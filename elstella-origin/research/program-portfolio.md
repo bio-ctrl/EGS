@@ -1,19 +1,27 @@
-# ELSTELLA — RESEARCH PROGRAM PORTFOLIO
+# ELSTELLA — THERAPEUTIC & RESEARCH PORTFOLIO
 
-This document distinguishes the company's current research priority from separate or future interests. Listing a program does not mean it is active, funded, validated, or scientifically endorsed.
+This document distinguishes the long-term company portfolio from current research activity. Listing a therapeutic area does not mean that a program is active, funded, validated, or supported by a nominated candidate.
 
-| Program | Role | Current status | Boundary |
+## Portfolio architecture
+
+| Program / area | Strategic role | Current status | Immediate boundary |
 |---|---|---|---|
-| PROJECT GENESIS | Flagship | Research thesis and initial charter drafted | Literature, public-data metadata, and descriptive computational research |
-| PROJECT CARDIA | Separate track | Prior literature and feasibility documents exist | Independent evidence review; not the flagship |
-| PROJECT BIOPATH | Exploratory interest | Early concept documentation | No delivery technology or therapeutic claim established |
-| Rejuvenation / aging biology | Future domain | Not an active validated program | Requires a separately defined question and evidence review |
-| Regenerative biology | Future domain | Not an active validated program | Requires a separately defined question and evidence review |
-| Mitochondrial biology | Future domain | Not an active validated program | Requires a separately defined question and evidence review |
+| PROJECT MITOS | Initial research priority: mitochondrial and cellular energy medicine | Literature-led charter and landscape assessment | No candidate, target, intervention, or therapeutic claim |
+| Neuromuscular & Muscle Medicine | Adjacent future therapeutic division | Strategic area only | Requires separate disease selection and evidence review |
+| Kidney & Organ Restoration | Adjacent future therapeutic division | Strategic area only | Requires separate disease selection and evidence review |
+| Elstella Intelligence | Computational research capability | Existing early software prototype | Must be benchmarked; not a validated discovery engine |
+| PROJECT GENESIS | Foundational systems-level biology research | Thesis and methods retained | Developmental biology and biological form; separate from MITOS |
+| PROJECT CARDIA | Separate exploratory cardiac research track | Prior literature and feasibility documents retained | Independent review; no validated therapeutic asset |
+| VYREON | Preliminary concept associated with CARDIA | Concept only | Not a molecule, drug candidate, target, or validated therapeutic |
+| PROJECT BIOPATH | Exploratory historical research interest | Parked | No delivery technology or therapeutic claim established |
 
 ## Portfolio rules
-1. GENESIS receives priority until its initial review and feasibility gates are completed.
-2. CARDIA remains separate; do not merge its hypotheses, evidence, or claims into GENESIS.
-3. Future domains remain parked until a narrow research question, literature scan, and resource case are approved.
-4. No program may be described as a drug candidate, validated therapeutic, or clinical program without the required evidence and oversight.
-5. Programs may be revised, paused, or stopped when evidence does not support continuation.
+
+1. PROJECT MITOS receives the initial research priority, limited to literature review, public-data metadata assessment, and a written unmet-need evaluation.
+2. Do not begin three therapeutic programs simultaneously.
+3. Neuromuscular and kidney/organ areas remain future portfolio ambitions until they pass independent disease-selection and feasibility reviews.
+4. Elstella Intelligence must demonstrate measurable value against existing tools and workflows.
+5. GENESIS and CARDIA records remain separate; do not merge their hypotheses, evidence, or claims into MITOS.
+6. Preserve prior research artifacts. Reclassify their status transparently rather than silently deleting or rewriting history.
+7. No program may be described as a drug candidate, validated therapeutic, clinical program, or licensing-ready asset without the required evidence and oversight.
+8. Programs may be revised, paused, or stopped when evidence does not support continuation.

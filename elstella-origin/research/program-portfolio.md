@@ -25,7 +25,6 @@ This document distinguishes the company's ordered strategic divisions from activ
 | PROJECT CARDIA | Separate exploratory historical track | Cardiac remodeling/fibrosis records remain distinct from Division 01 |
 | VYREON | Preliminary concept associated with CARDIA | Not a molecule, drug candidate, target, or validated therapeutic |
 | PROJECT MITOS | Earlier mitochondrial planning retained as historical material | Superseded by the broader Division 01 framing; not a parallel active program |
-| PROJECT LEIGH | Discontinued as flagship strategy | Leigh-specific planning is no longer the company's strategic center; old artifacts must not be represented as current strategy |
 | Other prior concepts | Historical or parked unless explicitly reassessed | No implied active development or validated claims |
 
 ## Program rules

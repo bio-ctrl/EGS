@@ -3,71 +3,66 @@
 **Descriptor:** Biological Restoration & Therapeutics  
 **Scientific foundation:** Systems-Level Biology  
 **Company model:** Computationally enabled therapeutic biotechnology  
-**Initial research priority:** PROJECT MITOS  
+**Flagship research focus:** PROJECT LEIGH — Leigh syndrome spectrum  
 **Stage:** Early research planning and software prototyping
 
 ## Ambition
 
-Elstella's long-term ambition is to become a research-driven biotechnology company that discovers, develops, and ultimately commercializes proprietary medicines for diseases involving dysfunctional cellular, tissue, and organ systems.
+Elstella's long-term ambition is to become a research-driven biotechnology company focused initially on Leigh syndrome spectrum (LSS), with a mission to contribute to better treatments and, ultimately, a cure.
 
-Computational biology is intended to strengthen research prioritization and evidence synthesis. The long-term business ambition is therapeutic development, not a standalone AI chatbot or generic research-services firm.
-
-This is an ambition, not a claim of current therapeutic capability.
+This is an ambition, not a claim of therapeutic capability. No cure, treatment, candidate, or validated development program has been established by Elstella.
 
 ## Company architecture
 
-1. **Elstella Intelligence:** an early research-software capability intended to organize literature, public biological datasets, disease context, and evidence provenance. Its value has not been demonstrated against expert workflows or established tools.
+1. **Elstella Intelligence:** an early research-software capability intended to organize literature, public biological dataset metadata, disease context, and evidence provenance. Its value has not yet been independently benchmarked.
 2. **Elstella Therapeutics:** the intended long-term proprietary medicine-development business. No therapeutic candidate or validated development program currently exists.
 
-## Initial therapeutic portfolio ambition
+## Flagship research focus — PROJECT LEIGH
 
-- **Mitochondrial & Cellular Energy Medicine:** initial research priority through PROJECT MITOS.
-- **Neuromuscular & Muscle Medicine:** adjacent future therapeutic area.
-- **Kidney & Organ Restoration:** adjacent future therapeutic area.
+The first objective is a source-traceable scientific landscape and unmet-need assessment of Leigh syndrome spectrum. It will map disease context, existing care and treatment approaches, research and clinical-development activity, public-data availability, evidence limitations, and potential research gaps.
 
-These are strategic portfolio areas, not three active drug-development programs. The initial research effort will assess whether one narrow mitochondrial-disease question is justified by the evidence.
-
-## Retained scientific foundation
-
-PROJECT GENESIS remains foundational work on developmental systems, gene regulation, and biological form. PROJECT CARDIA remains a separate exploratory literature track on cardiac remodeling and fibrosis. Existing CARDIA/NEXUS records are retained and must be assessed independently. VYREON remains a preliminary concept associated with CARDIA only; it is not an established drug candidate or validated therapeutic.
+The landscape must acknowledge existing work. A 2026 *Nature Communications* publication reported preclinical findings using computational screening and human brain organoid models. A 2026 international natural-history study reported work on longitudinal outcomes and measures. Neither establishes that Elstella has a differentiated discovery or clinical asset.
 
 ## Current evidence and status
 
 - Company strategy: documented as a working plan.
-- PROJECT MITOS charter: drafted.
-- PROJECT MITOS landscape assessment: framework prepared; assessment not yet completed.
-- Existing-treatment and competitor review: not yet completed for a defined disease indication.
-- Public dataset inventory: not yet completed.
+- PROJECT LEIGH initial charter: prepared.
+- PROJECT LEIGH landscape assessment: initial desk-research framework prepared; not independently reviewed.
 - Research Atlas: early software prototype; product value not yet benchmarked.
 - Independent scientific review: not yet completed.
+- Institutional partnership: none claimed.
 - Experimental validation: none claimed.
 - Therapeutic candidate: none.
 - Clinical validation: none.
 - Patent or licensing position: none claimed.
-- Revenue, funding, and institutional partnerships: none claimed.
+- Revenue, funding, and licensing agreements: none claimed.
 
-## Key risks
+## Why this is difficult
 
-1. The selected disease area may already have effective or emerging treatments that reduce the proposed unmet need.
-2. Biological complexity may make a useful therapeutic hypothesis difficult to establish.
-3. Public datasets may be incomplete, biased, or unsuitable for the intended question.
-4. Computational associations may not establish causal mechanisms or therapeutic benefit.
-5. Existing competitors may have stronger data, teams, capital, and intellectual property.
-6. Translating biological research into safe and effective medicines is expensive, lengthy, and requires specialized expertise and regulatory oversight.
-7. The research platform may not demonstrate a meaningful advantage over existing tools.
+1. LSS is genetically and clinically heterogeneous.
+2. Existing academic and clinical research may already address apparent gaps.
+3. Public datasets may be incomplete, biased, restricted, or unsuitable.
+4. Computational organization does not establish causation or therapeutic benefit.
+5. Established research groups have greater expertise, data, infrastructure, and capital.
+6. Translation into safe and effective medicines requires specialized teams, time, funding, institutional infrastructure, and regulatory oversight.
+7. The software may not demonstrate a meaningful advantage over existing tools.
 
 ## Next proof points
 
-1. Complete the PROJECT MITOS literature and existing-treatment landscape.
-2. Compare disease areas using transparent unmet-need and feasibility criteria.
-3. Build a traceable public-dataset inventory.
-4. Identify one narrow research question only if the evidence supports it.
-5. Obtain qualified independent scientific critique.
-6. Benchmark the Research Atlas against a conventional workflow.
-7. Advance, revise, or stop based on documented results.
+1. Complete and independently check the PROJECT LEIGH landscape.
+2. Verify research and clinical-development records against primary sources.
+3. Build a traceable public-data inventory.
+4. Benchmark the Research Atlas against a conventional workflow.
+5. Obtain qualified scientific critique.
+6. Draft one narrow research question only if the evidence justifies it.
+7. Make a documented advance, revise, or stop decision.
 
-## Capital and governance
+## Capital and partnership strategy
 
-Capital should follow validated milestones. Any future financing plan must be supported by a defined development scope, qualified team, budget, institutional access, IP assessment, and appropriate legal structure. Fundraising is not revenue, personal wealth, or evidence of scientific progress.
+**Near-term ask:** scientific mentorship, expert critique, and appropriate support for the research assessment and software benchmark—not a claim that a multimillion-dollar therapeutic-development round is currently justified.
 
-Because the founder is a minor, formal company formation, contracts, equity, fundraising, securities matters, IP assignments, and institutional agreements require parent/guardian involvement and qualified professional guidance.
+Future capital requests must be tied to defined milestones, a qualified team, realistic budgets, institutional dependencies, and a credible IP and competitive assessment. Licensing is a future possibility only if Elstella develops a genuine asset with defensible rights and evidence that a partner values.
+
+Fundraising proceeds belong to the company and must be used for the agreed company purpose; they are not the founder's personal cash. Founder liquidity depends on lawful compensation or a later liquidity event, subject to ownership, agreements, and applicable law.
+
+Because the founder is a minor, company formation, equity, contracts, fundraising, securities matters, IP assignments, and institutional agreements require parent/guardian involvement and qualified professional guidance.

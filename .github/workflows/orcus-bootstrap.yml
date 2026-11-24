@@ -1,0 +1,84 @@
+name: ORCUS repository migration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orcus-bootstrap.yml"
+      - "orcus-payload/**"
+
+permissions:
+  contents: write
+
+jobs:
+  install-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Extract ORCUS source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f orcus-source.tar.gz
+          tar -xzf orcus-source.tar.gz
+          test -f orcus/README.md
+          grep -F "Optimized Representation & Computational Understanding System" orcus/README.md
+
+      - name: Replace Elstella project files with ORCUS
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import shutil
+
+          root = Path.cwd()
+          source = root / "orcus"
+          if not source.is_dir():
+              raise SystemExit("Expected extracted ORCUS source directory")
+          readme = (source / "README.md").read_text(encoding="utf-8")
+          if "Optimized Representation & Computational Understanding System" not in readme:
+              raise SystemExit("ORCUS README expansion missing; refusing migration")
+
+          # Preserve only Git's metadata and the extracted ORCUS tree.
+          for item in list(root.iterdir()):
+              if item.name in {".git", "orcus"}:
+                  continue
+              if item.is_dir():
+                  shutil.rmtree(item)
+              else:
+                  item.unlink()
+
+          # Move the ORCUS project contents to the repository root.
+          for item in list(source.iterdir()):
+              destination = root / item.name
+              if destination.exists():
+                  raise SystemExit(f"Unexpected destination collision: {destination}")
+              shutil.move(str(item), str(destination))
+          source.rmdir()
+          PY
+
+      - name: Run complete unit test suite
+        run: python -m unittest discover -s tests -v
+
+      - name: Compile all Python modules
+        run: python -m compileall -q orcus tests examples benchmarks
+
+      - name: Run canonical synthesis benchmarks
+        run: python -m orcus benchmark --max-gates 7 --output /tmp/orcus-ci-smoke.jsonl
+
+      - name: Commit ORCUS repository state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Replace Elstella with ORCUS computational architecture research"
+          git push

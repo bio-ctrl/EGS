@@ -2,86 +2,71 @@
 
 **Biological Restoration & Therapeutics**  
 **Scientific foundation:** Systems-Level Biology  
-**Company model:** Computationally enabled therapeutic biotechnology  
-**Flagship research focus:** PROJECT LEIGH — Leigh syndrome spectrum
+**Company model:** Research-led biotechnology, supported by computational infrastructure
 
-Elstella's long-term ambition is to become a research-driven biotechnology company focused initially on one disease area: Leigh syndrome spectrum (LSS). Its long-term mission is to contribute to better treatments and, ultimately, a cure. This is an ambition, not a claim that Elstella has discovered a treatment or established a therapeutic program.
+ELSTELLA's ambition is to build a durable biotechnology company that advances human health through rigorous biological research, responsible therapeutic development, and long-term scientific partnerships.
 
-Computational biology and evidence infrastructure are intended to strengthen research prioritization. They are not substitutes for expert scientific judgment, biological validation, qualified drug development, or clinical evidence.
+The company will build in a deliberate sequence. Its first research division is **Cellular & Mitochondrial Health**. The second planned division is **Muscle & Physical Health**. The third planned division is **Brain & Cognitive Health**. These are ordered strategic priorities, not three active drug-development programs.
+
+## What we learn from Eli Lilly's beginnings
+
+ELSTELLA is not copying Eli Lilly's products, branding, or historical business. It is adapting several early-company principles:
+
+1. **Start with a clear medical purpose.** Colonel Eli Lilly founded a small Indianapolis pharmaceutical business in 1876 with an emphasis on scientifically sound, quality medicines rather than dubious patent remedies.
+2. **Make quality the operating standard.** A medicine company earns trust through consistency, evidence, manufacturing discipline, and integrity—not grand claims.
+3. **Build scientific capability deliberately.** Lilly later hired dedicated chemistry and biochemical research expertise and strengthened its research capacity.
+4. **Collaborate when expertise is outside the company.** Lilly's insulin work depended on collaboration with academic researchers and rights to commercialize the resulting product.
+5. **Reinvest in capability and scale only when justified.** Lilly's later growth came through research, manufacturing, partnerships, and products that addressed real medical needs.
+
+The lesson is not "start with a drug and get rich." It is: establish trust, build scientific competence, solve a real medical problem, collaborate with experts, and scale only after evidence supports it. Historical references: [Lilly company history](https://www.lilly.com/about/history), [Encyclopedia of Indianapolis history](https://indyencyclopedia.org/eli-lilly-and-company/), and [review of insulin's history and Lilly's role](https://academic.oup.com/edrv/article/42/5/503/6323380).
 
 ## Company architecture
 
-1. **Elstella Intelligence** — computational research infrastructure for organizing scientific literature, public dataset metadata, disease context, evidence provenance, and research questions.
-2. **Elstella Therapeutics** — the intended long-term therapeutic biotechnology business. It will advance only when a disease-specific research thesis, qualified expertise, evidence, resources, and institutional oversight justify progression.
+### Elstella Intelligence
+The initial computational research capability. It organizes literature, public dataset metadata, biological context, source provenance, uncertainty, and research questions. Its first job is to make the company's own research workflow more traceable and efficient. It must be benchmarked before any commercial-performance claim.
 
-These are strategic capabilities, not established commercial products. The Research Atlas is an early prototype whose value has not yet been independently benchmarked.
+### Elstella Therapeutics
+The long-term biotechnology business. It may eventually develop proprietary therapeutic programs or partner with established organizations, but only when there is a well-supported medical need, qualified scientific leadership, appropriate institutional oversight, and a defensible development case.
 
-## One flagship focus: PROJECT LEIGH
+## Three divisions — in sequence
 
-**Disease area:** Leigh syndrome spectrum, a genetically heterogeneous mitochondrial disorder spectrum that predominantly affects the nervous system.
+1. **Cellular & Mitochondrial Health — first.** Establish the scientific landscape, understand cellular energy biology and mitochondrial disease at a high level, map existing research, and identify whether a focused, responsible research question exists.
+2. **Muscle & Physical Health — second.** Preserve this as the next planned division, focused on legitimate medical needs involving muscle disease, weakness, and age-related loss of function. It is not an enhancement-drug program.
+3. **Brain & Cognitive Health — third.** Preserve this as the third planned division, focused on neurological disease, brain health, and cognitive decline. It is not a cognitive-enhancement drug program.
 
-**Mission:** Advance research toward better treatments and, over the long term, a cure for Leigh syndrome spectrum.
+The sequence is intentional: complete and review the first division's foundation before allocating meaningful resources to the next. No division is currently a validated therapeutic program.
 
-**First objective:** Complete a rigorous, source-traceable scientific landscape and unmet-need assessment. Determine what is already known, what is being investigated, what remains uncertain, and whether Elstella can make a credible contribution.
+## What we build first
 
-The disease is genetically diverse. A 2026 *Nature Communications* study reported promising preclinical findings using computational screening and human brain organoid models. These findings are not proof of safety or effectiveness in people, and they demonstrate why Elstella must map existing work before claiming a gap. See the [2026 study](https://www.nature.com/articles/s41467-026-71391-2) and the [2026 natural-history study](https://doi.org/10.1177/26330040261476231).
+**Elstella Intelligence / Research Atlas** is the first tangible product. Its initial workflow will support:
+- Literature search and source registration.
+- Evidence records linked to original publications.
+- Public dataset inventory with provenance and access conditions.
+- Biological-context and uncertainty notes.
+- Research-question tracking.
+- Exportable, cited research reports.
 
-Initial work is limited to:
-- A dated, traceable literature and clinical-development landscape.
-- A high-level disease and patient-need overview using credible sources.
-- A public research-data inventory with provenance, access terms, and limitations.
-- A map of existing research efforts and competing approaches.
-- A documented evidence-gap and feasibility assessment.
-- Qualified independent scientific critique.
-- An advance, revise, or stop recommendation.
+The software is a research-organization tool, not an AI drug-discovery engine, medical device, diagnostic system, or substitute for scientific judgment.
 
-No drug candidate, molecular target, therapeutic mechanism, efficacy, safety, or clinical claim is established by this plan.
+## Capital, IP, and licensing
 
-## Elstella Intelligence
+Capital follows evidence-backed milestones. The near-term objective is to produce a credible research assessment, a usable software prototype, independent expert feedback, and a benchmark showing whether the workflow solves a real problem.
 
-The platform's near-term purpose is to make research evidence easier to organize and audit:
-- Literature records with source links and publication metadata.
-- Public dataset inventory and data-use documentation.
-- Disease-context and evidence maps.
-- Clear separation of observation, interpretation, and hypothesis.
-- Contradiction tracking, uncertainty labels, and reproducible records.
-- Exportable research documentation.
+Intellectual property must arise from an actual, documented invention. Patentability, ownership, inventorship, freedom to operate, confidentiality, and publication strategy require qualified professional advice. Licensing is a future possibility only if Elstella develops a genuine asset with defensible rights and demonstrable value to a partner.
 
-The platform must be benchmarked against a conventional literature-review workflow and reviewed by qualified researchers before any performance or commercial-advantage claim.
+Fundraising proceeds belong to the company and must be used for agreed company purposes; they are not the founder's personal cash. Because the founder is a minor, company formation, equity, contracts, fundraising, securities matters, IP assignments, and institutional agreements require parent/guardian involvement and qualified professional guidance.
 
-## Capital, intellectual property, and licensing
+## Retained work and boundaries
 
-Capital should follow evidence-backed milestones, not projections or headquarters plans. Near-term priorities are scientific mentorship, a defensible research assessment, a working and benchmarked software prototype, and qualified institutional relationships.
-
-Intellectual property must arise from a genuine, documented invention. Patentability, ownership, inventorship, freedom to operate, confidentiality, and publication timing require qualified professional advice. Do not claim patent protection where none exists.
-
-Licensing is a possible future route only if Elstella develops an asset or technology with defensible rights, supporting evidence, and a clear value proposition to a partner. No licensing-ready asset or deal is currently claimed.
-
-Because the founder is a minor, company formation, equity, contracts, fundraising, securities matters, IP assignments, and institutional agreements require parent/guardian involvement and qualified professional guidance.
-
-## Retained work and scope control
-
-- **PROJECT GENESIS** remains foundational research on developmental systems, gene regulation, and biological form. It is not a second active therapeutic program.
-- **PROJECT CARDIA** remains a separate exploratory historical research track. Its evidence and claims are not part of PROJECT LEIGH.
-- **VYREON** remains a preliminary concept associated with CARDIA only; it is not an established candidate, molecule, target, or validated therapeutic.
-- Other prior research records are preserved as historical or exploratory work. They are not active therapeutic programs unless explicitly re-evaluated.
-
-Do not start additional disease programs while PROJECT LEIGH is the sole flagship focus. Do not access or modify CERES.
-
-## Research and development principles
-
-1. Start with a defined disease problem and a falsifiable research question.
-2. Map existing research and clinical development before claiming an unmet gap.
-3. Use lawfully accessible publications and appropriately accessible public research data.
-4. Preserve source provenance, access conditions, context, and uncertainty.
-5. Separate association, mechanism, causation, and therapeutic intervention.
-6. Do not claim novelty, efficacy, safety, patentability, or clinical utility without appropriate independent evidence.
-7. Experimental, translational, and clinical research require qualified institutional partners, supervision, permissions, and regulatory oversight.
+- **PROJECT GENESIS** remains foundational research on developmental systems, gene regulation, and biological form.
+- **PROJECT CARDIA** remains a separate exploratory historical research track. Its records and claims remain distinct.
+- **VYREON** remains a preliminary concept associated with CARDIA only; it is not a molecule, candidate, target, or validated therapeutic.
+- Earlier MITOS planning is retained as historical material, not a separate active program.
+- Previous Leigh-specific planning is discontinued as the company's flagship strategy.
+- **CERES is out of scope and must not be accessed or modified.**
 
 ## Current stage
 
-**Stage:** Early research infrastructure, literature review, and software prototyping.
+Early research planning and software prototyping. No therapeutic candidate, validated biological mechanism, clinical program, patent, regulatory approval, revenue, funding, licensing agreement, or institutional partnership is claimed.
 
-**Not established:** A validated therapeutic discovery, drug candidate, validated biological mechanism, clinical program, patent, regulatory approval, revenue, funding, licensing agreement, or institutional partnership.
-
-**Founding principle: Evidence before claims.**
+**Founding principle: Quality and evidence before scale.**

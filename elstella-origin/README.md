@@ -40,7 +40,7 @@ This repository contains an early software and research prototype. It is **not**
 
 ## Run ORIGIN ATLAS
 
-Open `index.html` in a modern browser. No package installation or build step is required.
+Use Node.js 20 or newer. Copy `.env.example` to `.env`, configure the AI provider variables on the server if AI synthesis is needed, then run `npm start` and open `http://localhost:4173`. Run `npm test` for automated unit tests. The static page can still be opened directly, but the server is required for AI synthesis.
 
 The current application supports:
 - creating and editing evidence records;
@@ -48,11 +48,11 @@ The current application supports:
 - adding research hypotheses;
 - saving edits in browser-local storage;
 - exporting evidence as CSV;
-- backing up and restoring the workspace as JSON.
+- backing up and restoring the workspace as JSON;\n- searching Europe PMC and importing bibliographic metadata;\n- extracting candidate abstract passages with explicit unverified status;\n- AI-assisted evidence synthesis through a server-side, OpenAI-compatible chat endpoint (requires server credentials);\n- optional Supabase account sync with row-level security (requires a separately created Supabase project and schema setup).
 
-**Important:** Local browser data does not automatically sync to GitHub or another device. Export JSON backups regularly. The application has no server database, account system, live literature API, AI extraction engine or multi-user collaboration.
+**Important:** Local browser data does not automatically sync to GitHub or another device. Export JSON backups regularly. The application includes a Europe PMC metadata/abstract importer, a server-side AI synthesis endpoint, and an optional per-account Supabase sync adapter. These integrations require configuration and have not been deployed or independently security-audited. Supabase sync is same-account cross-device sync, not shared team collaboration. The AI model is an assistant for synthesis, not an autonomous scientific discovery system.
 
-## First execution milestones
+## Integrations and setup\n\n- AI: copy `.env.example` to `.env` and set `AI_API_URL`, `AI_API_KEY`, and `AI_MODEL` for an OpenAI-compatible chat-completions endpoint. The API key stays on the Node server. Never place a provider secret in browser code or commit `.env`.\n- Shared workspace: create a Supabase project, run `supabase/schema.sql`, and configure the project URL plus public anon key in the Research engine tab. The schema uses row-level security so each signed-in account accesses only its own row. No database is provisioned by this repository.\n- Literature extraction: Europe PMC search imports publication metadata and abstract text; sentence-level candidates are suggestions only. Review the original publication before entering any verified claim.\n\n## First execution milestones
 
 1. Verify every starter source's bibliographic metadata and obtain lawful full-text access.
 2. Run and document the search strategy in the review protocol.

@@ -14,23 +14,22 @@ const REQUIRED_FOR_REVIEW = [
 
 /**
  * Checks whether a record contains the minimum metadata required to be
- * considered ready for human review. This is a completeness check only.
+ * ready for human verification. This is a completeness check only.
  * It does not verify the source, judge scientific validity, or establish truth.
  */
-export function assessEvidenceCompleteness(record = {}) {
+function assessEvidenceCompleteness(record = {}) {
   const missing = REQUIRED_FOR_REVIEW.filter((field) => {
     const value = record[field];
     return value === undefined || value === null || String(value).trim() === "";
   });
 
-  const sourceUrlValid = (() => {
-    try {
-      const url = new URL(record.sourceUrl);
-      return url.protocol === "https:" || url.protocol === "http:";
-    } catch {
-      return false;
-    }
-  })();
+  let sourceUrlValid = false;
+  try {
+    const url = new URL(record.sourceUrl);
+    sourceUrlValid = url.protocol === "https:" || url.protocol === "http:";
+  } catch {
+    sourceUrlValid = false;
+  }
 
   const issues = [...missing];
   if (!missing.includes("sourceUrl") && !sourceUrlValid) {
@@ -45,4 +44,4 @@ export function assessEvidenceCompleteness(record = {}) {
   };
 }
 
-export { REQUIRED_FOR_REVIEW };
+module.exports = { assessEvidenceCompleteness, REQUIRED_FOR_REVIEW };

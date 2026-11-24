@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/orcus-bootstrap.yml"
-      - "orcus-payload/**"
+      - "orcus-source.tar.gz"
 
 permissions:
   contents: write
@@ -46,22 +46,29 @@ jobs:
           if "Optimized Representation & Computational Understanding System" not in readme:
               raise SystemExit("ORCUS README expansion missing; refusing migration")
 
-          # Preserve only Git's metadata and the extracted ORCUS tree.
+          # Move the outer archive directory aside so its inner Python package
+          # can be installed at the repository root without a name collision.
+          stage = root / ".orcus-stage"
+          if stage.exists():
+              shutil.rmtree(stage)
+          source.rename(stage)
+
+          # Preserve only Git metadata and the staging directory.
           for item in list(root.iterdir()):
-              if item.name in {".git", "orcus"}:
+              if item.name in {".git", ".orcus-stage"}:
                   continue
               if item.is_dir():
                   shutil.rmtree(item)
               else:
                   item.unlink()
 
-          # Move the ORCUS project contents to the repository root.
-          for item in list(source.iterdir()):
+          # Install the complete ORCUS project at the repository root.
+          for item in list(stage.iterdir()):
               destination = root / item.name
               if destination.exists():
                   raise SystemExit(f"Unexpected destination collision: {destination}")
               shutil.move(str(item), str(destination))
-          source.rmdir()
+          stage.rmdir()
           PY
 
       - name: Run complete unit test suite

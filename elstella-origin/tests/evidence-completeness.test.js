@@ -1,6 +1,6 @@
-import test from "node:test";
-import assert from "node:assert/strict";
-import { assessEvidenceCompleteness } from "../platform/evidence-completeness.js";
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { assessEvidenceCompleteness } = require("../platform/evidence-completeness.js");
 
 const completeRecord = {
   title: "Example primary study",

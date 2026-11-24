@@ -26,6 +26,7 @@ const server=http.createServer(async(req,res)=>{
  if(req.method==="POST"&&url.pathname==="/api/research-assist")return handleAI(req,res);
  if(req.method!=="GET"&&req.method!=="HEAD")return send(res,405,{error:"Method not allowed."});
  let pathname=decodeURIComponent(url.pathname==="/" ? "/index.html":url.pathname);
+ if(pathname.split("/").some(part=>part===".env"||part===".git"||part==="node_modules"))return send(res,404,{error:"Not found."});
  const file=path.resolve(ROOT,"."+pathname);
  if(!file.startsWith(ROOT+path.sep))return send(res,403,{error:"Forbidden."});
  fs.readFile(file,(err,buf)=>{if(err)return send(res,404,{error:"Not found."});res.writeHead(200,{"Content-Type":MIME[path.extname(file)]||"application/octet-stream","X-Content-Type-Options":"nosniff"});if(req.method==="HEAD")return res.end();res.end(buf);});

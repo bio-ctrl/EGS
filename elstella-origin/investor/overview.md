@@ -2,63 +2,72 @@
 
 **Descriptor:** Biological Restoration & Therapeutics  
 **Scientific foundation:** Systems-Level Biology  
-**Flagship research program:** PROJECT GENESIS  
+**Company model:** Computationally enabled therapeutic biotechnology  
+**Initial research priority:** PROJECT MITOS  
 **Stage:** Early research planning and software prototyping
 
 ## Ambition
 
-Elstella's long-term ambition is to build a research-led biotechnology company that studies biological systems across development, evolution, and disease, and investigates opportunities for biological restoration when evidence supports them.
+Elstella's long-term ambition is to become a research-driven biotechnology company that discovers, develops, and ultimately commercializes proprietary medicines for diseases involving dysfunctional cellular, tissue, and organ systems.
+
+Computational biology is intended to strengthen research prioritization and evidence synthesis. The long-term business ambition is therapeutic development, not a standalone AI chatbot or generic research-services firm.
 
 This is an ambition, not a claim of current therapeutic capability.
 
-## Initial strategy
+## Company architecture
 
-The current strategy has two distinct hypotheses:
+1. **Elstella Intelligence:** an early research-software capability intended to organize literature, public biological datasets, disease context, and evidence provenance. Its value has not been demonstrated against expert workflows or established tools.
+2. **Elstella Therapeutics:** the intended long-term proprietary medicine-development business. No therapeutic candidate or validated development program currently exists.
 
-1. **Research infrastructure:** the Elstella Research Atlas may improve the traceability and organization of biological literature and public research data.
-2. **Biological research:** PROJECT GENESIS will map published evidence on developmental systems, gene regulation, and biological form to identify a narrow, defensible research question.
+## Initial therapeutic portfolio ambition
 
-PROJECT CARDIA remains a separate exploratory literature track on cardiac remodeling and fibrosis. It is not the current flagship.
+- **Mitochondrial & Cellular Energy Medicine:** initial research priority through PROJECT MITOS.
+- **Neuromuscular & Muscle Medicine:** adjacent future therapeutic area.
+- **Kidney & Organ Restoration:** adjacent future therapeutic area.
 
-## Research software
+These are strategic portfolio areas, not three active drug-development programs. The initial research effort will assess whether one narrow mitochondrial-disease question is justified by the evidence.
 
-**Elstella Research Atlas** is an early software prototype for organizing literature records, source provenance, hypotheses, and review status. Its value has not been demonstrated against expert workflows or established tools.
+## Retained scientific foundation
 
-The current prototype must not be described as an autonomous discovery engine, validated AI platform, or clinical decision system.
+PROJECT GENESIS remains foundational work on developmental systems, gene regulation, and biological form. PROJECT CARDIA remains a separate exploratory literature track on cardiac remodeling and fibrosis. Existing CARDIA/NEXUS records are retained and must be assessed independently. VYREON remains a preliminary concept associated with CARDIA only; it is not an established drug candidate or validated therapeutic.
 
 ## Current evidence and status
 
-- Company thesis: documented as a working strategy.
-- GENESIS research thesis: drafted.
-- GENESIS literature review: not yet completed.
-- Public dataset inventory: template prepared; inventory not yet completed.
-- Software: early research-workspace prototype.
+- Company strategy: documented as a working plan.
+- PROJECT MITOS charter: drafted.
+- PROJECT MITOS landscape assessment: framework prepared; assessment not yet completed.
+- Existing-treatment and competitor review: not yet completed for a defined disease indication.
+- Public dataset inventory: not yet completed.
+- Research Atlas: early software prototype; product value not yet benchmarked.
 - Independent scientific review: not yet completed.
 - Experimental validation: none claimed.
 - Therapeutic candidate: none.
 - Clinical validation: none.
+- Patent or licensing position: none claimed.
 - Revenue, funding, and institutional partnerships: none claimed.
 
 ## Key risks
 
-1. Existing literature and research tools may already solve the proposed workflow problem.
-2. The initial research question may be too broad or already well answered.
-3. Public datasets may lack the metadata or comparability required.
-4. Computational patterns may not imply causal biological mechanisms.
-5. Expert users may not find the workspace useful.
-6. Translating biological research into safe, effective therapeutics is difficult and requires substantial expertise, resources, and oversight.
+1. The selected disease area may already have effective or emerging treatments that reduce the proposed unmet need.
+2. Biological complexity may make a useful therapeutic hypothesis difficult to establish.
+3. Public datasets may be incomplete, biased, or unsuitable for the intended question.
+4. Computational associations may not establish causal mechanisms or therapeutic benefit.
+5. Existing competitors may have stronger data, teams, capital, and intellectual property.
+6. Translating biological research into safe and effective medicines is expensive, lengthy, and requires specialized expertise and regulatory oversight.
+7. The research platform may not demonstrate a meaningful advantage over existing tools.
 
 ## Next proof points
 
-1. Complete a reproducible GENESIS literature search and source screen.
-2. Build a traceable public-dataset inventory.
-3. Compare the proposed research question with existing reviews and studies.
-4. Obtain qualified independent critique.
-5. Benchmark the Research Atlas against an ordinary literature-review workflow.
-6. Advance, revise, or stop based on documented results.
+1. Complete the PROJECT MITOS literature and existing-treatment landscape.
+2. Compare disease areas using transparent unmet-need and feasibility criteria.
+3. Build a traceable public-dataset inventory.
+4. Identify one narrow research question only if the evidence supports it.
+5. Obtain qualified independent scientific critique.
+6. Benchmark the Research Atlas against a conventional workflow.
+7. Advance, revise, or stop based on documented results.
 
 ## Capital and governance
 
-Capital should follow validated milestones. Any future funding plan must be supported by a defined scope, qualified team, budget, institutional access, IP assessment, and appropriate legal structure. Fundraising is not revenue, personal wealth, or evidence of scientific progress.
+Capital should follow validated milestones. Any future financing plan must be supported by a defined development scope, qualified team, budget, institutional access, IP assessment, and appropriate legal structure. Fundraising is not revenue, personal wealth, or evidence of scientific progress.
 
 Because the founder is a minor, formal company formation, contracts, equity, fundraising, securities matters, IP assignments, and institutional agreements require parent/guardian involvement and qualified professional guidance.

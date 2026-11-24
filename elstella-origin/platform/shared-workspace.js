@@ -24,7 +24,9 @@
      return request(base+"/auth/v1/"+path,{method:"POST",headers:{apikey:key,"Content-Type":"application/json"},body:JSON.stringify(payload)},fetchImpl);
    }
    async function save(accessToken,workspace){
-     return request(base+"/rest/v1/"+TABLE,{method:"POST",headers:{...headers(key,accessToken),Prefer:"resolution=merge-duplicates,return=representation"},body:JSON.stringify({payload:workspace,updated_at:new Date().toISOString()})},fetchImpl);
+     let claims;try{claims=JSON.parse(atob(accessToken.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));}catch(_){throw new Error("Could not read authenticated account from session.");}
+     if(!claims.sub)throw new Error("Authenticated session has no account ID.");
+     return request(base+"/rest/v1/"+TABLE+"?on_conflict=user_id",{method:"POST",headers:{...headers(key,accessToken),Prefer:"resolution=merge-duplicates,return=representation"},body:JSON.stringify({user_id:claims.sub,payload:workspace,updated_at:new Date().toISOString()})},fetchImpl);
    }
    async function load(accessToken){
      const rows=await request(base+"/rest/v1/"+TABLE+"?select=payload,updated_at&limit=1",{headers:headers(key,accessToken)},fetchImpl);

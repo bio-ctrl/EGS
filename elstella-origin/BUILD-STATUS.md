@@ -1,4 +1,4 @@
-# BUILD STATUS — ELSTELLA RESEARCH ATLAS
+# BUILD STATUS — ELSTELLA INTELLIGENCE / RESEARCH ATLAS
 
 ## Implemented in the existing prototype
 
@@ -18,17 +18,20 @@
 - Supabase schema with row-level security.
 - Evidence metadata completeness gate with unit tests.
 - Node built-in test suite and GitHub Actions workflow.
-- Company identity, therapeutic strategy, MITOS research charter, data-governance, and roadmap documentation.
 
 ## Current strategic role
 
-The Research Atlas is intended to support Elstella Intelligence: a provenance-first research workspace for organizing literature, public-data metadata, disease context, hypotheses, and evidence status. It is not a validated AI discovery engine, clinical decision system, or drug-design platform.
+The Research Atlas is the first product prototype for Elstella Intelligence. It is intended to support Division 01, Cellular & Mitochondrial Health, and later divisions only when activated through their own evidence gates. It is a provenance-first research workspace, not a validated AI discovery engine, clinical decision system, diagnostic product, or drug-design platform.
 
-PROJECT MITOS is the initial literature-led research priority. The therapeutic portfolio also identifies neuromuscular/muscle medicine and kidney/organ restoration as future areas. These are not active drug-development programs.
+## Division sequence
+
+1. Cellular & Mitochondrial Health — first research priority.
+2. Muscle & Physical Health — second planned division, not active.
+3. Brain & Cognitive Health — third planned division, not active.
 
 ## Known limitations
 
-- The prototype was originally organized around CARDIA/ORIGIN; the interface and data model still require a full product-level review to become a coherent multi-program workspace.
+- The prototype was originally organized around CARDIA/ORIGIN; the interface and data model still require a full product-level review.
 - Starter records remain unreviewed leads until metadata and source content are checked.
 - Europe PMC search requires network access and has not been fully browser-tested.
 - AI synthesis requires a configured compatible provider endpoint and a running Node server. AI output can be incorrect and must be checked against original sources.
@@ -44,7 +47,16 @@ PROJECT MITOS is the initial literature-led research priority. The therapeutic p
 
 ## Run and test
 
-Use Node.js 20.6 or newer. Copy .env.example to .env, configure an AI provider only if desired, run npm start, then open http://localhost:4173. Run npm test for unit tests.
+Requirements: Node.js 20.6 or newer.
+
+```bash
+cd elstella-origin
+npm install
+npm test
+npm start
+```
+
+Open http://localhost:4173. Optional AI-assisted synthesis requires server-side provider configuration. The core literature and evidence workflow should not require AI credentials.
 
 ## Data safety
 
@@ -52,13 +64,13 @@ Do not enter patient-identifiable information. Export JSON backups because brows
 
 ## Remaining milestones
 
-1. Run the automated test suite and verify the resulting GitHub Actions status.
-2. Perform a browser-level smoke test of the Research Atlas.
-3. Complete the PROJECT MITOS literature and existing-treatment landscape.
+1. Run the automated test suite and verify GitHub Actions.
+2. Perform a browser-level smoke test.
+3. Complete the Division 01 literature and existing-care landscape.
 4. Build a traceable public-dataset inventory.
-5. Compare candidate disease areas using transparent unmet-need and feasibility criteria.
-6. Obtain qualified independent scientific critique.
-7. Benchmark the Research Atlas against a conventional research workflow.
-8. Decide whether MITOS advances, is revised, or is stopped.
+5. Obtain qualified independent scientific critique.
+6. Benchmark the Research Atlas against a conventional research workflow.
+7. Decide whether Division 01 advances, is revised, or is stopped.
+8. Activate Division 02 and then Division 03 only after their explicit gates.
 
 Therapeutic discovery and biological validation are scientific programs, not software checkboxes.

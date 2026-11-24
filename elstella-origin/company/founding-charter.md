@@ -1,66 +1,65 @@
 # ELSTELLA & CO. — FOUNDING CHARTER
 
-**Company identity:** Biological Restoration & Therapeutics  
+**Identity:** Biological Restoration & Therapeutics  
 **Scientific foundation:** Systems-Level Biology  
-**Company model:** Computationally enabled therapeutic biotechnology  
-**Stage:** Early research infrastructure and literature-led hypothesis assessment
+**Model:** Research-led biotechnology supported by computational infrastructure  
+**Stage:** Early research planning and software prototyping
 
 ## 1. Mission
 
-To advance understanding of human biological systems and, over time, discover and develop medicines for serious diseases involving dysfunctional cellular, tissue, and organ systems.
+Advance understanding of human biological systems and, over time, contribute to better treatments for serious diseases through rigorous research, responsible therapeutic development, and qualified partnerships.
 
 ## 2. Vision
 
-To build a research-driven biotechnology company with proprietary therapeutic programs, supported by computational biology, rigorous evidence practices, and qualified scientific and clinical partnerships.
+Build a durable biotechnology company with scientific credibility, proprietary capabilities, and the ability to develop or partner on valuable therapeutic programs. Long-term scale must be earned through quality, evidence, and patient-relevant outcomes.
 
-## 3. Scientific thesis
+## 3. Lessons adapted from Eli Lilly's beginnings
 
-Biological function emerges from interactions among genetic regulation, cells, tissues, organs, physiology, developmental history, and environment. Elstella's working thesis is that studying these relationships in context can help identify important research questions and inform future therapeutic development.
+ELSTELLA does not copy Lilly's products, identity, or history. It adapts these operating principles:
+- Begin with a specific medical purpose rather than a broad promise.
+- Make quality and consistency non-negotiable.
+- Build scientific and technical expertise deliberately.
+- Collaborate with qualified academic and industry partners.
+- Protect trust through integrity, documentation, and responsible claims.
+- Reinvest in research and operational capability before expanding.
+- Scale manufacturing, commercialization, and facilities only when a validated product and real demand justify them.
 
-This is a scientific framework to investigate, not a demonstrated discovery, proprietary advantage, or proof that any intervention will work.
+## 4. Scientific thesis
 
-## 4. Company architecture
+Biological function emerges from interactions among genetic regulation, cells, tissues, organs, physiology, development, and environment. Elstella's working thesis is that studying these relationships in context can improve the quality of research questions and may inform future therapeutic work.
+
+This is a research framework, not a demonstrated discovery, proprietary advantage, or proof that an intervention will work.
+
+## 5. Company architecture
 
 ### Elstella Intelligence
-
-A proposed computational research capability for:
-- Organizing and tracing scientific literature.
-- Curating metadata from lawfully accessible public datasets.
-- Preserving biological and disease context.
-- Mapping evidence, uncertainty, contradictions, and research gaps.
-- Supporting reproducible research workflows.
-
-Its usefulness must be benchmarked against existing tools and expert workflows. It is not currently a validated AI discovery platform or clinical decision system.
+The first build: a provenance-first research workspace for scientific literature, public dataset metadata, biological context, evidence uncertainty, and research questions. Its value must be benchmarked against conventional workflows and reviewed by qualified users.
 
 ### Elstella Therapeutics
+The long-term therapeutic-development business. Any future program requires a defined medical need, credible evidence, qualified scientific leadership, appropriate institutional oversight, and a realistic development pathway.
 
-The long-term therapeutic-development business. Its purpose is to build and advance proprietary programs where there is a defensible medical need and scientific rationale.
+## 6. Division sequence
 
-Potential future value may come from approved medicine sales, licensing, and pharmaceutical partnerships. None of these revenue streams is currently established.
+### Division 01 — Cellular & Mitochondrial Health
+First priority. Establish a high-level scientific landscape across cellular energy biology and mitochondrial health, map relevant disease areas and existing research, document evidence quality and gaps, and determine whether a narrow research question is justified.
 
-## 5. Therapeutic portfolio ambition
+### Division 02 — Muscle & Physical Health
+Second priority, retained in the long-term plan. Future focus: legitimate medical needs involving muscle disease, weakness, and age-related loss of function. Not a muscle-enhancement drug program.
 
-- **Mitochondrial & Cellular Energy Medicine:** initial research priority through PROJECT MITOS.
-- **Neuromuscular & Muscle Medicine:** adjacent future portfolio area.
-- **Kidney & Organ Restoration:** adjacent future portfolio area.
+### Division 03 — Brain & Cognitive Health
+Third priority, retained in the long-term plan. Future focus: neurological disease, brain health, and cognitive decline. Not a cognitive-enhancement drug program.
 
-These are portfolio ambitions, not three active drug-development programs. The company will select one narrow disease problem for initial investigation and will expand only when evidence, qualified expertise, and resources support it.
-
-## 6. Retained research foundation
-
-- **PROJECT GENESIS:** foundational research on developmental systems, gene regulation, and biological form. Its existing thesis and methods are retained.
-- **PROJECT CARDIA:** a separate exploratory research track on cardiac remodeling and fibrosis. Existing CARDIA/NEXUS records remain separate and are not reclassified as validated therapeutic assets.
-- **VYREON:** a preliminary concept associated with CARDIA only. It is not an established molecule, drug candidate, target, or validated therapeutic.
+Only Division 01 receives initial research priority. Divisions 02 and 03 remain planned, not operational.
 
 ## 7. Operating principles
 
 1. Medical need before fashionable biology.
-2. Evidence before assertion.
+2. Quality and evidence before claims.
 3. Reproducibility over presentation.
-4. Negative and contradictory findings are first-class evidence.
+4. Preserve negative and contradictory findings.
 5. Distinguish association, mechanism, causation, and intervention.
 6. State model-system and dataset limitations.
-7. Do not claim novelty without documented prior-art and competitor review.
+7. Do not claim novelty without documented landscape review.
 8. Do not claim efficacy, safety, patentability, or clinical utility without appropriate evidence.
 9. Invite independent scientific criticism.
 10. Allocate resources to measurable milestones.
@@ -68,16 +67,16 @@ These are portfolio ambitions, not three active drug-development programs. The c
 
 ## 8. What Elstella is not claiming today
 
-Elstella has not established a medicine, validated therapeutic target, new biological mechanism, clinical benefit, regulatory approval, patent position, commercial product, or institutional partnership. Current work is research planning, literature organization, and early software development.
+No medicine, validated therapeutic target, new biological mechanism, clinical benefit, regulatory approval, patent position, commercial product, funding, or institutional partnership is established.
 
 ## 9. Milestone logic
 
-- **Gate 0 — Medical need:** define the disease area and document the unmet need.
-- **Gate 1 — Landscape:** review existing treatments, active development, prior art, and competing approaches.
-- **Gate 2 — Evidence:** identify a specific, falsifiable biological question supported by traceable sources.
-- **Gate 3 — Data and reproducibility:** determine whether appropriate public data can responsibly address the question.
+- **Gate 0 — Need:** define the medical problem and who is affected.
+- **Gate 1 — Landscape:** review current care, research, clinical development, and existing approaches.
+- **Gate 2 — Evidence:** define a focused, falsifiable research question only if warranted.
+- **Gate 3 — Data:** assess lawful access, provenance, suitability, and limitations of public data.
 - **Gate 4 — Independent review:** obtain qualified critique and revise or stop.
-- **Gate 5 — Institutional pathway:** consider any experimental or translational work only through qualified institutions, supervision, training, permissions, and required approvals.
-- **Gate 6 — Therapeutic development:** any future candidate work requires experienced drug-development professionals, formal governance, appropriate preclinical and clinical pathways, and regulatory oversight.
+- **Gate 5 — Institutional pathway:** consider further research only with qualified institutions, supervision, permissions, and approvals.
+- **Gate 6 — Translation:** any therapeutic development requires experienced professionals, formal governance, appropriate preclinical and clinical pathways, and regulatory oversight.
 
-A calendar date, attractive interface, or investor interest does not satisfy a scientific or development gate.
+A calendar date, attractive interface, or investor interest does not satisfy a scientific gate.

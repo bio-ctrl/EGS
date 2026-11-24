@@ -1,81 +1,71 @@
-# ELSTELLA — THERAPEUTIC PORTFOLIO STRATEGY
+# ELSTELLA — STAGED THERAPEUTIC COMPANY STRATEGY
 
 ## 1. Company ambition
 
-ELSTELLA & CO. aims to become a therapeutics-focused biotechnology company supported by computational biology and systems-level research. The long-term objective is to develop proprietary medicines for meaningful unmet medical needs.
+ELSTELLA & CO. aims to become a research-driven biotechnology company supported by computational biology, rigorous evidence practices, and qualified partnerships. The company will expand through three ordered divisions rather than attempting every area at once.
 
-The company should not be positioned as a generic AI platform, supplement brand, wellness company, or contract research provider. Computational tools are intended to strengthen the company's own research and development decisions.
+## 2. Division 01 — Cellular & Mitochondrial Health
 
-## 2. Scientific foundation
+This is the first research priority. Initial work is a high-level scientific landscape and unmet-need assessment, not drug development.
 
-Systems-Level Biology is the shared scientific foundation. Elstella studies biological function in context across cells, tissues, organs, and physiology. This is a research orientation, not proof that a single mechanism or intervention will apply across diseases.
+The assessment should:
+- Explain cellular energy and mitochondrial biology using authoritative, accessible scientific sources.
+- Map major disease areas and patient needs at a high level.
+- Summarize existing care, research activity, and clinical-development context.
+- Distinguish established findings from preliminary, contested, or missing evidence.
+- Inventory public research datasets, provenance, access conditions, and limitations.
+- Identify whether a narrow, responsible research question is justified.
+- Obtain qualified independent scientific critique before making claims.
 
-## 3. Long-term therapeutic portfolio
+No molecular target, drug candidate, intervention, efficacy, safety, or clinical claim is established by this strategy.
 
-### Portfolio I — Mitochondrial & Cellular Energy Medicine
+## 3. Division 02 — Muscle & Physical Health
 
-**Initial research priority: PROJECT MITOS**
+This is the second planned division. Its future remit is legitimate medical need involving muscle disease, weakness, recovery from illness, and age-related loss of function. It is not an enhancement-drug business. No substantive program begins until Division 01 passes its review gate and the company has suitable expertise and resources.
 
-Long-term area of interest: diseases in which mitochondrial function and cellular energy biology are relevant to disease burden.
+## 4. Division 03 — Brain & Cognitive Health
 
-The initial task is to assess unmet need and identify whether a narrow research question is justified. No indication, target, candidate, or therapeutic approach is selected by this strategy document.
+This is the third planned division. Its future remit is neurological disease, brain health, and cognitive decline. It is not a cognitive-enhancement drug business. No substantive program begins until the earlier divisions have passed their review gates and the company has suitable expertise and resources.
 
-### Portfolio II — Neuromuscular & Muscle Medicine
+## 5. Elstella Intelligence
 
-Adjacent future area of interest: conditions affecting muscle function and the nervous system.
-
-This area may have scientific connections to cellular energy and mitochondrial biology, but shared biology does not establish that one treatment will work across conditions. It requires a separate disease-specific assessment.
-
-### Portfolio III — Kidney & Organ Restoration
-
-Adjacent future area of interest: kidney disease, organ dysfunction, and tissue remodeling.
-
-This area remains a future portfolio ambition. It requires its own medical-need, treatment-landscape, evidence, competition, and feasibility review.
-
-## 4. Computational research capability
-
-Elstella Intelligence is intended to support the therapeutic portfolio through:
+The Research Atlas is the initial computational capability. Its scope:
 - Traceable literature organization.
-- Public dataset metadata curation.
+- Public dataset metadata and access-term documentation.
 - Context-aware evidence mapping.
-- Documentation of uncertainty and contradictory findings.
-- Reproducible descriptive research workflows.
+- Contradiction and uncertainty tracking.
+- Reproducible descriptive workflows.
+- Exportable research records.
 
-The Research Atlas is an early prototype. It must be benchmarked against existing tools and expert workflows before any claims of advantage or product-market fit.
+The prototype must be benchmarked against an appropriate conventional workflow and reviewed by qualified users. It is not a validated discovery engine or clinical decision system.
 
-## 5. Portfolio sequencing
+## 6. Lessons from early Eli Lilly history
 
-1. Complete PROJECT MITOS's literature-led unmet-need assessment.
-2. Select one narrowly defined disease context only if the evidence justifies it.
-3. Obtain qualified independent scientific critique.
-4. Determine whether public-data research can answer a meaningful question.
-5. Consider future institutional collaboration only when a qualified partner and appropriate oversight are available.
-6. Reassess the neuromuscular and kidney portfolios independently after the first program's evidence gates.
+ELSTELLA adapts general company-building principles from Lilly's beginnings:
+- Start with a specific medical purpose.
+- Build a reputation for quality and scientific integrity.
+- Develop internal scientific capability in stages.
+- Collaborate with qualified external experts and institutions.
+- Establish reliable processes before scaling.
+- Reinvest in research and operational capability.
+- Expand into new therapeutic areas only when the existing organization can support them.
 
-Do not launch three drug-development programs simultaneously.
+ELSTELLA does not copy Lilly's products, branding, proprietary methods, or historical identity.
 
-## 6. Commercial model
+## 7. Commercial model
 
-Potential long-term value may come from:
-- Approved proprietary medicines.
-- Licensing of validated therapeutic intellectual property.
-- Co-development and research partnerships.
-- Selective use of computational research tools in support of proprietary programs.
+Possible future value may come from proprietary therapeutic IP, licensing or co-development of substantiated assets, research partnerships, and computational infrastructure that demonstrably improves research workflows. These are future possibilities, not existing revenue or capabilities.
 
-These are possible future models, not existing revenue, products, or capabilities.
+Licensing requires a real asset, defensible rights, evidence, and a partner-specific value proposition. A literature summary or prototype alone is not a licensing asset.
 
-## 7. Investment discipline
+## 8. Capital strategy
 
-A financing target is not a strategy. Any future investment case must be based on:
-- A defined medical problem and patient population.
-- A differentiated and evidence-supported research thesis.
-- Qualified scientific and development leadership.
-- A credible IP and competitive assessment.
-- A milestone-based development plan and budget.
-- A realistic regulatory and clinical pathway.
+Capital should follow measurable milestones. The near-term case is scientific mentorship, qualified critique, and support for a narrow research and software-validation plan—not a multimillion-dollar therapeutic-development raise.
 
-Do not claim that any funding amount is likely or guaranteed.
+Future financing materials must include a defined scope, qualified leadership, realistic budget, use of funds, data and institutional dependencies, competitive assessment, IP review, and governance. Fundraising proceeds belong to the company, not the founder personally.
 
-## 8. Integrity statement
+## 9. IP and integrity
 
-No therapeutic candidate, target, clinical benefit, safety profile, patent position, or regulatory status is established by this portfolio strategy. Each program must earn advancement through evidence and qualified review.
+Do not claim patentability or ownership based on an idea, literature summary, or prototype alone. Obtain qualified advice on inventorship, ownership, prior art, freedom to operate, confidentiality, and publication strategy before formal IP claims or commitments.
+
+No therapeutic candidate, target, clinical benefit, safety profile, patent position, or regulatory status is established.

@@ -1,69 +1,78 @@
 # ELSTELLA — EVIDENCE-GATED COMPANY ROADMAP
 
-This roadmap describes decision gates, not promised dates, discoveries, funding, or product readiness.
+This roadmap describes ordered priorities and decision gates, not promised dates, discoveries, funding, or product readiness.
 
-## Phase 0 — Company and research foundation
+## Phase 0 — Company foundation
 
-**Objective:** Establish the company model and choose one defensible starting research area.
+**Objective:** Establish a focused, quality-led biotechnology company strategy.
 
 Deliverables:
-- Company identity, founding charter, and operating model.
+- Company identity, mission, and operating principles.
 - Clear distinction between Elstella Intelligence and Elstella Therapeutics.
-- Therapeutic portfolio strategy.
-- PROJECT MITOS initial charter.
-- Research claims, data-governance, and safety boundaries.
+- Three ordered divisions: Cellular & Mitochondrial Health; Muscle & Physical Health; Brain & Cognitive Health.
+- Historical work clearly separated from active scope.
+- Research claims, data-governance, and safety standards.
 
-Exit condition: the initial research question, scope, and stop criteria are explicit.
+Exit condition: priorities, immediate deliverables, and stop criteria are explicit.
 
-## Phase 1 — PROJECT MITOS landscape assessment
+## Phase 1 — Division 01: Cellular & Mitochondrial Health
 
-**Objective:** Determine what is already known and whether a meaningful unmet need remains.
+**Objective:** Understand the research landscape and determine whether a meaningful, defensible contribution exists.
 
 Deliverables:
-- Search strategy and dated literature log.
-- Existing-treatment and standard-of-care summary.
-- Map of active development programs and competitors.
-- Disease-context and patient-need summary based on credible sources.
-- Public dataset inventory with access terms and limitations.
+- Dated literature search strategy and source register.
+- High-level cellular-energy and mitochondrial biology overview.
+- Disease and patient-need landscape.
+- Current care, research, and clinical-development map.
+- Public dataset inventory with provenance, access terms, and limitations.
 - Evidence-gap and feasibility assessment.
+- Qualified independent scientific critique.
 
-Exit condition: a qualified reviewer can trace conclusions to sources and confirm that the proposed question is not merely a restatement of existing work.
+Exit condition: conclusions are traceable to sources and reviewed for accuracy. No novelty or therapeutic claim is made without evidence.
 
-## Phase 2 — Narrow computational research question
+## Phase 2 — Elstella Intelligence validation
 
-**Objective:** Decide whether public evidence and suitable datasets can address one specific question.
+**Objective:** Test whether the software improves a defined research workflow.
 
 Deliverables:
-- Falsifiable research question and analysis specification.
-- Dataset suitability and provenance assessment.
-- Reproducible descriptive analysis plan.
-- Versioned code, tests, and documented limitations.
+- One documented user task and workflow.
+- Benchmark against a conventional literature-review process.
+- Appropriate accuracy, completeness, time, and usability measures.
+- Reproducible test cases, limitations, and versioned results.
+- Qualified user feedback.
+
+Exit condition: the platform demonstrates measurable utility or is revised/stopped.
+
+## Phase 3 — Division 01 decision
+
+**Objective:** Decide whether to continue, narrow, revise, or stop the first division's research direction.
+
+Deliverables:
+- One research question only if justified by the landscape.
+- Public-data suitability and provenance assessment.
+- Qualified external critique.
 - Written advance, revise, or stop decision.
 
-Exit condition: the work is reproducible, auditable, and useful enough to justify independent review.
+Exit condition: qualified reviewers support further work and the required institutional pathway is clear.
 
-## Phase 3 — Independent scientific review
+## Phase 4 — Division 02: Muscle & Physical Health
 
-**Objective:** Challenge the interpretation and determine whether the research adds value.
+This division remains on the roadmap. It is activated only after Division 01 passes its review gate, the company has appropriate expertise and resources, and a separate medical-need assessment is justified. Initial scope is literature and public-data assessment, not enhancement-drug development.
 
-Deliverables:
-- Qualified external critique.
-- Revised literature and data assessment.
-- Platform workflow benchmark against an appropriate baseline.
-- Documented limitations, negative results, and next-step decision.
+## Phase 5 — Division 03: Brain & Cognitive Health
 
-Exit condition: independent reviewers agree that further work is justified, or the program is revised or stopped.
+This division remains on the roadmap after Division 02. It requires a separate medical-need assessment, qualified expertise, resources, and its own evidence gate. Initial scope is literature and public-data assessment, not cognitive-enhancement drug development.
 
-## Phase 4 — Institutional translational pathway
+## Phase 6 — Institutional pathway, IP, partnerships, and financing
 
-Any experimental or translational research is considered only with qualified institutional partners, experienced supervision, appropriate training, permissions, approvals, and professional guidance. This phase is not implied by completion of earlier phases.
+Any experimental or translational research requires qualified institutional partners, experienced supervision, appropriate training, permissions, approvals, and professional guidance.
 
-## Phase 5 — Therapeutic development readiness
+IP, licensing, and financing are considered only when a genuine asset or capability exists, ownership and rights are clear, and independent review supports proceeding. No patent, licensing deal, funding, or valuation is presumed.
 
-A future therapeutic program would require a qualified multidisciplinary team, a defensible scientific rationale, appropriate intellectual-property review, a development strategy, financing, formal governance, and applicable regulatory oversight.
+## Phase 7 — Long-term therapeutic development
 
-No candidate design, preclinical testing, clinical study, or drug-development milestone is claimed by this roadmap.
+A therapeutic development pathway requires qualified multidisciplinary leadership, institutional infrastructure, substantial financing, appropriate preclinical and clinical evidence, and regulatory oversight. This roadmap does not claim any such program currently exists.
 
 ## Immediate priority
 
-Complete the PROJECT MITOS landscape assessment. Do not expand into neuromuscular or kidney therapeutic programs until the first research question has passed its evidence and feasibility gates.
+Build and validate the Elstella Intelligence Research Atlas while completing the Division 01 scientific landscape. Keep Divisions 02 and 03 visible in the roadmap, but do not start them in parallel.

@@ -71,6 +71,9 @@ jobs:
           stage.rmdir()
           PY
 
+      - name: Defer CI workflow installation to repository API
+        run: rm -f .github/workflows/ci.yml
+
       - name: Run complete unit test suite
         run: python -m unittest discover -s tests -v
 

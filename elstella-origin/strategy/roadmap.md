@@ -1,54 +1,69 @@
-# ELSTELLA — INITIAL ROADMAP
+# ELSTELLA — EVIDENCE-GATED COMPANY ROADMAP
 
-This roadmap is a sequence of evidence gates, not a promise of dates, outcomes, funding, or product readiness.
+This roadmap describes decision gates, not promised dates, discoveries, funding, or product readiness.
 
-## Phase 0 — Foundation
-**Objective:** Establish a coherent company identity and a researchable flagship question.
+## Phase 0 — Company and research foundation
 
-Deliverables:
-- Company identity and brand system.
-- Founding charter and operating model.
-- PROJECT GENESIS thesis and initial charter.
-- Explicit research boundaries and claims policy.
-
-Exit condition: the research question, scope, and stop criteria are clear.
-
-## Phase 1 — Evidence map
-**Objective:** Determine what is already known.
+**Objective:** Establish the company model and choose one defensible starting research area.
 
 Deliverables:
-- Reproducible literature search log.
-- Screened source register.
-- Public dataset inventory.
-- Evidence and uncertainty map.
-- Comparison with existing reviews.
+- Company identity, founding charter, and operating model.
+- Clear distinction between Elstella Intelligence and Elstella Therapeutics.
+- Therapeutic portfolio strategy.
+- PROJECT MITOS initial charter.
+- Research claims, data-governance, and safety boundaries.
 
-Exit condition: a qualified reviewer can trace the main conclusions to sources and identify the major gaps.
+Exit condition: the initial research question, scope, and stop criteria are explicit.
 
-## Phase 2 — Computational feasibility
-**Objective:** Determine whether an appropriately scoped public-data analysis is feasible and useful.
+## Phase 1 — PROJECT MITOS landscape assessment
 
-Deliverables:
-- Data suitability assessment.
-- Reproducible analysis specification.
-- Versioned code and tests.
-- Documented limitations and negative results.
-
-Exit condition: an independent person can reproduce the descriptive result and audit the inputs.
-
-## Phase 3 — Independent review
-**Objective:** Challenge the research interpretation and the usefulness of the software.
+**Objective:** Determine what is already known and whether a meaningful unmet need remains.
 
 Deliverables:
-- External scientific critique.
-- Revisions to the research question.
-- Software usability and workflow benchmark.
-- Explicit advance, revise, or stop decision.
+- Search strategy and dated literature log.
+- Existing-treatment and standard-of-care summary.
+- Map of active development programs and competitors.
+- Disease-context and patient-need summary based on credible sources.
+- Public dataset inventory with access terms and limitations.
+- Evidence-gap and feasibility assessment.
 
-Exit condition: the next step is justified by evidence, not presentation.
+Exit condition: a qualified reviewer can trace conclusions to sources and confirm that the proposed question is not merely a restatement of existing work.
 
-## Phase 4 — Institutional pathway
-Any experimental or translational work is considered only with qualified institutional partners, appropriate supervision, training, approvals, and professional guidance. No laboratory or therapeutic activity is implied by completion of earlier phases.
+## Phase 2 — Narrow computational research question
+
+**Objective:** Decide whether public evidence and suitable datasets can address one specific question.
+
+Deliverables:
+- Falsifiable research question and analysis specification.
+- Dataset suitability and provenance assessment.
+- Reproducible descriptive analysis plan.
+- Versioned code, tests, and documented limitations.
+- Written advance, revise, or stop decision.
+
+Exit condition: the work is reproducible, auditable, and useful enough to justify independent review.
+
+## Phase 3 — Independent scientific review
+
+**Objective:** Challenge the interpretation and determine whether the research adds value.
+
+Deliverables:
+- Qualified external critique.
+- Revised literature and data assessment.
+- Platform workflow benchmark against an appropriate baseline.
+- Documented limitations, negative results, and next-step decision.
+
+Exit condition: independent reviewers agree that further work is justified, or the program is revised or stopped.
+
+## Phase 4 — Institutional translational pathway
+
+Any experimental or translational research is considered only with qualified institutional partners, experienced supervision, appropriate training, permissions, approvals, and professional guidance. This phase is not implied by completion of earlier phases.
+
+## Phase 5 — Therapeutic development readiness
+
+A future therapeutic program would require a qualified multidisciplinary team, a defensible scientific rationale, appropriate intellectual-property review, a development strategy, financing, formal governance, and applicable regulatory oversight.
+
+No candidate design, preclinical testing, clinical study, or drug-development milestone is claimed by this roadmap.
 
 ## Immediate priority
-Complete the GENESIS literature and dataset inventory. Do not expand into multiple therapeutic programs or build unnecessary infrastructure before this work is finished.
+
+Complete the PROJECT MITOS landscape assessment. Do not expand into neuromuscular or kidney therapeutic programs until the first research question has passed its evidence and feasibility gates.

@@ -8,6 +8,6 @@
     "start": "node --env-file=.env server.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.6"
   }
 }

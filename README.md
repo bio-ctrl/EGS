@@ -2,72 +2,86 @@
 
 **Biological Restoration & Therapeutics**  
 **Scientific foundation:** Systems-Level Biology  
-**Company model:** Computationally enabled therapeutic biotechnology
+**Company model:** Computationally enabled therapeutic biotechnology  
+**Flagship research focus:** PROJECT LEIGH — Leigh syndrome spectrum
 
-Elstella's long-term ambition is to become a research-driven biotechnology company that discovers, develops, and ultimately commercializes medicines for diseases involving dysfunctional cellular and organ systems. Computational biology and evidence infrastructure are intended to strengthen the company's research process; they are not substitutes for biological validation, qualified drug development, or clinical evidence.
+Elstella's long-term ambition is to become a research-driven biotechnology company focused initially on one disease area: Leigh syndrome spectrum (LSS). Its long-term mission is to contribute to better treatments and, ultimately, a cure. This is an ambition, not a claim that Elstella has discovered a treatment or established a therapeutic program.
 
-## Strategic architecture
+Computational biology and evidence infrastructure are intended to strengthen research prioritization. They are not substitutes for expert scientific judgment, biological validation, qualified drug development, or clinical evidence.
 
-Elstella is designed around two connected capabilities:
+## Company architecture
 
-1. **Elstella Intelligence** — computational research infrastructure for organizing literature, public biological datasets, disease context, evidence provenance, and research questions.
-2. **Elstella Therapeutics** — a future portfolio of proprietary therapeutic programs advanced only when scientific evidence, qualified expertise, resources, and institutional oversight justify progression.
+1. **Elstella Intelligence** — computational research infrastructure for organizing scientific literature, public dataset metadata, disease context, evidence provenance, and research questions.
+2. **Elstella Therapeutics** — the intended long-term therapeutic biotechnology business. It will advance only when a disease-specific research thesis, qualified expertise, evidence, resources, and institutional oversight justify progression.
 
-The long-term therapeutic portfolio is intended to focus on three related areas:
+These are strategic capabilities, not established commercial products. The Research Atlas is an early prototype whose value has not yet been independently benchmarked.
 
-- **Mitochondrial & Cellular Energy Medicine** — diseases involving mitochondrial dysfunction and impaired cellular energy biology.
-- **Neuromuscular & Muscle Medicine** — conditions affecting muscle function and the nervous system.
-- **Kidney & Organ Restoration** — chronic organ dysfunction, renal disease, and tissue remodeling.
+## One flagship focus: PROJECT LEIGH
 
-These are strategic areas of interest, not validated programs or established product opportunities. The initial research priority is **PROJECT MITOS**, a literature-led assessment of mitochondrial disease biology and unmet medical needs.
+**Disease area:** Leigh syndrome spectrum, a genetically heterogeneous mitochondrial disorder spectrum that predominantly affects the nervous system.
 
-## Initial research priority — PROJECT MITOS
+**Mission:** Advance research toward better treatments and, over the long term, a cure for Leigh syndrome spectrum.
 
-**Core question:** Where do current evidence, treatment limitations, and accessible research data indicate a specific, meaningful unmet need in mitochondrial disease that merits further investigation?
+**First objective:** Complete a rigorous, source-traceable scientific landscape and unmet-need assessment. Determine what is already known, what is being investigated, what remains uncertain, and whether Elstella can make a credible contribution.
+
+The disease is genetically diverse. A 2026 *Nature Communications* study reported promising preclinical findings using computational screening and human brain organoid models. These findings are not proof of safety or effectiveness in people, and they demonstrate why Elstella must map existing work before claiming a gap. See the [2026 study](https://www.nature.com/articles/s41467-026-71391-2) and the [2026 natural-history study](https://doi.org/10.1177/26330040261476231).
 
 Initial work is limited to:
-- A traceable literature and existing-treatment landscape.
-- A high-level map of mitochondrial disease categories and clinical context.
-- A public research dataset inventory, including access conditions and limitations.
-- A comparison of existing research programs and development activity.
-- A documented gap assessment and an advance, revise, or stop recommendation.
+- A dated, traceable literature and clinical-development landscape.
+- A high-level disease and patient-need overview using credible sources.
+- A public research-data inventory with provenance, access terms, and limitations.
+- A map of existing research efforts and competing approaches.
+- A documented evidence-gap and feasibility assessment.
+- Qualified independent scientific critique.
+- An advance, revise, or stop recommendation.
 
-No drug candidate, molecular target, therapeutic mechanism, efficacy, or safety claim is established by this research plan.
+No drug candidate, molecular target, therapeutic mechanism, efficacy, safety, or clinical claim is established by this plan.
 
-## Scientific foundation and retained work
+## Elstella Intelligence
 
-- **Systems-Level Biology** is the company's scientific foundation: biological outcomes are studied in context across molecules, cells, tissues, organs, and physiology.
-- **PROJECT GENESIS** remains foundational research on developmental systems, gene regulation, and biological form. It supports the company's broader systems-biology understanding; it is not the current therapeutic lead.
-- **PROJECT CARDIA** remains a separate exploratory research track on cardiac remodeling and fibrosis. Its prior work is retained and must be assessed independently.
-- **VYREON** remains a preliminary concept associated with CARDIA only. It is not an established drug candidate, molecule, target, or validated therapeutic.
-- Earlier research records are preserved as historical or exploratory work unless their status is explicitly updated through evidence review.
+The platform's near-term purpose is to make research evidence easier to organize and audit:
+- Literature records with source links and publication metadata.
+- Public dataset inventory and data-use documentation.
+- Disease-context and evidence maps.
+- Clear separation of observation, interpretation, and hypothesis.
+- Contradiction tracking, uncertainty labels, and reproducible records.
+- Exportable research documentation.
+
+The platform must be benchmarked against a conventional literature-review workflow and reviewed by qualified researchers before any performance or commercial-advantage claim.
+
+## Capital, intellectual property, and licensing
+
+Capital should follow evidence-backed milestones, not projections or headquarters plans. Near-term priorities are scientific mentorship, a defensible research assessment, a working and benchmarked software prototype, and qualified institutional relationships.
+
+Intellectual property must arise from a genuine, documented invention. Patentability, ownership, inventorship, freedom to operate, confidentiality, and publication timing require qualified professional advice. Do not claim patent protection where none exists.
+
+Licensing is a possible future route only if Elstella develops an asset or technology with defensible rights, supporting evidence, and a clear value proposition to a partner. No licensing-ready asset or deal is currently claimed.
+
+Because the founder is a minor, company formation, equity, contracts, fundraising, securities matters, IP assignments, and institutional agreements require parent/guardian involvement and qualified professional guidance.
+
+## Retained work and scope control
+
+- **PROJECT GENESIS** remains foundational research on developmental systems, gene regulation, and biological form. It is not a second active therapeutic program.
+- **PROJECT CARDIA** remains a separate exploratory historical research track. Its evidence and claims are not part of PROJECT LEIGH.
+- **VYREON** remains a preliminary concept associated with CARDIA only; it is not an established candidate, molecule, target, or validated therapeutic.
+- Other prior research records are preserved as historical or exploratory work. They are not active therapeutic programs unless explicitly re-evaluated.
+
+Do not start additional disease programs while PROJECT LEIGH is the sole flagship focus. Do not access or modify CERES.
 
 ## Research and development principles
 
 1. Start with a defined disease problem and a falsifiable research question.
-2. Map existing treatments, competitors, clinical development, and prior art before claiming a gap.
+2. Map existing research and clinical development before claiming an unmet gap.
 3. Use lawfully accessible publications and appropriately accessible public research data.
-4. Preserve source provenance, cohort structure, data-use terms, and uncertainty.
+4. Preserve source provenance, access conditions, context, and uncertainty.
 5. Separate association, mechanism, causation, and therapeutic intervention.
 6. Do not claim novelty, efficacy, safety, patentability, or clinical utility without appropriate independent evidence.
-7. Experimental research, drug development, biological samples, animals, human participants, and clinical work require qualified institutional partners, supervision, permissions, and regulatory oversight.
-
-## Repository structure
-
-- `elstella-origin/company/` — company identity, charter, and operating model.
-- `elstella-origin/research/` — program charters, evidence reviews, and research plans.
-- `elstella-origin/platform/` — research software, data-quality utilities, and methods.
-- `elstella-origin/governance/` — claims, data, and research-safety standards.
-- `elstella-origin/strategy/` — evidence-gated company and research roadmap.
-- `elstella-origin/investor/` — factual company overview.
-- `elstella-origin/tests/` and `.github/workflows/` — software tests and continuous integration.
+7. Experimental, translational, and clinical research require qualified institutional partners, supervision, permissions, and regulatory oversight.
 
 ## Current stage
 
-**Stage:** Early research infrastructure, literature review, and hypothesis assessment.
+**Stage:** Early research infrastructure, literature review, and software prototyping.
 
-**Not established:** A validated therapeutic discovery, drug candidate, validated biological mechanism, clinical program, patent, regulatory approval, revenue, funding, or institutional partnership.
-
-The immediate objective is to complete the PROJECT MITOS landscape assessment and determine whether one narrow research question merits further work. Elstella should not attempt three therapeutic areas simultaneously.
+**Not established:** A validated therapeutic discovery, drug candidate, validated biological mechanism, clinical program, patent, regulatory approval, revenue, funding, licensing agreement, or institutional partnership.
 
 **Founding principle: Evidence before claims.**

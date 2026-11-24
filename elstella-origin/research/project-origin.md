@@ -1,50 +1,49 @@
-# PROJECT ORIGIN — FOUNDING RESEARCH INITIATIVE
+# ELSTELLA — SYSTEMS-LEVEL BIOLOGY RESEARCH FOUNDATION
+
+This document records the broad scientific motivation behind Elstella. It is not a substitute for the narrower PROJECT GENESIS research thesis.
 
 ## Central question
 
-Can we identify biological mechanisms associated with the transition from healthy cellular function to dysfunctional states, and organize the evidence in a way that helps researchers formulate better, more testable restoration hypotheses?
+How do genetic regulation, cellular interactions, developmental history, tissue organization, and environment combine to produce biological form and function—and how do these relationships change across development, evolution, and disease?
 
 ## Rationale
 
-Biological dysfunction is context-dependent. A molecular signal may differ by tissue, cell population, disease state, stage, model system and patient subgroup. Literature summaries that flatten those distinctions can make findings appear more consistent or generalizable than they are.
+Biological outcomes are context-dependent. A molecular observation may differ by tissue, cell population, developmental stage, model system, or environment. Treating any one measurement as a complete explanation can hide important dependencies and limitations.
 
-ORIGIN will test whether a structured, traceable representation of biological evidence improves research synthesis and hypothesis prioritization.
+Elstella's scientific foundation is to study biological systems in context, preserve the distinction between observation and interpretation, and develop research questions that can be tested against evidence.
 
-## Initial research tracks
+## Initial flagship: PROJECT GENESIS
 
-### A. Cardiovascular restoration — PROJECT CARDIA
-Investigate cardiac fibrosis as a focused case study in disease context, fibroblast-state diversity, immune–stromal interactions, tissue remodeling and translation barriers.
+GENESIS is the first research priority. Its initial phase is limited to:
+- Literature mapping in developmental and evolutionary biology.
+- Terminology and concept mapping for gene regulation and developmental context.
+- Public dataset metadata inventory.
+- Descriptive synthesis of published evidence.
+- Identification of a narrow, falsifiable research gap.
 
-### B. Nature-inspired delivery — PROJECT BIOPATH
-Study published principles of biological transport, distribution and molecular targeting as inspiration for safer and more selective therapeutic delivery concepts. Do not handle or experiment with toxins or venoms.
+It does not include gene sequence design, gene editing, organism engineering, wet-lab experimentation, or therapeutic testing.
 
-### C. Cellular and epigenetic restoration
-Survey the evidence on cell-state regulation, epigenetic reprogramming and aging-related biology. This remains a literature-research track until a specific, defensible question is selected.
+## Separate research track: PROJECT CARDIA
 
-## Proposed platform hypothesis
+CARDIA remains a distinct exploratory literature program concerning cardiac remodeling and fibrosis. Its existing documents and hypotheses must be reviewed independently and must not be presented as findings from GENESIS.
 
-A context-aware evidence model that records disease context, tissue, cell state, model system, time point, intervention class, outcome and evidence quality may help reviewers identify contradictions, context-specific signals and weak translational links more reliably than an unstructured summary.
+## Future areas of interest
 
-This hypothesis is falsifiable. Existing systematic-review tools, knowledge graphs and expert workflows may already provide equivalent or superior performance.
+Aging biology, regenerative biology, mitochondrial biology, and other domains may be considered later. They are not active validated programs. Each would require its own question, literature review, feasibility assessment, and explicit decision to proceed.
 
-## Research objectives
+## Research-platform hypothesis
 
-1. Build a transparent evidence schema.
-2. Preserve source provenance for every extracted claim.
-3. Separate direct observations from authors' interpretations and our own hypotheses.
-4. Represent contradictory findings rather than forcing consensus.
-5. Make model-system limitations visible.
-6. Compare platform-assisted review with a conventional review process.
-7. Obtain independent expert feedback before claiming utility.
+A provenance-first workspace that records biological context, model system, time point, evidence type, source location, and limitations may improve research synthesis. This is a software hypothesis that must be benchmarked; it is not evidence of a new biological mechanism or therapeutic discovery.
 
 ## Success criteria
 
-- Every displayed evidence claim links to a source and a precise location in that source.
-- Reviewers can reproduce the extraction process.
-- Independent reviewers achieve acceptable agreement on key fields.
-- The tool reduces a pre-defined review burden or improves identification of context-specific evidence without increasing unsupported conclusions.
-- Domain experts identify at least one meaningful decision or question clarified by the platform.
+- Research questions are specific and falsifiable.
+- Sources and dataset metadata are traceable.
+- Direct observations are separated from interpretation.
+- Contradictory and negative findings are retained.
+- Independent reviewers can audit the process.
+- The platform demonstrates measurable value against an appropriate baseline.
 
 ## Stop criteria
 
-Stop or redesign if the evidence cannot be extracted reliably, the tool adds no measurable value over existing workflows, experts find the representation misleading, or the proposed advantage depends on unsupported biological assumptions.
+Revise or stop if the question is already adequately answered, the evidence cannot be compared responsibly, the data are unsuitable, the synthesis is not reproducible, or the software adds no measurable value.

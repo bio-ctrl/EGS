@@ -1,58 +1,73 @@
-# ELSTELLA & CO. — EARLY COMPANY OVERVIEW
+# ELSTELLA & CO. — EARLY-STAGE COMPANY OVERVIEW
 
-**Biological Restoration & Therapeutics**
+**Descriptor:** Biological Restoration & Therapeutics  
+**Scientific foundation:** Systems-Level Biology  
+**Company model:** Computationally enabled therapeutic biotechnology  
+**Initial research priority:** PROJECT MITOS  
+**Stage:** Early research planning and software prototyping
 
-## The ambition
+## Ambition
 
-Elstella aims to build a biotechnology company focused on understanding biological dysfunction and developing computational and therapeutic technologies intended to restore healthy biological function.
+Elstella's long-term ambition is to become a research-driven biotechnology company that discovers, develops, and ultimately commercializes proprietary medicines for diseases involving dysfunctional cellular, tissue, and organ systems.
 
-## The proposed approach
+Computational biology is intended to strengthen research prioritization and evidence synthesis. The long-term business ambition is therapeutic development, not a standalone AI chatbot or generic research-services firm.
 
-The initial strategy combines:
-- a computational research workflow for organizing biomedical evidence by biological context;
-- a focused cardiovascular research program examining cardiac fibrosis;
-- a longer-term pipeline of research questions selected only when supported by evidence.
+This is an ambition, not a claim of current therapeutic capability.
 
-## Initial product concept
+## Company architecture
 
-**Elstella Intelligence / ORIGIN ATLAS** is a proposed research tool for traceable evidence extraction, context mapping and hypothesis comparison. The current implementation is a static interface demonstrator, not a functioning AI platform or validated scientific product.
+1. **Elstella Intelligence:** an early research-software capability intended to organize literature, public biological datasets, disease context, and evidence provenance. Its value has not been demonstrated against expert workflows or established tools.
+2. **Elstella Therapeutics:** the intended long-term proprietary medicine-development business. No therapeutic candidate or validated development program currently exists.
 
-## Initial research program
+## Initial therapeutic portfolio ambition
 
-**PROJECT CARDIA** investigates whether context-aware evidence mapping clarifies differences across cardiac fibrosis disease contexts, cell populations, model systems and stages of disease.
+- **Mitochondrial & Cellular Energy Medicine:** initial research priority through PROJECT MITOS.
+- **Neuromuscular & Muscle Medicine:** adjacent future therapeutic area.
+- **Kidney & Organ Restoration:** adjacent future therapeutic area.
 
-## Why this could matter
+These are strategic portfolio areas, not three active drug-development programs. The initial research effort will assess whether one narrow mitochondrial-disease question is justified by the evidence.
 
-Biomedical research produces large, heterogeneous bodies of evidence. A workflow that improves traceability, exposes contradictions and preserves biological context could be useful to researchers. This value proposition remains unproven and must be benchmarked against existing systematic-review and biomedical knowledge tools.
+## Retained scientific foundation
 
-## Current stage
+PROJECT GENESIS remains foundational work on developmental systems, gene regulation, and biological form. PROJECT CARDIA remains a separate exploratory literature track on cardiac remodeling and fibrosis. Existing CARDIA/NEXUS records are retained and must be assessed independently. VYREON remains a preliminary concept associated with CARDIA only; it is not an established drug candidate or validated therapeutic.
 
-- Company thesis: documented.
-- Research question: proposed.
-- Initial source list: assembled; source-level extraction pending.
-- Software: static interface demonstrator.
-- Experimental validation: none.
+## Current evidence and status
+
+- Company strategy: documented as a working plan.
+- PROJECT MITOS charter: drafted.
+- PROJECT MITOS landscape assessment: framework prepared; assessment not yet completed.
+- Existing-treatment and competitor review: not yet completed for a defined disease indication.
+- Public dataset inventory: not yet completed.
+- Research Atlas: early software prototype; product value not yet benchmarked.
+- Independent scientific review: not yet completed.
+- Experimental validation: none claimed.
 - Therapeutic candidate: none.
-- Clinical data or clinical validation: none.
-- Revenue, funding and institutional partnerships: none claimed.
+- Clinical validation: none.
+- Patent or licensing position: none claimed.
+- Revenue, funding, and institutional partnerships: none claimed.
 
 ## Key risks
 
-1. Existing tools may already solve the workflow problem.
-2. Evidence extraction may be unreliable or expensive.
-3. Expert users may not find the output useful.
-4. A software platform may not create defensible intellectual property.
-5. Cardiac fibrosis biology may not yield a tractable therapeutic opportunity.
-6. Translation from preclinical findings to clinical benefit is difficult.
+1. The selected disease area may already have effective or emerging treatments that reduce the proposed unmet need.
+2. Biological complexity may make a useful therapeutic hypothesis difficult to establish.
+3. Public datasets may be incomplete, biased, or unsuitable for the intended question.
+4. Computational associations may not establish causal mechanisms or therapeutic benefit.
+5. Existing competitors may have stronger data, teams, capital, and intellectual property.
+6. Translating biological research into safe and effective medicines is expensive, lengthy, and requires specialized expertise and regulatory oversight.
+7. The research platform may not demonstrate a meaningful advantage over existing tools.
 
 ## Next proof points
 
-1. Complete a verified, reproducible evidence map.
-2. Benchmark against a conventional review.
-3. Obtain independent expert feedback.
-4. Demonstrate a measurable improvement in accuracy, speed or decision usefulness.
-5. Define a specific, defensible technical advantage before making a commercial claim.
+1. Complete the PROJECT MITOS literature and existing-treatment landscape.
+2. Compare disease areas using transparent unmet-need and feasibility criteria.
+3. Build a traceable public-dataset inventory.
+4. Identify one narrow research question only if the evidence supports it.
+5. Obtain qualified independent scientific critique.
+6. Benchmark the Research Atlas against a conventional workflow.
+7. Advance, revise, or stop based on documented results.
 
-## Capital philosophy
+## Capital and governance
 
-Capital should follow validated milestones. Any future funding target must be supported by a credible scope, qualified team, budget, institutional access, IP strategy and appropriate legal structure. Fundraising is not personal income and is not evidence of scientific progress.
+Capital should follow validated milestones. Any future financing plan must be supported by a defined development scope, qualified team, budget, institutional access, IP assessment, and appropriate legal structure. Fundraising is not revenue, personal wealth, or evidence of scientific progress.
+
+Because the founder is a minor, formal company formation, contracts, equity, fundraising, securities matters, IP assignments, and institutional agreements require parent/guardian involvement and qualified professional guidance.

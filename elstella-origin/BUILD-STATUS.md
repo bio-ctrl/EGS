@@ -1,6 +1,6 @@
-# BUILD STATUS — ORIGIN ATLAS
+# BUILD STATUS — ELSTELLA RESEARCH ATLAS
 
-## Implemented in this branch
+## Implemented in the existing prototype
 
 - Interactive tab navigation.
 - Seeded starter bibliography marked unreviewed.
@@ -11,48 +11,54 @@
 - CSV evidence export.
 - JSON workspace backup and import.
 - Reset of local workspace with confirmation.
-- Protocol, data dictionary and benchmark documentation.
-- CARDIA therapeutic landscape rapid map and scientific validation protocol.
-- Evidence metadata completeness gate with unit tests.
-- Europe PMC literature search and bibliographic metadata import.
+- Literature search and bibliographic metadata import through Europe PMC.
 - Abstract sentence candidate extraction with explicit unverified labels.
 - Server-side AI synthesis endpoint with evidence-ID citation constraints and provider credentials kept off the client.
 - Optional Supabase authentication and per-account workspace sync adapter.
 - Supabase schema with row-level security.
-- Node built-in test suite and repository-level GitHub Actions workflow.
+- Evidence metadata completeness gate with unit tests.
+- Node built-in test suite and GitHub Actions workflow.
+- Company identity, therapeutic strategy, MITOS research charter, data-governance, and roadmap documentation.
+
+## Current strategic role
+
+The Research Atlas is intended to support Elstella Intelligence: a provenance-first research workspace for organizing literature, public-data metadata, disease context, hypotheses, and evidence status. It is not a validated AI discovery engine, clinical decision system, or drug-design platform.
+
+PROJECT MITOS is the initial literature-led research priority. The therapeutic portfolio also identifies neuromuscular/muscle medicine and kidney/organ restoration as future areas. These are not active drug-development programs.
 
 ## Known limitations
 
-- Europe PMC search requires network access and has not been tested against the live service in a browser.
-- PubMed remains an external search shortcut.
-- AI synthesis requires a configured compatible provider endpoint and a running Node server. AI output can be incorrect and must be source-checked.
-- Supabase sync requires a separately provisioned project, schema execution and user configuration. It supports same-account cross-device sync, not shared team collaboration.
+- The prototype was originally organized around CARDIA/ORIGIN; the interface and data model still require a full product-level review to become a coherent multi-program workspace.
+- Starter records remain unreviewed leads until metadata and source content are checked.
+- Europe PMC search requires network access and has not been fully browser-tested.
+- AI synthesis requires a configured compatible provider endpoint and a running Node server. AI output can be incorrect and must be checked against original sources.
+- Supabase sync requires a separately provisioned project, schema execution, and user configuration. It supports same-account cross-device sync, not shared team collaboration.
 - No production database has been provisioned by this repository.
 - No browser-level end-to-end test or external security audit has been completed.
 - Abstract extraction produces candidate snippets only; no claim is automatically marked verified.
 - No validated evidence-quality scoring exists.
-- The five starter citations remain unreviewed leads; verify metadata and source content before relying on them.
 - No formal scientific or clinical validation has been completed.
-- CARDIA literature map is rapid and non-exhaustive; it is not a systematic review or a target nomination.
-- Evidence completeness tests only check required metadata; they do not verify source truth or scientific quality.
-- No therapeutic discovery or drug candidate has been completed.
-- A 2026 preclinical cardiac-fibrosis compound report is documented as competing literature, not as an Elstella discovery.
+- Existing CARDIA literature materials are rapid research artifacts, not a systematic review or validated therapeutic program.
+- Evidence completeness tests check required metadata; they do not verify source truth or scientific quality.
+- No therapeutic discovery, drug candidate, or clinical product has been completed.
 
 ## Run and test
 
-Use Node.js 20.6 or newer. Copy `.env.example` to `.env`, configure an AI provider if desired, run `npm start`, then open `http://localhost:4173`. Run `npm test` for unit tests. Directly opening `index.html` supports the local UI but not the server-side AI endpoint.
+Use Node.js 20.6 or newer. Copy .env.example to .env, configure an AI provider only if desired, run npm start, then open http://localhost:4173. Run npm test for unit tests.
 
 ## Data safety
 
-Do not enter patient-identifiable information. Export JSON backups because browser-local storage can be cleared. Imported JSON replaces the local workspace after confirmation. AI requests send selected evidence records to the configured external provider only after an explicit confirmation. Do not commit `.env`.
+Do not enter patient-identifiable information. Export JSON backups because browser-local storage can be cleared. Imported JSON replaces the local workspace after confirmation. AI requests send selected evidence records to the configured external provider only after explicit confirmation. Do not commit .env.
 
 ## Remaining milestones
 
-1. Obtain a successful GitHub Actions test run and perform a browser-level smoke test.
-2. Configure and test an AI provider endpoint without exposing credentials.
-3. Provision Supabase and test signup, row-level security, upsert and cross-device restore.
-4. Add search-log and formal screening-decision modules.
-5. Verify source metadata and manually review every abstract candidate.
-6. Conduct an independent benchmark with qualified reviewers.
-7. Execute the review protocol, independently verify extracted claims and complete the platform benchmark.
-8. Obtain qualified expert review before proposing any supervised experimental research. Therapeutic discovery and biological validation are research activities, not software checkboxes.
+1. Run the automated test suite and verify the resulting GitHub Actions status.
+2. Perform a browser-level smoke test of the Research Atlas.
+3. Complete the PROJECT MITOS literature and existing-treatment landscape.
+4. Build a traceable public-dataset inventory.
+5. Compare candidate disease areas using transparent unmet-need and feasibility criteria.
+6. Obtain qualified independent scientific critique.
+7. Benchmark the Research Atlas against a conventional research workflow.
+8. Decide whether MITOS advances, is revised, or is stopped.
+
+Therapeutic discovery and biological validation are scientific programs, not software checkboxes.

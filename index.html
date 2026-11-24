@@ -1,79 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xylenic Systems | Autonomous Worker Proxy</title>
-    <!-- Forced Design Layout Engine -->
-    <link rel="stylesheet" href="https://cloudflare.com">
-    <style>
-        body { background-color: #faf9f7; font-family: system-ui, -apple-system, sans-serif; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081018">
+  <meta name="description" content="Elstella & Co. — Biological Restoration & Therapeutics. A therapeutics-focused biotechnology initiative grounded in systems-level biology.">
+  <title>ELSTELLA &amp; CO. | Biological Restoration &amp; Therapeutics</title>
+  <style>
+    :root{color-scheme:dark;--bg:#081018;--panel:#101c25;--line:#263b47;--text:#edf4f5;--muted:#9aadb5;--accent:#86d6c5;--gold:#d9c18c}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 15% 0%,#17313a 0,transparent 45%),var(--bg);color:var(--text);font:16px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+    .shell{max-width:1180px;margin:auto;padding:30px 28px 42px;min-height:100vh;display:flex;flex-direction:column}
+    header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0 22px;gap:18px}
+    .brand{display:flex;align-items:center;gap:14px}.mark{width:42px;height:42px;border:1px solid #568c86;border-radius:12px;display:grid;place-items:center;color:var(--accent);font-size:22px}
+    .word{font-size:15px;font-weight:700;letter-spacing:.2em}.sub,.eyebrow,.status{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .status{border:1px solid #405d58;border-radius:99px;padding:7px 11px;color:var(--accent)}
+    main{flex:1;display:grid;grid-template-columns:1.25fr .75fr;gap:44px;align-items:center;padding:90px 0}
+    .eyebrow{color:var(--accent)}h1{font-size:clamp(42px,7vw,78px);line-height:.99;letter-spacing:-.055em;font-weight:520;margin:18px 0 24px;max-width:780px}
+    .lead{max-width:660px;color:var(--muted);font-size:18px}.rule{height:1px;background:var(--line);margin:28px 0}
+    .panel{border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,var(--panel),#0b151d);padding:24px}
+    .panel h2{font-size:13px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin:0 0 14px}
+    .panel p{font-size:14px;color:var(--muted);margin:0 0 18px}.link{display:inline-flex;text-decoration:none;color:#071411;background:var(--accent);padding:12px 16px;border-radius:7px;font-weight:700;font-size:13px}
+    .note{font-size:12px;color:var(--muted);border-left:2px solid var(--gold);padding-left:13px;margin-top:20px}
+    footer{border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:16px}
+    @media(max-width:760px){.shell{padding:22px 17px 28px}header{align-items:flex-start;flex-direction:column}main{grid-template-columns:1fr;padding:58px 0;gap:25px}.lead{font-size:16px}footer{flex-direction:column}}
+  </style>
 </head>
-<body class="text-zinc-900 min-h-screen p-6 sm:p-12 flex flex-col justify-between antialiased">
-
-    <!-- Clean Header Frame -->
-    <header class="w-full max-w-4xl mx-auto flex justify-between items-center bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-        <div class="flex items-center gap-3">
-            <div class="w-6 h-6 bg-red-500 rounded text-white flex items-center justify-center font-bold text-xs">X</div>
-            <span class="font-mono text-sm font-bold tracking-tight">XYLENIC PROTOCOL v1.0.4</span>
-        </div>
-        <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-            <span class="text-xs font-mono text-gray-400 uppercase font-semibold">Proxy Streaming</span>
-        </div>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand"><div class="mark" aria-hidden="true">✳</div><div><div class="word">ELSTELLA &amp; CO.</div><div class="sub">Biological Restoration &amp; Therapeutics</div></div></div>
+      <div class="status">Systems-Level Biology · Research Stage</div>
     </header>
-
-    <!-- Clean Two-Column Grid Setup (No Dark Simulation Window) -->
-    <main class="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 my-auto py-12">
-        
-        <!-- Left Side: Product Positioning -->
-        <div class="flex flex-col justify-center">
-            <div class="inline-flex items-center gap-2 text-xs uppercase font-mono border border-gray-200 px-3 py-1 rounded-full bg-white text-gray-500 w-fit mb-6">
-                ■ Secure Network Proxy
-            </div>
-            <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-gray-900 mb-6 leading-tight">
-                Automate your jobs. <br><span class="text-gray-400">Keep the sovereignty.</span>
-            </h1>
-            <p class="text-gray-500 text-base font-light leading-relaxed">
-                The first promptless, passive workspace daemon. Xylenic maps repository architecture, processes asynchronous corporate communication loops, and deploys validated production updates natively—completely invisible to endpoint tracking frameworks.
-            </p>
-        </div>
-
-        <!-- Right Side: Clean White Lead Capture Box -->
-        <div class="flex flex-col justify-center">
-            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm space-y-6">
-                <div>
-                    <h3 class="text-lg font-bold text-gray-900">Request Encrypted Access</h3>
-                    <p class="text-xs text-gray-400 font-mono mt-1">Join 400+ remote engineers in the stealth queue.</p>
-                </div>
-
-                <!-- Netlify Automatic Form Connection -->
-                <form name="waitlist" method="POST" data-netlify="true" class="space-y-4">
-                    <div>
-                        <label class="text-[10px] font-mono uppercase tracking-wider text-gray-400 block mb-1">Secure Corporate Email</label>
-                        <input type="email" name="email" required placeholder="name@company.com" 
-                               class="w-full bg-[#faf9f7] border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-gray-400 font-mono transition">
-                    </div>
-                    
-                    <!-- Sunlit High-Contrast Action Button -->
-                    <button type="submit" class="w-full bg-yellow-100 border border-yellow-300 text-gray-950 font-bold text-xs tracking-wider py-4 rounded-lg hover:bg-yellow-200 transition uppercase font-mono shadow-sm">
-                        Secure Alpha Token
-                    </button>
-                </form>
-
-                <div class="border-t border-gray-100 pt-4 text-center">
-                    <span class="text-[10px] font-mono text-gray-400 uppercase tracking-widest">● End-To-End Security Guaranteed</span>
-                </div>
-            </div>
-        </div>
-
+    <main>
+      <section>
+        <div class="eyebrow">Computational biology supporting therapeutic innovation</div>
+        <h1>Understand biology at the level of the system.</h1>
+        <p class="lead">Elstella is building toward a therapeutics-focused biotechnology company that studies dysfunctional cellular, tissue, and organ systems and aims to develop medicines for meaningful unmet medical needs.</p>
+        <div class="rule"></div>
+        <p class="lead">Our initial research priority, <strong>PROJECT MITOS</strong>, is a literature-led assessment of mitochondrial disease, existing care, and unmet medical needs. Computational biology supports the research; it does not replace biological validation or clinical evidence.</p>
+      </section>
+      <aside class="panel">
+        <h2>Research workspace</h2>
+        <p>Explore the current evidence-organizing prototype, research programs, methods, and project documentation.</p>
+        <a class="link" href="./elstella-origin/">Open Elstella Research Atlas ↗</a>
+        <div class="note"><strong>Research-stage notice.</strong> Elstella has not established a validated discovery, therapeutic candidate, medical product, or clinical benefit. All scientific claims remain subject to evidence review.</div>
+      </aside>
     </main>
-
-    <!-- Simple Corporate Footer -->
-    <footer class="w-full max-w-4xl mx-auto flex justify-between items-center text-xs font-mono text-gray-400 border-t border-gray-200 pt-6">
-        <div>&copy; 2026 Xylenic Systems Inc. All rights reserved.</div>
-    </footer>
-
+    <footer><span>ELSTELLA &amp; CO. · Biological Restoration &amp; Therapeutics</span><span>Evidence before claims.</span></footer>
+  </div>
 </body>
 </html>

@@ -27,11 +27,14 @@ This repository contains an early software and research prototype. It is **not**
 - `research/project-cardia.md` — initial cardiac fibrosis research question and falsification criteria.
 - `research/project-biopath.md` — exploratory nature-inspired delivery research.
 - `research/review-protocol.md` — draft CARDIA review protocol; not registered or executed.
+- `research/scientific-validation-plan.md` — validation gates, benchmark design and falsification criteria.
+- `research/cardia-therapeutic-landscape.md` — rapid literature map of existing mechanisms, candidate approaches and translational gaps; not a systematic review.
 - `research/evidence-register.csv` — starter bibliography, not completed evidence extraction.
 - `research/hypothesis-register.csv` — initial proposed hypotheses.
 - `platform/architecture.md` — proposed technical architecture.
 - `platform/methodology.md` — evidence review methodology.
 - `platform/data-dictionary.md` — field definitions and provenance rules.
+- `platform/evidence-completeness.js` — metadata completeness gate; does not verify scientific truth.
 - `platform/benchmark-plan.md` — proposed comparison against a conventional review workflow.
 - `platform/research-engine.js` — Europe PMC search, metadata conversion and abstract candidate extraction.
 - `platform/ai-contract.js` and `server.js` — evidence-grounded AI synthesis contract and local server endpoint.
@@ -96,6 +99,10 @@ Europe PMC search imports publication metadata and abstract text. Sentence-level
 6. Benchmark ORIGIN ATLAS against a conventional literature-review workflow.
 7. Ask qualified cardiovascular researchers whether the structured map changes any research decisions.
 8. Revise or stop the platform hypothesis based on results.
+
+## CARDIA validation status
+
+The therapeutic landscape and validation plan are drafted. They are literature-mapping and protocol artifacts, not completed scientific validation or therapeutic discovery. See `research/scientific-validation-plan.md` and `research/cardia-therapeutic-landscape.md`.
 
 ## Founding principle
 

@@ -27,6 +27,7 @@ $("literatureSearchForm").addEventListener("submit",async e=>{
 });
 $("aiResearchForm").addEventListener("submit",async e=>{
  e.preventDefault();const question=$("aiQuestion").value.trim();const records=state().evidence.slice(0,30);
+ if(!confirm("This sends up to 30 evidence records, including their abstracts and notes, to the external AI provider configured on the server. Do not send patient-identifiable or confidential information. Continue?"))return;
  $("aiStatus").textContent="Sending "+records.length+" local evidence records to the configured server…";$("aiAnswer").hidden=true;
  try{
   const response=await fetch("/api/research-assist",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question,records})});

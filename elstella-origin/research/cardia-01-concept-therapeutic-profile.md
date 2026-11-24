@@ -1,15 +1,18 @@
 # ELSTELLA | PROJECT CARDIA
-## CARDIA-01 — Concept Therapeutic Profile
+## VYREON — Concept Therapeutic Profile
 **Document status:** Concept only · Research hypothesis · Not a drug candidate  
+**Working name:** VYREON · Internal codename only; commercial use pending clearance  
 **Version:** 0.1 · **Program:** CARDIA · **Platform context:** NEXUS
 
-> **Important status statement:** CARDIA-01 is a proposed therapeutic concept for scientific discussion. It is not a synthesized compound, selected molecular entity, validated target, tested treatment, or clinical product. No efficacy, safety, selectivity, delivery, or novelty claim has been established.
+> **Naming status:** A preliminary web screen surfaced an existing U.S. VYREON trademark application (serial 99475531) in cleaning preparations and a similar VIREON application in dietary supplements. These are not a legal clearance search, but the similarity and adjacent regulated-product context create a meaningful naming risk. Keep VYREON as an internal working codename only; do not use it as a public product brand or file on it without a full search and qualified trademark advice. See [USPTO search guidance](https://www.uspto.gov/trademarks/search/federal-trademark-searching).
+>
+> **Important status statement:** VYREON (CARDIA-01) is a proposed therapeutic concept for scientific discussion. It is not a synthesized compound, selected molecular entity, validated target, tested treatment, or clinical product. No efficacy, safety, selectivity, delivery, or novelty claim has been established.
 
 ---
 
 ## 1. Executive concept
 
-**CARDIA-01** is Elstella's working concept for a future precision antifibrotic therapy intended to reduce *maladaptive, persistent cardiac fibroblast activity* while preserving the heart's normal tissue-repair functions.
+**VYREON (CARDIA-01)** is Elstella's working concept for a future precision antifibrotic therapy intended to reduce *maladaptive, persistent cardiac fibroblast activity* while preserving the heart's normal tissue-repair functions.
 
 The concept is deliberately state-selective rather than based on indiscriminately suppressing all fibrosis. The central premise is that cardiac fibroblasts are not a single uniform population: their roles vary with disease cause, tissue location, injury stage, and cellular state. A useful therapy may therefore need to distinguish persistent pathological remodeling from necessary repair.
 
@@ -33,7 +36,7 @@ This is a research proposition—not a claim that such selectivity has been achi
 | Formulation / delivery | Not selected |
 | Route / regimen | Not determined |
 | Development stage | Concept hypothesis only |
-| Current evidence | Published field-level evidence; no CARDIA-01-specific data |
+| Current evidence | Published field-level evidence; no VYREON (CARDIA-01)-specific data |
 
 ## 3. The unmet need
 
@@ -54,11 +57,11 @@ The concept rests on four field-level observations:
 3. **Disease-stage dependence:** Fibrosis is not a single static process; early repair and later maladaptive remodeling should not be treated as interchangeable.
 4. **Translation challenge:** A result in a simplified model is not proof of benefit in people.
 
-A 2025 *Nature* study reported that selective inhibition of stromal mechanosensing, together with modulation of TGF-β signaling, shifted persistently activated cardiac fibroblasts toward a less activated state in experimental systems. This is important prior art. It means CARDIA-01 cannot claim that targeting fibroblast mechanosensing or the broad idea of fibroblast-state modulation is new.
+A 2025 *Nature* study reported that selective inhibition of stromal mechanosensing, together with modulation of TGF-β signaling, shifted persistently activated cardiac fibroblasts toward a less activated state in experimental systems. This is important prior art. It means VYREON (CARDIA-01) cannot claim that targeting fibroblast mechanosensing or the broad idea of fibroblast-state modulation is new.
 
 Primary study: Cho et al., *Selective inhibition of stromal mechanosensing suppresses cardiac fibrosis* (2025): https://pubmed.ncbi.nlm.nih.gov/40307543/
 
-## 5. CARDIA-01's proposed differentiation question
+## 5. VYREON (CARDIA-01)'s proposed differentiation question
 
 **Not:** “Can Elstella invent an antifibrotic drug?”
 
@@ -71,7 +74,7 @@ The potential differentiation would have to come from evidence that a specific d
 - offers a sufficiently selective and tractable therapeutic opportunity; and
 - can be addressed without unacceptable effects on other cardiac cell types or normal tissue functions.
 
-None of these CARDIA-01-specific conditions has yet been demonstrated.
+None of these VYREON (CARDIA-01)-specific conditions has yet been demonstrated.
 
 ## 6. Proposed mechanism — deliberately unresolved
 
@@ -99,7 +102,7 @@ No biomarker panel, diagnostic threshold, or patient-selection rule has been sel
 
 ## 8. What would count as convincing evidence?
 
-CARDIA-01 would need to pass separate evidence gates. A positive result at one gate does not automatically satisfy the next.
+VYREON (CARDIA-01) would need to pass separate evidence gates. A positive result at one gate does not automatically satisfy the next.
 
 | Gate | Question that must be answered |
 |---|---|
@@ -193,6 +196,6 @@ The immediate decision is **not** to make a compound. It is to determine whether
 
 ### External-facing description
 
-**CARDIA-01 is an early Elstella therapeutic concept exploring whether persistent pathological cardiac fibroblast states can be addressed more selectively, with the aim of reducing maladaptive fibrosis while preserving normal tissue repair. The concept remains at the research-hypothesis stage. Its target, modality, delivery strategy, safety profile, and therapeutic value have not been established.**
+**VYREON (CARDIA-01) is an early Elstella therapeutic concept exploring whether persistent pathological cardiac fibroblast states can be addressed more selectively, with the aim of reducing maladaptive fibrosis while preserving normal tissue repair. The concept remains at the research-hypothesis stage. Its target, modality, delivery strategy, safety profile, and therapeutic value have not been established.**
 
 *Prepared for research planning and scientific discussion. Not medical advice, a treatment recommendation, or a representation of an existing drug.*

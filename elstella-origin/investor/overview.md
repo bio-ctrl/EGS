@@ -1,58 +1,64 @@
-# ELSTELLA & CO. — EARLY COMPANY OVERVIEW
+# ELSTELLA & CO. — EARLY-STAGE COMPANY OVERVIEW
 
-**Biological Restoration & Therapeutics**
+**Descriptor:** Biological Restoration & Therapeutics  
+**Scientific foundation:** Systems-Level Biology  
+**Flagship research program:** PROJECT GENESIS  
+**Stage:** Early research planning and software prototyping
 
-## The ambition
+## Ambition
 
-Elstella aims to build a biotechnology company focused on understanding biological dysfunction and developing computational and therapeutic technologies intended to restore healthy biological function.
+Elstella's long-term ambition is to build a research-led biotechnology company that studies biological systems across development, evolution, and disease, and investigates opportunities for biological restoration when evidence supports them.
 
-## The proposed approach
+This is an ambition, not a claim of current therapeutic capability.
 
-The initial strategy combines:
-- a computational research workflow for organizing biomedical evidence by biological context;
-- a focused cardiovascular research program examining cardiac fibrosis;
-- a longer-term pipeline of research questions selected only when supported by evidence.
+## Initial strategy
 
-## Initial product concept
+The current strategy has two distinct hypotheses:
 
-**Elstella Intelligence / ORIGIN ATLAS** is a proposed research tool for traceable evidence extraction, context mapping and hypothesis comparison. The current implementation is a static interface demonstrator, not a functioning AI platform or validated scientific product.
+1. **Research infrastructure:** the Elstella Research Atlas may improve the traceability and organization of biological literature and public research data.
+2. **Biological research:** PROJECT GENESIS will map published evidence on developmental systems, gene regulation, and biological form to identify a narrow, defensible research question.
 
-## Initial research program
+PROJECT CARDIA remains a separate exploratory literature track on cardiac remodeling and fibrosis. It is not the current flagship.
 
-**PROJECT CARDIA** investigates whether context-aware evidence mapping clarifies differences across cardiac fibrosis disease contexts, cell populations, model systems and stages of disease.
+## Research software
 
-## Why this could matter
+**Elstella Research Atlas** is an early software prototype for organizing literature records, source provenance, hypotheses, and review status. Its value has not been demonstrated against expert workflows or established tools.
 
-Biomedical research produces large, heterogeneous bodies of evidence. A workflow that improves traceability, exposes contradictions and preserves biological context could be useful to researchers. This value proposition remains unproven and must be benchmarked against existing systematic-review and biomedical knowledge tools.
+The current prototype must not be described as an autonomous discovery engine, validated AI platform, or clinical decision system.
 
-## Current stage
+## Current evidence and status
 
-- Company thesis: documented.
-- Research question: proposed.
-- Initial source list: assembled; source-level extraction pending.
-- Software: static interface demonstrator.
-- Experimental validation: none.
+- Company thesis: documented as a working strategy.
+- GENESIS research thesis: drafted.
+- GENESIS literature review: not yet completed.
+- Public dataset inventory: template prepared; inventory not yet completed.
+- Software: early research-workspace prototype.
+- Independent scientific review: not yet completed.
+- Experimental validation: none claimed.
 - Therapeutic candidate: none.
-- Clinical data or clinical validation: none.
-- Revenue, funding and institutional partnerships: none claimed.
+- Clinical validation: none.
+- Revenue, funding, and institutional partnerships: none claimed.
 
 ## Key risks
 
-1. Existing tools may already solve the workflow problem.
-2. Evidence extraction may be unreliable or expensive.
-3. Expert users may not find the output useful.
-4. A software platform may not create defensible intellectual property.
-5. Cardiac fibrosis biology may not yield a tractable therapeutic opportunity.
-6. Translation from preclinical findings to clinical benefit is difficult.
+1. Existing literature and research tools may already solve the proposed workflow problem.
+2. The initial research question may be too broad or already well answered.
+3. Public datasets may lack the metadata or comparability required.
+4. Computational patterns may not imply causal biological mechanisms.
+5. Expert users may not find the workspace useful.
+6. Translating biological research into safe, effective therapeutics is difficult and requires substantial expertise, resources, and oversight.
 
 ## Next proof points
 
-1. Complete a verified, reproducible evidence map.
-2. Benchmark against a conventional review.
-3. Obtain independent expert feedback.
-4. Demonstrate a measurable improvement in accuracy, speed or decision usefulness.
-5. Define a specific, defensible technical advantage before making a commercial claim.
+1. Complete a reproducible GENESIS literature search and source screen.
+2. Build a traceable public-dataset inventory.
+3. Compare the proposed research question with existing reviews and studies.
+4. Obtain qualified independent critique.
+5. Benchmark the Research Atlas against an ordinary literature-review workflow.
+6. Advance, revise, or stop based on documented results.
 
-## Capital philosophy
+## Capital and governance
 
-Capital should follow validated milestones. Any future funding target must be supported by a credible scope, qualified team, budget, institutional access, IP strategy and appropriate legal structure. Fundraising is not personal income and is not evidence of scientific progress.
+Capital should follow validated milestones. Any future funding plan must be supported by a defined scope, qualified team, budget, institutional access, IP assessment, and appropriate legal structure. Fundraising is not revenue, personal wealth, or evidence of scientific progress.
+
+Because the founder is a minor, formal company formation, contracts, equity, fundraising, securities matters, IP assignments, and institutional agreements require parent/guardian involvement and qualified professional guidance.

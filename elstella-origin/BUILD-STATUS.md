@@ -11,11 +11,11 @@
 - CSV evidence export.
 - JSON workspace backup and import.
 - Reset of local workspace with confirmation.
-- Protocol, data dictionary and benchmark documentation.
+- Protocol, data dictionary and benchmark documentation.\n- Europe PMC search and bibliographic metadata import.\n- Abstract sentence candidate extraction with explicit unverified labels.\n- Server-side AI synthesis endpoint with evidence-ID citation constraints and provider credentials kept off the client.\n- Optional Supabase auth and per-account workspace sync adapter.\n- Supabase schema with row-level security.\n- Node built-in test suite and GitHub Actions test workflow.
 
 ## Known limitations
 
-- No live PubMed or Europe PMC API integration; database shortcuts open external search pages.
+- Europe PMC search is implemented; PubMed is still an external shortcut. Europe PMC availability and CORS/network access depend on the user's environment.
 - No server database or multi-user synchronization.
 - Local browser data does not automatically sync to GitHub.
 - No authentication or access-control layer.

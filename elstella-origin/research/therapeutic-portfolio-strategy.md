@@ -1,82 +1,71 @@
-# ELSTELLA — SINGLE-FLAGSHIP COMPANY STRATEGY
+# ELSTELLA — STAGED THERAPEUTIC COMPANY STRATEGY
 
 ## 1. Company ambition
 
-ELSTELLA & CO. aims to become a therapeutics-focused biotechnology company supported by computational biology and systems-level research. Its initial focus is one disease area: Leigh syndrome spectrum (LSS). The long-term mission is to contribute to better treatments and, ultimately, a cure.
+ELSTELLA & CO. aims to become a research-driven biotechnology company supported by computational biology, rigorous evidence practices, and qualified partnerships. The company will expand through three ordered divisions rather than attempting every area at once.
 
-This is a company ambition, not evidence of a current therapeutic capability, discovery, or development program.
+## 2. Division 01 — Cellular & Mitochondrial Health
 
-## 2. One flagship: PROJECT LEIGH
+This is the first research priority. Initial work is a high-level scientific landscape and unmet-need assessment, not drug development.
 
-PROJECT LEIGH begins with a scientific landscape and unmet-need assessment. The work must establish:
-- What is known about LSS and its genetic and clinical diversity.
-- What care and treatment approaches currently exist.
-- Which research and clinical-development efforts are already underway.
-- What evidence is robust, preliminary, contradictory, or missing.
-- Whether a narrowly scoped, ethically and institutionally appropriate research question exists.
-- Whether Elstella's proposed contribution is differentiated and feasible.
+The assessment should:
+- Explain cellular energy and mitochondrial biology using authoritative, accessible scientific sources.
+- Map major disease areas and patient needs at a high level.
+- Summarize existing care, research activity, and clinical-development context.
+- Distinguish established findings from preliminary, contested, or missing evidence.
+- Inventory public research datasets, provenance, access conditions, and limitations.
+- Identify whether a narrow, responsible research question is justified.
+- Obtain qualified independent scientific critique before making claims.
 
-LSS is genetically heterogeneous. A 2026 study in *Nature Communications* reported preclinical findings from computational screening and human brain organoid models. Those results are not clinical proof and must be included in any honest competitive landscape. A 2026 international natural-history study also emphasizes the importance of understanding disease progression and outcome measures. Sources are linked in the PROJECT LEIGH landscape assessment.
+No molecular target, drug candidate, intervention, efficacy, safety, or clinical claim is established by this strategy.
 
-## 3. Scientific foundation
+## 3. Division 02 — Muscle & Physical Health
 
-Systems-Level Biology is the company's scientific foundation. Elstella studies biological function in context across cells, tissues, organs, and physiology. This is a research orientation, not proof that a single mechanism or intervention applies across all forms of LSS.
+This is the second planned division. Its future remit is legitimate medical need involving muscle disease, weakness, recovery from illness, and age-related loss of function. It is not an enhancement-drug business. No substantive program begins until Division 01 passes its review gate and the company has suitable expertise and resources.
 
-## 4. Elstella Intelligence
+## 4. Division 03 — Brain & Cognitive Health
 
-Elstella Intelligence is the computational research capability supporting the flagship program. Near-term scope:
+This is the third planned division. Its future remit is neurological disease, brain health, and cognitive decline. It is not a cognitive-enhancement drug business. No substantive program begins until the earlier divisions have passed their review gates and the company has suitable expertise and resources.
+
+## 5. Elstella Intelligence
+
+The Research Atlas is the initial computational capability. Its scope:
 - Traceable literature organization.
-- Public dataset metadata curation and access-term documentation.
+- Public dataset metadata and access-term documentation.
 - Context-aware evidence mapping.
 - Contradiction and uncertainty tracking.
 - Reproducible descriptive workflows.
 - Exportable research records.
 
-The Research Atlas is an early prototype. Benchmark it against an appropriate conventional workflow and obtain qualified user review before making claims of advantage, scientific utility, or product-market fit.
+The prototype must be benchmarked against an appropriate conventional workflow and reviewed by qualified users. It is not a validated discovery engine or clinical decision system.
 
-## 5. Evidence-gated sequence
+## 6. Lessons from early Eli Lilly history
 
-1. Complete the PROJECT LEIGH landscape assessment.
-2. Verify source records and distinguish peer-reviewed findings, clinical records, preprints, and commentary.
-3. Inventory relevant public datasets without assuming access or suitability.
-4. Draft one narrow, falsifiable research question only if the landscape supports it.
-5. Obtain qualified independent scientific critique.
-6. Benchmark Elstella Intelligence against a conventional workflow.
-7. Record an advance, revise, or stop decision.
-8. Consider institutional collaboration only with qualified partners, appropriate supervision, permissions, and governance.
+ELSTELLA adapts general company-building principles from Lilly's beginnings:
+- Start with a specific medical purpose.
+- Build a reputation for quality and scientific integrity.
+- Develop internal scientific capability in stages.
+- Collaborate with qualified external experts and institutions.
+- Establish reliable processes before scaling.
+- Reinvest in research and operational capability.
+- Expand into new therapeutic areas only when the existing organization can support them.
 
-Do not represent this sequence as a drug-development program or promise a cure.
+ELSTELLA does not copy Lilly's products, branding, proprietary methods, or historical identity.
 
-## 6. Commercial model
+## 7. Commercial model
 
-Possible long-term business value may come from:
-- Proprietary therapeutic intellectual property, if a genuine invention is made and appropriately protected.
-- Licensing or co-development of a substantiated asset.
-- Research partnerships built around a clear, evidence-backed contribution.
-- Computational infrastructure that demonstrably improves the company's own research workflow.
+Possible future value may come from proprietary therapeutic IP, licensing or co-development of substantiated assets, research partnerships, and computational infrastructure that demonstrably improves research workflows. These are future possibilities, not existing revenue or capabilities.
 
-These are possible future models, not existing revenue, products, or capabilities. Licensing requires something a partner can evaluate and has a legitimate right to license.
+Licensing requires a real asset, defensible rights, evidence, and a partner-specific value proposition. A literature summary or prototype alone is not a licensing asset.
 
-## 7. Capital strategy
+## 8. Capital strategy
 
-Capital should follow evidence-backed milestones. The immediate case is not a multimillion-dollar drug-development raise. It is a request for appropriate scientific mentorship, research feedback, and support for a narrow, verifiable research and software-validation plan.
+Capital should follow measurable milestones. The near-term case is scientific mentorship, qualified critique, and support for a narrow research and software-validation plan—not a multimillion-dollar therapeutic-development raise.
 
-Any future financing case must include:
-- A defined scope and milestone.
-- Qualified scientific and operational leadership.
-- A realistic budget and use of funds.
-- Data access and institutional dependencies.
-- A documented competitive and IP assessment.
-- Governance, ownership, and regulatory considerations.
+Future financing materials must include a defined scope, qualified leadership, realistic budget, use of funds, data and institutional dependencies, competitive assessment, IP review, and governance. Fundraising proceeds belong to the company, not the founder personally.
 
-A funding announcement is not revenue or personal liquidity. Founder wealth generally depends on retained equity and a later, lawful liquidity event; raising capital does not put the investment proceeds in the founder's pocket.
+## 9. IP and integrity
 
-## 8. Intellectual property and licensing discipline
+Do not claim patentability or ownership based on an idea, literature summary, or prototype alone. Obtain qualified advice on inventorship, ownership, prior art, freedom to operate, confidentiality, and publication strategy before formal IP claims or commitments.
 
-Do not claim patentability or ownership based on an idea, literature summary, or software prototype alone. Document actual contributions and obtain qualified IP counsel on inventorship, ownership, prior art, freedom to operate, confidentiality, and publication strategy before making formal claims or commitments.
-
-No patent, proprietary therapeutic asset, licensing-ready technology, or licensing agreement is currently claimed.
-
-## 9. Integrity statement
-
-No therapeutic candidate, target, clinical benefit, safety profile, patent position, or regulatory status is established by this strategy. All scientific advancement requires appropriate evidence and qualified oversight.
+No therapeutic candidate, target, clinical benefit, safety profile, patent position, or regulatory status is established.

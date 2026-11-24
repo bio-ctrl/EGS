@@ -30,7 +30,7 @@ A 2026 review emphasizes disease context, anatomical location, fibroblast state,
 A 2024 *Nature* study profiled 45 healthy donor, acutely infarcted and chronically failing human hearts using multi-omic approaches. It reported disease-associated fibroblast trajectories and distinct populations with features resembling myofibroblasts and matrifibrocytes. This supports biological heterogeneity and the need to preserve disease and cell-state context. It does not, by itself, validate a therapeutic intervention.
 
 Source: https://www.nature.com/articles/s41586-024-08008-5  
-PMID: 394434ರ
+PMID: verify from publisher record before entering in the evidence register.
 
 ### 2. Translational biology of human cardiac fibrosis
 

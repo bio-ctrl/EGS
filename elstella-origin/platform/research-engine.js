@@ -32,14 +32,14 @@
     if(!text)return [];
     const sentences=text.split(/(?<=[.!?])\s+(?=[A-Z0-9])/);
     const patterns=[
-      {kind:"Objective / rationale",re:/\b(aim|objective|investigat|evaluat|assess|sought to|we hypothesi)\b/i},
-      {kind:"Methods / model",re:/\b(method|cohort|patient|mouse|mice|rat|animal model|in vitro|single.cell|sequenc|transcriptom|proteom|randomi[sz])\b/i},
-      {kind:"Reported result",re:/\b(found|observed|demonstrat|showed|revealed|associated with|increased|decreased|reduced|improved|identified|resulted in)\b/i},
-      {kind:"Limitation / uncertainty",re:/\b(limit|however|although|caution|small sample|not powered|further studies|remain unclear|did not)\b/i}
+      {kind:"Objective / rationale",re:/\b(aim\w*|objective\w*|investigat\w*|evaluat\w*|assess\w*|sought to|we hypothesi\w*)\b/i},
+      {kind:"Methods / model",re:/\b(method\w*|cohort|patient\w*|mouse|mice|rat\w*|animal model|in vitro|single.cell|sequenc\w*|transcriptom\w*|proteom\w*|randomi[sz]\w*)\b/i},
+      {kind:"Reported result",re:/\b(found|observ\w*|demonstrat\w*|showed|reveal\w*|associated with|increased|decreased|reduced|improved|identified|resulted in)\b/i},
+      {kind:"Limitation / uncertainty",re:/\b(limit\w*|however|although|caution|small sample|not powered|further studies|remain unclear|did not)\b/i}
     ];
     const out=[];
     for(const sentence of sentences){
-      const s=clean(sentence); if(s.length<35)continue;
+      const s=clean(sentence); if(s.length<20)continue;
       const match=patterns.find(p=>p.re.test(s));
       if(match && !out.some(x=>x.text===s))out.push({kind:match.kind,text:s,sourceLocation:"Abstract — exact sentence; confirm against publisher/PubMed record",reviewStatus:"Candidate only"});
       if(out.length>=12)break;

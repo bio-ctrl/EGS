@@ -1,81 +1,82 @@
-# ELSTELLA — THERAPEUTIC PORTFOLIO STRATEGY
+# ELSTELLA — SINGLE-FLAGSHIP COMPANY STRATEGY
 
 ## 1. Company ambition
 
-ELSTELLA & CO. aims to become a therapeutics-focused biotechnology company supported by computational biology and systems-level research. The long-term objective is to develop proprietary medicines for meaningful unmet medical needs.
+ELSTELLA & CO. aims to become a therapeutics-focused biotechnology company supported by computational biology and systems-level research. Its initial focus is one disease area: Leigh syndrome spectrum (LSS). The long-term mission is to contribute to better treatments and, ultimately, a cure.
 
-The company should not be positioned as a generic AI platform, supplement brand, wellness company, or contract research provider. Computational tools are intended to strengthen the company's own research and development decisions.
+This is a company ambition, not evidence of a current therapeutic capability, discovery, or development program.
 
-## 2. Scientific foundation
+## 2. One flagship: PROJECT LEIGH
 
-Systems-Level Biology is the shared scientific foundation. Elstella studies biological function in context across cells, tissues, organs, and physiology. This is a research orientation, not proof that a single mechanism or intervention will apply across diseases.
+PROJECT LEIGH begins with a scientific landscape and unmet-need assessment. The work must establish:
+- What is known about LSS and its genetic and clinical diversity.
+- What care and treatment approaches currently exist.
+- Which research and clinical-development efforts are already underway.
+- What evidence is robust, preliminary, contradictory, or missing.
+- Whether a narrowly scoped, ethically and institutionally appropriate research question exists.
+- Whether Elstella's proposed contribution is differentiated and feasible.
 
-## 3. Long-term therapeutic portfolio
+LSS is genetically heterogeneous. A 2026 study in *Nature Communications* reported preclinical findings from computational screening and human brain organoid models. Those results are not clinical proof and must be included in any honest competitive landscape. A 2026 international natural-history study also emphasizes the importance of understanding disease progression and outcome measures. Sources are linked in the PROJECT LEIGH landscape assessment.
 
-### Portfolio I — Mitochondrial & Cellular Energy Medicine
+## 3. Scientific foundation
 
-**Initial research priority: PROJECT MITOS**
+Systems-Level Biology is the company's scientific foundation. Elstella studies biological function in context across cells, tissues, organs, and physiology. This is a research orientation, not proof that a single mechanism or intervention applies across all forms of LSS.
 
-Long-term area of interest: diseases in which mitochondrial function and cellular energy biology are relevant to disease burden.
+## 4. Elstella Intelligence
 
-The initial task is to assess unmet need and identify whether a narrow research question is justified. No indication, target, candidate, or therapeutic approach is selected by this strategy document.
-
-### Portfolio II — Neuromuscular & Muscle Medicine
-
-Adjacent future area of interest: conditions affecting muscle function and the nervous system.
-
-This area may have scientific connections to cellular energy and mitochondrial biology, but shared biology does not establish that one treatment will work across conditions. It requires a separate disease-specific assessment.
-
-### Portfolio III — Kidney & Organ Restoration
-
-Adjacent future area of interest: kidney disease, organ dysfunction, and tissue remodeling.
-
-This area remains a future portfolio ambition. It requires its own medical-need, treatment-landscape, evidence, competition, and feasibility review.
-
-## 4. Computational research capability
-
-Elstella Intelligence is intended to support the therapeutic portfolio through:
+Elstella Intelligence is the computational research capability supporting the flagship program. Near-term scope:
 - Traceable literature organization.
-- Public dataset metadata curation.
+- Public dataset metadata curation and access-term documentation.
 - Context-aware evidence mapping.
-- Documentation of uncertainty and contradictory findings.
-- Reproducible descriptive research workflows.
+- Contradiction and uncertainty tracking.
+- Reproducible descriptive workflows.
+- Exportable research records.
 
-The Research Atlas is an early prototype. It must be benchmarked against existing tools and expert workflows before any claims of advantage or product-market fit.
+The Research Atlas is an early prototype. Benchmark it against an appropriate conventional workflow and obtain qualified user review before making claims of advantage, scientific utility, or product-market fit.
 
-## 5. Portfolio sequencing
+## 5. Evidence-gated sequence
 
-1. Complete PROJECT MITOS's literature-led unmet-need assessment.
-2. Select one narrowly defined disease context only if the evidence justifies it.
-3. Obtain qualified independent scientific critique.
-4. Determine whether public-data research can answer a meaningful question.
-5. Consider future institutional collaboration only when a qualified partner and appropriate oversight are available.
-6. Reassess the neuromuscular and kidney portfolios independently after the first program's evidence gates.
+1. Complete the PROJECT LEIGH landscape assessment.
+2. Verify source records and distinguish peer-reviewed findings, clinical records, preprints, and commentary.
+3. Inventory relevant public datasets without assuming access or suitability.
+4. Draft one narrow, falsifiable research question only if the landscape supports it.
+5. Obtain qualified independent scientific critique.
+6. Benchmark Elstella Intelligence against a conventional workflow.
+7. Record an advance, revise, or stop decision.
+8. Consider institutional collaboration only with qualified partners, appropriate supervision, permissions, and governance.
 
-Do not launch three drug-development programs simultaneously.
+Do not represent this sequence as a drug-development program or promise a cure.
 
 ## 6. Commercial model
 
-Potential long-term value may come from:
-- Approved proprietary medicines.
-- Licensing of validated therapeutic intellectual property.
-- Co-development and research partnerships.
-- Selective use of computational research tools in support of proprietary programs.
+Possible long-term business value may come from:
+- Proprietary therapeutic intellectual property, if a genuine invention is made and appropriately protected.
+- Licensing or co-development of a substantiated asset.
+- Research partnerships built around a clear, evidence-backed contribution.
+- Computational infrastructure that demonstrably improves the company's own research workflow.
 
-These are possible future models, not existing revenue, products, or capabilities.
+These are possible future models, not existing revenue, products, or capabilities. Licensing requires something a partner can evaluate and has a legitimate right to license.
 
-## 7. Investment discipline
+## 7. Capital strategy
 
-A financing target is not a strategy. Any future investment case must be based on:
-- A defined medical problem and patient population.
-- A differentiated and evidence-supported research thesis.
-- Qualified scientific and development leadership.
-- A credible IP and competitive assessment.
-- A milestone-based development plan and budget.
-- A realistic regulatory and clinical pathway.
+Capital should follow evidence-backed milestones. The immediate case is not a multimillion-dollar drug-development raise. It is a request for appropriate scientific mentorship, research feedback, and support for a narrow, verifiable research and software-validation plan.
 
-Do not claim that any funding amount is likely or guaranteed.
+Any future financing case must include:
+- A defined scope and milestone.
+- Qualified scientific and operational leadership.
+- A realistic budget and use of funds.
+- Data access and institutional dependencies.
+- A documented competitive and IP assessment.
+- Governance, ownership, and regulatory considerations.
 
-## 8. Integrity statement
+A funding announcement is not revenue or personal liquidity. Founder wealth generally depends on retained equity and a later, lawful liquidity event; raising capital does not put the investment proceeds in the founder's pocket.
 
-No therapeutic candidate, target, clinical benefit, safety profile, patent position, or regulatory status is established by this portfolio strategy. Each program must earn advancement through evidence and qualified review.
+## 8. Intellectual property and licensing discipline
+
+Do not claim patentability or ownership based on an idea, literature summary, or software prototype alone. Document actual contributions and obtain qualified IP counsel on inventorship, ownership, prior art, freedom to operate, confidentiality, and publication strategy before making formal claims or commitments.
+
+No patent, proprietary therapeutic asset, licensing-ready technology, or licensing agreement is currently claimed.
+
+## 9. Integrity statement
+
+No therapeutic candidate, target, clinical benefit, safety profile, patent position, or regulatory status is established by this strategy. All scientific advancement requires appropriate evidence and qualified oversight.

@@ -1,55 +1,73 @@
 # ELSTELLA & CO.
 
 **Biological Restoration & Therapeutics**  
-**Scientific foundation:** Systems-Level Biology
+**Scientific foundation:** Systems-Level Biology  
+**Company model:** Computationally enabled therapeutic biotechnology
 
-Elstella is an early-stage computational biology research initiative focused on understanding how biological systems develop, maintain form and function, and change across evolution, development, and disease.
+Elstella's long-term ambition is to become a research-driven biotechnology company that discovers, develops, and ultimately commercializes medicines for diseases involving dysfunctional cellular and organ systems. Computational biology and evidence infrastructure are intended to strengthen the company's research process; they are not substitutes for biological validation, qualified drug development, or clinical evidence.
 
-Our initial scientific direction is **PROJECT GENESIS**: a computational research program studying how genetic regulation and developmental systems are associated with differences in biological form.
+## Strategic architecture
 
-This repository contains research charters, evidence maps, data-quality tools, and reproducible computational workflows. It does not represent a validated scientific discovery, a therapeutic product, a medical device, or an organism-engineering program.
+Elstella is designed around two connected capabilities:
 
-## Scientific direction
+1. **Elstella Intelligence** — computational research infrastructure for organizing literature, public biological datasets, disease context, evidence provenance, and research questions.
+2. **Elstella Therapeutics** — a future portfolio of proprietary therapeutic programs advanced only when scientific evidence, qualified expertise, resources, and institutional oversight justify progression.
 
-### PROJECT GENESIS — Developmental Systems & Biological Form
+The long-term therapeutic portfolio is intended to focus on three related areas:
 
-**Core question:** How do changes in gene regulation and developmental context relate to differences in cell identity, tissue organization, and organismal form across species?
+- **Mitochondrial & Cellular Energy Medicine** — diseases involving mitochondrial dysfunction and impaired cellular energy biology.
+- **Neuromuscular & Muscle Medicine** — conditions affecting muscle function and the nervous system.
+- **Kidney & Organ Restoration** — chronic organ dysfunction, renal disease, and tissue remodeling.
 
-Initial scope:
-- Evolutionary developmental biology (Evo-Devo).
-- Gene regulatory networks, described from published evidence.
-- Developmental timing and spatial patterns of gene expression.
-- Cell differentiation and tissue pattern formation.
-- Comparative analysis of published, lawfully accessible datasets.
-- Reproducibility, uncertainty, and evidence provenance.
+These are strategic areas of interest, not validated programs or established product opportunities. The initial research priority is **PROJECT MITOS**, a literature-led assessment of mitochondrial disease biology and unmet medical needs.
 
-The first deliverable is a rigorous computational evidence map—not a designed organism, engineered sequence, or claim that a small DNA change necessarily creates a new species.
+## Initial research priority — PROJECT MITOS
 
-### Other research programs
+**Core question:** Where do current evidence, treatment limitations, and accessible research data indicate a specific, meaningful unmet need in mitochondrial disease that merits further investigation?
 
-- **PROJECT CARDIA:** A separate computational research direction examining human cardiac remodeling and fibrosis. Existing CARDIA/NEXUS work remains a provisional research track.
-- **VYREON:** A working concept name associated with CARDIA only. It is not an established drug candidate, molecule, target, or validated therapeutic.
+Initial work is limited to:
+- A traceable literature and existing-treatment landscape.
+- A high-level map of mitochondrial disease categories and clinical context.
+- A public research dataset inventory, including access conditions and limitations.
+- A comparison of existing research programs and development activity.
+- A documented gap assessment and an advance, revise, or stop recommendation.
 
-## Research principles
+No drug candidate, molecular target, therapeutic mechanism, efficacy, or safety claim is established by this research plan.
 
-1. Start with a precise, falsifiable question.
-2. Use published evidence and appropriately accessible, de-identified research datasets.
-3. Preserve source provenance, cohort structure, and data-use conditions.
-4. Separate association from causation.
-5. Report uncertainty, negative findings, and limitations.
-6. Do not claim novelty, efficacy, safety, or clinical relevance without independent evidence.
-7. Any work involving human participants, biological samples, gene editing, or laboratory experimentation requires appropriate institutional oversight and qualified supervision.
+## Scientific foundation and retained work
+
+- **Systems-Level Biology** is the company's scientific foundation: biological outcomes are studied in context across molecules, cells, tissues, organs, and physiology.
+- **PROJECT GENESIS** remains foundational research on developmental systems, gene regulation, and biological form. It supports the company's broader systems-biology understanding; it is not the current therapeutic lead.
+- **PROJECT CARDIA** remains a separate exploratory research track on cardiac remodeling and fibrosis. Its prior work is retained and must be assessed independently.
+- **VYREON** remains a preliminary concept associated with CARDIA only. It is not an established drug candidate, molecule, target, or validated therapeutic.
+- Earlier research records are preserved as historical or exploratory work unless their status is explicitly updated through evidence review.
+
+## Research and development principles
+
+1. Start with a defined disease problem and a falsifiable research question.
+2. Map existing treatments, competitors, clinical development, and prior art before claiming a gap.
+3. Use lawfully accessible publications and appropriately accessible public research data.
+4. Preserve source provenance, cohort structure, data-use terms, and uncertainty.
+5. Separate association, mechanism, causation, and therapeutic intervention.
+6. Do not claim novelty, efficacy, safety, patentability, or clinical utility without appropriate independent evidence.
+7. Experimental research, drug development, biological samples, animals, human participants, and clinical work require qualified institutional partners, supervision, permissions, and regulatory oversight.
 
 ## Repository structure
 
-- `elstella-origin/research/` — research questions, charters, evidence reviews, and analysis plans.
-- `elstella-origin/platform/` — research software and data-quality utilities.
-- `elstella-origin/tests/` — automated software tests.
-- `.github/workflows/` — reproducible CI and research-integrity checks.
+- `elstella-origin/company/` — company identity, charter, and operating model.
+- `elstella-origin/research/` — program charters, evidence reviews, and research plans.
+- `elstella-origin/platform/` — research software, data-quality utilities, and methods.
+- `elstella-origin/governance/` — claims, data, and research-safety standards.
+- `elstella-origin/strategy/` — evidence-gated company and research roadmap.
+- `elstella-origin/investor/` — factual company overview.
+- `elstella-origin/tests/` and `.github/workflows/` — software tests and continuous integration.
 
 ## Current stage
 
-**Stage:** Early research infrastructure and hypothesis development.  
-**Not yet established:** A validated discovery, novel gene mechanism, therapeutic candidate, clinical application, or licensing-ready asset.
+**Stage:** Early research infrastructure, literature review, and hypothesis assessment.
 
-The immediate objective is to build a transparent, reproducible PROJECT GENESIS literature-and-dataset inventory, then determine whether a narrow research question survives a novelty and feasibility review.
+**Not established:** A validated therapeutic discovery, drug candidate, validated biological mechanism, clinical program, patent, regulatory approval, revenue, funding, or institutional partnership.
+
+The immediate objective is to complete the PROJECT MITOS landscape assessment and determine whether one narrow research question merits further work. Elstella should not attempt three therapeutic areas simultaneously.
+
+**Founding principle: Evidence before claims.**

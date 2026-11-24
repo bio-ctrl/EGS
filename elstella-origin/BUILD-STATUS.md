@@ -12,6 +12,8 @@
 - JSON workspace backup and import.
 - Reset of local workspace with confirmation.
 - Protocol, data dictionary and benchmark documentation.
+- CARDIA therapeutic landscape rapid map and scientific validation protocol.
+- Evidence metadata completeness gate with unit tests.
 - Europe PMC literature search and bibliographic metadata import.
 - Abstract sentence candidate extraction with explicit unverified labels.
 - Server-side AI synthesis endpoint with evidence-ID citation constraints and provider credentials kept off the client.
@@ -31,7 +33,10 @@
 - No validated evidence-quality scoring exists.
 - The five starter citations remain unreviewed leads; verify metadata and source content before relying on them.
 - No formal scientific or clinical validation has been completed.
+- CARDIA literature map is rapid and non-exhaustive; it is not a systematic review or a target nomination.
+- Evidence completeness tests only check required metadata; they do not verify source truth or scientific quality.
 - No therapeutic discovery or drug candidate has been completed.
+- A 2026 preclinical cardiac-fibrosis compound report is documented as competing literature, not as an Elstella discovery.
 
 ## Run and test
 
@@ -49,4 +54,5 @@ Do not enter patient-identifiable information. Export JSON backups because brows
 4. Add search-log and formal screening-decision modules.
 5. Verify source metadata and manually review every abstract candidate.
 6. Conduct an independent benchmark with qualified reviewers.
-7. Complete scientific validation and therapeutic discovery through appropriate research and expert review. These are research activities, not software checkboxes.
+7. Execute the review protocol, independently verify extracted claims and complete the platform benchmark.
+8. Obtain qualified expert review before proposing any supervised experimental research. Therapeutic discovery and biological validation are research activities, not software checkboxes.

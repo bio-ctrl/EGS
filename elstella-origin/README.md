@@ -33,6 +33,9 @@ This repository contains an early software and research prototype. It is **not**
 - `platform/methodology.md` — evidence review methodology.
 - `platform/data-dictionary.md` — field definitions and provenance rules.
 - `platform/benchmark-plan.md` — proposed comparison against a conventional review workflow.
+- `platform/research-engine.js` — Europe PMC search, metadata conversion and abstract candidate extraction.
+- `platform/ai-contract.js` and `server.js` — evidence-grounded AI synthesis contract and local server endpoint.
+- `platform/shared-workspace.js` and `supabase/schema.sql` — optional authenticated per-account cloud sync.
 - `governance/claims-and-safety.md` — scientific integrity and research boundaries.
 - `investor/overview.md` — factual early-stage company overview.
 - `BUILD-STATUS.md` — implemented features and known limitations.
@@ -40,19 +43,50 @@ This repository contains an early software and research prototype. It is **not**
 
 ## Run ORIGIN ATLAS
 
-Use Node.js 20 or newer. Copy `.env.example` to `.env`, configure the AI provider variables on the server if AI synthesis is needed, then run `npm start` and open `http://localhost:4173`. Run `npm test` for automated unit tests. The static page can still be opened directly, but the server is required for AI synthesis.
+Use Node.js 20.6 or newer. Copy `.env.example` to `.env`, configure the AI provider variables on the server if AI synthesis is needed, then run:
 
-The current application supports:
-- creating and editing evidence records;
-- searching the evidence register;
-- adding research hypotheses;
-- saving edits in browser-local storage;
-- exporting evidence as CSV;
-- backing up and restoring the workspace as JSON;\n- searching Europe PMC and importing bibliographic metadata;\n- extracting candidate abstract passages with explicit unverified status;\n- AI-assisted evidence synthesis through a server-side, OpenAI-compatible chat endpoint (requires server credentials);\n- optional Supabase account sync with row-level security (requires a separately created Supabase project and schema setup).
+```bash
+npm start
+```
 
-**Important:** Local browser data does not automatically sync to GitHub or another device. Export JSON backups regularly. The application includes a Europe PMC metadata/abstract importer, a server-side AI synthesis endpoint, and an optional per-account Supabase sync adapter. These integrations require configuration and have not been deployed or independently security-audited. Supabase sync is same-account cross-device sync, not shared team collaboration. The AI model is an assistant for synthesis, not an autonomous scientific discovery system.
+Open `http://localhost:4173`. Run automated tests with:
 
-## Integrations and setup\n\n- AI: copy `.env.example` to `.env` and set `AI_API_URL`, `AI_API_KEY`, and `AI_MODEL` for an OpenAI-compatible chat-completions endpoint. The API key stays on the Node server. Never place a provider secret in browser code or commit `.env`.\n- Shared workspace: create a Supabase project, run `supabase/schema.sql`, and configure the project URL plus public anon key in the Research engine tab. The schema uses row-level security so each signed-in account accesses only its own row. No database is provisioned by this repository.\n- Literature extraction: Europe PMC search imports publication metadata and abstract text; sentence-level candidates are suggestions only. Review the original publication before entering any verified claim.\n\n## First execution milestones
+```bash
+npm test
+```
+
+The static page can be opened directly, but the server is required for the AI synthesis endpoint. No third-party npm dependencies are required.
+
+## Implemented capabilities
+
+- Create, edit, search, export and back up evidence records.
+- Maintain a hypothesis register.
+- Search Europe PMC and import bibliographic metadata and abstracts.
+- Extract candidate abstract sentences for objective, methods, reported-result and limitation review.
+- Send selected local evidence records to a configured server-side AI provider for evidence-grounded synthesis.
+- Optionally sync a workspace to Supabase for the same authenticated account across devices.
+
+**Extraction boundary:** imported metadata and abstract passages are unverified candidates. They are not verified scientific claims. Read the original publication, record exact source locations and have important claims independently reviewed.
+
+## Integrations and setup
+
+### AI-assisted synthesis
+
+Copy `.env.example` to `.env` and set `AI_API_URL`, `AI_API_KEY`, and `AI_MODEL` for an OpenAI-compatible chat-completions endpoint. The API key stays on the Node server. Never put a provider secret in browser code or commit `.env`. The interface asks for confirmation before sending up to 30 records to the configured external provider.
+
+The assistant is a synthesis aid, not an autonomous scientific discovery system. Its output may be wrong and must be checked against the original sources. Do not send patient-identifiable or confidential information.
+
+### Shared workspace
+
+Create a Supabase project, run `supabase/schema.sql` in its SQL editor, and configure the project URL plus public anon key in the Research engine tab. The schema uses row-level security so each signed-in account accesses only its own row. No database is provisioned by this repository. This supports same-account cross-device sync; it is not team collaboration or multi-user shared editing.
+
+Never use a Supabase `service_role` key in the browser.
+
+### Literature extraction
+
+Europe PMC search imports publication metadata and abstract text. Sentence-level candidates are suggestions only. Verify bibliographic details and review the original publication before entering any verified claim.
+
+## First execution milestones
 
 1. Verify every starter source's bibliographic metadata and obtain lawful full-text access.
 2. Run and document the search strategy in the review protocol.

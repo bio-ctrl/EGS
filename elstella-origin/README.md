@@ -1,70 +1,93 @@
 # ELSTELLA & CO. — BIOLOGICAL RESTORATION & THERAPEUTICS
 
 **Scientific foundation:** Systems-Level Biology  
-**Company model:** Computationally enabled therapeutic biotechnology  
-**Initial research priority:** PROJECT MITOS  
-**Research software:** Elstella Research Atlas
+**Company model:** Research-led biotechnology supported by computational infrastructure  
+**Research software:** Elstella Intelligence / Research Atlas
 
-Elstella's long-term ambition is to become a research-driven biotechnology company that develops proprietary medicines across areas of interconnected human biology. Its computational research infrastructure is intended to support literature synthesis, public-data assessment, evidence traceability, and research prioritization. It is not a validated drug-discovery engine.
+## Company sequence
+
+1. **Cellular & Mitochondrial Health** — first division and first research priority.
+2. **Muscle & Physical Health** — second planned division.
+3. **Brain & Cognitive Health** — third planned division.
+
+These divisions are ordered strategic priorities, not simultaneous drug-development programs.
 
 ## Company architecture
 
-- **Elstella Intelligence:** proposed computational research capability for organizing biological literature, public datasets, disease context, and evidence.
-- **Elstella Therapeutics:** long-term proprietary therapeutic development portfolio, advanced only through qualified scientific, institutional, safety, and regulatory pathways.
+- **Elstella Intelligence:** research software for literature organization, public-data metadata, biological context, source provenance, evidence uncertainty, and research questions.
+- **Elstella Therapeutics:** long-term proprietary therapeutic-development capability, advanced only with qualified scientific leadership, appropriate institutional oversight, and evidence.
 
-## Therapeutic portfolio ambition
+## Operating philosophy adapted from early Eli Lilly history
 
-1. **Mitochondrial & Cellular Energy Medicine** — initial research priority.
-2. **Neuromuscular & Muscle Medicine** — adjacent future portfolio area.
-3. **Kidney & Organ Restoration** — adjacent future portfolio area.
+ELSTELLA is adapting principles, not copying products or branding: begin with a clear medical purpose; build trust through quality and scientific integrity; recruit expertise deliberately; collaborate with academic and industry partners where appropriate; reinvest in research capability; and scale only when evidence and demand justify it.
 
-The portfolio is a strategic ambition, not three active drug-development programs. PROJECT MITOS is currently a literature-led research initiative; no candidate, target, or therapeutic has been identified or validated.
+## First division — Cellular & Mitochondrial Health
+
+Initial work is a high-level scientific landscape and unmet-need assessment:
+- Understand cellular energy and mitochondrial biology using authoritative sources.
+- Map relevant diseases, existing care, research activity, and clinical-development context.
+- Inventory lawfully accessible public datasets and document limitations.
+- Identify what is established, uncertain, contested, and not yet understood.
+- Obtain qualified independent scientific critique.
+- Decide whether a focused research question is justified.
+
+No molecular target, drug candidate, intervention, efficacy, safety, or clinical claim is established.
+
+## Second and third divisions
+
+**Muscle & Physical Health** is preserved as the second planned division. Its future research remit is medical needs involving muscle disease, weakness, and age-related loss of function—not performance-enhancement drug development.
+
+**Brain & Cognitive Health** is preserved as the third planned division. Its future research remit is neurological disease, brain health, and cognitive decline—not cognitive-enhancement drug development.
+
+Neither division begins substantive research until the first division has passed its documented review gate and the company has the qualified expertise and resources to proceed.
 
 ## Retained research
 
 - **PROJECT GENESIS:** foundational systems-level research on developmental systems, gene regulation, and biological form.
-- **PROJECT CARDIA:** separate exploratory literature work on cardiac remodeling and fibrosis. Existing CARDIA/NEXUS records remain intact and independently gated.
+- **PROJECT CARDIA:** separate exploratory historical research on cardiac remodeling and fibrosis.
 - **VYREON:** preliminary concept associated with CARDIA only; not an established candidate or validated therapeutic.
-- Other earlier research documents remain preserved as exploratory or historical work unless formally reassessed.
+- **PROJECT MITOS:** earlier mitochondrial research-planning material retained as historical work.
+- Leigh-specific project documents are discontinued as active strategy.
 
 ## Repository map
 
-- company/founding-charter.md — mission, company model, scientific foundation, and stage gates.
-- company/brand-system.md — company naming and communication rules.
-- company/operating-model.md — computational platform and therapeutic business model.
-- research/program-portfolio.md — current priority, adjacent portfolio ambitions, and retained research.
-- research/project-mitos-initial-charter.md — scope and decision criteria for the first research initiative.
-- research/project-mitos-landscape-assessment.md — literature-led unmet-need assessment framework.
-- research/therapeutic-portfolio-strategy.md — long-term therapeutic portfolio logic.
-- research/project-genesis-research-thesis.md — retained foundational GENESIS thesis.
-- research/project-cardia-*.md — retained CARDIA research records.
-- governance/claims-and-safety.md — scientific integrity and research boundaries.
-- governance/data-governance.md — data provenance, handling, and oversight rules.
-- strategy/roadmap.md — evidence-gated company and research roadmap.
-- platform/ — research software, data dictionary, methods, and architecture.
-- tests/ and .github/workflows/ — automated software tests and CI.
-- investor/overview.md — factual early-stage company overview.
-- BUILD-STATUS.md — implemented features and known limitations.
+- `company/founding-charter.md` — mission, principles, company architecture, and stage gates.
+- `company/brand-system.md` — company naming and communication rules.
+- `company/operating-model.md` — business model and staged division sequence.
+- `research/program-portfolio.md` — division order and retained historical work.
+- `research/cellular-mitochondrial-health-charter.md` — first division charter.
+- `research/cellular-mitochondrial-landscape-framework.md` — literature-led research framework.
+- `research/therapeutic-portfolio-strategy.md` — long-term therapeutic strategy.
+- `strategy/roadmap.md` — evidence-gated company roadmap.
+- `platform/` — Research Atlas software, data dictionary, methods, and architecture.
+- `tests/` and `.github/workflows/` — automated software tests and CI.
+- `investor/overview.md` — factual early-stage company overview.
+- `BUILD-STATUS.md` — implemented features and known limitations.
 
 ## Run the Research Atlas
 
-Use Node.js 20.6 or newer. Copy .env.example to .env, configure optional server-side AI provider variables only if needed, then run npm start. Open http://localhost:4173. Run automated tests with npm test.
+Requirements: Node.js 20.6 or newer.
 
-No production database or AI provider is provisioned by this repository. Never commit .env or place provider secrets in browser code.
+```bash
+cd elstella-origin
+npm install
+npm test
+npm start
+```
+
+Then open [http://localhost:4173](http://localhost:4173).
+
+Optional AI-assisted synthesis requires server-side provider configuration. The core application and literature workflow should be usable without AI credentials. Never put provider secrets in browser code or commit a `.env` file.
 
 ## Research integrity
 
-- Begin with a precise, falsifiable question.
-- Use lawfully accessible publications and appropriately accessible public research data.
+- Start with a defined question and credible medical need.
+- Map existing research before claiming a gap.
+- Use lawfully accessible publications and public research data.
 - Record source identifiers, retrieval dates, access terms, and transformations.
-- Distinguish direct study results from author interpretations and Elstella hypotheses.
-- Separate association from causation.
-- Record negative findings, contradictions, uncertainty, and model limitations.
-- Do not claim novelty, efficacy, safety, patentability, or clinical relevance without independent evidence.
-- Any future work involving human participants, sensitive data, biological samples, animals, or laboratory activity requires qualified institutional oversight, permissions, and supervision.
-
-## Immediate priority
-
-Complete the PROJECT MITOS literature and unmet-need assessment. Compare candidate disease areas using transparent criteria before selecting a narrower research question. Do not launch multiple therapeutic programs or build unnecessary infrastructure before the first question survives review.
+- Distinguish study results, author interpretations, and Elstella hypotheses.
+- Record uncertainty, contradictory findings, and negative results.
+- Do not claim novelty, efficacy, safety, patentability, or clinical relevance without appropriate evidence.
+- Human-participant, patient-data, biological-sample, animal, laboratory, experimental, and clinical work requires qualified institutional oversight, permissions, and supervision.
 
 **Founding principle: Evidence before claims.**

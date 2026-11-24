@@ -62,7 +62,6 @@ Fundraising proceeds belong to the company and must be used for agreed company p
 - **PROJECT CARDIA** remains a separate exploratory historical research track. Its records and claims remain distinct.
 - **VYREON** remains a preliminary concept associated with CARDIA only; it is not a molecule, candidate, target, or validated therapeutic.
 - Earlier MITOS planning is retained as historical material, not a separate active program.
-- Previous Leigh-specific planning is discontinued as the company's flagship strategy.
 - **CERES is out of scope and must not be accessed or modified.**
 
 ## Current stage

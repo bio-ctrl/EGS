@@ -2,6 +2,7 @@
 from __future__ import annotations
 import argparse
 import json
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -28,19 +29,34 @@ def run_yosys(network, require=False):
         cand_path, ref_path = Path(tmp)/"candidate.v", Path(tmp)/"reference.v"
         cand_path.write_text(candidate)
         ref_path.write_text(reference)
-        script = (f"read_verilog {cand_path} {ref_path}; "
-                  "proc; flatten candidate; "
-                  "miter -equiv -flatten reference candidate m; "
-                  "sat -verify -prove trigger 0 m; "
-                  "design -reset; "
-                  f"read_verilog {cand_path}; hierarchy -top candidate; synth -top candidate; stat")
-        proc = subprocess.run([yosys, "-p", script], text=True, capture_output=True)
-        if proc.returncode:
-            raise RuntimeError(proc.stdout + "\n" + proc.stderr)
+        proof_script = (f"read_verilog {cand_path} {ref_path}; "
+                        "proc; flatten candidate; "
+                        "miter -equiv -flatten reference candidate m; "
+                        "sat -verify -prove trigger 0 m")
+        proof = subprocess.run([yosys, "-p", proof_script], text=True, capture_output=True)
+        if proof.returncode:
+            raise RuntimeError(proof.stdout + "\n" + proof.stderr)
+        formal_passed = "SAT proof finished - no model found: SUCCESS!" in proof.stdout
+        if not formal_passed:
+            raise RuntimeError("Yosys completed without the expected successful SAT proof marker")
+        def synth_count(path, top):
+            script = f"read_verilog {path}; hierarchy -top {top}; synth -top {top}; stat"
+            result = subprocess.run([yosys, "-p", script], text=True, capture_output=True)
+            if result.returncode:
+                raise RuntimeError(result.stdout + "\n" + result.stderr)
+            counts = re.findall(r"Number of cells:\\s+(\\d+)", result.stdout)
+            return int(counts[-1]) if counts else None
+        candidate_cells = synth_count(cand_path, "candidate")
+        reference_cells = synth_count(ref_path, "reference")
         return {"available": True, "version": subprocess.run(
             [yosys, "-V"], text=True, capture_output=True).stdout.strip(),
-            "formal_passed": "SAT proof finished - no model found: SUCCESS!" in proc.stdout,
-            "log_tail": proc.stdout[-2500:]}
+            "formal_passed": formal_passed,
+            "candidate_generic_cells": candidate_cells,
+            "reference_generic_cells": reference_cells,
+            "cell_count_delta_candidate_minus_reference": (
+                candidate_cells - reference_cells
+                if candidate_cells is not None and reference_cells is not None else None),
+            "proof_log_tail": proof.stdout[-1200:]}
 
 
 def main():

@@ -1,11 +1,11 @@
 # Bit-level adder architecture experiment
 
-ORCUS now contains two generators for the same unsigned addition function:
+ORCUS now contains three generators for the same unsigned addition function:
 
 - **Ripple-carry:** each bit waits for the carry from the previous bit.
-- **Kogge–Stone prefix:** carry information is combined in parallel stages.
+- **Kogge–Stone prefix:** carry information is combined in dense parallel stages.\n- **Sklansky prefix:** group prefixes are shared across upper halves, creating a different fanout/resource trade-off.
 
-The generators produce explicit Boolean DAGs, not opaque arithmetic operators.
+The generators produce explicit Boolean DAGs, not opaque arithmetic operators. A deterministic search wrapper enumerates the three families and computes a Pareto frontier over gate count, logic depth, and fanout.
 Each candidate can be evaluated, measured, and exported as Verilog. Tests
 exhaustively check every input pair for widths 1 through 4. The benchmark
 extends to 32-bit structures and optionally invokes Yosys for an independent

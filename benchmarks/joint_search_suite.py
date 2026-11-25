@@ -35,7 +35,7 @@ def benchmark_cases():
             "ab_or_c": table(lambda a, b, c: (a & b) | c),
             "ab_xor_c": table(lambda a, b, c: (a & b) ^ c),
         },
-        "full_adder": {
+        "half_adder": {
             "sum": table(lambda a, b, c: a ^ b ^ c),
             "carry": table(lambda a, b, c: int(a + b + c >= 2)),
         },
@@ -43,9 +43,9 @@ def benchmark_cases():
             "mux_bc": table(lambda s, b, c: b if s else c),
             "mux_cb": table(lambda s, b, c: c if s else b),
         },
-        "parity_and_majority": {
+        "parity_and_or": {
             "parity": table(lambda a, b, c: a ^ b ^ c),
-            "majority": table(lambda a, b, c: int(a + b + c >= 2)),
+            "at_least_one": table(lambda a, b, c: int(bool(a or b or c))),
             "all_three": table(lambda a, b, c: a & b & c),
         },
         "two_bit_decoder": {

@@ -35,7 +35,9 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y yosys
       - name: Run diverse joint-search benchmark suite
         run: python benchmarks/joint_search_suite.py --max-gates 3 --require-yosys --output /tmp/orcus-joint-suite.json
-      - name: Verify typed bit-vector dataflow IR\n        run: python benchmarks/bitvector_ir_smoke.py\n      - name: Run bit-level adder architecture experiment
+      - name: Verify typed bit-vector dataflow IR
+        run: python benchmarks/bitvector_ir_smoke.py
+      - name: Run bit-level adder architecture experiment
         run: python benchmarks/adder_architecture_suite.py --widths 4 8 16 32 --require-yosys --output /tmp/orcus-adder-suite.json
 
       - name: Upload research benchmark reports

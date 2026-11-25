@@ -29,3 +29,5 @@ jobs:
 
       - name: Verify benchmark targets
         run: python -m orcus benchmark --max-gates 7 --output /tmp/orcus-ci-smoke.jsonl
+      - name: Verify joint-search benchmark
+        run: python benchmarks/joint_search_smoke.py --max-gates 3 --output /tmp/orcus-joint-smoke.json

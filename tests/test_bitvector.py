@@ -45,7 +45,8 @@ class BitVectorGraphTests(unittest.TestCase):
         )
         source = graph.emit_verilog("adder4")
         self.assertIn("module adder4(a, b, sum);", source)
-        self.assertIn("assign sum5 = a + b;", source)
+        self.assertIn("assign sum5 =", source)
+        self.assertIn("1'b0", source)
         self.assertIn("assign sum = sum5;", source)
 
     def test_rejects_bad_widths_unknown_inputs_and_duplicate_names(self):

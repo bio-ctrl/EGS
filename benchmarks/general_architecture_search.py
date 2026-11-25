@@ -88,6 +88,8 @@ def main() -> int:
                 candidate["verilog"], module, args.operator,
                 args.operands, args.width, binary,
             )
+            candidate["verification"]["passed"] = candidate["formal_equivalence"]["proved"]
+            candidate["verification"]["method"] = candidate["formal_equivalence"]["method"]
             candidate["yosys"] = yosys_cells(candidate["verilog"], module, binary)
 
         names = [f"x{i}" for i in range(args.operands)]

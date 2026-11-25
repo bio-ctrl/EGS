@@ -44,6 +44,9 @@ jobs:
       - name: Run generic associative architecture search
         run: python benchmarks/general_architecture_search.py --operator add --operands 4 --width 2 --require-yosys --output /tmp/orcus-general-architecture-search.json
 
+      - name: Run multi-operand compressor-network experiment
+        run: python benchmarks/compressor_network_suite.py --operands 4 --width 3 --require-yosys --output /tmp/orcus-compressor-network.json
+
       - name: Upload research benchmark reports
         uses: actions/upload-artifact@v4
         with:
@@ -54,4 +57,5 @@ jobs:
             /tmp/orcus-adder-suite.json
             /tmp/orcus-architecture-search.json
             /tmp/orcus-general-architecture-search.json
+            /tmp/orcus-compressor-network.json
           if-no-files-found: error

@@ -24,6 +24,8 @@ are introduced.
   metrics.
 - Verilog emission for inspection and downstream synthesis experiments.
 - A reproducible benchmark harness and JSON Lines result records.
+- A five-case multi-output joint-search suite with exhaustive verification.
+- Optional Yosys generic-cell synthesis comparison for baseline and joint candidates.
 - Unit tests and a GitHub Actions workflow.
 
 ## Quick start
@@ -36,6 +38,7 @@ python -m unittest discover -s tests -v
 python -m orcus synthesize parity3 --max-gates 7
 python -m orcus synthesize majority3 --max-gates 7 --verilog artifacts/majority3.v
 python -m orcus benchmark --max-gates 7 --output artifacts/baseline.jsonl
+python benchmarks/joint_search_suite.py --max-gates 3 --output artifacts/joint-suite.json
 ```
 
 Install as a local CLI if desired:
@@ -89,7 +92,7 @@ orcus/                 Core package
   cli.py               Command-line interface
 tests/                 Unit and functional-verification tests
 examples/              Small usage example
-benchmarks/            Baseline runner
+benchmarks/            Baseline and multi-output research runners
 docs/                  Research plan and experimental protocol
 .github/workflows/     Continuous-integration test workflow
 ```
@@ -98,7 +101,7 @@ docs/                  Research plan and experimental protocol
 
 1. Add a search procedure that directly optimizes multi-output DAGs instead of only compiling shared expressions.
 2. Introduce Pareto search over gate count, depth, fanout, and activity.
-3. Add larger benchmark suites and compare against independent synthesis tools.
+3. Expand benchmark coverage and compare against independent synthesis tools (the initial Yosys generic-cell check is not foundry PPA).
 4. Export and map Verilog against a documented cell library.
 5. Only then investigate physical PPA and FPGA validation.
 

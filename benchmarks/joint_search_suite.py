@@ -36,8 +36,8 @@ def benchmark_cases():
             "ab_xor_c": table(lambda a, b, c: (a & b) ^ c),
         },
         "half_adder": {
-            "sum": table(lambda a, b, c: a ^ b ^ c),
-            "carry": table(lambda a, b, c: int(a + b + c >= 2)),
+            "sum": table(lambda a, b, c: a ^ b),
+            "carry": table(lambda a, b, c: a & b),
         },
         "dual_mux": {
             "mux_bc": table(lambda s, b, c: b if s else c),

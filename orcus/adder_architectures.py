@@ -114,6 +114,21 @@ class _Builder:
     def gate(self, op: str, left: str, right: str) -> str:
         if op not in {"AND", "OR", "XOR"}:
             raise ValueError(f"unsupported gate: {op}")
+        if left in {"0", "1"} and right in {"0", "1"}:
+            a, b = int(left), int(right)
+            value = (a & b) if op == "AND" else (a | b) if op == "OR" else (a ^ b)
+            return str(value)
+        if op == "AND":
+            if "0" in {left, right}: return "0"
+            if left == "1": return right
+            if right == "1": return left
+        elif op == "OR":
+            if "1" in {left, right}: return "1"
+            if left == "0": return right
+            if right == "0": return left
+        elif op == "XOR":
+            if left == "0": return right
+            if right == "0": return left
         name = f"n{self.serial}"
         self.serial += 1
         self.nodes.append(LogicNode(name, op, (left, right)))

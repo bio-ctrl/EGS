@@ -141,6 +141,7 @@ def build_kogge_stone_adder(width: int) -> AdderArchitecture:
         raise ValueError("width must be between 1 and 64")
     b = _Builder()
     p = [b.gate("XOR", f"a{i}", f"b{i}") for i in range(width)]
+    bit_propagate = p[:]
     g = [b.gate("AND", f"a{i}", f"b{i}") for i in range(width)]
     distance = 1
     while distance < width:

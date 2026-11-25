@@ -31,5 +31,7 @@ jobs:
         run: python -m orcus benchmark --max-gates 7 --output /tmp/orcus-ci-smoke.jsonl
       - name: Verify joint-search benchmark
         run: python benchmarks/joint_search_smoke.py --max-gates 3 --output /tmp/orcus-joint-smoke.json
+      - name: Install independent synthesis tool
+        run: sudo apt-get update && sudo apt-get install -y yosys
       - name: Run diverse joint-search benchmark suite
-        run: python benchmarks/joint_search_suite.py --max-gates 3 --output /tmp/orcus-joint-suite.json
+        run: python benchmarks/joint_search_suite.py --max-gates 3 --require-yosys --output /tmp/orcus-joint-suite.json

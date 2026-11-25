@@ -154,31 +154,36 @@ def run_search(op: str, operand_count: int, width: int,
         op, operand_count, width, max_candidates=max_candidates
     )
     input_bits = operand_count * width
-    if input_bits > 16:
-        raise ValueError(
-            "Python exhaustive verification is limited to 16 total input bits; "
-            "use the Yosys SAT benchmark for wider candidates"
-        )
+    exhaustive = input_bits <= 16
     frontier = {item.name for item in pareto_candidates(candidates)}
     reports = []
     for candidate in candidates:
-        report = candidate.graph.verify_exhaustive(
-            lambda assignment: {
-                "result": _apply(
-                    op, [assignment[name] for name in sorted(assignment)], width
-                )
-            },
-            max_input_bits=16,
-        )
-        if not report.passed:
-            raise AssertionError(f"candidate failed equivalence: {candidate.name}")
+        if exhaustive:
+            verification = asdict(candidate.graph.verify_exhaustive(
+                lambda assignment: {
+                    "result": _apply(
+                        op, [assignment[name] for name in sorted(assignment)], width
+                    )
+                },
+                max_input_bits=16,
+            ))
+            if not verification["passed"]:
+                raise AssertionError(f"candidate failed equivalence: {candidate.name}")
+        else:
+            verification = {
+                "passed": False,
+                "exhaustive": False,
+                "vectors_checked": 0,
+                "input_bits": input_bits,
+                "status": "requires_external_formal_proof",
+            }
         metrics = asdict(candidate.graph.metrics())
         reports.append({
             "name": candidate.name,
             "topology": repr(candidate.topology),
             "metrics": metrics,
             "pareto_optimal": candidate.name in frontier,
-            "verification": asdict(report),
+            "verification": verification,
             "verilog": candidate.graph.emit_verilog(candidate.name),
         })
     return {

@@ -8,7 +8,11 @@ from __future__ import annotations
 import argparse
 import json
 import platform
+import re
+import shutil
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from time import perf_counter
 
@@ -20,6 +24,7 @@ from orcus.joint_search import JointSearchConfig, search_multi_output_joint
 from orcus.multioutput import synthesize_multi_output
 from orcus.synthesis import SynthesisConfig
 from orcus.truth_table import TruthTable
+from orcus.network_verilog import emit_network_verilog
 
 
 def table(fn):
@@ -57,7 +62,34 @@ def benchmark_cases():
     }
 
 
-def run_case(name, targets, synthesis, generated_limit, combination_limit):
+def yosys_stats(network, module_name, yosys_binary):
+    """Synthesize one emitted network with Yosys and return generic cell stats."""
+    source = emit_network_verilog(network, module_name=module_name)
+    with tempfile.TemporaryDirectory(prefix="orcus-yosys-") as directory:
+        verilog_path = Path(directory) / f"{module_name}.v"
+        verilog_path.write_text(source, encoding="utf-8")
+        command = (
+            f"read_verilog {verilog_path}; hierarchy -top {module_name}; "
+            f"synth -top {module_name}; stat"
+        )
+        completed = subprocess.run(
+            [yosys_binary, "-p", command], check=True, capture_output=True, text=True
+        )
+        matches = re.findall(r"Number of cells:\\s+(\\d+)", completed.stdout)
+        if not matches:
+            raise RuntimeError(f"could not parse Yosys cell count for {module_name}")
+        version = subprocess.run(
+            [yosys_binary, "-V"], check=True, capture_output=True, text=True
+        ).stdout.strip()
+        return {
+            "generic_cell_count": int(matches[-1]),
+            "yosys_version": version,
+            "flow": "read_verilog; hierarchy; synth; stat",
+            "library": "Yosys generic internal cells; no foundry standard-cell library",
+        }
+
+
+def run_case(name, targets, synthesis, generated_limit, combination_limit, yosys_binary=None):
     start = perf_counter()
     baseline = synthesize_multi_output(targets, synthesis)
     baseline_seconds = perf_counter() - start
@@ -82,6 +114,17 @@ def run_case(name, targets, synthesis, generated_limit, combination_limit):
 
     baseline_gates = baseline.shared_gate_count
     joint_gates = joint.joint_gate_count
+    external = None
+    if yosys_binary:
+        external = {
+            "baseline": yosys_stats(baseline.network, f"orcus_base_{name}", yosys_binary),
+            "joint_search": yosys_stats(joint.network, f"orcus_joint_{name}", yosys_binary),
+        }
+        external["generic_cell_delta_baseline_minus_joint"] = (
+            external["baseline"]["generic_cell_count"]
+            - external["joint_search"]["generic_cell_count"]
+        )
+
     return {
         "case": name,
         "outputs": list(targets),
@@ -106,6 +149,7 @@ def run_case(name, targets, synthesis, generated_limit, combination_limit):
             "verified": joint_verified,
             "network": joint.network.to_dict(),
         },
+        "yosys_comparison": external,
         "comparison": {
             "gate_delta_baseline_minus_joint": baseline_gates - joint_gates,
             "improved_gate_count": joint_gates < baseline_gates,
@@ -123,11 +167,19 @@ def main():
     parser.add_argument("--max-generated-expressions", type=int, default=100_000)
     parser.add_argument("--max-combinations", type=int, default=50_000)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--require-yosys", action="store_true")
     args = parser.parse_args()
+
+    yosys_binary = shutil.which("yosys")
+    if args.require_yosys and not yosys_binary:
+        raise RuntimeError("--require-yosys was set but yosys is not installed")
 
     synthesis = SynthesisConfig(input_count=3, max_gates=args.max_gates)
     results = [
-        run_case(name, targets, synthesis, args.max_generated_expressions, args.max_combinations)
+        run_case(
+            name, targets, synthesis, args.max_generated_expressions,
+            args.max_combinations, yosys_binary
+        )
         for name, targets in benchmark_cases().items()
     ]
     record = {
@@ -140,6 +192,15 @@ def main():
         "limits": {
             "max_generated_expressions": args.max_generated_expressions,
             "max_combinations": args.max_combinations,
+        },
+        "external_synthesis": {
+            "tool": "Yosys",
+            "available": bool(yosys_binary),
+            "version": (
+                subprocess.run([yosys_binary, "-V"], check=True, capture_output=True, text=True).stdout.strip()
+                if yosys_binary else None
+            ),
+            "scope": "generic-cell synthesis only; not mapped to a foundry library",
         },
         "summary": {
             "cases": len(results),

@@ -6,7 +6,10 @@ import json
 import shutil
 import subprocess
 import tempfile
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from orcus.adder_architectures import (
     build_kogge_stone_adder,

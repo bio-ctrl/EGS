@@ -105,5 +105,6 @@ docs/                  Research plan and experimental protocol
 4. Export and map Verilog against a documented cell library.
 5. Only then investigate physical PPA and FPGA validation.
 
-See [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md) and
-[docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md).
+See [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md),
+[docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md), and the
+[first five-case joint-search results](docs/JOINT_SEARCH_RESULTS.md).

@@ -48,11 +48,11 @@ def benchmark_cases():
             "majority": table(lambda a, b, c: int(a + b + c >= 2)),
             "all_three": table(lambda a, b, c: a & b & c),
         },
-        "minterm_decoder": {
-            "m0": table(lambda a, b, c: int((a, b, c) == (0, 0, 0))),
-            "m3": table(lambda a, b, c: int((a, b, c) == (0, 1, 1))),
-            "m5": table(lambda a, b, c: int((a, b, c) == (1, 0, 1))),
-            "m7": table(lambda a, b, c: int((a, b, c) == (1, 1, 1))),
+        "two_bit_decoder": {
+            "m0": table(lambda a, b, c: int((a, b) == (0, 0))),
+            "m3": table(lambda a, b, c: int((a, b) == (0, 1))),
+            "m5": table(lambda a, b, c: int((a, b) == (1, 0))),
+            "m7": table(lambda a, b, c: int((a, b) == (1, 1))),
         },
     }
 

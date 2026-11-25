@@ -3,6 +3,7 @@ import unittest
 from orcus.adder_architectures import (
     build_kogge_stone_adder,
     build_ripple_carry_adder,
+    build_sklansky_adder,
 )
 
 
@@ -12,10 +13,12 @@ class AdderArchitectureTests(unittest.TestCase):
             limit = 1 << width
             expected = build_ripple_carry_adder(width)
             candidate = build_kogge_stone_adder(width)
+            sklansky = build_sklansky_adder(width)
             for a in range(limit):
                 for b in range(limit):
                     self.assertEqual(expected.evaluate(a, b), a + b)
                     self.assertEqual(candidate.evaluate(a, b), a + b)
+                    self.assertEqual(sklansky.evaluate(a, b), a + b)
 
     def test_constant_propagation_removes_redundant_zero_carry_gates(self):
         self.assertEqual(build_ripple_carry_adder(4).metrics().gate_count, 17)
@@ -37,6 +40,8 @@ class AdderArchitectureTests(unittest.TestCase):
             build_ripple_carry_adder(0)
         with self.assertRaises(ValueError):
             build_kogge_stone_adder(65)
+        with self.assertRaises(ValueError):
+            build_sklansky_adder(0)
         with self.assertRaises(ValueError):
             build_ripple_carry_adder(3).evaluate(8, 0)
 

@@ -21,27 +21,29 @@ def yosys_prove_equivalent(candidate_verilog: str, candidate_module: str,
     """Prove candidate == direct operator reference for every input assignment."""
     names = [f"x{i}" for i in range(operands)]
     port_list = ", ".join(names)
-    declarations = "\\n".join(f"  input [{width - 1}:0] {name};" for name in names)
+    declarations = "\\n".join(
+        f"  input [{width - 1}:0] {name};" for name in names
+    )
     symbols = {"add": "+", "and": "&", "or": "|", "xor": "^"}
     reference_expression = f" {symbols[operator]} ".join(names)
     connections = ", ".join(f".{name}({name})" for name in names)
     reference = (
-        f"module orcus_reference({port_list}, result);\n"
-        f"  {declarations};\n"
-        f"  output [{width - 1}:0] result;\n"
-        f"  assign result = {reference_expression};\n"
-        f"endmodule\n"
+        f"module orcus_reference({port_list}, result);\\n"
+        f"{declarations}\\n"
+        f"  output [{width - 1}:0] result;\\n"
+        f"  assign result = {reference_expression};\\n"
+        f"endmodule\\n"
     )
     miter = (
-        f"module orcus_miter({port_list}, mismatch);\n"
-        f"  {declarations};\n"
-        f"  output mismatch;\n"
-        f"  wire [{width - 1}:0] candidate_value;\n"
-        f"  wire [{width - 1}:0] reference_value;\n"
-        f"  {candidate_module} dut({connections}, .result(candidate_value));\n"
-        f"  orcus_reference ref({connections}, .result(reference_value));\n"
-        f"  assign mismatch = |(candidate_value ^ reference_value);\n"
-        f"endmodule\n"
+        f"module orcus_miter({port_list}, mismatch);\\n"
+        f"{declarations}\\n"
+        f"  output mismatch;\\n"
+        f"  wire [{width - 1}:0] candidate_value;\\n"
+        f"  wire [{width - 1}:0] reference_value;\\n"
+        f"  {candidate_module} dut({connections}, .result(candidate_value));\\n"
+        f"  orcus_reference ref({connections}, .result(reference_value));\\n"
+        f"  assign mismatch = |(candidate_value ^ reference_value);\\n"
+        f"endmodule\\n"
     )
     with tempfile.TemporaryDirectory() as directory:
         root = Path(directory)
@@ -54,7 +56,7 @@ def yosys_prove_equivalent(candidate_verilog: str, candidate_module: str,
             "hierarchy -top orcus_miter; flatten; opt; "
             "sat -verify -prove mismatch 0"
         )
-        run = subprocess.run(
+        subprocess.run(
             [binary, "-p", script], capture_output=True, text=True, check=True
         )
         version = subprocess.run(

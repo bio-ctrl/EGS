@@ -92,17 +92,17 @@ def main() -> int:
 
         names = [f"x{i}" for i in range(args.operands)]
         ports = ", ".join(names)
-        declarations = "\\n".join(
+        declarations = "\n".join(
             f"  input [{args.width - 1}:0] {name};" for name in names
         )
         symbols = {"add": "+", "and": "&", "or": "|", "xor": "^"}
         expression = f" {symbols[args.operator]} ".join(names)
         baseline_source = (
-            f"module orcus_reference_baseline({ports}, result);\\n"
-            f"{declarations}\\n"
-            f"  output [{args.width - 1}:0] result;\\n"
-            f"  assign result = {expression};\\n"
-            f"endmodule\\n"
+            f"module orcus_reference_baseline({ports}, result);\n"
+            f"{declarations}\n"
+            f"  output [{args.width - 1}:0] result;\n"
+            f"  assign result = {expression};\n"
+            f"endmodule\n"
         )
         baseline = yosys_cells(
             baseline_source, "orcus_reference_baseline", binary
@@ -140,7 +140,7 @@ def main() -> int:
     rendered = json.dumps(result, indent=2, sort_keys=True)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(rendered + "\\n", encoding="utf-8")
+        args.output.write_text(rendered + "\n", encoding="utf-8")
     print(rendered)
     return 0
 

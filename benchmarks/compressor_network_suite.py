@@ -68,17 +68,20 @@ def main():
     args = parser.parse_args()
     results = []
     for schedule in ("wallace", "wallace_reverse", "dadda"):
-        network = build_compressor_network(args.operands, args.width, schedule)
-        verification = verify_exhaustive(network, max_input_bits=16)
-        synthesis = run_yosys(network, args.require_yosys)
-        results.append({"schedule": schedule, "metrics": network.metrics(),
-                        "verification": verification, "yosys": synthesis,
-                        "verilog": network.emit_verilog()})
+        for final_adder in ("ripple", "kogge_stone", "sklansky"):
+            network = build_compressor_network(args.operands, args.width, schedule, final_adder)
+            verification = verify_exhaustive(network, max_input_bits=16)
+            if verification["exhaustive"] and not verification["passed"]:
+                raise RuntimeError(f"functional verification failed: {network.schedule}")
+            synthesis = run_yosys(network, args.require_yosys)
+            results.append({"schedule": schedule, "final_adder": final_adder,
+                            "metrics": network.metrics(), "verification": verification,
+                            "yosys": synthesis, "verilog": network.emit_verilog()})
     report = {"experiment": "multi_operand_compressor_networks",
               "operands": args.operands, "width": args.width,
               "output_width": args.width + (args.operands-1).bit_length(),
               "results": results,
-              "limitations": ["bounded schedule family", "generic synthesis is not physical PPA",
+              "limitations": ["bounded schedule and final-adder family", "generic synthesis is not physical PPA",
                               "Wallace and Dadda are established reference architectures",
                               "no novelty or commercial-performance claim"]}
     payload = json.dumps(report, indent=2)

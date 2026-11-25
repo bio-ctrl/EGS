@@ -21,8 +21,9 @@ def yosys_prove_equivalent(candidate_verilog: str, candidate_module: str,
     """Prove candidate == direct operator reference for every input assignment."""
     names = [f"x{i}" for i in range(operands)]
     port_list = ", ".join(names)
-    declarations = ", ".join(f"input [{width - 1}:0] {name}" for name in names)
-    reference_expression = f" {operator} ".join(names)
+    declarations = "\\n".join(f"  input [{width - 1}:0] {name};" for name in names)
+    symbols = {"add": "+", "and": "&", "or": "|", "xor": "^"}
+    reference_expression = f" {symbols[operator]} ".join(names)
     connections = ", ".join(f".{name}({name})" for name in names)
     reference = (
         f"module orcus_reference({port_list}, result);\n"

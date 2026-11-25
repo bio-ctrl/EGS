@@ -35,6 +35,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y yosys
       - name: Run diverse joint-search benchmark suite
         run: python benchmarks/joint_search_suite.py --max-gates 3 --require-yosys --output /tmp/orcus-joint-suite.json
+      - name: Run bit-level adder architecture experiment
+        run: python benchmarks/adder_architecture_suite.py --widths 4 8 16 32 --require-yosys --output /tmp/orcus-adder-suite.json
 
       - name: Upload research benchmark reports
         uses: actions/upload-artifact@v4
@@ -43,4 +45,5 @@ jobs:
           path: |
             /tmp/orcus-joint-smoke.json
             /tmp/orcus-joint-suite.json
+            /tmp/orcus-adder-suite.json
           if-no-files-found: error

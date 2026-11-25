@@ -80,6 +80,7 @@ def main() -> int:
         raise RuntimeError("Yosys is required but not installed")
     report = run_search(args.operator, args.operands, args.width, args.max_candidates)
 
+    baseline = None
     if binary:
         for candidate in report["candidates"]:
             module = candidate["name"]
@@ -89,9 +90,44 @@ def main() -> int:
             )
             candidate["yosys"] = yosys_cells(candidate["verilog"], module, binary)
 
+        names = [f"x{i}" for i in range(args.operands)]
+        ports = ", ".join(names)
+        declarations = "\\n".join(
+            f"  input [{args.width - 1}:0] {name};" for name in names
+        )
+        symbols = {"add": "+", "and": "&", "or": "|", "xor": "^"}
+        expression = f" {symbols[args.operator]} ".join(names)
+        baseline_source = (
+            f"module orcus_reference_baseline({ports}, result);\\n"
+            f"{declarations}\\n"
+            f"  output [{args.width - 1}:0] result;\\n"
+            f"  assign result = {expression};\\n"
+            f"endmodule\\n"
+        )
+        baseline = yosys_cells(
+            baseline_source, "orcus_reference_baseline", binary
+        )
+        counts = [item["yosys"]["generic_cell_count"] for item in report["candidates"]]
+        report["yosys_comparison"] = {
+            "direct_expression_baseline_generic_cells": baseline["generic_cell_count"],
+            "best_generated_candidate_generic_cells": min(counts),
+            "worst_generated_candidate_generic_cells": max(counts),
+            "generated_candidates_beating_baseline": sum(
+                count < baseline["generic_cell_count"] for count in counts
+            ),
+            "generated_candidates_tying_baseline": sum(
+                count == baseline["generic_cell_count"] for count in counts
+            ),
+            "generated_candidates_losing_to_baseline": sum(
+                count > baseline["generic_cell_count"] for count in counts
+            ),
+        }
+
     result = {
         "experiment": "orcus-general-associative-architecture-search-v1",
         "yosys_available": bool(binary),
+        "yosys_version": baseline["version"] if baseline else None,
+        "direct_expression_baseline": baseline,
         "result": report,
         "interpretation_limits": [
             "The generator searches associative/commutative binary-tree topologies only.",

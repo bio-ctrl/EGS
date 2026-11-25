@@ -31,9 +31,13 @@ class ArchitectureSearchTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             generate_associative_candidates("xor", 5, 2, max_candidates=10)
 
-    def test_exhaustive_verifier_rejects_input_spaces_over_16_bits(self):
-        with self.assertRaises(ValueError):
-            run_search("add", 5, 4)
+    def test_wider_search_marks_verification_as_external(self):
+        report = run_search("add", 5, 4)
+        self.assertFalse(report["search_space"]["exhaustive_equivalence"])
+        self.assertTrue(all(
+            item["verification"]["status"] == "requires_external_formal_proof"
+            for item in report["candidates"]
+        ))
 
     def test_search_is_deterministic(self):
         first = generate_associative_candidates("xor", 4, 2)

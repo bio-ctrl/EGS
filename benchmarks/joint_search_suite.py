@@ -75,7 +75,7 @@ def yosys_stats(network, module_name, yosys_binary):
         completed = subprocess.run(
             [yosys_binary, "-p", command], check=True, capture_output=True, text=True
         )
-        matches = re.findall(r"Number of cells:\\s+(\\d+)", completed.stdout)
+        matches = re.findall(r"Number of cells:\s+(\d+)", completed.stdout)
         if not matches:
             raise RuntimeError(f"could not parse Yosys cell count for {module_name}")
         version = subprocess.run(

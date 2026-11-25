@@ -17,6 +17,10 @@ class AdderArchitectureTests(unittest.TestCase):
                     self.assertEqual(expected.evaluate(a, b), a + b)
                     self.assertEqual(candidate.evaluate(a, b), a + b)
 
+    def test_constant_propagation_removes_redundant_zero_carry_gates(self):
+        self.assertEqual(build_ripple_carry_adder(4).metrics().gate_count, 17)
+        self.assertEqual(build_kogge_stone_adder(4).metrics().gate_count, 26)
+
     def test_prefix_depth_is_lower_for_sixteen_bits(self):
         ripple = build_ripple_carry_adder(16).metrics()
         prefix = build_kogge_stone_adder(16).metrics()

@@ -7,6 +7,12 @@
 
 **EGS** is the proposed parent technology company. It is not the name of a single software product or research project.
 
+### Personal origin of the name
+
+The founder's actual initials are **EGE**. **EGS** is a deliberate variation: it retains the E and G from those initials and uses **S** from the nickname portion of the founder's name. Do not publish or infer the founder's full name from this explanation.
+
+EGS is therefore the intended personal-origin parent-company name. **NEM is not the source of the EGS name.** Do not describe NEM as the founder's initials reversed.
+
 ### What EGS is intended to represent
 
 EGS is intended to build foundational technology: new computational methods, computing architectures, hardware-oriented systems, and the tools needed to discover, evaluate, and engineer them.
@@ -39,9 +45,7 @@ Current limits matter: passing software tests and exhaustive small-function chec
 
 ### NEM
 
-NEM is a separate potential product or platform name. It has personal significance because it is derived from the founder's initials in reverse. Do not expand it into the founder's full name or publish the full name as part of the naming rationale.
-
-NEM's product scope has not yet been defined. Do not assign it a feature set, technical meaning, or relationship to ORCUS until that is deliberately decided.
+NEM is a separate potential product or platform name. Its product scope and naming origin have not been established in this company-architecture document. Do not assign it a technical definition, feature set, or etymology until the founder explicitly defines those.
 
 ## 3. Relationship
 
@@ -65,15 +69,16 @@ NEM and ORCUS are independent names that could exist under EGS. They are not alt
 
 1. Keep the parent-company identity distinct from product and platform identities.
 2. Treat EGS as the leading working candidate, not as a finalized or legally cleared name.
-3. Do not invent an expansion for the letters EGS. Its significance is the parent-company identity and mission described above unless the founder later supplies an intended expansion.
+3. Do not invent an expansion for the letters EGS. Its personal origin is described above; its corporate mission is described separately.
 4. Do not replace ORCUS in source code, package metadata, repository documentation, or existing research artifacts merely because EGS is the parent-company candidate.
-5. Do not assign NEM a technical definition, feature set, or product scope until explicitly defined.
+5. Do not assign NEM a technical definition, feature set, or etymology until explicitly defined.
 6. Before public adoption, screen EGS and product names for exact and confusingly similar company names, trademarks in relevant goods/services classes, domains, and international usage. A general web search is not legal clearance.
 7. Do not imply that EGS has already built, validated, or commercialized capabilities that remain research goals.
 
 ## 6. Decision log
 
 - 2026-11-24: Clarified that EGS is the parent-company candidate, while NEM and ORCUS are separate potential product/platform names.
-- 2026-11-24: Recorded that NEM is personally derived from the founder's initials in reverse, without using the founder's full name.
+- 2026-11-24: Corrected the personal origin of EGS: the founder's actual initials are EGE; EGS retains E and G and uses S from the nickname portion. The founder's full name is not to be published in this rationale.
+- 2026-11-24: Removed the incorrect claim that NEM is derived from the founder's initials in reverse. NEM remains a separate potential product/platform name with its origin and scope unspecified here.
 - 2026-11-24: Defined the proposed EGS mission as developing foundational computing technologies through discovery, testing, and engineering.
 - 2026-11-24: Recommended keeping this technical repository named around ORCUS; EGS belongs at the company/organization level, not as a replacement for the ORCUS project.

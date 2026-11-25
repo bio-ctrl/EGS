@@ -176,6 +176,7 @@ def _finish_two_rows(heap, builder, final_adder):
         out.append(carry)
         return tuple(out)
     p = [builder.gate("XOR", a, b) for a, b in zip(row0, row1)]
+    bit_propagate = p[:]
     g = [builder.gate("AND", a, b) for a, b in zip(row0, row1)]
     if final_adder == "kogge_stone":
         distance = 1
@@ -200,7 +201,7 @@ def _finish_two_rows(heap, builder, final_adder):
     else:
         raise ValueError("final_adder must be ripple, kogge_stone, or sklansky")
     carries = ["0", *g[:-1]]
-    sums = [builder.gate("XOR", p[i], carries[i]) for i in range(len(p))]
+    sums = [builder.gate("XOR", bit_propagate[i], carries[i]) for i in range(len(p))]
     return tuple([*sums, g[-1]])
 
 

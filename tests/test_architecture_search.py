@@ -31,6 +31,10 @@ class ArchitectureSearchTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             generate_associative_candidates("xor", 5, 2, max_candidates=10)
 
+    def test_exhaustive_verifier_rejects_input_spaces_over_16_bits(self):
+        with self.assertRaises(ValueError):
+            run_search("add", 5, 4)
+
     def test_search_is_deterministic(self):
         first = generate_associative_candidates("xor", 4, 2)
         second = generate_associative_candidates("xor", 4, 2)

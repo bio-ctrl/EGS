@@ -162,37 +162,66 @@ def _compress_dadda(heap, builder):
     return _compress_wallace(heap, builder)
 
 
-def _finish_two_rows(heap, builder):
+def _finish_two_rows(heap, builder, final_adder):
     row0, row1 = [], []
     for col in heap:
         row0.append(col[0] if col else "0")
         row1.append(col[1] if len(col) > 1 else "0")
-    # Carry-propagate addition of the two rows; retain all representable bits.
-    carry = "0"
-    out = []
-    for a, b in zip(row0, row1):
-        s, carry = builder.full_adder(a, b, carry)
-        out.append(s)
-    out.append(carry)
-    return tuple(out)
+    if final_adder == "ripple":
+        carry = "0"
+        out = []
+        for a, b in zip(row0, row1):
+            s, carry = builder.full_adder(a, b, carry)
+            out.append(s)
+        out.append(carry)
+        return tuple(out)
+    p = [builder.gate("XOR", a, b) for a, b in zip(row0, row1)]
+    g = [builder.gate("AND", a, b) for a, b in zip(row0, row1)]
+    if final_adder == "kogge_stone":
+        distance = 1
+        while distance < len(p):
+            old_p, old_g = p[:], g[:]
+            for bit in range(distance, len(p)):
+                combined = builder.gate("AND", old_p[bit], old_g[bit-distance])
+                g[bit] = builder.gate("OR", old_g[bit], combined)
+                p[bit] = builder.gate("AND", old_p[bit], old_p[bit-distance])
+            distance *= 2
+    elif final_adder == "sklansky":
+        distance = 1
+        while distance < len(p):
+            old_p, old_g = p[:], g[:]
+            for bit in range(len(p)):
+                if bit % (2 * distance) >= distance:
+                    lower = (bit // (2 * distance)) * (2 * distance) + distance - 1
+                    combined = builder.gate("AND", old_p[bit], old_g[lower])
+                    g[bit] = builder.gate("OR", old_g[bit], combined)
+                    p[bit] = builder.gate("AND", old_p[bit], old_p[lower])
+            distance *= 2
+    else:
+        raise ValueError("final_adder must be ripple, kogge_stone, or sklansky")
+    carries = ["0", *g[:-1]]
+    sums = [builder.gate("XOR", p[i], carries[i]) for i in range(len(p))]
+    return tuple([*sums, g[-1]])
 
 
-def build_compressor_network(operand_count: int, width: int, schedule: str = "wallace") -> CompressorNetwork:
+def build_compressor_network(operand_count: int, width: int, schedule: str = "wallace",
+                             final_adder: str = "ripple") -> CompressorNetwork:
     if not 3 <= operand_count <= 16:
         raise ValueError("operand_count must be between 3 and 16")
     if not 1 <= width <= 32:
         raise ValueError("width must be between 1 and 32")
     if schedule not in {"wallace", "wallace_reverse", "dadda"}:
         raise ValueError("schedule must be wallace, wallace_reverse, or dadda")
+    if final_adder not in {"ripple", "kogge_stone", "sklansky"}:
+        raise ValueError("final_adder must be ripple, kogge_stone, or sklansky")
     builder = _Builder()
     heap = _initial_heap(operand_count, width)
     heap = (_compress_dadda(heap, builder) if schedule == "dadda"
             else _compress_wallace(heap, builder, schedule == "wallace_reverse"))
-    outputs = _finish_two_rows(heap, builder)
+    outputs = _finish_two_rows(heap, builder, final_adder)
     output_width = width + ceil(log2(operand_count))
-    return CompressorNetwork(schedule, operand_count, width, output_width,
+    return CompressorNetwork(schedule + "+" + final_adder, operand_count, width, output_width,
                              tuple(builder.gates), outputs[:output_width])
-
 
 def verify_exhaustive(network: CompressorNetwork, max_input_bits: int = 16) -> dict:
     total_bits = network.operand_count * network.width

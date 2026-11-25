@@ -16,7 +16,11 @@ def run_yosys(network, require=False):
         if require:
             raise RuntimeError("Yosys is required but was not found")
         return {"available": False}
-    ref = " + ".join(f"x{i}" for i in range(network.operand_count))
+    pad = network.output_width - network.width
+    terms = []
+    for i in range(network.operand_count):
+        terms.append(f"x{i}" if pad == 0 else "{{" + f"{pad}{{1'b0}}" + "}, " + f"x{i}" + "}")
+    ref = " + ".join(terms)
     reference = (f"module reference({', '.join([f'input [{network.width-1}:0] x{i}' for i in range(network.operand_count)])}, "
                  f"output [{network.output_width-1}:0] sum); assign sum = {ref}; endmodule\n")
     candidate = network.emit_verilog("candidate")

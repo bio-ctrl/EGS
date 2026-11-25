@@ -26,6 +26,7 @@ are introduced.
 - A reproducible benchmark harness and JSON Lines result records.
 - A five-case multi-output joint-search suite with exhaustive verification.
 - Bit-level ripple-carry and Kogge–Stone adder architecture generators with Verilog export and structural metrics.
+- A typed, width-aware dataflow IR for multi-bit arithmetic, bitwise logic, muxes, comparisons, and shifts, with exhaustive verification and Verilog export.
 - Optional Yosys generic-cell synthesis comparison for baseline and joint candidates.
 - Unit tests and a GitHub Actions workflow.
 
@@ -40,6 +41,7 @@ python -m orcus synthesize parity3 --max-gates 7
 python -m orcus synthesize majority3 --max-gates 7 --verilog artifacts/majority3.v
 python -m orcus benchmark --max-gates 7 --output artifacts/baseline.jsonl
 python benchmarks/joint_search_suite.py --max-gates 3 --output artifacts/joint-suite.json
+python benchmarks/bitvector_ir_smoke.py
 ```
 
 Install as a local CLI if desired:

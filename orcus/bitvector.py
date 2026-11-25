@@ -121,7 +121,10 @@ class BitVectorGraph:
         if node.value is not None:
             raise ValueError("only const nodes may define a value")
         source_widths = [widths[source] for source in node.inputs]
-        if node.op in {"add", "sub", "and", "or", "xor"}:
+        if node.op in {"add", "sub"}:
+            if source_widths[0] != source_widths[1] or node.width not in {source_widths[0], source_widths[0] + 1}:
+                raise ValueError(f"{node.op} requires equal-width operands and a result width equal to operand width or one bit wider")
+        elif node.op in {"and", "or", "xor"}:
             if source_widths != [node.width, node.width]:
                 raise ValueError(f"{node.op} requires two operands matching result width")
         elif node.op == "not":
@@ -173,7 +176,8 @@ class BitVectorGraph:
         depths = {port.name: 0 for port in self.inputs}
         fanout = {name: 0 for name in depths}
         for node in self.nodes:
-            depths[node.node_id] = 1 + max((depths[name] for name in node.inputs), default=0)
+            depths[node.node_id] = (0 if node.op == "const" else
+                                    1 + max((depths[name] for name in node.inputs), default=0))
             fanout[node.node_id] = 0
             for source in node.inputs:
                 fanout[source] += 1
@@ -225,6 +229,15 @@ class BitVectorGraph:
                 expression = f"~{args[0]}"
             elif node.op == "mux":
                 expression = f"{args[0]} ? {args[1]} : {args[2]}"
+            elif node.op in {"add", "sub"}:
+                operand_width = self._widths()[args[0]]
+                if node.width > operand_width:
+                    pad = node.width - operand_width
+                    left = f"{{{{{pad}{{1'b0}}}}, {args[0]}}}"
+                    right = f"{{{{{pad}{{1'b0}}}}, {args[1]}}}"
+                else:
+                    left, right = args
+                expression = f"{left} {symbols[node.op]} {right}"
             else:
                 expression = f"{args[0]} {symbols[node.op]} {args[1]}"
             lines.append(f"  assign {node.node_id} = {expression};")

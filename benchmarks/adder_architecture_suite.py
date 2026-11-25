@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from orcus.adder_architectures import (
     build_kogge_stone_adder,
     build_ripple_carry_adder,
+    build_sklansky_adder,
 )
 
 
@@ -45,10 +46,12 @@ def main() -> int:
     for width in args.widths:
         ripple = build_ripple_carry_adder(width)
         prefix = build_kogge_stone_adder(width)
+        sklansky = build_sklansky_adder(width)
         limit = 1 << min(width, 8)
         for a in range(limit):
             for b in range(limit):
-                if ripple.evaluate(a, b) != a + b or prefix.evaluate(a, b) != a + b:
+                if (ripple.evaluate(a, b) != a + b or prefix.evaluate(a, b) != a + b
+                        or sklansky.evaluate(a, b) != a + b):
                     raise AssertionError(f"functional verification failed at width={width}")
         row = {
             "width": width,
@@ -73,11 +76,20 @@ def main() -> int:
                 },
                 "verilog": prefix.emit_verilog(),
             },
+            "sklansky": {
+                "metrics": {
+                    "gate_count": sklansky.metrics().gate_count,
+                    "logic_depth": sklansky.metrics().logic_depth,
+                    "max_fanout": sklansky.metrics().max_fanout,
+                },
+                "verilog": sklansky.emit_verilog(),
+            },
         }
         if binary:
             row["yosys"] = {
                 "ripple": yosys_cells(ripple.emit_verilog(), f"orcus_ripple_{width}", binary),
                 "kogge_stone": yosys_cells(prefix.emit_verilog(), f"orcus_kogge_stone_{width}", binary),
+                "sklansky": yosys_cells(sklansky.emit_verilog(), f"orcus_sklansky_{width}", binary),
             }
         rows.append(row)
     result = {

@@ -169,3 +169,25 @@ def build_kogge_stone_adder(width: int) -> AdderArchitecture:
     carry = ["0", *g[:-1]]
     sums = [b.gate("XOR", bit_propagate[i], carry[i]) for i in range(width)]
     return AdderArchitecture("kogge_stone", width, tuple(b.nodes), tuple(sums), g[-1])
+
+
+def build_sklansky_adder(width: int) -> AdderArchitecture:
+    """Build a Sklansky divide-and-conquer parallel-prefix adder."""
+    if not 1 <= width <= 64:
+        raise ValueError("width must be between 1 and 64")
+    b = _Builder()
+    p = [b.gate("XOR", f"a{i}", f"b{i}") for i in range(width)]
+    bit_propagate = p[:]
+    g = [b.gate("AND", f"a{i}", f"b{i}") for i in range(width)]
+    distance = 1
+    while distance < width:
+        old_p, old_g = p[:], g[:]
+        for bit in range(width):
+            if bit & distance:
+                combined_g = b.gate("AND", old_p[bit], old_g[bit - distance])
+                g[bit] = b.gate("OR", old_g[bit], combined_g)
+                p[bit] = b.gate("AND", old_p[bit], old_p[bit - distance])
+        distance *= 2
+    carry = ["0", *g[:-1]]
+    sums = [b.gate("XOR", bit_propagate[i], carry[i]) for i in range(width)]
+    return AdderArchitecture("sklansky", width, tuple(b.nodes), tuple(sums), g[-1])

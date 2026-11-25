@@ -35,3 +35,12 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y yosys
       - name: Run diverse joint-search benchmark suite
         run: python benchmarks/joint_search_suite.py --max-gates 3 --require-yosys --output /tmp/orcus-joint-suite.json
+
+      - name: Upload research benchmark reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: orcus-joint-search-reports
+          path: |
+            /tmp/orcus-joint-smoke.json
+            /tmp/orcus-joint-suite.json
+          if-no-files-found: error

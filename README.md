@@ -28,6 +28,7 @@ are introduced.
 - Bit-level ripple-carry and Kogge–Stone adder architecture generators with Verilog export and structural metrics.
 - A typed, width-aware dataflow IR for multi-bit arithmetic, bitwise logic, muxes, comparisons, and shifts, with exhaustive verification and Verilog export.
 - A deterministic architecture-search experiment that generates ripple, Sklansky, and Kogge–Stone adders, verifies them, and computes a multi-objective Pareto frontier.
+- A bit-heap compressor-network generator with Wallace, Dadda, and reversed-order Wallace schedules for multi-operand addition, with exhaustive checks and Yosys SAT/synthesis benchmarking.
 - Optional Yosys generic-cell synthesis comparison for baseline and joint candidates.
 - Unit tests and a GitHub Actions workflow.
 
@@ -43,6 +44,7 @@ python -m orcus synthesize majority3 --max-gates 7 --verilog artifacts/majority3
 python -m orcus benchmark --max-gates 7 --output artifacts/baseline.jsonl
 python benchmarks/joint_search_suite.py --max-gates 3 --output artifacts/joint-suite.json
 python benchmarks/bitvector_ir_smoke.py
+python benchmarks/compressor_network_suite.py --operands 4 --width 3 --require-yosys --output artifacts/compressor-network.json
 python benchmarks/architecture_search_suite.py --widths 4 8 16 32 --require-yosys --output artifacts/architecture-search.json
 ```
 
@@ -109,7 +111,8 @@ docs/                  Research plan and experimental protocol
 3. Expand benchmark coverage and compare against independent synthesis tools (the initial Yosys generic-cell check is not foundry PPA).
 4. Export and map Verilog against a documented cell library.
 5. Compare generated arithmetic architectures (ripple-carry and parallel-prefix) with exhaustive small-width verification and independent Yosys generic-cell synthesis.
-6. Only then investigate physical PPA and FPGA validation.
+6. Search and compare multi-operand compressor networks against established Wallace/Dadda references.
+7. Only then investigate mapped standard-cell PPA and FPGA validation.
 
 See [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md),
 [docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md), and the

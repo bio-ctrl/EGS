@@ -154,8 +154,11 @@ def run_search(op: str, operand_count: int, width: int,
         op, operand_count, width, max_candidates=max_candidates
     )
     input_bits = operand_count * width
-    exhaustive = input_bits <= 16
-    verification_results = []
+    if input_bits > 16:
+        raise ValueError(
+            "Python exhaustive verification is limited to 16 total input bits; "
+            "use the Yosys SAT benchmark for wider candidates"
+        )
     frontier = {item.name for item in pareto_candidates(candidates)}
     reports = []
     for candidate in candidates:
@@ -169,7 +172,6 @@ def run_search(op: str, operand_count: int, width: int,
         )
         if not report.passed:
             raise AssertionError(f"candidate failed equivalence: {candidate.name}")
-        verification_results.append(report.vectors_checked)
         metrics = asdict(candidate.graph.metrics())
         reports.append({
             "name": candidate.name,

@@ -56,3 +56,14 @@ Do not describe a candidate as physically faster, lower-power, smaller silicon,
 novel, or patentable based only on truth-table gate count or logic depth. Those
 claims require mapped netlists, target-library characterization, timing and
 power analysis, reproducible baselines, and prior-art review.
+
+
+## Bounded joint-search implementation (experimental)
+
+A first bounded joint-search implementation now retains multiple expression
+candidates per truth table and per gate-cost layer, then evaluates candidate
+combinations as shared DAGs. It is a search experiment, not evidence of a new
+synthesis capability. Its candidate, generation, and combination limits are
+explicit and reported. The next research gate is to run the new tests, measure
+search coverage and runtime, and compare its best networks against the
+single-output baseline and an independent synthesis tool.

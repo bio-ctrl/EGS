@@ -151,5 +151,5 @@ def build_kogge_stone_adder(width: int) -> AdderArchitecture:
             p[bit] = b.gate("AND", old_p[bit], old_p[bit - distance])
         distance *= 2
     carry = ["0", *g[:-1]]
-    sums = [b.gate("XOR", p[i], carry[i]) for i in range(width)]
+    sums = [b.gate("XOR", bit_propagate[i], carry[i]) for i in range(width)]
     return AdderArchitecture("kogge_stone", width, tuple(b.nodes), tuple(sums), g[-1])

@@ -183,10 +183,12 @@ def build_sklansky_adder(width: int) -> AdderArchitecture:
     while distance < width:
         old_p, old_g = p[:], g[:]
         for bit in range(width):
-            if bit & distance:
-                combined_g = b.gate("AND", old_p[bit], old_g[bit - distance])
+            group_offset = bit % (2 * distance)
+            if group_offset >= distance:
+                lower_group_prefix = (bit // (2 * distance)) * (2 * distance) + distance - 1
+                combined_g = b.gate("AND", old_p[bit], old_g[lower_group_prefix])
                 g[bit] = b.gate("OR", old_g[bit], combined_g)
-                p[bit] = b.gate("AND", old_p[bit], old_p[bit - distance])
+                p[bit] = b.gate("AND", old_p[bit], old_p[lower_group_prefix])
         distance *= 2
     carry = ["0", *g[:-1]]
     sums = [b.gate("XOR", bit_propagate[i], carry[i]) for i in range(width)]

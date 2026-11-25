@@ -1,35 +1,79 @@
-# Brand Architecture — Working Decision
+# EGS — Company and Product Architecture
 
 **Date:** 2026-11-24  
-**Status:** Exploratory naming decision; parent-company name not finalized.
+**Status:** EGS is the leading working candidate for the parent-company name; not yet legally cleared or formally finalized.
 
-## Current structure
+## 1. Parent company: EGS
 
-The current naming discussion separates the possible parent-company identity from individual products and platforms.
+**EGS** is the proposed parent technology company. It is not the name of a single software product or research project.
 
-- **EGS** — candidate name for the parent technology company. This is a candidate only; it has not been selected or cleared.
-- **NEM** — potential product or platform name. The name has personal significance because it is derived from the founder's initials in reverse. Do not expand it into the founder's full name or publish the full name as part of the naming rationale.
-- **ORCUS** — a separate product/platform identity for the computational-architecture research system currently implemented in this repository.
+### What EGS is intended to represent
 
-NEM and ORCUS are independent product/platform names that could exist under a future parent company. They are not alternative names for EGS, and they are not competing parent-company candidates.
+EGS is intended to build foundational technology: new computational methods, computing architectures, hardware-oriented systems, and the tools needed to discover, evaluate, and engineer them.
 
-## Naming constraints
+The company's long-term direction is broader than building another AI application. Its ambition is to develop technology at the systems and infrastructure level, where advances can enable new classes of computing and engineering.
+
+The initial technical focus is computational architecture discovery:
+
+- Develop algorithms and software that search for alternative computational representations and circuit architectures.
+- Evaluate candidate architectures with reproducible experiments and explicit cost models.
+- Translate promising results into verifiable hardware descriptions.
+- Validate claims against independent synthesis tools, documented cell libraries, FPGA experiments, and physical measurements where feasible.
+- Expand into adjacent foundational computing and engineering technologies only when supported by evidence and execution capacity.
+
+**Mission statement (working):** EGS develops foundational computing technologies by discovering, testing, and engineering better ways to compute.
+
+This is a proposed company mission, not a claim that EGS has already achieved these outcomes.
+
+## 2. Product and platform identities
+
+EGS is the parent-company candidate. Its products and research platforms retain independent names.
+
+### ORCUS
+
+**ORCUS — Optimized Representation & Computational Understanding System**
+
+ORCUS is the active computational-architecture research project in this repository. Its current implementation is an experimental Boolean-circuit search engine and reproducible baseline. ORCUS is a platform/research identity, not the parent-company name.
+
+Current limits matter: passing software tests and exhaustive small-function checks do not establish superior physical performance, commercial readiness, or a novel architecture. Those claims require independent benchmarks and hardware validation.
+
+### NEM
+
+NEM is a separate potential product or platform name. It has personal significance because it is derived from the founder's initials in reverse. Do not expand it into the founder's full name or publish the full name as part of the naming rationale.
+
+NEM's product scope has not yet been defined. Do not assign it a feature set, technical meaning, or relationship to ORCUS until that is deliberately decided.
+
+## 3. Relationship
+
+The intended architecture is:
+
+- **EGS** — parent technology company and overarching mission.
+- **ORCUS** — active computational-architecture discovery research platform.
+- **NEM** — separate potential product/platform; scope to be defined.
+
+NEM and ORCUS are independent names that could exist under EGS. They are not alternative names for EGS and are not competing parent-company candidates.
+
+## 4. What name to use where
+
+- **Company / organization display name:** EGS (working candidate; do not present as legally cleared).
+- **This repository / technical project name:** ORCUS. Keep the repository focused on the ORCUS codebase; do not rename the project EGS.
+- **Product naming:** NEM may be used for a separate product once its purpose and scope are defined.
+- **GitHub repository slug:** Prefer `orcus` if and when the repository is renamed. The current repository slug can remain unchanged until the owner deliberately performs the rename and checks links, remotes, workflows, and integrations.
+- **GitHub organization:** Use EGS only when the parent-company identity is selected and the organization name is checked for availability. Do not rename the repository to EGS merely to reflect the parent-company candidate.
+
+## 5. Naming and claims constraints
 
 1. Keep the parent-company identity distinct from product and platform identities.
-2. Do not assume EGS is final. Continue to treat it as a working candidate until deliberate selection and legal screening.
-3. Do not replace ORCUS in source code, package metadata, repository documentation, or existing research artifacts merely because a parent-company candidate is being explored.
-4. Do not assign NEM a technical definition, feature set, or product scope until that product concept is explicitly defined.
-5. Do not invent acronym expansions for EGS, NEM, or ORCUS beyond the established ORCUS expansion already documented in the project.
-6. Before public adoption, screen candidate names for exact and confusingly similar company names, trademarks in relevant goods/services classes, domains, and international usage. A general web search is not legal clearance.
+2. Treat EGS as the leading working candidate, not as a finalized or legally cleared name.
+3. Do not invent an expansion for the letters EGS. Its significance is the parent-company identity and mission described above unless the founder later supplies an intended expansion.
+4. Do not replace ORCUS in source code, package metadata, repository documentation, or existing research artifacts merely because EGS is the parent-company candidate.
+5. Do not assign NEM a technical definition, feature set, or product scope until explicitly defined.
+6. Before public adoption, screen EGS and product names for exact and confusingly similar company names, trademarks in relevant goods/services classes, domains, and international usage. A general web search is not legal clearance.
+7. Do not imply that EGS has already built, validated, or commercialized capabilities that remain research goals.
 
-## Current implementation context
+## 6. Decision log
 
-ORCUS remains the active computational-architecture research project in this repository. Its current v0.1.0 scope and validation limits are documented in the root README and docs/VALIDATION_REPORT.md.
-
-This document records naming architecture only. It does not change the technical project name, Python package, repository name, product scope, or scientific claims.
-
-## Decision log
-
-- 2026-11-24: Clarified that EGS is a possible parent-company name, while NEM and ORCUS are separate potential product/platform names.
+- 2026-11-24: Clarified that EGS is the parent-company candidate, while NEM and ORCUS are separate potential product/platform names.
 - 2026-11-24: Recorded that NEM is personally derived from the founder's initials in reverse, without using the founder's full name.
-- 2026-11-24: Parent-company naming remains open; no final selection or trademark/domain clearance is claimed.
+- 2026-11-24: Defined the proposed EGS mission as developing foundational computing technologies through discovery, testing, and engineering.
+- 2026-11-24: Recommended keeping this technical repository named around ORCUS; EGS belongs at the company/organization level, not as a replacement for the ORCUS project.

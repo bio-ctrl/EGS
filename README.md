@@ -25,6 +25,7 @@ are introduced.
 - Verilog emission for inspection and downstream synthesis experiments.
 - A reproducible benchmark harness and JSON Lines result records.
 - A five-case multi-output joint-search suite with exhaustive verification.
+- Bit-level ripple-carry and Kogge–Stone adder architecture generators with Verilog export and structural metrics.
 - Optional Yosys generic-cell synthesis comparison for baseline and joint candidates.
 - Unit tests and a GitHub Actions workflow.
 
@@ -103,7 +104,8 @@ docs/                  Research plan and experimental protocol
 2. Introduce Pareto search over gate count, depth, fanout, and activity.
 3. Expand benchmark coverage and compare against independent synthesis tools (the initial Yosys generic-cell check is not foundry PPA).
 4. Export and map Verilog against a documented cell library.
-5. Only then investigate physical PPA and FPGA validation.
+5. Compare generated arithmetic architectures (ripple-carry and parallel-prefix) with exhaustive small-width verification and independent Yosys generic-cell synthesis.
+6. Only then investigate physical PPA and FPGA validation.
 
 See [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md),
 [docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md), and the

@@ -2,7 +2,6 @@
 from __future__ import annotations
 import argparse
 import json
-import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -44,7 +43,8 @@ def run_yosys(network, require=False):
             result = subprocess.run([yosys, "-p", script], text=True, capture_output=True)
             if result.returncode:
                 raise RuntimeError(result.stdout + "\n" + result.stderr)
-            counts = re.findall(r"Number of cells:\\s+(\\d+)", result.stdout)
+            counts = [line.split(":")[-1].strip() for line in result.stdout.splitlines()
+                      if "Number of cells:" in line]
             return int(counts[-1]) if counts else None
         candidate_cells = synth_count(cand_path, "candidate")
         reference_cells = synth_count(ref_path, "reference")

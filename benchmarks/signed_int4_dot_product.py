@@ -1,9 +1,9 @@
 """Four-lane signed INT4 dot-product accumulation experiment.
 
-All variants instantiate the same four signed 4x4 multipliers and sign-extend
-their 8-bit products to a 10-bit signed accumulator. Only the reduction
-network changes. Generic-cell counts and VCD toggle counts are not physical
-area, critical-path timing, or power measurements.
+All variants instantiate identical signed 4x4 multipliers and sign-extend
+their 8-bit products to a 10-bit signed accumulator. Only reduction topology
+changes. Optional Nangate45 mapping/STA/power is pre-layout research evidence,
+not manufacturable silicon PPA.
 """
 from __future__ import annotations
 
@@ -24,7 +24,6 @@ def module_source(name: str, variant: str) -> str:
     ports = ", ".join(f"input signed [3:0] a{i}, input signed [3:0] b{i}" for i in range(LANES))
     lines = [f"module {name}({ports}, output signed [9:0] y);"]
     for i in range(LANES):
-        # This exact multiplier expression is shared by every architecture.
         lines.append(f"  wire signed [7:0] p{i} = $signed(a{i}) * $signed(b{i});")
         lines.append(f"  wire signed [9:0] e{i} = {{{{2{{p{i}[7]}}}}, p{i}}};")
     if variant == "direct":
@@ -55,11 +54,13 @@ def module_source(name: str, variant: str) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _run_yosys(candidate_text: str, reference_text: str, top: str, yosys: str) -> dict:
+def _run_yosys(candidate_text: str, reference_text: str, top: str,
+               yosys: str, liberty: Path | None = None) -> dict:
     with tempfile.TemporaryDirectory(prefix="orcus-int4-") as tmp:
         root = Path(tmp)
         candidate = root / "candidate.v"
         reference = root / "reference.v"
+        mapped = root / "mapped.v"
         candidate.write_text(candidate_text)
         reference.write_text(reference_text)
         proof_script = (
@@ -70,24 +71,46 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str, yosys: str) -
         proof = subprocess.run([yosys, "-p", proof_script], text=True, capture_output=True)
         if proof.returncode or "SAT proof finished - no model found: SUCCESS!" not in proof.stdout:
             raise RuntimeError("Yosys SAT equivalence failed: " + proof.stdout[-2500:] + proof.stderr[-1000:])
-        synth_script = f"read_verilog {candidate}; hierarchy -top {top}; synth -top {top}; stat"
-        synth = subprocess.run([yosys, "-p", synth_script], text=True, capture_output=True)
-        if synth.returncode:
-            raise RuntimeError(synth.stdout[-2500:] + synth.stderr[-1000:])
-        counts = re.findall(r"Number of cells:\s+(\d+)", synth.stdout)
+
+        generic_script = f"read_verilog {candidate}; hierarchy -top {top}; synth -top {top}; stat"
+        generic = subprocess.run([yosys, "-p", generic_script], text=True, capture_output=True)
+        if generic.returncode:
+            raise RuntimeError(generic.stdout[-2500:] + generic.stderr[-1000:])
+        counts = re.findall(r"Number of cells:\s+(\d+)", generic.stdout)
+
+        mapped_area = None
+        mapped_text = None
+        mapping_log = None
+        if liberty is not None:
+            mapped_script = (
+                f"read_verilog {candidate}; hierarchy -top {top}; "
+                f"synth -top {top} -noabc; abc -liberty {liberty}; "
+                f"clean; stat -liberty {liberty}; write_verilog -noattr {mapped}"
+            )
+            mapping = subprocess.run([yosys, "-p", mapped_script], text=True, capture_output=True)
+            if mapping.returncode or not mapped.exists():
+                raise RuntimeError("Liberty mapping failed: " + mapping.stdout[-2500:] + mapping.stderr[-1000:])
+            areas = re.findall(r"Chip area for module .*?:\s*([0-9.eE+-]+)", mapping.stdout)
+            mapped_area = float(areas[-1]) if areas else None
+            mapped_text = mapped.read_text()
+            mapping_log = mapping.stdout[-2500:]
+
         return {
             "formal_equivalence": "formal-pass",
             "yosys_version": subprocess.run([yosys, "-V"], text=True, capture_output=True).stdout.strip(),
             "generic_cell_count": int(counts[-1]) if counts else None,
             "generic_cell_count_evidence": "Yosys synth/stat; not standard-cell area",
+            "mapped_standard_cell_area": mapped_area,
+            "mapped_area_unit": "library-defined area units from Liberty cell area attributes",
+            "mapping_library": "Nangate45 typical" if liberty else None,
+            "mapping_log_tail": mapping_log,
+            "mapped_verilog": mapped_text,
             "proof_log_tail": proof.stdout[-1200:],
         }
 
 
 def _vcd_toggles(vcd_text: str) -> dict:
-    ids = {}
-    previous = {}
-    toggles = {}
+    ids, previous, toggles = {}, {}, {}
     in_values = False
     for line in vcd_text.splitlines():
         line = line.strip()
@@ -110,8 +133,7 @@ def _vcd_toggles(vcd_text: str) -> dict:
                         toggles[ident] = toggles.get(ident, 0) + sum(x != y for x, y in zip(a, b))
                     previous[ident] = value
         elif in_values and line and line[0] in "01xzXZ":
-            ident = line[1:]
-            value = line[0].lower()
+            ident, value = line[1:], line[0].lower()
             if value in {"0", "1"}:
                 old = previous.get(ident)
                 if old is not None:
@@ -124,21 +146,15 @@ def _vcd_toggles(vcd_text: str) -> dict:
     return by_name
 
 
-def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) -> dict:
-    tb_ports = []
-    regs = []
-    connections = []
+def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) -> tuple[dict, str]:
+    regs, connections = [], []
     for i in range(LANES):
         regs += [f"reg signed [3:0] a{i};", f"reg signed [3:0] b{i};"]
         connections += [f".a{i}(a{i})", f".b{i}(b{i})"]
-        tb_ports += [f"a{i}", f"b{i}"]
     tb = [
-        "module tb;",
-        *regs,
-        "wire signed [9:0] y;",
+        "module tb;", *regs, "wire signed [9:0] y;",
         f"{top} dut({', '.join(connections)}, .y(y));",
-        "integer i;",
-        "initial begin",
+        "integer i;", "initial begin",
         '  $dumpfile("activity.vcd"); $dumpvars(0, tb);',
         "  for (i = 0; i < 512; i = i + 1) begin",
     ]
@@ -148,31 +164,81 @@ def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) ->
     tb += ["    #5;", "  end", "  $finish;", "end", "endmodule"]
     with tempfile.TemporaryDirectory(prefix="orcus-vcd-") as tmp:
         root = Path(tmp)
-        source = root / "candidate.v"
-        testbench = root / "tb.v"
+        source, testbench = root / "candidate.v", root / "tb.v"
         source.write_text(candidate_text)
         testbench.write_text("\n".join(tb) + "\n")
-        compile_result = subprocess.run([iverilog, "-g2012", "-s", "tb", "-o", str(root/"sim"), str(source), str(testbench)],
-                                        text=True, capture_output=True)
+        compile_result = subprocess.run(
+            [iverilog, "-g2012", "-s", "tb", "-o", str(root/"sim"), str(source), str(testbench)],
+            text=True, capture_output=True,
+        )
         if compile_result.returncode:
             raise RuntimeError(compile_result.stdout + compile_result.stderr)
         run_result = subprocess.run([vvp, str(root/"sim")], cwd=root, text=True, capture_output=True)
         if run_result.returncode:
             raise RuntimeError(run_result.stdout + run_result.stderr)
         vcd = (root / "activity.vcd").read_text()
-        return {"vectors": 512, "signal_bit_toggles": _vcd_toggles(vcd),
-                "activity_evidence": "Icarus Verilog deterministic VCD simulation; toggles are not power"}
+        return ({
+            "vectors": 512,
+            "signal_bit_toggles": _vcd_toggles(vcd),
+            "activity_evidence": "Icarus Verilog deterministic RTL VCD; switching activity, not power",
+        }, vcd)
+
+
+def run_sta(mapped_verilog: str, top: str, liberty: Path, sta: str, vcd_text: str) -> dict:
+    with tempfile.TemporaryDirectory(prefix="orcus-sta-") as tmp:
+        root = Path(tmp)
+        netlist, vcd, script = root/"mapped.v", root/"activity.vcd", root/"run.tcl"
+        netlist.write_text(mapped_verilog)
+        vcd.write_text(vcd_text)
+        tcl = [
+            f'read_liberty "{liberty}"',
+            f'read_verilog "{netlist}"',
+            f"link_design {top}",
+            "create_clock -name virtual_clock -period 10",
+            "set_input_delay -clock virtual_clock 0 [all_inputs]",
+            "set_output_delay -clock virtual_clock 0 [all_outputs]",
+            "set_input_transition 0.05 [all_inputs]",
+            "set_load 0.01 [all_outputs]",
+            f'read_vcd -scope tb/dut "{vcd}"',
+            "report_units",
+            "report_checks -path_delay max -from [all_inputs] -to [all_outputs] -format full",
+            "report_power -digits 6",
+        ]
+        script.write_text("\n".join(tcl) + "\n")
+        result = subprocess.run([sta, "-no_splash", "-exit", str(script)], text=True, capture_output=True)
+        if result.returncode:
+            raise RuntimeError("OpenSTA analysis failed: " + result.stdout[-3000:] + result.stderr[-1000:])
+        timing = re.findall(r"data arrival time\s+([-+0-9.eE]+)", result.stdout, re.IGNORECASE)
+        power_rows = re.findall(
+            r"^\s*Total\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)",
+            result.stdout, re.MULTILINE,
+        )
+        return {
+            "status": "completed",
+            "critical_path_delay": float(timing[-1]) if timing else None,
+            "critical_path_delay_unit": "library time unit; see report_units in raw report",
+            "power_total": float(power_rows[-1][3]) if power_rows else None,
+            "power_unit": "library-defined power unit; see report_units in raw report",
+            "power_method": "OpenSTA Liberty power models with RTL VCD input activity; pre-layout, no parasitics",
+            "sta_version": subprocess.run([sta, "-version"], text=True, capture_output=True).stdout.strip(),
+            "raw_report": result.stdout[-7000:],
+        }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
     parser.add_argument("--require-tools", action="store_true")
-    parser.add_argument("--liberty", type=Path, help="Optional target Liberty for future mapped-cell area flow")
-    parser.add_argument("--sta", default="sta", help="OpenSTA executable for optional timing analysis")
+    parser.add_argument("--require-physical", action="store_true")
+    parser.add_argument("--liberty", type=Path, help="Target Liberty file for mapped area, timing, and power estimation")
+    parser.add_argument("--sta", default="sta", help="OpenSTA executable")
     args = parser.parse_args()
+
     yosys, iverilog, vvp = (shutil.which(x) for x in ("yosys", "iverilog", "vvp"))
     missing = [name for name, path in (("yosys", yosys), ("iverilog", iverilog), ("vvp", vvp)) if not path]
+    sta = shutil.which(args.sta)
+    if args.require_physical and (not args.liberty or not args.liberty.is_file() or not sta):
+        raise RuntimeError("Physical-metric mode requires an existing --liberty file and OpenSTA executable")
     if missing and args.require_tools:
         raise RuntimeError("Missing required tools: " + ", ".join(missing))
     if missing:
@@ -184,31 +250,47 @@ def main() -> int:
             top = f"orcus_{variant}"
             source = module_source(top, variant)
             start = time.perf_counter()
-            synthesis = _run_yosys(source, reference, top, yosys)
-            activity = simulate_activity(source, top, iverilog, vvp)
+            synthesis = _run_yosys(source, reference, top, yosys, args.liberty)
+            mapped_verilog = synthesis.pop("mapped_verilog")
+            activity, vcd_text = simulate_activity(source, top, iverilog, vvp)
+            sta_report = (
+                run_sta(mapped_verilog, top, args.liberty, sta, vcd_text)
+                if mapped_verilog and sta and args.liberty else {"status": "not-run"}
+            )
             results.append({
                 "variant": variant,
                 "multiplier_contract": "identical signed 4x4 expressions in every module; same p0..p3 and sign extension",
                 "synthesis": synthesis,
                 "activity": activity,
-                "search_runtime_seconds": time.perf_counter() - start,
-                "mapped_standard_cell_area": None,
-                "critical_path_delay": None,
-                "power": None,
-                "physical_metrics_status": "not-measured: target Liberty, STA constraints, and power methodology not yet configured",
+                "sta": sta_report,
+                "search_and_evaluation_runtime_seconds": time.perf_counter() - start,
+                "physical_metrics_status": "pre-layout Nangate45 research-library estimates" if sta_report["status"] == "completed" else "not-measured",
             })
         report = {
-            "schema_version": "orcus-int4-dot-product-v1",
+            "schema_version": "orcus-int4-dot-product-v2",
             "workload": {"name": "four-lane signed INT4 dot-product accumulation",
                          "lanes": 4, "multiplicand_width": 4, "multiplier_width": 8,
                          "accumulator_width": 10, "signed": True},
             "baseline": "direct-expression",
+            "target_library": {
+                "name": "Nangate45 typical",
+                "purpose": "open research and flow-validation library; not a manufacturable process kit",
+                "timing_constraints": {
+                    "virtual_clock_period": 10,
+                    "input_delay": 0,
+                    "output_delay": 0,
+                    "input_transition": 0.05,
+                    "output_load": 0.01,
+                    "parasitics": "not included",
+                },
+            } if args.liberty else None,
             "variants": results,
             "limitations": [
-                "Yosys generic cell count is not standard-cell area.",
-                "VCD bit toggles are switching activity, not power.",
-                "Critical-path delay and mapped standard-cell area are not claimed without a target Liberty and STA flow.",
+                "Nangate45 is a research proxy, not a foundry PDK or manufacturable process.",
+                "Area, delay, and power are pre-layout Liberty-based estimates with no routed parasitics.",
+                "VCD activity is generated from deterministic RTL simulation and annotated onto the mapped design by matching top-level ports.",
                 "The benchmark isolates reduction topology by keeping multiplier expressions and sign extension identical.",
+                "No FPGA or silicon measurements are claimed.",
             ],
         }
     rendered = json.dumps(report, indent=2, sort_keys=True)

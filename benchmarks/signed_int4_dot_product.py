@@ -201,18 +201,35 @@ def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) ->
     for i in range(LANES):
         regs += [f"reg signed [3:0] a{i};", f"reg signed [3:0] b{i};"]
         connections += [f".a{i}(a{i})", f".b{i}(b{i})"]
+    # Fixed-seed xorshift32 stimulus: 512 distinct, reproducible 8-input vectors.
+    state = 0xC0FFEE01
+    vectors = []
+    for _ in range(512):
+        vector = []
+        for _lane in range(LANES):
+            pair = []
+            for _operand in range(2):
+                state ^= (state << 13) & 0xFFFFFFFF
+                state ^= state >> 17
+                state ^= (state << 5) & 0xFFFFFFFF
+                state &= 0xFFFFFFFF
+                value = state & 0xF
+                pair.append(value if value < 8 else value - 16)
+            vector.extend(pair)
+        vectors.append(tuple(vector))
     tb = [
         "`timescale 1ns/1ps",
         "module tb;", *regs, "wire signed [9:0] y;",
         f"{top} dut({', '.join(connections)}, .y(y));",
-        "integer i;", "initial begin",
+        "initial begin",
         '  $dumpfile("activity.vcd"); $dumpvars(0, tb);',
-        "  for (i = 0; i < 512; i = i + 1) begin",
     ]
-    for i in range(LANES):
-        tb.append(f"    a{i} = ((i * {i+3} + {i*5+1}) % 16) - 8;")
-        tb.append(f"    b{i} = ((i * {i+7} + {i*3+2}) % 16) - 8;")
-    tb += ["    #5;", "  end", "  $finish;", "end", "endmodule"]
+    for vector in vectors:
+        for lane in range(LANES):
+            tb.append(f"  a{lane} = 4\'sd{vector[2 * lane]};")
+            tb.append(f"  b{lane} = 4\'sd{vector[2 * lane + 1]};")
+        tb.append("  #5;")
+    tb += ["  $finish;", "end", "endmodule"]
     with tempfile.TemporaryDirectory(prefix="orcus-vcd-") as tmp:
         root = Path(tmp)
         source, testbench = root / "candidate.v", root / "tb.v"
@@ -229,7 +246,9 @@ def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) ->
             raise RuntimeError(run_result.stdout + run_result.stderr)
         vcd = (root / "activity.vcd").read_text()
         return ({
-            "vectors": 512,
+            "vectors": len(vectors),
+            "unique_vectors": len(set(vectors)),
+            "stimulus": "fixed-seed xorshift32; 512 reproducible vectors",
             "signal_bit_toggles": _vcd_toggles(vcd),
             "activity_evidence": "Icarus Verilog deterministic RTL VCD; switching activity, not power",
         }, vcd)

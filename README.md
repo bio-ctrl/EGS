@@ -20,8 +20,9 @@ to think beyond precedent while proving every technical claim with
 reproducible evidence.
 
 See [the EGS north star and execution principles](docs/EGS_NORTH_STAR.md),
-[the company/product identity boundaries](docs/BRAND_ARCHITECTURE.md), and the
-[ORCUS v2 five-week execution plan](docs/ORCUS_V2_FIVE_WEEK_EXECUTION_PLAN.md).
+[the company/product identity boundaries](docs/BRAND_ARCHITECTURE.md),
+[the ORCUS Search v2 technical specification](docs/ORCUS_SEARCH_V2_SPEC.md),
+and [the ORCUS v2 five-week execution plan](docs/ORCUS_V2_FIVE_WEEK_EXECUTION_PLAN.md).
 
 ## What is implemented
 
@@ -36,12 +37,12 @@ See [the EGS north star and execution principles](docs/EGS_NORTH_STAR.md),
 - Verilog emission for inspection and downstream synthesis experiments.
 - A reproducible benchmark harness and JSON Lines result records.
 - A five-case multi-output joint-search suite with exhaustive verification.
-- Bit-level ripple-carry and Kogge–Stone adder architecture generators with Verilog export and structural metrics.
-- A typed, width-aware dataflow IR for multi-bit arithmetic, bitwise logic, muxes, comparisons, and shifts, with exhaustive verification and Verilog export.
-- A deterministic architecture-search experiment that generates ripple, Sklansky, and Kogge–Stone adders, verifies them, and computes a multi-objective Pareto frontier.
-- A bit-heap compressor-network generator with Wallace, Dadda, and reversed-order Wallace schedules for multi-operand addition, with exhaustive checks and Yosys SAT/synthesis benchmarking.
-- Optional Yosys generic-cell synthesis comparison for baseline and joint candidates.
-- Unit tests and a GitHub Actions workflow.
+- Bit-level ripple-carry, Kogge–Stone, and Sklansky adder generators with Verilog export and structural metrics.
+- A typed, width-aware dataflow IR for multi-bit arithmetic, bitwise logic, muxes, comparisons, and shifts.
+- A deterministic architecture-search experiment over a bounded associative/commutative grammar.
+- A bit-heap compressor-network generator with Wallace, Dadda, and reversed-order Wallace schedules.
+- Exhaustive checks for tractable cases and Yosys SAT/equivalence and generic-cell synthesis experiments.
+- Unit tests and GitHub Actions CI.
 
 ## Quick start
 
@@ -69,10 +70,10 @@ orcus synthesize mux3 --max-gates 7
 ## Search model
 
 The initial engine enumerates single-output expression trees by increasing
-primitive-gate count. It packs each Boolean function into an integer whose bit
-positions correspond to input assignments in lexicographic order. For three
-inputs, all eight input rows fit in one byte. Each gate applies bit-parallel
-operations to these truth-table integers.
+primitive-gate count. It packs each Boolean function into an integer whose
+bit positions correspond to input assignments in lexicographic order. For
+three inputs, all eight input rows fit in one byte. Each gate applies
+bit-parallel operations to these truth-table integers.
 
 A lower-gate implementation of the same truth table dominates a higher-gate
 implementation for the current tree-cost objective. The engine retains one
@@ -83,9 +84,9 @@ logic synthesis.
 
 ## Metrics and limitations
 
-`gate_count` counts unique gate nodes in the compiled IR. `logic_depth` is the
-longest gate path. `max_fanout` and `input_fanout` are structural counts.
-`output_toggle_proxy` is an output activity proxy under uniform,
+gate_count counts unique gate nodes in the compiled IR. logic_depth is the
+longest gate path. max_fanout and input_fanout are structural counts.
+output_toggle_proxy is an output activity proxy under uniform,
 independent input vectors, not a power estimate.
 
 For three inputs, the configured library reaches all 256 Boolean truth tables
@@ -106,27 +107,27 @@ orcus/                 Core package
   circuit.py           Single-output circuit IR and structural metrics
   network.py           Multi-output DAG representation and validation
   network_verilog.py   Multi-output Verilog emitter
-  verilog.py           Verilog emitter
-  targets.py           Canonical benchmark functions
-  experiment.py        Reproducible experiment records
+  bitvector.py         Typed width-aware dataflow graph
+  adder_architectures.py Adder architecture generators
+  adder_search.py      Bounded adder architecture ranking
+  architecture_search.py Associative/commutative topology search
+  compressor.py        Multi-operand compressor-network generator
   cli.py               Command-line interface
 tests/                 Unit and functional-verification tests
-examples/              Small usage example
-benchmarks/            Baseline and multi-output research runners
-docs/                  Research plan and experimental protocol
+benchmarks/            Reproducible research and synthesis runners
+docs/                  Research plans, protocols, results, and specifications
 .github/workflows/     Continuous-integration test workflow
 ```
 
 ## Next research milestones
 
-1. Add a search procedure that directly optimizes multi-output DAGs instead of only compiling shared expressions.
-2. Introduce Pareto search over gate count, depth, fanout, and activity.
-3. Expand benchmark coverage and compare against independent synthesis tools (the initial Yosys generic-cell check is not foundry PPA).
-4. Export Verilog and map it against a documented cell library.
-5. Compare generated arithmetic architectures with exhaustive small-width verification and independent Yosys generic-cell synthesis.
-6. Generalize compressor scheduling and search coverage while retaining every candidate, including ties and regressions.
-7. Investigate memory-hierarchy and data-movement models using representative workloads and measured baselines; treat accelerator concepts as hypotheses until evidence supports them.
-8. Only then investigate mapped standard-cell PPA and FPGA validation.
+1. Stabilize and independently review the existing research branch before merging.
+2. Implement Search v2 provenance, candidate identity, streaming generation, budgets, and verification gates as specified in [ORCUS_SEARCH_V2_SPEC.md](docs/ORCUS_SEARCH_V2_SPEC.md).
+3. Expand benchmark coverage and compare against independent synthesis tools; generic-cell counts are not foundry PPA.
+4. Map Verilog against a documented cell library where a valid flow is available.
+5. Validate candidate architectures with held-out workloads and preserve wins, ties, regressions, and failures.
+6. Investigate memory-hierarchy and data-movement models using representative workloads and measured baselines; treat accelerator concepts as hypotheses until evidence supports them.
+7. Progress to FPGA and physical validation only when the target, toolchain, and hardware access are confirmed.
 
 See [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md),
 [docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md),

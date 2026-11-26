@@ -208,7 +208,7 @@ def run_sta(mapped_verilog: str, top: str, liberty: Path, sta: str, vcd_text: st
         result = subprocess.run([sta, "-no_splash", "-exit", str(script)], text=True, capture_output=True)
         if result.returncode:
             raise RuntimeError("OpenSTA analysis failed: " + result.stdout[-3000:] + result.stderr[-1000:])
-        timing = re.findall(r"data arrival time\s+([-+0-9.eE]+)", result.stdout, re.IGNORECASE)
+        timing = re.findall(r"(?im)^\s*data arrival time[ \t]+([-+0-9.eE]+)", result.stdout)\n        if not timing:\n            raise RuntimeError("OpenSTA did not report a numeric constrained data-arrival time; report tail:\\n" + result.stdout[-7000:])
         power_rows = re.findall(
             r"^\s*Total\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)",
             result.stdout, re.MULTILINE,

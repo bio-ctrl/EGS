@@ -1,8 +1,9 @@
 """Four-lane signed INT4 dot-product accumulation experiment.
 
-All variants instantiate identical signed 4x4 multipliers and sign-extend
-their 8-bit products to a 10-bit signed accumulator. Only reduction topology
-changes. Optional Nangate45 mapping/STA/power is pre-layout research evidence,
+The five reduction baselines use identical signed 4x4 multipliers. The fused
+variant instead expands signed products into Baugh-Wooley partial products and
+compresses all four lanes in one 10-bit bit heap before a final carry-propagate
+addition. Optional Nangate45 mapping/STA/power is pre-layout research evidence,
 not manufacturable silicon PPA.
 """
 from __future__ import annotations
@@ -313,7 +314,12 @@ def main() -> int:
             )
             results.append({
                 "variant": variant,
-                "multiplier_contract": "identical signed 4x4 expressions in every module; same p0..p3 and sign extension",
+                "multiplier_contract": (
+                    "four signed 4x4 products expanded into Baugh-Wooley partial products; "
+                    "all lanes share one 10-bit compressor heap"
+                    if variant == "fused_partial_product"
+                    else "identical signed 4x4 expressions in every module; same p0..p3 and sign extension"
+                ),
                 "synthesis": synthesis,
                 "activity": activity,
                 "sta": sta_report,
@@ -343,7 +349,7 @@ def main() -> int:
                 "Nangate45 is a research proxy, not a foundry PDK or manufacturable process.",
                 "Area, delay, and power are pre-layout Liberty-based estimates with no routed parasitics.",
                 "VCD activity is generated from deterministic RTL simulation and annotated onto the mapped design by matching top-level ports.",
-                "The benchmark isolates reduction topology by keeping multiplier expressions and sign extension identical.",
+                "The four baseline variants isolate reduction topology with identical multiplier expressions; the fused variant expands the same signed products into Baugh-Wooley partial products and combines all lanes in one bit heap.",
                 "No FPGA or silicon measurements are claimed.",
             ],
         }

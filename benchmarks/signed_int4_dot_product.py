@@ -226,8 +226,8 @@ def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) ->
     ]
     for vector in vectors:
         for lane in range(LANES):
-            tb.append(f"  a{lane} = 4\'sd{vector[2 * lane]};")
-            tb.append(f"  b{lane} = 4\'sd{vector[2 * lane + 1]};")
+            tb.append(f"  a{lane} = 4\'d{vector[2 * lane] & 15};")
+            tb.append(f"  b{lane} = 4\'d{vector[2 * lane + 1] & 15};")
         tb.append("  #5;")
     tb += ["  $finish;", "end", "endmodule"]
     with tempfile.TemporaryDirectory(prefix="orcus-vcd-") as tmp:

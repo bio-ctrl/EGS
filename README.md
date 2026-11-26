@@ -2,14 +2,26 @@
 
 **Optimized Representation & Computational Understanding System**
 
-ORCUS is an experimental autonomous computational-architecture discovery
-project. Its first deliverable is a reproducible Boolean-circuit search engine
-that establishes a transparent baseline before more ambitious search methods
-are introduced.
+ORCUS is the active computational-architecture discovery research platform
+under EGS, the proposed parent technology company. Its first deliverable is a
+reproducible Boolean-circuit search engine that establishes a transparent
+baseline before more ambitious search methods are introduced.
 
 > Status: research prototype, v0.1.0. This is not a production synthesizer and
 > does not make claims about physical silicon performance or algorithmic
 > novelty.
+
+## Mission and research standard
+
+EGS's long-term ambition is to develop foundational computing technologies
+that expand what future generations can build. ORCUS is one research platform
+toward that ambition—not the parent company itself. The operating standard is
+to think beyond precedent while proving every technical claim with
+reproducible evidence.
+
+See [the EGS north star and execution principles](docs/EGS_NORTH_STAR.md),
+[the company/product identity boundaries](docs/BRAND_ARCHITECTURE.md), and the
+[ORCUS v2 five-week execution plan](docs/ORCUS_V2_FIVE_WEEK_EXECUTION_PLAN.md).
 
 ## What is implemented
 
@@ -20,10 +32,15 @@ are introduced.
 - A multi-output DAG network representation that shares repeated logic across outputs.
 - Multi-output truth-table verification and Verilog emission.
 - Exhaustive functional verification for every input assignment.
-- Gate-count, logic-depth, fanout, and explicitly limited switching-proxy
-  metrics.
+- Gate-count, logic-depth, fanout, and explicitly limited switching-proxy metrics.
 - Verilog emission for inspection and downstream synthesis experiments.
 - A reproducible benchmark harness and JSON Lines result records.
+- A five-case multi-output joint-search suite with exhaustive verification.
+- Bit-level ripple-carry and Kogge–Stone adder architecture generators with Verilog export and structural metrics.
+- A typed, width-aware dataflow IR for multi-bit arithmetic, bitwise logic, muxes, comparisons, and shifts, with exhaustive verification and Verilog export.
+- A deterministic architecture-search experiment that generates ripple, Sklansky, and Kogge–Stone adders, verifies them, and computes a multi-objective Pareto frontier.
+- A bit-heap compressor-network generator with Wallace, Dadda, and reversed-order Wallace schedules for multi-operand addition, with exhaustive checks and Yosys SAT/synthesis benchmarking.
+- Optional Yosys generic-cell synthesis comparison for baseline and joint candidates.
 - Unit tests and a GitHub Actions workflow.
 
 ## Quick start
@@ -36,6 +53,10 @@ python -m unittest discover -s tests -v
 python -m orcus synthesize parity3 --max-gates 7
 python -m orcus synthesize majority3 --max-gates 7 --verilog artifacts/majority3.v
 python -m orcus benchmark --max-gates 7 --output artifacts/baseline.jsonl
+python benchmarks/joint_search_suite.py --max-gates 3 --output artifacts/joint-suite.json
+python benchmarks/bitvector_ir_smoke.py
+python benchmarks/compressor_network_suite.py --operands 4 --width 3 --require-yosys --output artifacts/compressor-network.json
+python benchmarks/architecture_search_suite.py --widths 4 8 16 32 --require-yosys --output artifacts/architecture-search.json
 ```
 
 Install as a local CLI if desired:
@@ -67,10 +88,12 @@ longest gate path. `max_fanout` and `input_fanout` are structural counts.
 `output_toggle_proxy` is an output activity proxy under uniform,
 independent input vectors, not a power estimate.
 
-For three inputs, the configured library reaches all 256 Boolean truth tables within the enumerated search bound; the exhaustive test suite verifies each emitted circuit against every input row. The current implementation does not model a standard-cell library, gate drive
-strength, area, delay, capacitance, fanout buffering, routing, placement,
-clocking, hazards, or manufacturing constraints. No claim about real silicon
-PPA should be drawn from these metrics.
+For three inputs, the configured library reaches all 256 Boolean truth tables
+within the enumerated search bound; the exhaustive test suite verifies each
+emitted circuit against every input row. The current implementation does not
+model a standard-cell library, gate drive strength, area, delay, capacitance,
+fanout buffering, routing, placement, clocking, hazards, or manufacturing
+constraints. No claim about real silicon PPA should be drawn from these metrics.
 
 ## Project map
 
@@ -89,7 +112,7 @@ orcus/                 Core package
   cli.py               Command-line interface
 tests/                 Unit and functional-verification tests
 examples/              Small usage example
-benchmarks/            Baseline runner
+benchmarks/            Baseline and multi-output research runners
 docs/                  Research plan and experimental protocol
 .github/workflows/     Continuous-integration test workflow
 ```
@@ -98,9 +121,15 @@ docs/                  Research plan and experimental protocol
 
 1. Add a search procedure that directly optimizes multi-output DAGs instead of only compiling shared expressions.
 2. Introduce Pareto search over gate count, depth, fanout, and activity.
-3. Add larger benchmark suites and compare against independent synthesis tools.
-4. Export and map Verilog against a documented cell library.
-5. Only then investigate physical PPA and FPGA validation.
+3. Expand benchmark coverage and compare against independent synthesis tools (the initial Yosys generic-cell check is not foundry PPA).
+4. Export Verilog and map it against a documented cell library.
+5. Compare generated arithmetic architectures with exhaustive small-width verification and independent Yosys generic-cell synthesis.
+6. Generalize compressor scheduling and search coverage while retaining every candidate, including ties and regressions.
+7. Investigate memory-hierarchy and data-movement models using representative workloads and measured baselines; treat accelerator concepts as hypotheses until evidence supports them.
+8. Only then investigate mapped standard-cell PPA and FPGA validation.
 
-See [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md) and
-[docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md).
+See [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md),
+[docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md),
+[docs/EGS_NORTH_STAR.md](docs/EGS_NORTH_STAR.md),
+[docs/ORCUS_V2_FIVE_WEEK_EXECUTION_PLAN.md](docs/ORCUS_V2_FIVE_WEEK_EXECUTION_PLAN.md),
+and the [first five-case joint-search results](docs/JOINT_SEARCH_RESULTS.md).

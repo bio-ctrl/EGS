@@ -56,3 +56,42 @@ Do not describe a candidate as physically faster, lower-power, smaller silicon,
 novel, or patentable based only on truth-table gate count or logic depth. Those
 claims require mapped netlists, target-library characterization, timing and
 power analysis, reproducible baselines, and prior-art review.
+
+
+## Bounded joint-search implementation (experimental)
+
+A first bounded joint-search implementation now retains multiple expression
+candidates per truth table and per gate-cost layer, then evaluates candidate
+combinations as shared DAGs. It is a search experiment, not evidence of a new
+synthesis capability. Its candidate, generation, and combination limits are
+explicit and reported. The next research gate is to run the new tests, measure
+search coverage and runtime, and compare its best networks against the
+single-output baseline and an independent synthesis tool.
+
+
+## Expanded benchmark and independent synthesis gate
+
+The reproducible suite in `benchmarks/joint_search_suite.py` evaluates five
+fixed three-input, multi-output cases: a shared-product family, half-adder
+intermediates, dual multiplexers, parity/OR/product outputs, and a two-bit
+decoder. Every case is retained in the report, including ties and regressions.
+Both baseline and joint networks must pass exhaustive truth-table verification.
+
+When Yosys is installed, the suite also emits both networks as Verilog and runs
+an independent `read_verilog; hierarchy; synth; stat` flow. The reported
+Yosys count is a generic internal-cell count, not a standard-cell area metric.
+It is useful as an independent logic-optimization check, but it is not a
+commercial EDA comparison or a foundry-library PPA result. CI installs Yosys
+and requires this comparison to run.
+
+Reproduce with:
+
+```bash
+python benchmarks/joint_search_suite.py --max-gates 3 --output artifacts/joint-suite.json
+```
+
+The benchmark is deliberately small and bounded. A positive result on one case
+does not establish a general advantage; report all cases and the truncation
+status. The next gates are broader benchmark coverage, repeated runtime
+measurements, stronger search completeness analysis, and eventually mapping
+against a documented standard-cell library.

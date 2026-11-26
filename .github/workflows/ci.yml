@@ -24,12 +24,13 @@ jobs:
       - name: Install synthesis, simulation, and OpenSTA build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y yosys iverilog build-essential cmake tcl-dev swig bison flex libeigen3-dev libfmt-dev zlib1g-dev
+          sudo apt-get install -y yosys iverilog build-essential cmake tcl-dev swig bison flex libeigen3-dev libfmt-dev zlib1g-dev autoconf automake libtool
 
       - name: Build pinned CUDD dependency
         run: |
           git clone --depth 1 --branch 3.0.0 https://github.com/cuddorg/cudd.git /tmp/cudd-src
           cd /tmp/cudd-src
+          autoreconf -fi
           ./configure --prefix=/tmp/cudd-install
           make -j2
           make install

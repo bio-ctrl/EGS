@@ -24,9 +24,19 @@ jobs:
       - name: Install synthesis, simulation, and OpenSTA build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y yosys iverilog build-essential cmake tcl-dev swig bison flex libeigen3-dev libfmt-dev zlib1g-dev autoconf automake libtool
+          sudo apt-get install -y yosys iverilog build-essential cmake tcl-dev swig bison flex libeigen3-dev libfmt-dev zlib1g-dev autoconf automake libtool libfl-dev
+
+      - name: Cache pinned CUDD and OpenSTA builds
+        id: eda-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            /tmp/cudd-install
+            /tmp/opensta-install
+          key: eda-${{ runner.os }}-cudd-3.0.0-opensta-28d7a0b5123d59cbff8c1def4e3830c840fe5d50-v1
 
       - name: Build pinned CUDD dependency
+        if: steps.eda-cache.outputs.cache-hit != 'true'
         run: |
           git clone --depth 1 --branch 3.0.0 https://github.com/cuddorg/cudd.git /tmp/cudd-src
           cd /tmp/cudd-src
@@ -36,6 +46,7 @@ jobs:
           make install
 
       - name: Build pinned OpenSTA with VCD activity support
+        if: steps.eda-cache.outputs.cache-hit != 'true'
         run: |
           git clone --filter=blob:none --no-checkout https://github.com/parallaxsw/OpenSTA.git /tmp/opensta-src
           git -C /tmp/opensta-src fetch --depth 1 origin 28d7a0b5123d59cbff8c1def4e3830c840fe5d50
@@ -46,6 +57,11 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release
           cmake --build /tmp/opensta-build --parallel 2
           cmake --install /tmp/opensta-build
+          /tmp/opensta-install/bin/sta -version
+
+      - name: Verify cached or newly built OpenSTA
+        run: |
+          test -x /tmp/opensta-install/bin/sta
           /tmp/opensta-install/bin/sta -version
 
       - name: Run unit tests

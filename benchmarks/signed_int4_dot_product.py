@@ -152,6 +152,7 @@ def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) ->
         regs += [f"reg signed [3:0] a{i};", f"reg signed [3:0] b{i};"]
         connections += [f".a{i}(a{i})", f".b{i}(b{i})"]
     tb = [
+        "`timescale 1ns/1ps",
         "module tb;", *regs, "wire signed [9:0] y;",
         f"{top} dut({', '.join(connections)}, .y(y));",
         "integer i;", "initial begin",

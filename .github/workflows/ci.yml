@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -21,11 +21,67 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install synthesis, simulation, and OpenSTA build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yosys iverilog build-essential cmake tcl-dev swig bison flex libeigen3-dev libfmt-dev zlib1g-dev autoconf automake libtool libfl-dev
+
+      - name: Cache pinned CUDD and OpenSTA builds
+        id: eda-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            /tmp/cudd-install
+            /tmp/opensta-install
+          key: eda-${{ runner.os }}-cudd-3.0.0-opensta-28d7a0b5123d59cbff8c1def4e3830c840fe5d50-v1
+
+      - name: Build pinned CUDD dependency
+        if: steps.eda-cache.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth 1 --branch 3.0.0 https://github.com/cuddorg/cudd.git /tmp/cudd-src
+          cd /tmp/cudd-src
+          autoreconf -fi
+          ./configure --prefix=/tmp/cudd-install
+          make -j2
+          make install
+
+      - name: Build pinned OpenSTA with VCD activity support
+        if: steps.eda-cache.outputs.cache-hit != 'true'
+        run: |
+          git clone --filter=blob:none --no-checkout https://github.com/parallaxsw/OpenSTA.git /tmp/opensta-src
+          git -C /tmp/opensta-src fetch --depth 1 origin 28d7a0b5123d59cbff8c1def4e3830c840fe5d50
+          git -C /tmp/opensta-src checkout --detach 28d7a0b5123d59cbff8c1def4e3830c840fe5d50
+          cmake -S /tmp/opensta-src -B /tmp/opensta-build \
+            -DCUDD_DIR=/tmp/cudd-install \
+            -DCMAKE_INSTALL_PREFIX=/tmp/opensta-install \
+            -DCMAKE_BUILD_TYPE=Release
+          cmake --build /tmp/opensta-build --parallel 2
+          cmake --install /tmp/opensta-build
+          /tmp/opensta-install/bin/sta -version
+
+      - name: Verify cached or newly built OpenSTA
+        run: |
+          test -x /tmp/opensta-install/bin/sta
+          /tmp/opensta-install/bin/sta -version
+
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
 
       - name: Compile all Python modules
         run: python -m compileall -q orcus tests examples benchmarks
+
+      - name: Fetch Nangate45 research Liberty
+        run: curl -fsSL https://raw.githubusercontent.com/The-OpenROAD-Project/OpenROAD-flow-scripts/master/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib -o /tmp/NangateOpenCellLibrary_typical.lib
+
+      - name: Run signed INT4 dot-product reduction benchmark
+        run: python benchmarks/signed_int4_dot_product.py --require-tools --require-physical --sta /tmp/opensta-install/bin/sta --liberty /tmp/NangateOpenCellLibrary_typical.lib --output /tmp/orcus-int4-dot-product.json
+
+      - name: Upload signed INT4 benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: orcus-signed-int4-dot-product
+          path: /tmp/orcus-int4-dot-product.json
+          if-no-files-found: error
 
       - name: Verify benchmark targets
         run: python -m orcus benchmark --max-gates 7 --output /tmp/orcus-ci-smoke.jsonl

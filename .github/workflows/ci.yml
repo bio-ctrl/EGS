@@ -21,11 +21,21 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install synthesis and simulation tools
+        run: sudo apt-get update && sudo apt-get install -y yosys iverilog
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
 
       - name: Compile all Python modules
         run: python -m compileall -q orcus tests examples benchmarks
+      - name: Run signed INT4 dot-product reduction benchmark
+        run: python benchmarks/signed_int4_dot_product.py --require-tools --output /tmp/orcus-int4-dot-product.json
+      - name: Upload signed INT4 benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: orcus-signed-int4-dot-product
+          path: /tmp/orcus-int4-dot-product.json
+          if-no-files-found: error
 
       - name: Verify benchmark targets
         run: python -m orcus benchmark --max-gates 7 --output /tmp/orcus-ci-smoke.jsonl

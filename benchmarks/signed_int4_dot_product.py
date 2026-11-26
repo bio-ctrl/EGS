@@ -64,7 +64,7 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str, yosys: str) -
         reference.write_text(reference_text)
         proof_script = (
             f"read_verilog {candidate} {reference}; "
-            "proc; miter -equiv -flatten reference candidate m; "
+            f"proc; miter -equiv -flatten reference {top} m; "
             "sat -verify -prove trigger 0 m"
         )
         proof = subprocess.run([yosys, "-p", proof_script], text=True, capture_output=True)

@@ -17,12 +17,61 @@ import tempfile
 import time
 
 LANES = 4
-VARIANTS = ("direct", "left_deep", "balanced_01_23", "balanced_02_13", "carry_save")
+VARIANTS = ("direct", "left_deep", "balanced_01_23", "balanced_02_13", "carry_save", "fused_partial_product")
+
+
+def _fused_partial_product_lines() -> list[str]:
+    """Build one 10-bit Baugh-Wooley bit heap across all four signed lanes.
+
+    Negative sign-bit cross-products are complemented and corrected by 0x390
+    per lane. All lane partial products enter one 3:2 compressor network; only
+    the final two-row result uses carry propagation.
+    """
+    columns: list[list[str]] = [[] for _ in range(10)]
+    lines: list[str] = []
+    for lane in range(LANES):
+        for i in range(4):
+            for j in range(4):
+                name = f"pp_{lane}_{i}_{j}"
+                product = f"(a{lane}[{i}] & b{lane}[{j}])"
+                # Exactly one sign-bit operand creates a negative Baugh-Wooley term.
+                expr = f"~{product}" if ((i == 3) != (j == 3)) else product
+                lines.append(f"  wire {name} = {expr};")
+                columns[i + j].append(name)
+        # -112 modulo 2^10 = 912 = 0x390; correction bits are 4, 7, 8, 9.
+        for bit in (4, 7, 8, 9):
+            columns[bit].append("1'b1")
+
+    fa_index = 0
+    for bit in range(10):
+        while len(columns[bit]) > 2:
+            a, b, c = columns[bit][:3]
+            del columns[bit][:3]
+            s_name, c_name = f"fa_s_{fa_index}", f"fa_c_{fa_index}"
+            lines.append(f"  wire {s_name} = {a} ^ {b} ^ {c};")
+            lines.append(
+                f"  wire {c_name} = ({a} & {b}) | ({a} & {c}) | ({b} & {c});"
+            )
+            columns[bit].append(s_name)
+            if bit < 9:
+                columns[bit + 1].append(c_name)
+            fa_index += 1
+
+    row0 = [columns[bit][0] if columns[bit] else "1'b0" for bit in range(10)]
+    row1 = [columns[bit][1] if len(columns[bit]) > 1 else "1'b0" for bit in range(10)]
+    lines.append("  wire [9:0] fused_row0 = {" + ", ".join(reversed(row0)) + "};")
+    lines.append("  wire [9:0] fused_row1 = {" + ", ".join(reversed(row1)) + "};")
+    lines.append("  assign y = fused_row0 + fused_row1;")
+    return lines
 
 
 def module_source(name: str, variant: str) -> str:
     ports = ", ".join(f"input signed [3:0] a{i}, input signed [3:0] b{i}" for i in range(LANES))
     lines = [f"module {name}({ports}, output signed [9:0] y);"]
+    if variant == "fused_partial_product":
+        lines.extend(_fused_partial_product_lines())
+        lines.append("endmodule")
+        return "\\n".join(lines) + "\\n"
     for i in range(LANES):
         lines.append(f"  wire signed [7:0] p{i} = $signed(a{i}) * $signed(b{i});")
         lines.append(f"  wire signed [9:0] e{i} = {{{{2{{p{i}[7]}}}}, p{i}}};")

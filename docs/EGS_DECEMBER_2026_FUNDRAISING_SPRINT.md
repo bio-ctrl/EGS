@@ -7,6 +7,8 @@
 **Separate platform concept:** NEM  
 **Status:** execution plan; financing is not committed or guaranteed.
 
+> **Technical execution plan:** The detailed 26 November–31 December engineering schedule, PR #13 review gate, ORCUS Search v2 requirements, synthesis/data-movement metrics, FPGA validation protocol, and evidence-room acceptance criteria are maintained in [ORCUS v2 — Five-Week Execution Plan](ORCUS_V2_FIVE_WEEK_EXECUTION_PLAN.md). This document remains the fundraising and commercial-readiness workstream; the technical plan is the source of truth for the engineering sprint.
+
 ## The objective
 
 By 31 December 2026, EGS should have a credible, reviewable fundraising package and an active pipeline of qualified conversations. The $10M target is an ambition, not a forecast. The sprint must pursue the target while creating smaller, realistic financing paths—grants, accelerator programs, sponsored research, paid technical evaluations, and staged investment—rather than treating one large check as the only possible outcome.

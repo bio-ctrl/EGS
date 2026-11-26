@@ -209,7 +209,8 @@ def run_sta(mapped_verilog: str, top: str, liberty: Path, sta: str, vcd_text: st
         result = subprocess.run([sta, "-no_splash", "-exit", str(script)], text=True, capture_output=True)
         if result.returncode or re.search(r"(?m)^Error:", result.stdout):
             raise RuntimeError("OpenSTA analysis failed: " + result.stdout[-5000:] + result.stderr[-1000:])
-        # OpenSTA prints the numeric value before the label, e.g. "1.01 data arrival time".
+        # The first data-arrival line is the actual path delay; OpenSTA repeats
+        # its negated value later when calculating slack. Do not read that second line.
         timing = re.findall(r"(?im)^\s*([-+0-9.eE]+)\s+data arrival time\b", result.stdout)
         if not timing:
             raise RuntimeError("OpenSTA did not report a numeric constrained data-arrival time; report tail:\n" + result.stdout[-7000:])
@@ -219,8 +220,8 @@ def run_sta(mapped_verilog: str, top: str, liberty: Path, sta: str, vcd_text: st
         )
         return {
             "status": "completed",
-            "critical_path_delay": float(timing[-1]) if timing else None,
-            "critical_path_delay_unit": "library time unit; see report_units in raw report",
+            "critical_path_delay": float(timing[0]) if timing else None,
+            "critical_path_delay_unit": "ns (OpenSTA report_units)",
             "power_total": float(power_rows[-1][3]) if power_rows else None,
             "power_unit": "library-defined power unit; see report_units in raw report",
             "power_method": "OpenSTA Liberty power models with RTL VCD input activity; pre-layout, no parasitics",

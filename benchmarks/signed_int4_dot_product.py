@@ -71,7 +71,7 @@ def module_source(name: str, variant: str) -> str:
     if variant == "fused_partial_product":
         lines.extend(_fused_partial_product_lines())
         lines.append("endmodule")
-        return "\\n".join(lines) + "\\n"
+        return "\n".join(lines) + "\n"
     for i in range(LANES):
         lines.append(f"  wire signed [7:0] p{i} = $signed(a{i}) * $signed(b{i});")
         lines.append(f"  wire signed [9:0] e{i} = {{{{2{{p{i}[7]}}}}, p{i}}};")

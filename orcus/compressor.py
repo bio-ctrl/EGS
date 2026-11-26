@@ -4,18 +4,16 @@ Wallace and Dadda are reference schedules. The search variants are bounded,
 deterministic alternatives; none are claimed to be novel or physically optimal.
 """
 from __future__ import annotations
-
 from dataclasses import dataclass
 from itertools import product
 from math import ceil, log2
-
+import re
 
 @dataclass(frozen=True)
 class Gate:
     name: str
     op: str
     args: tuple[str, ...]
-
 
 @dataclass(frozen=True)
 class CompressorNetwork:
@@ -60,13 +58,12 @@ class CompressorNetwork:
                 fanout[x] = fanout.get(x, 0) + 1
         for name in self.output_bits:
             fanout[name] = fanout.get(name, 0) + 1
-        return {"gate_count": len(self.gates),
-                "logic_depth": max(depth[x] for x in self.output_bits),
+        return {"gate_count": len(self.gates), "logic_depth": max(depth[x] for x in self.output_bits),
                 "max_fanout": max(fanout.values(), default=0)}
 
     def emit_verilog(self, module_name: str = "orcus_compressor") -> str:
-        if not module_name.replace("_", "a").isalnum() or module_name[0].isdigit():
-            raise ValueError("invalid module name")
+        if not isinstance(module_name, str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", module_name):
+            raise ValueError("module_name must be a valid Verilog identifier")
         ports = [f"input [{self.width-1}:0] x{i}" for i in range(self.operand_count)]
         ports.append(f"output [{self.output_width-1}:0] sum")
         lines = [f"module {module_name}({', '.join(p.split()[-1] for p in ports)});"]
@@ -92,29 +89,23 @@ class CompressorNetwork:
         lines.append("endmodule")
         return "\n".join(lines) + "\n"
 
-
 class _Builder:
     def __init__(self):
         self.gates = []
         self.serial = 0
-
     def gate(self, op, a, b):
         name = f"g{self.serial}"
         self.serial += 1
         self.gates.append(Gate(name, op, (a, b)))
         return name
-
     def full_adder(self, a, b, c):
         p = self.gate("XOR", a, b)
         s = self.gate("XOR", p, c)
         ab = self.gate("AND", a, b)
         pc = self.gate("AND", p, c)
-        carry = self.gate("OR", ab, pc)
-        return s, carry
-
+        return s, self.gate("OR", ab, pc)
     def half_adder(self, a, b):
         return self.gate("XOR", a, b), self.gate("AND", a, b)
-
 
 def _initial_heap(operands, width):
     heap = [[] for _ in range(width + ceil(log2(operands)) + 1)]
@@ -122,7 +113,6 @@ def _initial_heap(operands, width):
         for bit in range(width):
             heap[bit].append(f"x{i}_{bit}")
     return heap
-
 
 def _compress_wallace(heap, builder, reverse=False):
     while any(len(col) > 2 for col in heap):
@@ -138,7 +128,6 @@ def _compress_wallace(heap, builder, reverse=False):
             next_heap[bit].extend(items[groups*3:])
         heap = next_heap
     return heap
-
 
 def _compress_dadda(heap, builder):
     maximum = max(map(len, heap))
@@ -158,9 +147,7 @@ def _compress_dadda(heap, builder):
                     s, carry = builder.half_adder(a, b)
                 heap[bit].append(s)
                 heap[bit+1].append(carry)
-    # Any remaining height above two is handled by a final Wallace pass.
     return _compress_wallace(heap, builder)
-
 
 def _finish_two_rows(heap, builder, final_adder):
     row0, row1 = [], []
@@ -168,8 +155,7 @@ def _finish_two_rows(heap, builder, final_adder):
         row0.append(col[0] if col else "0")
         row1.append(col[1] if len(col) > 1 else "0")
     if final_adder == "ripple":
-        carry = "0"
-        out = []
+        carry, out = "0", []
         for a, b in zip(row0, row1):
             s, carry = builder.full_adder(a, b, carry)
             out.append(s)
@@ -204,7 +190,6 @@ def _finish_two_rows(heap, builder, final_adder):
     sums = [builder.gate("XOR", bit_propagate[i], carries[i]) for i in range(len(p))]
     return tuple([*sums, g[-1]])
 
-
 def build_compressor_network(operand_count: int, width: int, schedule: str = "wallace",
                              final_adder: str = "ripple") -> CompressorNetwork:
     if not 3 <= operand_count <= 16:
@@ -225,9 +210,13 @@ def build_compressor_network(operand_count: int, width: int, schedule: str = "wa
                              tuple(builder.gates), outputs[:output_width])
 
 def verify_exhaustive(network: CompressorNetwork, max_input_bits: int = 16) -> dict:
+    """Verify small networks exhaustively and distinguish skipped checks from failures."""
+    if not isinstance(max_input_bits, int) or isinstance(max_input_bits, bool) or max_input_bits < 0:
+        raise ValueError("max_input_bits must be a non-negative integer")
     total_bits = network.operand_count * network.width
     if total_bits > max_input_bits:
-        return {"passed": False, "exhaustive": False, "vectors_checked": 0}
+        return {"passed": None, "exhaustive": False, "vectors_checked": 0,
+                "reason": "input-bit budget exceeded"}
     checked = 0
     ranges = [range(1 << network.width)] * network.operand_count
     for values in product(*ranges):

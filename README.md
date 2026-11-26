@@ -19,8 +19,9 @@ toward that ambition—not the parent company itself. The operating standard is
 to think beyond precedent while proving every technical claim with
 reproducible evidence.
 
-See [the EGS north star and execution principles](docs/EGS_NORTH_STAR.md) and
-[the company/product identity boundaries](docs/BRAND_ARCHITECTURE.md).
+See [the EGS north star and execution principles](docs/EGS_NORTH_STAR.md),
+[the company/product identity boundaries](docs/BRAND_ARCHITECTURE.md), and the
+[ORCUS v2 five-week execution plan](docs/ORCUS_V2_FIVE_WEEK_EXECUTION_PLAN.md).
 
 ## What is implemented
 
@@ -129,5 +130,6 @@ docs/                  Research plan and experimental protocol
 
 See [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md),
 [docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md),
-[docs/EGS_NORTH_STAR.md](docs/EGS_NORTH_STAR.md), and the
-[first five-case joint-search results](docs/JOINT_SEARCH_RESULTS.md).
+[docs/EGS_NORTH_STAR.md](docs/EGS_NORTH_STAR.md),
+[docs/ORCUS_V2_FIVE_WEEK_EXECUTION_PLAN.md](docs/ORCUS_V2_FIVE_WEEK_EXECUTION_PLAN.md),
+and the [first five-case joint-search results](docs/JOINT_SEARCH_RESULTS.md).

@@ -2495,3 +2495,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - GitHub confirmed PR #22 is open, draft, unmerged, and `mergeable=false` at creation. The PR event should trigger the workflow configured for `opened`; verify the exact-head Actions run rather than assuming it started or passed.
 - PR body records the separate pipelined Dadda architecture, schedule-derived latencies (4/8/16/32 lanes: L=6/8/10/11, not yet execution-verified), sequential SAT/512-vector Icarus tests, and separate ECP5 P&R target. It explicitly claims no pipeline verification or timing result yet.
 - No merge, force-push, PR #21 action, baseline modification, Ceres action, or NEM mixing occurred. Next: query Actions for exact head `9a7f426055692f1f2543718060bdeea21eb052e9`, inspect run/jobs/logs/artifacts, and fix any failures with a STATUS update after each action.
+
+
+## 278. PR #22 initial exact-head Actions query — 2026-11-28T05:37:30Z
+
+- Queried pull-request-triggered workflow runs for exact PR head `9a7f426055692f1f2543718060bdeea21eb052e9` immediately after opening Draft PR #22. The GitHub integration returned an empty run list.
+- This does not establish that the workflow failed or that Actions are disabled; it only means no PR-triggered run was visible in this query. Next inspect repository Actions runs API for the same exact head, then re-query PR metadata. Do not claim CI is running until a run ID/head SHA is confirmed.

@@ -1277,3 +1277,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Retrieved benchmark draft blob 7c3ff788061b2d76794b963650b980c101c9d287, inserted repository-root sys.path setup before importing orcus, and created corrected blob 3752360638a608849239624bb2f70d3b98441caf (12,928 bytes).
 - Corrected blob remains uncommitted. Next add focused tests for accumulator-width/bias derivation, graph audit at both schedules and all scales, tamper rejection, SAT lemmas, and Yosys direct/CSA equivalence.
+
+## 143. Local arithmetic spot-check tool unavailable — 2026-11-27T06:04:51.534Z
+
+- Attempted an independent Python truth-table spot check of the derived width-dependent Baugh-Wooley bias; the Python execution environment reset before running the script, so no result is claimed.
+- The mathematical derivation remains: signed product = complemented-sign Baugh-Wooley weighted matrix - 112; therefore add 2^W-112 to represent the signed product modulo 2^W. The CI SAT lemma is the required verification gate for each target width.

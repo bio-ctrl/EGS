@@ -923,3 +923,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 101. Run #240 dependency install poll — 2026-11-27T05:31:33.699Z
 
 - Run #240 `45946252250`, job `140331518211`, remains `in_progress`; dependency installation step 4 is still active. Unit tests and benchmark have not started. No new evidence.
+
+
+## 102. Run #240 benchmark stage active — 2026-11-27T05:31:45.061Z
+
+- Run #240 `45946252250`, job `140331518211`, exact head `84635f54bdb885f6825d28c087687916d1072411`: setup/dependencies/cache/OpenSTA verification passed; all unit tests passed; Python compileall passed; Nangate45 Liberty fetch passed. Benchmark step 12 is now `in_progress`; artifact upload and smoke verification pending.
+- This is the first run to reach the benchmark after the typed heap proof unit test passed and the script import-path fix landed. No benchmark metrics/artifact are available until the stage completes.

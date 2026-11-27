@@ -608,3 +608,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR branch commit `604edb03dd9da3793aca591911e84a52428aa105` removes `-ascii` from Yosys `write_aiger`, so the `.aig` files are binary AIGER as expected by ABC's AIG reader.
 - This directly addresses Run #227's `Wrong input file format` error. No proof result is claimed until a new CI run confirms the export and CEC verdicts.
 - Next: synchronize main STATUS/ancestry to the PR branch with a non-force merge commit, trigger fresh CI, and inspect the positive full-design proof plus negative one-bit tamper test.
+
+
+## 62. Binary AIGER branch synchronization — 2026-11-27T05:03:19.863Z
+
+- Advanced `research/orcus-fused-int4-mac` to non-force two-parent merge commit `b7a479a03b51ac633963947170186ba7c41afb3a`.
+- Parents: previous PR branch head `604edb03dd9da3793aca591911e84a52428aa105` and main head `da4e86b3c125c7522b405c5f899db9a6c6009d02`. Merge tree preserves the binary AIGER export change and includes the current main STATUS blob.
+- Branch ref update succeeded with `force=false` and expected-head protection. No PR merge.
+- Next: confirm fresh PR CI for head `b7a479a03b51ac633963947170186ba7c41afb3a`; inspect the binary AIGER reader and ABC CEC verdict. No proof pass yet.

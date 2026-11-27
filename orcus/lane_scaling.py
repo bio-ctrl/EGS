@@ -539,7 +539,7 @@ def run_yosys_equivalence(candidate_source: str, reference: str, top: str,
         if not width_match or not module_match or not reference_match:
             raise ValueError("carry-save source module/width could not be parsed")
         width = int(width_match.group(1)) + 1
-        lanes_match = re.search(r"equiv_carry_save_(\d+)", top)
+        lanes_match = re.search(r"_carry_save_(\d+)$", top)
         if not lanes_match:
             raise ValueError("carry-save proof top does not encode lane count")
         lanes = int(lanes_match.group(1))

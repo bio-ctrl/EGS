@@ -551,3 +551,60 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - The negative test now flips output bit 0 in the full fused RTL and requires ABC CEC to report `Networks are NOT EQUIVALENT`. Both positive and negative checks are configured with a 120-second timeout in unit tests; benchmark formal timeout remains 300 seconds.
 - This is a new proof strategy under test, not a verified pass. Run #224 remains failed due to the 60.06-second output-only heap SAT timeout; no benchmark artifact or fused PPA data exists. Next: synchronize main STATUS/ancestry to the PR branch and run fresh CI on the ABC CEC implementation.
 - Milestone #1 remains open; Milestone #2 (8/16/32 lanes) blocked. PR #19 remains open/unmerged. Ceres untouched; NEM separate.
+
+
+## 54. ABC CEC branch synchronized — 2026-11-27T05:02:14.908Z
+
+- Advanced `research/orcus-fused-int4-mac` with non-force two-parent merge commit `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`.
+- Parents: prior PR branch head `3088d9538f8b741d431a9bad6601848bb2c40b46` and main head `009dd556ec22ba73d75cb3952fdab175a06c6b03`. The merge tree includes main's current STATUS blob and preserves the ABC CEC implementation and negative test.
+- Branch ref advanced successfully with `force=false` and expected-head protection. This is a main-to-PR-branch synchronization only; PR #19 remains unmerged.
+- Next: confirm a fresh automatic PR workflow run for head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`, then inspect unit tests. No ABC CEC verdict yet.
+
+
+## 55. ABC CEC run trigger check — 2026-11-27T05:02:22.035Z
+
+- After branch synchronization to head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`, `fetch_commit_workflow_runs` returned no PR run at the time of this check.
+- Direct PR API still reports mergeability `unknown` while recalculating; base `009dd556ec22ba73d75cb3952fdab175a06c6b03`, head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`.
+- No ABC CEC proof result or CI run ID is confirmed yet. Next: inspect supported Actions run listing for the exact head; if no run exists, diagnose why synchronize did not trigger. Do not claim CI started.
+
+
+## 56. ABC CEC CI Run #227 discovered — 2026-11-27T05:02:28.824Z
+
+- The Actions run listing confirms automatic PR Run #227, ID `45943382079`, event `pull_request`, head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`, created `2026-11-27T05:02:16Z`; it is `in_progress`.
+- The earlier commit-specific run lookup returned empty before the Actions listing updated. This was a lookup timing delay; the workflow has in fact triggered.
+- Next: poll Run #227's job steps; the key gate is the full-design ABC CEC positive proof and one-bit negative test. No result or PPA metrics yet.
+
+
+## 57. Run #227 setup progress — 2026-11-27T05:02:36.205Z
+
+- Run #227 `45943382079` remains `in_progress` on ABC CEC branch head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`. Job `140322472966`: setup, checkout, and Python setup passed; dependency installation is active. Unit tests and benchmark remain pending; no artifact.
+- Next: poll through unit tests, inspect the ABC CEC verdict and negative tamper test, then benchmark only if both pass.
+
+
+## 58. Run #227 cache restore progress — 2026-11-27T05:02:43.270Z
+
+- Run #227 `45943382079` remains `in_progress`. Dependency installation completed successfully; cache restore step 5 is active. Formal unit tests, benchmark, and artifact upload remain pending.
+- No proof verdict or PPA data exists at this poll. Continue monitoring exact step transitions.
+
+
+## 59. Run #227 failed at unit tests — 2026-11-27T05:02:50.109Z
+
+- Run #227 `45943382079` completed with conclusion `failure`. Job failed at step 9 (`Run unit tests`); setup/cache/OpenSTA verification passed. Compile, benchmark, artifact, and smoke steps were skipped.
+- Exact ABC CEC test failure has not yet been inspected. Next retrieve completed job logs and determine whether AIG export, ABC executable invocation, CEC verdict parsing, or actual equivalence caused the failure.
+- No fused proof pass, negative-test rejection, artifact, or PPA metrics from this run.
+
+
+## 60. Run #227 exact ABC CEC failure — 2026-11-27T05:02:57.989Z
+
+- Retrieved completed Run #227 `45943382079`, job `140322472966` logs. All 63 non-CEC tests passed; the new ABC CEC test errored immediately before any equivalence computation.
+- Exact error from ABC: `Wrong input file format. Reading AIG from file has failed.` The export command used Yosys `write_aiger -ascii -symbols` but named the resulting ASCII AIGER file with the binary `.aig` extension. ABC's `cec` reader rejected the format. This is a file-format mismatch, not an equivalence counterexample or proof timeout.
+- Benchmark and artifact steps were skipped. No proof pass or PPA result.
+- Next: export binary AIGER (remove `-ascii`) while keeping `.aig`, or use an ASCII extension supported by ABC. Re-run the full positive/negative CEC test; require explicit `Networks are equivalent` for the valid design and `Networks are NOT EQUIVALENT` for the one-bit tamper.
+- PR #19 remains open/unmerged. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 61. ABC AIGER format correction committed — 2026-11-27T05:03:06.944Z
+
+- PR branch commit `604edb03dd9da3793aca591911e84a52428aa105` removes `-ascii` from Yosys `write_aiger`, so the `.aig` files are binary AIGER as expected by ABC's AIG reader.
+- This directly addresses Run #227's `Wrong input file format` error. No proof result is claimed until a new CI run confirms the export and CEC verdicts.
+- Next: synchronize main STATUS/ancestry to the PR branch with a non-force merge commit, trigger fresh CI, and inspect the positive full-design proof plus negative one-bit tamper test.

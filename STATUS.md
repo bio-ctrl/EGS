@@ -1748,3 +1748,11 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Independent validation returned zero problems: all 12 formal-pass; 512 vectors and 512 unique vectors each; nonzero pin annotations (456/527/520/490 for 8 lanes, 913/1019/1018/1020 for 16, 1939/2050/2050/1998 for 32); all four raw power components present and their W→µW conversions match the recorded values within 1e-9 µW; every raw report contains its Total power row. All 12 PPA rows exactly match Run #254 artifact values; only formal runtimes differ because the rerun was faster. Exact-head Run #255 therefore independently reconfirms the complete matrix.
 - Formal runtimes from Run #255 (s): 8 lanes Direct 0.095857, Carry-Save 0.025541, Fused Linear 0.048489, Fused Dadda 0.048152; 16 lanes 1.026898, 0.029722, 0.049703, 0.052506; 32 lanes 1.326839, 0.030136, 0.063303, 0.062506. Proof methods and PPA table remain as in section 193.
 - No missing scaling evidence remains. PR #20 still open/unmerged pending mergeability diagnosis and final merge. Milestone #2 technical evidence verified; Milestone #3 not started. Ceres untouched; NEM distinct.
+
+
+## 202. PR #20 mergeability refreshed after Run #255 — 2026-11-27T06:47:11.831Z
+
+- Re-read main STATUS before mergeability diagnostics. STATUS blob: 335b02b37b618d56f75e23144ef9298238fc2e5b.
+- PR #20 raw REST metadata at 2026-11-27T06:46:30Z: state open, merged=false, mergeable=null, mergeable_state=unknown, base 05604d1a36b354a7127739281be58bdb75a64378, head 35f45253dec3b0476d6c4f8977c9508b9df6005b. The normalized PR metadata wrapper in the same poll reported mergeable=true. Treat the raw null/unknown as GitHub recalculation, not as a confirmed conflict.
+- Exact-head Run #255 45953708374 is SUCCESS, and its scaling artifact 15177593284 has been independently audited with 12/12 formal/activity/power records matching Run #254. The combined commit-status wrapper returned an empty legacy statuses array; the successful exact-head Actions run is the concrete CI evidence.
+- PR #20 has no remaining technical artifact gate. Re-fetch normalized PR metadata immediately before merge; if it still reports mergeable=true and exact head unchanged, merge with expected_head_sha 35f45253dec3b0476d6c4f8977c9508b9df6005b. Preserve latest main STATUS history. Ceres untouched; NEM distinct.

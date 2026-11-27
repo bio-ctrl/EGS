@@ -1601,3 +1601,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Re-read main STATUS before this poll. STATUS blob: 34dbe7af9bbe122e2cc6bd59c248f1a1035fac3b.
 - Run #254 remains in_progress at step 14 8/16/32-lane scaling benchmark. All prior steps 1–13 succeeded, including unit tests, compileall, Liberty fetch, four-lane benchmark, and upload. Scaling artifact is not yet listed; the only current artifact is four-lane orcus-signed-int4-dot-product ID 15177069315, digest sha256:c6630d36c5578844cc35068a6862014d7c0a47cb548e2634cd51b1954cee862c.
 - No scaling data has been published. Await step 14 completion and scaling artifact upload; PR #20 remains open/unmerged. Ceres untouched; NEM distinct.
+
+
+## 191. Run #254 live scaling logs unavailable — 2026-11-27T06:37:33.664Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 8185527c91e4924de74464608a3a1b00c7ea7638.
+- Attempted to fetch job 140352372364 logs while Run #254 step 14 is active. The connector returned an empty content payload (0 characters); no live per-variant output could be inspected. Job endpoint still reports step 14 in_progress, steps 15–16 pending. The four-lane artifact is the only artifact currently listed.
+- No failure or timeout inferred from missing live logs. Continue polling job steps and retrieve completed logs/artifact once available. No scaling metrics yet; PR #20 remains open/unmerged; Ceres untouched; NEM distinct.

@@ -2209,3 +2209,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read STATUS.md on main before this diagnostic. Current STATUS blob: 5a857f316f86086c50bac478b620348ad018331a.
 - Attempted a parallel query for completed Run #248 job steps/logs and PR #21 diff. The GitHub tool rejected the PR diff request because its exact schema requires {repo_full_name, pr_number}; the call supplied repository_full_name. The Promise batch returned an error before yielding the other query results. No repository source or branch mutation occurred, and no Run #248 failure-stage diagnosis was obtained.
 - Next retry the Run #248 job/log retrieval independently and use the exact PR diff schema {repo_full_name:"bio-ctrl/EGS",pr_number:21}. Current Milestone #3 PR #21 remains draft/unmerged; no FPGA P&R metrics are verified. Ceres untouched; NEM distinct.
+
+
+## 245. STATUS update conflict after FPGA artifact download — 2026-11-27T07:06:37.340Z
+
+- Re-read latest main STATUS after a 409 conflict. A concurrent main update changed STATUS.md from expected blob 5a857f316f86086c50bac478b620348ad018331a; the attempted artifact-download status append did not commit.
+- Run #261 FPGA artifact 15178134912 was successfully downloaded to /mnt/data/orcus-fpga-ecp5-run-261.zip (GitHub SHA-256 c6e38d5b2779a6d5d4f70304336822d321f21ac9a078031c4361faa05b84025d). Inspection is still pending.
+- No repository source mutation occurred in the failed status append. Next inspect the artifact, then append results against the newly fetched STATUS blob. Run #262 continues independently. Ceres untouched; NEM distinct.

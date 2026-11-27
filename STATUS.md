@@ -2174,3 +2174,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Source helper fix commit b5b8b3c118282139cfa6eb52afd5bafb1136d271 triggered main push Run #261, ID 45955949888, created 2026-11-27T07:04:21Z, in_progress.
 - FPGA regression test commit 93f23518a7f8ba2699f58a8c7fd0322b09a442ba triggered Run #262, ID 45955978365, created 2026-11-27T07:04:37Z, in_progress. Run #262 includes both the four-lane helper fix and explicit unsupported-lane assertion and is the latest exact source/test head.
 - Run #260 remains failed history, exact failure documented in section 236. Next poll both runs; prioritize #262 for complete FPGA job evidence. No P&R results yet. Ceres untouched; NEM distinct.
+
+
+## 242. First ECP5 FPGA place-and-route matrix completed successfully on Run #261 — 2026-11-27T07:05:32.084Z
+
+- Re-read main STATUS before polling. STATUS blob: 8fc63df75d2ebccf19e4464126d3cf3199541221.
+- Run #261 (45955949888), exact source helper commit b5b8b3c118282139cfa6eb52afd5bafb1136d271: FPGA job 140362341777 passed toolchain installation (Yosys 0.33 / nextpnr 0.6-3build5), all FPGA wrapper/parser tests, and the full 8-build 4/8/16/32 × Direct/Fused-Dadda synthesis + nextpnr place-and-route step. Artifact upload step 7 is still in_progress at poll time. This is the first successful P&R execution, but no Fmax/resource values have been inspected yet.
+- The parallel latest-head Run #262 (45955978365, exact test commit 93f23518a7f8ba2699f58a8c7fd0322b09a442ba) is in_progress: FPGA toolchain installation step 4 active; shared ASIC job unit tests step 9 active. Run #262 is the latest exact source/test head and should also complete the FPGA matrix.
+- Do not publish FPGA measurements until artifact is uploaded and raw reports are audited. Run #260 remains failed history, with its exact 4-lane guard cause fixed. Ceres untouched; NEM distinct.

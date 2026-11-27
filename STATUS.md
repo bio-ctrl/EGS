@@ -753,3 +753,44 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - This fix addresses the observed `unexpected initial bit kind: compressor_sum` error. It is not yet verified by tests. Run #231 remains failed and historical; no rerun result is yet confirmed. No SAT lemma or benchmark has completed.
 - Next: sync latest main STATUS/ancestry to the branch and inspect the synchronize-triggered CI run for the new head. Confirm that the four SAT lemmas run and the three tamper tests reject the modified designs. If another failure appears, preserve exact logs and fix only the demonstrated issue. No runtime claim until measured.
 - PR #19 remains open/unmerged. Latest mergeability state from before this fix was `false`; recheck after sync. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 79. PR #19 branch resynchronized after Run #231 fix — 2026-11-27T05:24:21.802Z
+
+- Synced latest `main` STATUS blob from `dac135dea73743d306c8c37d5720e3abe10265f5` and main ancestry `dac135dea73743d306c8c37d5720e3abe10265f5` into PR branch using non-force two-parent merge commit `1b2c502e056009f922d47bcab4c0b21f089c8107`.
+- Merge parents: branch fix commit `668122146ed2c546d0f47dc8ff53e3d2ba750d80` first, main `dac135dea73743d306c8c37d5720e3abe10265f5` second. Branch ref update succeeded with expected-head protection and `force=false`.
+- This new branch head should trigger PR CI. Run #231 `45945384577` remains failed on prior head `6d11c50eadcf36d56b756578d505d75248791130`; it is preserved as history. No proof pass or benchmark result is claimed.
+- Next: inspect PR metadata and Actions listing for exact head `1b2c502e056009f922d47bcab4c0b21f089c8107`; monitor tests and proof logs. Ceres untouched; NEM separate; ORCUS v0.2 baseline intact.
+
+
+## 80. Compositional proof CI Run #233 started — 2026-11-27T05:24:38.223Z
+
+- Automatic PR Run #233, ID `45945601986`, is confirmed for exact branch head `1b2c502e056009f922d47bcab4c0b21f089c8107`; event `pull_request`; status `in_progress`. Job `140329457878`: setup, checkout, Python setup succeeded; dependency installation step 4 active. Unit tests and benchmark pending.
+- PR #19 remains open/unmerged. GitHub still reports `mergeable=false` after both ancestry/STATUS syncs; this is a reported state, not to be overridden or described as true.
+- Run #231 failure `45945384577` is preserved. Its fix is committed in `668122146ed2c546d0f47dc8ff53e3d2ba750d80`; Run #233 is the first CI run on the corrected source-node manifest and current main STATUS ancestry.
+- No SAT proof result, tamper-test result, runtime, benchmark artifact, stage timing, or PPA result exists yet. Next: poll Run #233; inspect full unit-test output and proceed to benchmark only if tests pass.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 81. Run #233 dependency installation still active — 2026-11-27T05:24:49.448Z
+
+- Run #233 `45945601986`, job `140329457878`, exact head `1b2c502e056009f922d47bcab4c0b21f089c8107` remains `in_progress`. Setup/checkout/Python setup succeeded; dependency installation step 4 remains active. No test or benchmark step has run yet.
+- No new proof, tamper-test, runtime, artifact, or PPA evidence. Continue polling; Run #231's manifest classification failure remains historical and unchanged.
+
+
+## 82. Run #233 second unit-test failure — 2026-11-27T05:25:17.854Z
+
+- Run #233 `45945601986`, job `140329457878`, exact head `1b2c502e056009f922d47bcab4c0b21f089c8107` failed at unit-test step 9. Setup, dependencies/cache, and OpenSTA verification passed. Compile, benchmark, artifact upload, and smoke steps were skipped.
+- Logs show 67 tests: 65 passed, 1 failed, 1 errored. The polarity and carry-weight tamper tests passed. The compositional audit errored at `full-adder sum equation mismatch: fa_24`; the output-tamper test failed early at the same audit check, before reaching its intended CPA-output assertion. The prior source-node classification error is fixed.
+- No SAT lemma completed; the failure occurs in graph/RTL audit before SAT invocation. No proof runtime, benchmark artifact, stage timing, or PPA data exists.
+- Next: inspect the exact emitted FA declaration and manifest operand order around `fa_24`; reconcile the auditor's parsed RTL expressions with the generator's emitted expression representation. Keep audit fail-closed. Then rerun all tests. Do not relax the check or skip the failing node.
+- PR #19 remains open/unmerged; latest mergeability remains `false`. Run #231 and #233 failures are preserved. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 83. RTL audit tokenization fix committed — 2026-11-27T05:25:57.046Z
+
+- Corrected the second Run #233 audit defect on PR branch commit `ebb0c82601715fcb2a0425231fcbf7948736279f` (parent `1b2c502e056009f922d47bcab4c0b21f089c8107`). The auditor now maps typed constant-bias source IDs to the literal `1'b1` when comparing emitted FA sum/carry expressions and final-row wiring; signal-backed bits retain their declared wire names.
+- This directly addresses `full-adder sum equation mismatch: fa_24`, where the generator emitted constant input expressions but the auditor compared typed manifest IDs as if they were RTL identifiers. It also fixes the latent undefined `rtl_expr` reference in final-row checking.
+- Run #233 `45945601986` remains failed on its earlier head; 65/67 tests passed, with the compositional audit and output-tamper test blocked by the same audit-token mismatch. The polarity and carry-weight tamper tests passed. No SAT lemma ran and no benchmark/artifact exists.
+- Next: synchronize latest main STATUS onto the PR branch and inspect the next CI run. Require all four SAT lemmas, full graph audit, and all three tamper tests to pass before benchmarking. No proof runtime or scaling claim until measured.
+- PR #19 remains open/unmerged; last metadata `mergeable=false`. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.

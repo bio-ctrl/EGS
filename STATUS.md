@@ -2533,3 +2533,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Retried the Actions runs API query and combined commit-status check using the correct connector schema for exact head `b4f1a9ef60d19258e3941e00389649f52ad3e392`.
 - Actions API returned no workflow run matching that SHA; GitHub combined commit status returned an empty `statuses` array. CI has not been queued/observed for the current PR head. This is not a test failure; it is an absent run/status.
 - The available GitHub integration exposes no workflow-dispatch action. The Draft PR remains open to trigger the configured workflow, but GitHub has not delivered a visible PR run. Next: inspect workflow file and repository Actions configuration/events; if no integration action can start it, leave the PR draft and clearly report that the user must manually run ORCUS CI from the Actions UI. Do not claim the four requested engineering tasks are complete.
+
+
+## 284. Branch-filtered Actions query also empty — 2026-11-28T05:42:00Z
+
+- Queried the GitHub Actions runs API filtered to branch `research/orcus-ecp5-dadda-pipeline` with `per_page=100`. GitHub returned `total_count=0` and no runs.
+- Combined with the exact-head query and empty commit statuses, this confirms no workflow run is visible for PR #22 or its branch. The PR remains draft. No test or P&R evidence exists. Next continue static review and report the manual Actions UI requirement unless an authorized trigger operation becomes available; do not change PR out of draft without authorization.

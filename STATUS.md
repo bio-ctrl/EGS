@@ -1119,3 +1119,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Milestone #1 technical evidence is complete for Run #244. PR #19 remains open/unmerged pending review and explicit merge authorization. Latest GitHub metadata before the next sync still reported `mergeable=false`; recheck after syncing the latest main STATUS/ancestry.
 - Milestone #2 can now be planned/started after PR #19 review: 8 lanes/11-bit accumulator, 16 lanes/12-bit, 32 lanes/13-bit; compare direct, multi-stage carry-save, and fused Baugh-Wooley with formal proofs, deterministic 512 unique vectors, VCD annotation, raw OpenSTA, and stage timings. Do not assume sub-second proof at larger widths; measure it.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 118. Final Run #244 evidence synchronized to PR branch — 2026-11-27T05:42:13.125Z
+
+- Synced final main STATUS blob from `c0e153e2cb7e24c9ca90344528711287e8b5164c` and main ancestry into PR branch using non-force two-parent merge commit `50afab04361308c74254d5466e0d6c0b1638ffae`.
+- Merge parents: verified FA+HA implementation source `df08d3a0259817204a7d7ca348d06a65f5edef2e` first; main `c0e153e2cb7e24c9ca90344528711287e8b5164c` second. Expected-head-protected update succeeded.
+- The synced branch now contains the Run #244 final artifact audit and full six-variant comparison in STATUS. This STATUS-only merge may trigger another PR workflow; Run #244 remains the verified implementation/benchmark run for the pre-sync source tree.
+- Next: recheck PR #19 mergeability and latest branch head. Do not merge without explicit authorization. Milestone #1 technical evidence complete; Milestone #2 planning may proceed, with scaling proof runtimes measured rather than assumed.

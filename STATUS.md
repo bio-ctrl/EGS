@@ -2610,3 +2610,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Fused Dadda reduces critical logic delay relative to Direct in every lane count, but critical routing delay is higher in these reports. It removes use of MULT18X18D blocks in the fused rows, while LUT4 usage rises. Only 4-lane Fused Dadda meets the 100 MHz target. All results are FPGA P&R results with unconstrained external IOs, not board-level validation or silicon claims.
 - These metrics are the fixed Run #262 comparison baseline. They are not results from the new pipelined design. Next use the same extraction method on PR #22's exact-head artifact once its run ID is identified.
+
+
+## 293. User reports manual ORCUS CI completion, but supplied run ID is a placeholder — 2026-11-27T23:49:53.289Z
+
+- Re-read authoritative `main` STATUS.md before repository work. User reported manually triggering and completing ORCUS CI on branch `research/orcus-ecp5-dadda-pipeline`, exact head `b4f1a9ef60d19258e3941e00389649f52ad3e392`, but the supplied run ID field literally contains `[PASTE_RUN_ID_HERE]` rather than a numeric ID or URL.
+- Independently queried GitHub Actions by exact `head_sha` and by branch, and re-fetched PR #22 metadata. Both Actions queries returned empty run lists (`total_count=0` for branch); PR #22 remains open, Draft, unmerged, at the specified exact head SHA.
+- Because no valid run ID was supplied and Actions API still exposes no matching run, there is no trustworthy run record to fetch. Sequential SAT, 512-vector streaming/reset leakage, execution-verified latency, synthesis/P&R, utilization, path breakdown, and pipeline Fmax remain unaudited. Do not substitute Run #262 or PR #21.
+- No source, PR, baseline, Ceres, or NEM state was modified. Next required input: actual numeric GitHub Actions run ID or the completed run's URL (and if it ran on another SHA, that exact head SHA). Keep PR #22 Draft and all project boundaries intact.

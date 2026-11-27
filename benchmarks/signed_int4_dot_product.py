@@ -146,7 +146,7 @@ def _run_abc_cec(candidate_text: str, reference_text: str, top: str,
             script = (
                 f"read_verilog {source}; hierarchy -top {module}; "
                 "proc; flatten; techmap; opt; aigmap; "
-                f"write_aiger -ascii -symbols {output}"
+                f"write_aiger -symbols {output}"
             )
             try:
                 result = subprocess.run(

@@ -1156,3 +1156,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Retried PR diff with the correct `repo_full_name` argument. GitHub connector rejected one of the concurrent fetch requests as an unsupported public endpoint (HTTP 400); no diff was obtained and no repository mutation occurred.
 - Main is now at the status-only commit `3dec130b508de87a9a7b7d59ec79e129b9467964`; PR #19 branch head remains `50afab04361308c74254d5466e0d6c0b1638ffae`. Continue with supported PR metadata/patch tools and compare API endpoint if accessible; do not infer merge-base cleanliness from earlier metadata alone.
+
+
+## 123. PR #19 merge preflight — 2026-11-27T05:49:53.856Z
+
+- Read current main STATUS first. Current main `73163fa034bd8e9bfd193dc0fa1a8612035d299a`; PR branch `50afab04361308c74254d5466e0d6c0b1638ffae`; PR #19 open/unmerged. The PR patch changes exactly three files: `benchmarks/signed_int4_dot_product.py`, new `orcus/typed_heap.py`, and `tests/test_signed_int4_dot_product.py`; no Ceres paths appear.
+- PR metadata reports mergeable false because main has advanced with STATUS-only commits. The branch's STATUS is stale relative to main. Next step: construct a non-force two-parent sync commit with latest main as second parent and latest main STATUS blob in the branch tree, then recheck mergeability and CI before merging.
+- Patch inspection confirms the current fused generator is parameterized only by a `lanes` argument at generation level but hardcodes 10-bit width and its proof/benchmark harness is four-lane-specific. Milestone #2 must separately derive accumulator width and prove generalized lane scaling; do not assume simply changing the lane count is sufficient.
+- No merge or Milestone #2 implementation has occurred yet. Ceres remains untouched; NEM distinct.

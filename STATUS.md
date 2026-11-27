@@ -1756,3 +1756,10 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - PR #20 raw REST metadata at 2026-11-27T06:46:30Z: state open, merged=false, mergeable=null, mergeable_state=unknown, base 05604d1a36b354a7127739281be58bdb75a64378, head 35f45253dec3b0476d6c4f8977c9508b9df6005b. The normalized PR metadata wrapper in the same poll reported mergeable=true. Treat the raw null/unknown as GitHub recalculation, not as a confirmed conflict.
 - Exact-head Run #255 45953708374 is SUCCESS, and its scaling artifact 15177593284 has been independently audited with 12/12 formal/activity/power records matching Run #254. The combined commit-status wrapper returned an empty legacy statuses array; the successful exact-head Actions run is the concrete CI evidence.
 - PR #20 has no remaining technical artifact gate. Re-fetch normalized PR metadata immediately before merge; if it still reports mergeable=true and exact head unchanged, merge with expected_head_sha 35f45253dec3b0476d6c4f8977c9508b9df6005b. Preserve latest main STATUS history. Ceres untouched; NEM distinct.
+
+
+## 203. PR #20 mergeability remains indeterminate — no merge attempted — 2026-11-27T06:47:52.294Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: d132088e9ed432b373070c4ebb9d75e100743d1b.
+- Re-fetched PR #20 metadata at 2026-11-27T06:47:24Z. Raw REST reports mergeable=null and mergeable_state=unknown; normalized wrapper currently reports mergeable=false. Head remains 35f45253dec3b0476d6c4f8977c9508b9df6005b; base snapshot remains 05604d1a36b354a7127739281be58bdb75a64378. This differs from the prior poll's normalized mergeable=true and is not a stable mergeability confirmation.
+- No merge was attempted. Run #255 and its exact-head scaling artifact are successful and fully audited, but GitHub mergeability is still indeterminate/reported false. Next inspect base/head ancestry and PR file conflict state; refresh mergeability again before any merge. Do not bypass a real conflict. Milestone #2 evidence is verified but not yet merged. Ceres untouched; NEM distinct.

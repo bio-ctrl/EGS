@@ -1691,3 +1691,11 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Re-read main STATUS before repository diagnostics. STATUS blob: 17ef5d515b99d4417c1061c8decebe6b3db02562.
 - Attempted to inspect main/PR branch commit tree SHAs using the normalized commit response. The response shape did not expose the expected nested commit.tree.sha property, so the diagnostic script stopped before emitting refs/tree IDs. No repository mutation occurred and no branch sync was attempted.
 - Retry by inspecting the raw GitHub commit API payload and use exact returned tree IDs. Current audited artifact remains Run #254 success; PR #20 still unmerged. Ceres untouched; NEM distinct.
+
+
+## 195. Pre-merge ancestry-sync refs captured — 2026-11-27T06:43:03.759Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 906dd484ce190c334f48428c5106269b684ea473.
+- Current main ref at diagnostic: d100b35ed109dfa20c4f53ed7e4c77e77b545422; its tree: dee1449e346d27cd3e62306245774f1d0fc62c28.
+- PR #20 research branch ref: 0052c1895ec04524a9babf4ffe695955fdce99ce; its tree: 6bf888886ff20f5d24c18ae50367fd21cfb93fb9.
+- Current main STATUS blob at this diagnostic: 906dd484ce190c334f48428c5106269b684ea473. PR #20 remains unmerged; previous PR metadata reported mergeable=false and stale base 6cd44f34f36b0945680c279a87a4d8737daf33aa. Next action is a non-force two-parent ancestry sync that retains branch files while replacing STATUS.md with the main blob, then rerun CI on the new exact head.

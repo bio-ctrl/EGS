@@ -1557,3 +1557,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - The next configuration, 8-lane Carry-Save, failed immediately in run_yosys_equivalence at orcus/lane_scaling.py line 544: ValueError: carry-save proof top does not encode lane count. Benchmark top is orcus_carry_save_8, while the proof parser incorrectly required the tests-only prefix equiv_carry_save_. This is a top-name parsing bug, not an arithmetic proof failure. Steps 15–16 were skipped; no scaling artifact exists.
 - The compositional fused proof/audit tests did pass in Run #252; the failure occurred when the benchmark invoked the carry-save proof path with its different top-name convention. Run #252 still fails overall; PR #20 remains open/unmerged; Milestone #2 incomplete; Milestone #3 not started. Ceres untouched; NEM distinct.
 - Next fix lane-count extraction to accept the actual top naming convention (anchored `_carry_save_<lanes>` suffix, independent of `orcus_` vs `equiv_` prefix), add regression coverage for both names, and rerun. Then inspect all 12 configs/artifact before any merge or FPGA work.
+
+
+## 185. Carry-save proof top-name parser fixed — 2026-11-27T06:34:51.473Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: 1175fdb0837aa36fd89fb0c299eaa700212749e5.
+- Updated orcus/lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: 382fd6e21792995e7088a608372218e5f9c0654b; source blob: 78766b20eb4992863d9bb3a87131cd66651c3449.
+- Changed lane-count extraction from the unit-test-specific equiv_carry_save_<lanes> prefix to an anchored _carry_save_<lanes> suffix. This accepts both test tops such as equiv_carry_save_8 and benchmark tops such as orcus_carry_save_8 without weakening width or source checks.
+- This fixes the exact Run #252 exception but has not yet been rerun. Next add regression coverage for both top-name patterns and rerun CI. No scaling artifact/complete table. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.

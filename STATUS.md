@@ -2479,3 +2479,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Updated `tests/test_dadda_pipeline.py` on the pipeline branch in commit `815944e9d53e32068a004785f56d5dcbc34bb601` to assert that the generated streaming testbench includes the post-reset stale-transaction leakage check.
 - This only adds a source assertion; no tests have been run. Next inspect exact generated source logic and fix any remaining issues before syncing branch STATUS and opening the Draft PR.
+
+
+## 276. Pipeline branch STATUS synchronized with main — 2026-11-27T23:59:00Z
+
+- Synchronized `research/orcus-ecp5-dadda-pipeline/STATUS.md` to the latest authoritative `main` STATUS content and appended a pipeline-specific handoff in branch commit `9a7f426055692f1f2543718060bdeea21eb052e9`.
+- The branch handoff records the separate generator, sequential formal/streaming harness, isolated ECP5 P&R runner, unit tests, CI wiring, architecture, and schedule-derived latency metadata: 4 lanes L=6, 8 lanes L=8, 16 lanes L=10, 32 lanes L=11. These latencies are derived from the source Dadda stage schedule and are not yet execution-verified.
+- Branch STATUS explicitly records that no tests/formal/simulation/synthesis/P&R have run and preserves all boundaries. Next create the requested Draft PR to trigger exact-head CI; PR number/head SHA and run status will be appended after GitHub confirms them.

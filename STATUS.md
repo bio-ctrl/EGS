@@ -1341,3 +1341,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 153. Run #248 unit tests active — 2026-11-27T06:10:10.010Z
 
 - Run #248 45950053878, job 140343567995, exact head f6144e9e5e10bab4d2bb5b2c9b0df232764571b8: dependency setup and OpenSTA verification passed; unit test step 9 is running. Compileall, Liberty fetch, existing four-lane benchmark, new 8/16/32 scaling benchmark, artifact uploads, and smoke check remain pending.
+
+## 154. Run #248 live job-log retrieval unavailable — 2026-11-27T06:10:27.396Z
+
+- Attempted to retrieve job logs while unit tests were still running. GitHub returned HTTP 404 BlobNotFound for the live log blob; no test result was inferred. No repository mutation occurred.
+- Continue polling the job-step endpoint; retrieve complete logs after the step/run completes. Run #248 remains the active exact-head CI run unless a later status says otherwise.

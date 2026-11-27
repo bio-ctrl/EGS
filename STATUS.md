@@ -1974,3 +1974,12 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - FPGA wrapper design: register every 4-bit lane input on posedge clk, feed the selected combinational core, and register W-bit output on the same clock. This creates a common input-register→combinational-core→output-register timing path for every architecture and lane count. Use identical wrapper interface/register treatment, one clock, no reset, no DSP-specific forced inference, and a fixed 100 MHz target for reproducibility; report achieved post-route Fmax even if timing fails.
 - Planned matrix: 4/8/16/32 lanes × Direct and Fused Dadda (8 builds). Dadda selected as the measured area/delay compromise from Milestone #2; fused-linear remains the lower-area/power option but loses delay, and Dadda dominates carry-save in area/power/delay at 16/32 lanes. No FPGA source or measurement yet.
 - Next inspect nextpnr JSON report structure and implement parser robustly for utilization, CCU2C, TRELLIS_COMB/LUT4, TRELLIS_FF, and fmax. Ceres untouched; NEM distinct.
+
+
+## 219. nextpnr report schema and FPGA resource primitives confirmed — 2026-11-27T06:56:39.872Z
+
+- Re-read main STATUS before report-format research. STATUS blob: 024ed0213cb29165b35f229ce0042936ac4b475a.
+- nextpnr report documentation specifies JSON `utilization` keyed by BEL type with `used` and `available`, plus `fmax` keyed by clock domain with `achieved` and `constraint` MHz. `--report` writes the post-place-and-route JSON; `--detailed-timing-report` appends path detail. Source: https://codegraph.jelmer.uk/nextpnr/0.10-5/docs/report.md.
+- ECP5 primitive list confirms LUT4, CCU2C (two LUT4s plus carry logic), TRELLIS_FF and TRELLIS_SLICE are supported/reportable resource types. Source: https://github.com/YosysHQ/nextpnr/blob/main/ecp5/docs/primitives.md. Report parser will preserve raw BEL utilization and separately expose LUT4, CCU2C and TRELLIS_FF; it will not mislabel TRELLIS_COMB as an exact LUT count.
+- Yosys 0.33 synth_ecp5 docs and upstream examples confirm `yosys -p 'synth_ecp5 -top <top> -json <file>'` followed by `nextpnr-ecp5 --json <file> --85k --package CABGA381 --speed 6 --freq <MHz> --report <file> --textcfg <file>` as the intended flow. Sources: https://yosyshq.readthedocs.io/_/downloads/yosys/en/0.33/pdf/ and https://github.com/YosysHQ/nextpnr.
+- No FPGA code or workflow changes yet. Next implement wrapper generator, resource parser, test fixtures, and isolated Ubuntu 24.04 CI job with package versions pinned. Ceres untouched; NEM distinct.

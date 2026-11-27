@@ -1065,3 +1065,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #244 `45947084195`, job `140334145107`, exact head `70949ed253e849453aaa0542d6f102a0130b81de`: dependency/cache/OpenSTA checks passed; unit tests passed; Python compileall passed; Liberty fetch passed. Benchmark step 12 is active; artifact upload and smoke verification pending.
 - This confirms the new test asserting an actual half-adder node is present passes in CI. Full benchmark/proof timings and HA-node artifact inspection remain pending.
+
+
+## 116. Run #244 full CI succeeded — artifact audit pending — 2026-11-27T05:40:17.148Z
+
+- Run #244 `45947084195`, job `140334145107`, exact head `70949ed253e849453aaa0542d6f102a0130b81de` completed success. Unit tests, compileall, Liberty fetch, benchmark, artifact upload, and smoke verification all passed.
+- This is the first end-to-end CI for the typed graph with an actual HA node. Artifact ID, proof timings, six-variant table, vector/VCD and raw OpenSTA checks are pending inspection.
+- Next: fetch artifact and complete job logs; verify HA node count and all proof/measurement evidence. Do not close Milestone #1 before that audit.

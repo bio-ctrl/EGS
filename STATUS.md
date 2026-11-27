@@ -403,3 +403,56 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR branch code commits: `031ca7fd378c2650cf5c4acb3add4db0eefc4abd` (lane/heap proof generators), `cb7494267f20566b55821538874ff337b072d2e4` (route fused candidate through compositional proof), `408324aed545acc65a25a0ee6a6640a150c3b3d0` (positive proof + one-bit negative test).
 - These changes have not yet run in CI. The prior Run #216 remains failed at unit tests; no proof pass or PPA data is claimed. Next: synchronize the latest main STATUS and ancestry to the branch, trigger a new PR CI run, inspect both positive lemmas and the negative tamper result, then benchmark only if all formal tests pass.
 - Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 35. PR proof branch synchronized for next CI — 2026-11-27T05:02:00Z
+
+- Synchronized latest main ancestry and STATUS into `research/orcus-fused-int4-mac` with non-force two-parent merge commit `e646fb171fffcba9483c98108f168f7da851cf3a`.
+- Parents: prior PR branch head `408324aed545acc65a25a0ee6a6640a150c3b3d0` and main head `d98c691836252141230c66a2ebb1b2df823798da`. Merge tree `2f40a87a9779fda6247aad947a1dcffa47ce3966` includes main's current STATUS blob and preserves the PR branch proof code/tests.
+- Branch ref advanced with `force=false` and expected-head check. No PR merge. New branch head: `e646fb171fffcba9483c98108f168f7da851cf3a`.
+- Next: verify a fresh automatic PR CI run for this exact head; monitor unit tests first. Do not claim Run #216's failed proof is repaired until the new positive/negative tests pass.
+
+
+## 36. New compositional-proof CI Run #220 started — 2026-11-27T05:03:00Z
+
+- Fresh automatic PR run confirmed for compositional proof branch head `e646fb171fffcba9483c98108f168f7da851cf3a`: Run #220, ID `45942838109`, event `pull_request`, status `in_progress`, created `2026-11-27T04:56:39Z`.
+- PR #19 remains open/unmerged. Direct API reports mergeability `null` / state `unknown` during recalculation; do not infer clean/conflicting state.
+- Next: inspect Run #220 job step progress and completed logs. The expected gate is the positive lane lemma, positive symbolic heap lemma, and negative one-bit tamper rejection. Benchmark only runs if the unit-test suite passes.
+- No proof pass, fused PPA result, or Milestone #1 closure yet. Milestone #2 (8/16/32 lanes) remains blocked. Ceres untouched; NEM separate.
+
+
+## 37. Run #220 early progress — 2026-11-27T05:04:00Z
+
+- Run #220 `45942838109`, exact branch head `e646fb171fffcba9483c98108f168f7da851cf3a`, remains `in_progress`. Job `140320786399` has setup/checkout/Python setup completed; apt dependency installation is active. Formal tests and benchmark have not started; no artifact.
+- Next: continue polling until the unit-test stage completes; inspect the proof log and negative tamper result before interpreting any benchmark. No proof or PPA result yet.
+
+
+## 38. Run #220 setup poll — 2026-11-27T05:04:30Z
+
+- Run #220 remains in progress; dependency installation step 4 is still active. Formal tests and benchmark remain pending. No artifacts or metrics.
+- No code or workflow changes in this poll. Continue monitoring exact job state; do not infer a proof outcome from setup duration.
+
+
+## 39. Run #220 failed at unit tests — 2026-11-27T05:05:00Z
+
+- Run #220 `45942838109` has failed at step 9 (`Run unit tests`) after setup and cached OpenSTA verification succeeded. Benchmark and artifact steps were skipped. Job `140320786399`.
+- Exact test failure is not yet inspected; fetch completed job logs next. No proof pass, benchmark run, or artifact exists from this run.
+
+
+## 40. Run #220 heap-lemma failure diagnosis — 2026-11-27T05:06:00Z
+
+- Retrieved completed Run #220 job logs. The new compositional test ran 64 tests in 2.863s; 63 passed and the fused compositional test errored during the symbolic heap lemma.
+- Important positive result: the standalone 4x4 signed Baugh-Wooley lane lemma completed successfully; the test advanced into `_run_equivalence` for `orcus_heap_gate`. Thus the lane-level multiplier identity did prove under the partitioned Yosys flow.
+- Exact heap failure: `equiv_status -assert` reported `ERROR: Found 37 unproven $equiv cells in 'equiv_status -assert'`. Log shows `equiv_struct -icells` created invalid/unhelpful internal structural matches between the arithmetic reference and compressor gate (e.g. reference add outputs matched to internal `fa_s_*` / `fa_c_*` / PP nodes). This is a structural-partitioning problem, not a demonstrated output counterexample and not a timeout.
+- Run #220 benchmark, artifact upload, and smoke verification were skipped. No fused PPA metrics.
+- Next: disable `equiv_struct` only for the symbolic heap proof so the tool proves the 10-bit outputs directly with `equiv_simple`, while retaining the successful lane lemma. Run the negative one-bit tamper check with the same output-only heap proof. If output-only SAT does not prove quickly, inspect proof partitions/logs before changing strategy.
+- PR #19 remains open/unmerged. Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 41. Heap proof matching refinement — 2026-11-27T05:07:00Z
+
+- PR branch head advanced through `2555c279c270dd1eba9e163dcb5bb41aec98dc08` and `92cc4ea77d066d5576e747ece5b36ef96308c128` to disable `equiv_struct -icells` for the symbolic heap lemma and the negative tamper proof. The lane multiplier lemma retains structural matching because it passed in Run #220.
+- Reason: Run #220's heap proof produced 37 unproven equivalence cells after `equiv_struct` made unsuitable internal matches between the arithmetic sum and compressor network. The heap should be compared at its complete 10-bit output only; `equiv_simple -v; equiv_status -assert` is now used there.
+- Commit `0fd9465315675ce7042486d01a789c127b3138c0` clarifies the distinct proof sequence in the recorded proof-method string.
+- This is a diagnostic refinement only. No CI has yet tested this output-only heap proof. Run #220 remains failed; no benchmark artifact or fused PPA data.
+- Next: sync latest main STATUS/ancestry to the PR branch with a non-force merge commit, trigger a fresh run, and inspect the heap proof. Do not assert success until the negative tamper is rejected.

@@ -85,6 +85,19 @@ class LaneScalingTests(unittest.TestCase):
                     })
                     self.assertEqual(proof["heap_audit"]["status"], "pass")
 
+    def test_carry_save_proof_accepts_benchmark_top_names(self):
+        yosys = shutil.which("yosys")
+        if not yosys:
+            self.skipTest("Yosys is required for equivalence checks")
+        for lanes in TARGET_LANES:
+            top = f"orcus_carry_save_{lanes}"
+            candidate = module_source(top, lanes, "carry_save")
+            reference = module_source("orcus_reference", lanes, "direct")
+            with self.subTest(lanes=lanes):
+                result = run_yosys_equivalence(candidate, reference, top, yosys)
+                self.assertEqual(result["formal_equivalence"], "formal-pass")
+                self.assertEqual(result["graph_audit"]["status"], "pass")
+
     def test_yosys_equivalence_for_direct_and_carry_save_at_all_scales(self):
         yosys = shutil.which("yosys")
         if not yosys:

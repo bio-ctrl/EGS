@@ -179,3 +179,103 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - The `orcus/*.py` and other shared test files inspected have identical blob SHAs on main and the PR branch. No Ceres paths or content were accessed.
 - Diagnosis: mergeability is false and there are overlapping edits in the three files above; GitHub's metadata alone does not establish which hunk(s) are actual conflict markers. Planned resolution is a non-force merge commit using main as first parent, retaining PR-branch benchmark/test blobs and taking main's workflow blob, with all unchanged shared blobs and main's STATUS.md preserved. Then advance the PR branch with a fast-forward update and check whether GitHub reports mergeable true / dispatches synchronize CI. No PR branch mutation has yet been made in this diagnostic batch.
 - No new benchmark run, artifact, SAT proof, vector confirmation, VCD annotation, stage timing, or PR #19 PPA result exists. Keep PR #19 unmerged pending evidence and explicit authorization. Preserve ORCUS v0.2 and keep Ceres untouched; NEM remains separate.
+
+
+## 9. Session handoff — 2026-11-27T04:37:58Z
+
+- PR #19 merge conflict resolution completed without force-pushing. A two-parent merge commit was created with PR head as first parent and the then-current main head as second parent. Merge commit: `29afabf84e82203bd350ed4ca233bde0d3bde2e1`; parents: PR head `fb11b4dcfabb92e651759259edb953ff8521dbde` and main `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e`. The branch ref was advanced with expected-head protection and non-force update.
+- The merge tree retained main's `.github/workflows/ci.yml` (including `paths-ignore: STATUS.md`), retained the PR branch's six-variant benchmark blob `a71b58bde71defc46a39dcc0666be8e55fba359b` and fused/parser test blob `b07462705ccd2f898dd123d0b7ffabc01387da8c`, and retained main's `STATUS.md`. Other common ORCUS source/test blobs were identical on both sides.
+- GitHub now reports PR #19 `mergeable=true`, open, unmerged, with base SHA `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e` and head SHA `29afabf84e82203bd350ed4ca233bde0d3bde2e1`. The PR diff now contains only the two intended benchmark/test files; the workflow diff is resolved.
+- Automatic `pull_request` synchronize CI started: Run #211, ID `45941055820`, exact head `29afabf84e82203bd350ed4ca233bde0d3bde2e1`, created at 2026-11-27 04:37:44 UTC. At this handoff it is `in_progress`; no artifact or stage results have yet been confirmed. This is an automatic PR run, not a workflow_dispatch run.
+- Exact next action: inspect Run #211 jobs/step timings and logs while it runs; after completion inspect the artifact and verify all six variants' SAT proof, 512 unique vectors, nonzero VCD annotation, and all four OpenSTA power components. Record only artifact-backed metrics. Keep PR #19 unmerged until review and explicit authorization. Ceres remains untouched; NEM remains separate; ORCUS v0.2 remains the fixed verified baseline.
+
+
+## 10. CI progress — 2026-11-27T04:38:13Z
+
+- Run #211 / ID `45941055820` remains `in_progress` on exact PR head `29afabf84e82203bd350ed4ca233bde0d3bde2e1` (started 2026-11-27 04:37:44 UTC).
+- Job `test` ID `140315208458` is running. Set up job, checkout, and Python setup completed successfully. Dependency installation was still `in_progress` at the latest step query; cache, CUDD/OpenSTA build, unit tests, compile, Liberty fetch, benchmark, artifact upload, and smoke verification had not yet started. Artifact list was empty at this point.
+- Workflow job-log download was attempted but GitHub returned BlobNotFound while the job was still running; no stage log/timing is available from that request. This is a log-availability limitation, not a benchmark failure.
+- Next: poll Run #211, retrieve job logs after completion, inspect uploaded artifact, and record exact per-stage results. Do not infer benchmark outcome from setup progress.
+
+
+## 11. CI progress — 2026-11-27T04:38:22Z
+
+- Run #211 / ID `45941055820` is still `in_progress` on head `29afabf84e82203bd350ed4ca233bde0d3bde2e1`.
+- Completed successfully: dependency installation; EDA cache lookup; cached OpenSTA verification; unit tests; Python compile; Nangate45 Liberty download. CUDD and OpenSTA build steps were skipped because the pinned build cache hit.
+- Benchmark step `Run signed INT4 dot-product reduction benchmark` (step 12) is currently `in_progress`. Artifact upload and benchmark smoke verification remain pending. No SAT outcome, per-variant stage timing, benchmark artifact, vector/VCD confirmation, or PPA metric is available yet.
+- Next: continue polling Run #211; inspect job logs and artifact once available. Do not call the running benchmark a pass.
+
+
+## 12. CI progress — 2026-11-27T04:38:37Z
+
+- Latest Run #211 poll: run `45941055820` remains `in_progress`; job `140315208458` remains active in benchmark step 12, `Run signed INT4 dot-product reduction benchmark`. Steps 1–11 are successful or cache-skipped as recorded above. Steps 13–14 (artifact upload and smoke verification) remain pending.
+- Repeated job-log retrieval still returns GitHub `BlobNotFound` while the job is running. No per-variant logs or stage timings can yet be inspected. Artifact listing remains empty while the benchmark is active.
+- No formal proof result, 512-vector count, VCD pin annotation, generic-cell count, Nangate45 area, delay, or power result is available at this timestamp. The run is neither a pass nor a failure yet.
+- Next: wait for Run #211 completion, then retrieve the completed job logs and artifact; if and only if fused SAT times out at its configured 300-second limit, investigate the exact solver logs and implement a separately documented structural-equivalence strategy. Keep PR #19 open/unmerged pending verified results and explicit authorization.
+
+
+## 13. CI poll — 2026-11-27T04:38:47Z
+
+- Rechecked Run #211 / `45941055820`: still `in_progress`, exact head `29afabf84e82203bd350ed4ca233bde0d3bde2e1`. Benchmark step 12 remains active; steps 13–14 remain pending; no artifact is published yet. No stage timings or six-variant measurements are available. This poll does not change the technical conclusion: PR #19 benchmark remains pending / NOT DETERMINED.
+- Next: retrieve completed logs and artifact after run completion; keep PR #19 open and unmerged until the evidence gates are reviewed.
+
+
+## 14. Run #211 inspection — 2026-11-27T04:41:51Z
+
+- Inspected workflow run #211 / ID `45941055820` again. It is still `in_progress` on exact head `29afabf84e82203bd350ed4ca233bde0d3bde2e1`; job `140315208458` remains in progress at benchmark step 12, `Run signed INT4 dot-product reduction benchmark`. Steps 1–11 are completed successfully or skipped on cache hit; steps 13–14 remain pending.
+- Artifact list is still empty. No completed job logs or stage timing report are available. No SAT proof results, vector uniqueness results, VCD activity counts, generic cells, Nangate45 area, delay, or power metrics can be verified yet. Run #211 outcome remains pending, not pass/fail.
+- PR #19 remains open and unmerged. A fresh PR metadata read currently reports `mergeable=false` despite the merge commit having previously reported `true`; this status may be recalculating or may reflect the base moving as STATUS commits are added. Do not assume it is mergeable until rechecked after CI completes. The exact PR head remains `29afabf84e82203bd350ed4ca233bde0d3bde2e1`.
+- No code or PR branch changes were made during this inspection. No solver fix was applied because no SAT timeout/failure has been observed. No Milestone #1 closure or Milestone #2 scaling work is authorized by the available evidence yet.
+- Next: poll Run #211 and PR mergeability. After run completion, retrieve logs and artifact, validate all six variants, and only then decide whether a proof-method change is needed. Keep PR #19 open/unmerged pending evidence and explicit authorization. Ceres remains untouched; NEM separate; ORCUS v0.2 fixed baseline intact.
+
+
+## 15. Run #211 poll — 2026-11-27T04:42:04Z
+
+- Second poll after the previous handoff confirms Run #211 `45941055820` is still `in_progress` on head `29afabf84e82203bd350ed4ca233bde0d3bde2e1`. Benchmark step 12 remains active; artifact upload and benchmark-target verification remain pending. Artifact list remains empty.
+- PR #19 remains open/unmerged; metadata still reports `mergeable=false` at this poll. Base SHA is `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e`; head SHA is unchanged. Do not merge or assume mergeability.
+- No benchmark outcome, stage timings, artifact, formal proof result, vector/VCD evidence, or PPA metrics have been produced in the observed responses. Exact next action: continue polling until the run completes, then retrieve completed logs and artifact. If the run fails, identify the precise failing step and log before deciding on a repair. Milestone #1 remains open; do not begin 8/16/32-lane implementation before four-lane evidence is closed.
+
+
+## 16. Run #211 final audit — 2026-11-27T04:43:23Z
+
+- Run #211 / ID `45941055820` completed with conclusion `failure` at 2026-11-27T04:43:23Z. It was an automatic `pull_request` run on PR #19, merge ref commit `7a57c217eb94470a7d5b0af59530c12fdcc3494a`, representing PR head `29afabf84e82203bd350ed4ca233bde0d3bde2e1` merged with base `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e`. Job ID: `140315208458`.
+- Setup, checkout, Python, dependencies, cached OpenSTA verification, unit tests, Python compilation, and Nangate45 Liberty download all completed successfully. All 63 unit tests passed in 0.946 seconds.
+- Benchmark step 12 failed; artifact upload (step 13) and benchmark-target verification (step 14) were skipped. Artifact query returned an empty list. No benchmark JSON artifact or complete raw OpenSTA reports were produced.
+- Exact failure: fused candidate `orcus_fused_partial_product` entered Yosys formal SAT at 2026-11-27T04:38:15.3939954Z and exceeded the configured 300-second timeout. Python reported `subprocess.TimeoutExpired` at 2026-11-27T04:43:15.5119878Z and raised `FORMAL_TIMEOUT` with elapsed `300.10s`. Exact proof command: `read_verilog candidate.v reference.v; proc; miter -equiv -flatten reference orcus_fused_partial_product m; sat -verify -prove trigger 0 m`. This is a solver timeout, not a counterexample and not a proof pass.
+- The first five variants completed all stages. Log-recorded formal / generic synthesis / Nangate45 mapping / simulation durations were:
+  - direct: 0.03 / 0.14 / 0.32 / 0.04 s; complete 0.69 s; 512 unique vectors; 259 annotated pins; 522 generic cells; area 574.56; delay 0.95 ns; total power 105.0206 µW.
+  - left_deep: 0.03 / 0.14 / 0.31 / 0.04 s; complete 0.66 s; 512 unique vectors; 259 annotated pins; 522 generic cells; area 574.56; delay 0.95 ns; total power 105.0206 µW.
+  - balanced_01_23: 0.04 / 0.15 / 0.31 / 0.04 s; complete 0.67 s; 512 unique vectors; 259 annotated pins; 522 generic cells; area 575.89; delay 1.00 ns; total power 104.8923 µW.
+  - balanced_02_13: 0.11 / 0.15 / 0.30 / 0.04 s; complete 0.73 s; 512 unique vectors; 259 annotated pins; 522 generic cells; area 574.56; delay 1.00 ns; total power 104.9567 µW.
+  - carry_save: 0.07 / 0.15 / 0.28 / 0.04 s; complete 0.67 s; 512 unique vectors; 268 annotated pins; 441 generic cells; area 460.712; delay 0.89 ns; total power 84.60975 µW.
+- The first five Run #211 measurements match the previously verified v0.2 values. This run's job log exposes total power, not the four individual power components in a saved artifact; do not claim the Run #211 artifact independently verified internal/switching/leakage values. The fused candidate has no synthesis, simulation, OpenSTA, or PPA measurements because it timed out before those stages.
+- Result: **fused Baugh-Wooley win/loss is NOT DETERMINED**. It cannot be compared against carry-save from this run. No six-variant table can honestly be completed. Do not close Milestone #1 or begin Milestone #2.
+- PR #19 remains open and unmerged. Current metadata reports `mergeable=false`; base SHA `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e`, head SHA `29afabf84e82203bd350ed4ca233bde0d3bde2e1`. No branch code change, solver substitution, PR merge, or milestone closure was made during this audit.
+- Next engineering action: design and validate a proof decomposition for the fused arithmetic, preserving the current SAT timeout and failure history. Candidate approaches to evaluate include equivalence partitioning with independently justified cutpoints, Yosys `equiv_*` passes where structural correspondence exists, or ABC `cec`; do not assume any is equivalent or fast without running it on the exact generated RTL. Keep the original Yosys miter/SAT proof as a recorded baseline. Any alternative must prove the full 10-bit output against the direct signed-INT4 reference, not merely prove isolated compressor equations or a subset of lanes. Run a fresh CI after a verified proof implementation.
+- Research limits remain unchanged: Nangate45 estimates are pre-layout and have no routed parasitics; they are not silicon PPA. Preserve ORCUS v0.2 as fixed baseline. Keep Ceres untouched and NEM separate.
+
+
+## 17. STATUS write verification — 2026-11-27T04:43:40Z
+
+- Verified the Run #211 audit entry is present on `main`; current STATUS.md blob SHA is `ccf9dafef36d21186a85daa55ec39edf5fd54de2`, written by commit `7a9a0f9e2ef578bcf75165a654dd69c8137cf9d4`.
+- Rechecked PR #19 after the STATUS update: it remains open, unmerged, and `mergeable=false`; base `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e`, head `29afabf84e82203bd350ed4ca233bde0d3bde2e1`. Do not merge or close Milestone #1.
+- No additional benchmark or proof attempt was performed in this verification.
+
+
+## 18. Formal proof implementation attempt — 2026-11-27T04:45:00Z
+
+- On PR #19 branch `research/orcus-fused-int4-mac`, commit `53e8887f9df4cd30326be036d2ea606eaa9daa40` changes the formal gate in `benchmarks/signed_int4_dot_product.py` from the monolithic `miter -equiv -flatten; sat -verify -prove trigger 0` command to a Yosys partitioned equivalence sequence:
+  `read_verilog reference candidate; proc; equiv_make reference candidate equiv; hierarchy -top equiv; clean -purge; equiv_struct -icells; equiv_simple -v; equiv_status -assert`.
+- New helper `_run_equivalence` uses the fail-closed `equiv_status -assert`, returns explicit method and elapsed proof time, and raises on command failure or timeout. The 300-second formal timeout remains the outer cap. This sequence is an implementation under test, not yet a verified proof result.
+- The next required change is the negative one-bit output-tamper unit test. After that, run unit tests and CI. Do not claim full equivalence or a fused PPA result until the actual run proves it.
+- PR #19 branch head is now `53e8887f9df4cd30326be036d2ea606eaa9daa40`. Main STATUS update commit will be recorded after this write.
+- Milestone #1 remains open. Milestone #2 (8/16/32 lanes) is blocked pending complete four-lane proof and benchmark evidence. Ceres remains untouched; NEM remains separate.
+
+
+## 19. Negative equivalence test added — 2026-11-27T04:46:00Z
+
+- PR #19 branch `research/orcus-fused-int4-mac` now includes commit `4777754c2410e0250568e2c7d2efd2e4d552f13b`, adding a unit test that runs the new partitioned Yosys equivalence flow on the fused candidate and then repeats it on an intentionally corrupted candidate whose final 10-bit result is XORed with `10'b0000000001`.
+- The test requires the correct candidate to prove and requires the one-bit-tampered candidate to raise an equivalence failure. This is the requested negative test; it has been committed but has NOT yet executed in CI.
+- Test timeout is 60 seconds per proof invocation. Full output equivalence remains the intended formal gate; no 2^32 exhaustive simulation is attempted.
+- Current PR branch head: `4777754c2410e0250568e2c7d2efd2e4d552f13b`. No CI result is yet confirmed. Next: run/review unit tests and inspect the new proof command's behavior, including that the negative test rejects the tampered output.
+- Milestone #1 remains open; no PPA comparison for fused Baugh-Wooley is available. Ceres untouched; NEM separate.

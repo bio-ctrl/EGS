@@ -1248,3 +1248,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 137. Lane-scaling status-log formatting retry — 2026-11-27T05:56:15.805Z
 
 - Attempted to append the source-audit/branch-sync record, but the JavaScript tool payload failed to parse before any GitHub write. No repository state changed. Retry with a simpler literal string and no mathematical escape sequences.
+
+## 138. Lane-scaling branch synchronized and source audit complete — 2026-11-27T05:56:29.227Z
+
+- Synced main 8a3e2c675363c09b9d3fcb82b316504db59a7c52 and its current STATUS blob into research/orcus-int4-lane-scaling via non-force two-parent commit 71fd77fb68aa4b900ed3c948604dd518847f12cd; expected-head update succeeded.
+- Inspected .github/workflows/ci.yml: one ORCUS CI workflow runs unit tests, compileall, fetches Nangate45 Liberty, runs the signed INT4 benchmark with required tools and physical analysis, uploads artifact, and smoke-tests ORCUS.
+- Scaling implementation plan: add separate orcus/lane_scaling.py and benchmarks/int4_lane_scaling.py to preserve the verified four-lane baseline. Target widths are W=11,12,13 for 8,16,32 lanes. Mathematical derivation: the complemented Baugh-Wooley partial-product matrix plus 0x90 equals signed product plus 2^8; therefore its W-bit sign-extended representation uses per-lane bias 2^W-112, specifically 0x790, 0xF90, and 0x1F90 for W=11,12,13. Prove this identity by SAT at each width.
+- Compare direct, multi-stage carry-save, fused linear-column, and fused Dadda-scheduled variants. Retain the linear baseline. Each width requires lane identity SAT, FA/HA invariants, modulo-W CPA lemma, independent graph audit, Yosys equivalence for direct/carry-save, 512 unique deterministic vectors, VCD activity, Nangate45 mapping, OpenSTA timing/power, and stage timings. No scaling implementation committed yet.
+- Ceres untouched; NEM distinct; ORCUS v0.3 is on main via PR #19 merge commit 35207adff3371fcadae68cbaa58181267c361359.

@@ -710,3 +710,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - **Not yet verified:** no local Yosys or Python test execution was performed in this repository write action. No proof runtime is measured yet. No CI run ID, stage timings, or benchmark artifact is confirmed. Do not claim the SAT lemmas or negative tests pass until CI logs confirm them.
 - Next: sync current main STATUS ancestry/blob onto the PR branch with a non-force two-parent merge commit, confirm PR mergeability after GitHub recalculates, then inspect the new synchronize-triggered CI run. If tests fail, preserve logs and fix the exact failure. Benchmark is permitted only after proof and unit tests pass. Milestone #1 remains open; Milestone #2 blocked.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline unchanged.
+
+
+## 74. PR #19 STATUS ancestry synchronized — 2026-11-27T05:22:12.973Z
+
+- Synced current `main` STATUS blob `55dd9d70540190e4b7db13102ca46e3421bdc2f5` and `main` ancestry commit `547f20c063ec60905f8fcaf60c65774f0e552500` into `research/orcus-fused-int4-mac` with non-force two-parent merge commit `6d11c50eadcf36d56b756578d505d75248791130`.
+- Merge parents: PR implementation commit `01d30e739b5030481313022a5d485c1b6a4d82d8` first, main `547f20c063ec60905f8fcaf60c65774f0e552500` second. Branch ref update succeeded with `force=false` and expected-head protection. No PR merge.
+- This sync is intended to restore ancestry and current STATUS on the branch; it does not guarantee GitHub's computed `mergeable` field is true. Verify PR metadata after GitHub recalculates.
+- No new CI result is confirmed at this exact step. Next: inspect PR #19 metadata and Actions runs for exact new branch head `6d11c50eadcf36d56b756578d505d75248791130`; monitor unit tests and compositional proof. No proof runtime or benchmark result is yet established.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

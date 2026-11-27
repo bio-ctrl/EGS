@@ -601,3 +601,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Benchmark and artifact steps were skipped. No proof pass or PPA result.
 - Next: export binary AIGER (remove `-ascii`) while keeping `.aig`, or use an ASCII extension supported by ABC. Re-run the full positive/negative CEC test; require explicit `Networks are equivalent` for the valid design and `Networks are NOT EQUIVALENT` for the one-bit tamper.
 - PR #19 remains open/unmerged. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 61. ABC AIGER format correction committed — 2026-11-27T05:03:06.944Z
+
+- PR branch commit `604edb03dd9da3793aca591911e84a52428aa105` removes `-ascii` from Yosys `write_aiger`, so the `.aig` files are binary AIGER as expected by ABC's AIG reader.
+- This directly addresses Run #227's `Wrong input file format` error. No proof result is claimed until a new CI run confirms the export and CEC verdicts.
+- Next: synchronize main STATUS/ancestry to the PR branch with a non-force merge commit, trigger fresh CI, and inspect the positive full-design proof plus negative one-bit tamper test.

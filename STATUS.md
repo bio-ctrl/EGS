@@ -2446,3 +2446,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Updated `.github/workflows/ci.yml` on `research/orcus-ecp5-dadda-pipeline` in commit `7bf6856a1b96058a05ee5784810f77f11b943512`.
 - The ECP5 job now installs Icarus, runs `tests/test_dadda_pipeline.py`, runs the separate `benchmarks/fpga_ecp5_pipeline.py` (sequential formal + 512-vector streaming + Yosys ECP5 synthesis + nextpnr P&R), and uploads a dedicated `orcus-fpga-ecp5-pipelined-dadda` artifact. The existing baseline ECP5 command/matrix remains present and unchanged in the workflow; baseline evidence is still Run #262.
 - This is CI wiring only. No Actions run has yet been observed for this branch/head; no formal, simulation, or P&R result is available. Next inspect all newly added source/workflow files, correct any issues, synchronize branch `STATUS.md` with the authoritative main handoff, then open a Draft PR to trigger CI. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 271. Pre-PR source review and artifact audit gap — 2026-11-27T23:49:00Z
+
+- Re-fetched all five new/modified pipeline files on the experiment branch and checked that the stale generator accumulator was removed, the sequential miter/512-vector source is present, the P&R runner exists, and CI references the new pipeline flow while retaining the baseline command.
+- Identified an evidence-retention gap before opening a PR: the formal and streaming harness currently write logs only inside temporary directories, then delete them; the P&R artifact would therefore lack persistent sequential proof and simulator logs. The pipeline manifest is also not currently persisted as a standalone JSON artifact. These are being fixed before the draft PR.
+- This was a read-only review. No tests/formal/simulation/P&R were run. No latency or Fmax values are yet verified. Next persist raw miter/testbench/solver/compiler/simulator logs and full heap manifests in the P&R artifact, then open a Draft PR. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.

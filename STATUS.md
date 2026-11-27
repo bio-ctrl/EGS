@@ -425,3 +425,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #220 `45942838109`, exact branch head `e646fb171fffcba9483c98108f168f7da851cf3a`, remains `in_progress`. Job `140320786399` has setup/checkout/Python setup completed; apt dependency installation is active. Formal tests and benchmark have not started; no artifact.
 - Next: continue polling until the unit-test stage completes; inspect the proof log and negative tamper result before interpreting any benchmark. No proof or PPA result yet.
+
+
+## 38. Run #220 setup poll — 2026-11-27T05:04:30Z
+
+- Run #220 remains in progress; dependency installation step 4 is still active. Formal tests and benchmark remain pending. No artifacts or metrics.
+- No code or workflow changes in this poll. Continue monitoring exact job state; do not infer a proof outcome from setup duration.

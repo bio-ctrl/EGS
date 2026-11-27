@@ -1184,3 +1184,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #246 `45948158005`, job `140337533817`, exact head `934e94addbda390ab56571eeca565d75dbd0fcc6`: checkout and Python setup passed; dependency installation/build stage is active. Unit tests, compileall, Liberty fetch, benchmark, artifact upload, and smoke verification remain pending.
 - No merge yet. Continue monitoring exact-head CI and then recheck raw PR mergeability. PR #19 remains open/unmerged.
+
+
+## 127. PR #19 Run #246 tests passed; benchmark active — 2026-11-27T05:51:17.913Z
+
+- Run #246 `45948158005`, job `140337533817`, exact head `934e94addbda390ab56571eeca565d75dbd0fcc6`: dependency setup/cache/OpenSTA verification passed; all unit tests passed; compileall passed; Nangate45 Liberty fetch passed. Benchmark step 12 is currently running; artifact upload and final smoke verification pending.
+- GitHub PR mergeability remains temporarily `null/unknown` during recalculation. Do not merge until the exact-head workflow completes and PR API reports clean/mergeable.

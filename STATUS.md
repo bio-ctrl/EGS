@@ -2568,3 +2568,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Performed a direct GitHub Actions runs query filtered by `head_sha=b4f1a9ef60d19258e3941e00389649f52ad3e392` with 100 results per page. GitHub returned `total_count=0` and an empty workflow_runs list.
 - This independently confirms the prior branch-filtered and repository-wide findings: no workflow run is currently discoverable for the stated PR #22 head. No run ID, logs, jobs, or artifacts can be audited from the available repository data. This is not evidence of a pipeline test failure; it is evidence that the requested run is not discoverable by its exact SHA.
 - No source, branch, PR, baseline, Ceres, or NEM state changed. Next required input to continue is the actual Actions run URL or numeric run ID, or an exact SHA different from the one specified. Preserve PR #22 as Draft and do not substitute Run #262 or PR #21 runs.
+
+
+## 289. Confirmed Run #262 is baseline-only, not pipeline validation — 2026-11-27T23:45:49.457Z
+
+- Inspected jobs, step summaries, and artifact metadata for Run #262 (ID `45955978365`, head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`). Its successful ECP5 job runs the existing combinational `benchmarks/fpga_ecp5.py` step and uploads `orcus-fpga-ecp5-pnr` (artifact ID `15179161047`, 1,297,789 bytes). The job has no pipeline unit-test, sequential SAT, streaming, or pipelined P&R steps.
+- Run #262 therefore remains the immutable combinational reference only; it cannot satisfy PR #22 validation. The baseline artifact is available for a separate metrics audit if needed. This run's ECP5 job and the separate general test job both completed successfully.
+- No pipeline result can be extracted from this artifact. No repository source or PR state changed. Next: obtain the actual PR #22 run ID/URL, then inspect its own jobs and dedicated `orcus-fpga-ecp5-pipelined-dadda` artifact. Do not substitute the baseline artifact or change the Draft PR state.

@@ -310,3 +310,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Refreshed `research/orcus-fused-int4-mac:STATUS.md` to the latest main audit content. Branch sync commit: `8d03410c25779dbff32ac000e5d0871f6b342929`; resulting STATUS blob `c81cb607f35fa229155bd0b3c43ede75f271d590`.
 - This is a content refresh only; it does not yet establish main ancestry. Next: create a non-force two-parent branch synchronization commit using the current main head as a parent and the PR branch tree, with main's latest STATUS blob incorporated. Then recheck mergeability and workflow dispatch.
 - No CI run or proof result yet. PR #19 remains open/unmerged; Milestone #1 remains open.
+
+
+## 24. Non-force main synchronization merge — 2026-11-27T04:53:00Z
+
+- Advanced `research/orcus-fused-int4-mac` with a non-force two-parent merge commit `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. Parents: previous PR branch head `8d03410c25779dbff32ac000e5d0871f6b342929` and current main head `d0767836cf95ace97e7789909a93a3108dedcfb6`. The merge tree preserves the PR branch's code/tests and includes the exact main STATUS blob `4f666fdb90af1cd8b1bd54eedd137f6e05e71f9e`.
+- Branch ref update succeeded with expected-head protection and `force=false`; no force-push occurred. This is a merge of main into the experiment branch only. PR #19 has NOT been merged into main.
+- Next: poll PR mergeability and Actions for the new branch head `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. No new run or test result is confirmed yet. The proof flow and negative tamper test remain pending execution.

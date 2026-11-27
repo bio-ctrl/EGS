@@ -551,3 +551,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - The negative test now flips output bit 0 in the full fused RTL and requires ABC CEC to report `Networks are NOT EQUIVALENT`. Both positive and negative checks are configured with a 120-second timeout in unit tests; benchmark formal timeout remains 300 seconds.
 - This is a new proof strategy under test, not a verified pass. Run #224 remains failed due to the 60.06-second output-only heap SAT timeout; no benchmark artifact or fused PPA data exists. Next: synchronize main STATUS/ancestry to the PR branch and run fresh CI on the ABC CEC implementation.
 - Milestone #1 remains open; Milestone #2 (8/16/32 lanes) blocked. PR #19 remains open/unmerged. Ceres untouched; NEM separate.
+
+
+## 54. ABC CEC branch synchronized — 2026-11-27T05:02:14.908Z
+
+- Advanced `research/orcus-fused-int4-mac` with non-force two-parent merge commit `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`.
+- Parents: prior PR branch head `3088d9538f8b741d431a9bad6601848bb2c40b46` and main head `009dd556ec22ba73d75cb3952fdab175a06c6b03`. The merge tree includes main's current STATUS blob and preserves the ABC CEC implementation and negative test.
+- Branch ref advanced successfully with `force=false` and expected-head protection. This is a main-to-PR-branch synchronization only; PR #19 remains unmerged.
+- Next: confirm a fresh automatic PR workflow run for head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`, then inspect unit tests. No ABC CEC verdict yet.

@@ -2466,3 +2466,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Updated `benchmarks/dadda_pipeline.py` in pipeline branch commit `e4b2442affb117667bd81b390277a0e0a65495f8` so Yosys SAT timeouts persist the partial solver log and miter source; Icarus compile logs are persisted before checking compile success; VVP timeout logs are also retained. This complements the successful-run log persistence recorded in section 272.
 - Source was not executed. The CI workflow still needs exact-head validation. Next complete the final source review, synchronize branch `STATUS.md` with current main handoff, and open a Draft PR. No Fmax or resource metrics exist yet. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 274. Reset-state leakage added to streaming validation — 2026-11-27T23:55:00Z
+
+- Extended `build_streaming_testbench()` in `benchmarks/dadda_pipeline.py` on the pipeline branch, commit `a197b3edccf5f4c2bd2494351457332a45ec6150`.
+- After the 512 consecutive transactions and pipeline drain, the testbench now injects one additional valid transaction, asserts synchronous reset while that transaction is in flight, then checks `out_valid` remains low for `L+1` cycles. This explicitly checks that reset flushes pending state and no stale transaction leaks after reset.
+- The generated testbench has not been compiled or simulated. Next update the unit test to assert the reset-leak check is present, then continue source review and branch handoff. No formal or P&R result is claimed.

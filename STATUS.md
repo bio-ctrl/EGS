@@ -973,3 +973,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #242 `45946483363`, job `140332240921`, exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`: setup/dependencies/cache/OpenSTA verification passed; unit tests passed; Python compileall passed; Liberty fetch passed. Benchmark step 12 is active. Artifact upload and smoke check pending.
 - No new metrics/artifact yet. The changed non-structural baseline proof path has passed the unit suite; the six-variant benchmark is the next evidence gate.
+
+
+## 109. Run #242 benchmark and CI succeeded — 2026-11-27T05:34:15.733Z
+
+- Run #242 `45946483363`, job `140332240921`, exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3` completed successfully. Unit tests, Python compileall, Liberty fetch, six-variant benchmark, artifact upload, and benchmark smoke verification all passed.
+- This is the first successful end-to-end CI after typed heap integration, script import correction, and non-structural baseline proof correction. Artifact and full logs still need inspection before recording per-variant proof timings, vector/VCD evidence, raw OpenSTA components, and final metrics.
+- Next: fetch and inspect artifact ZIP and complete job logs. Confirm all six variants' proof methods/results, 512 unique vectors, nonzero annotation counts, stage timings, and complete area/delay/power table. Do not close Milestone #1 until the artifact itself is validated.
+- PR #19 remains open/unmerged. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

@@ -1608,3 +1608,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Re-read main STATUS before this diagnostic. STATUS blob: 8185527c91e4924de74464608a3a1b00c7ea7638.
 - Attempted to fetch job 140352372364 logs while Run #254 step 14 is active. The connector returned an empty content payload (0 characters); no live per-variant output could be inspected. Job endpoint still reports step 14 in_progress, steps 15–16 pending. The four-lane artifact is the only artifact currently listed.
 - No failure or timeout inferred from missing live logs. Continue polling job steps and retrieve completed logs/artifact once available. No scaling metrics yet; PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 192. Run #254 CI SUCCESS — scaling artifact downloaded — 2026-11-27T06:38:09.090Z
+
+- Re-read main STATUS before this update. STATUS blob: 81daf5841c918a10f6ade4434e6f3a3d0cca05a3.
+- ORCUS CI Run #254 (45952823219) completed SUCCESS at 2026-11-27T06:37:29Z on exact PR #20 head 0052c1895ec04524a9babf4ffe695955fdce99ce. Job 140352372364 succeeded. Steps 1–16 completed successfully; unit tests, compileall, Liberty fetch, four-lane benchmark/upload, 8/16/32 scaling benchmark, scaling artifact upload, and benchmark-target verification all passed.
+- Scaling artifact: orcus-int4-lane-scaling, artifact ID 15177592132, size 138883 bytes, SHA-256 zip digest b9816aa2e0cfd6e69a1c9a4a7dca0ca98110a846f62f8bffc9379162bdea31ec. Download completed to /mnt/data/orcus-int4-lane-scaling-run-254.zip. The artifact has not yet been inspected; no tables or physical conclusions are accepted until raw JSON/reports are audited.
+- Four-lane artifact is separate: orcus-signed-int4-dot-product ID 15177069315. Scaling artifact inspection is next. PR #20 remains open/unmerged pending artifact audit and branch/main sync. Milestone #2 not yet closed. Ceres untouched; NEM distinct.

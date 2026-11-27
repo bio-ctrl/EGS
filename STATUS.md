@@ -1684,3 +1684,10 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - The scaling artifact contains raw JSON including the OpenSTA timing/power reports, mapped and generic synthesis log tails, proof log tails, activity toggle maps, and stage timings. Artifact audit found no missing fields or failed configuration.
 - PR #20 at this audit: open, unmerged, head 0052c1895ec04524a9babf4ffe695955fdce99ce; GitHub metadata currently reports mergeable=false and base main 6cd44f34f36b0945680c279a87a4d8737daf33aa. The PR must be synchronized with current main (including this STATUS update), then exact-head checks/mergeability reverified before merge. Do not merge the stale base.
 - Milestone #2 technical benchmark matrix is VERIFIED on PR head, but not yet merged/locked on main. Milestone #3 not started. Next: sync current main ancestry and STATUS into PR branch non-force; run CI on the synchronized exact head; verify checks and mergeability; merge PR #20; then start FPGA P&R Milestone #3 with a pinned, verified ECP5 target and Yosys + nextpnr flow. Ceres untouched; NEM distinct.
+
+
+## 194. Git commit metadata shape inspection needed — 2026-11-27T06:42:32.691Z
+
+- Re-read main STATUS before repository diagnostics. STATUS blob: 17ef5d515b99d4417c1061c8decebe6b3db02562.
+- Attempted to inspect main/PR branch commit tree SHAs using the normalized commit response. The response shape did not expose the expected nested commit.tree.sha property, so the diagnostic script stopped before emitting refs/tree IDs. No repository mutation occurred and no branch sync was attempted.
+- Retry by inspecting the raw GitHub commit API payload and use exact returned tree IDs. Current audited artifact remains Run #254 success; PR #20 still unmerged. Ceres untouched; NEM distinct.

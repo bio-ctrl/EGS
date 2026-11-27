@@ -817,3 +817,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #235 `45945802919`, job `140330080622`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e` remains `in_progress`. Setup, checkout, and Python setup passed; dependency installation step 4 is active. Unit tests, SAT lemmas, benchmark, and artifact steps remain pending.
 - No new formal or negative-tamper result; no runtime or PPA metrics. Continue polling. PR #19 mergeability remains reported false.
+
+
+## 87. Run #235 unit tests active — 2026-11-27T05:26:57.832Z
+
+- Run #235 `45945802919`, job `140330080622`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e` remains `in_progress`. Dependency installation, cache restore, and OpenSTA verification passed; unit-test step 9 is active. Python compilation, benchmark, artifact upload, and smoke check remain pending.
+- No SAT lemma verdict or tamper-test outcome is confirmed until step 9 completes. No proof runtime or PPA metrics yet.

@@ -647,3 +647,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #229 `45943490330` remains `in_progress`. Setup, dependencies, cache restore, and OpenSTA verification passed; unit-test step 9 is now active. Benchmark and artifact steps remain pending; artifact list is empty.
 - No CEC verdict or negative-test result is available yet. Next: retrieve logs after step 9 completes; do not report proof pass based only on step start.
+
+
+## 68. Run #229 latest poll — 2026-11-27T05:04:04.254Z
+
+- Run #229 `45943490330` remains `in_progress` at unit-test step 9. Steps 1–8 succeeded or were skipped on cache hit; steps 10–14 remain pending. No artifact is available.
+- The binary AIGER export/ABC CEC test has not yet reported a result. No six-variant benchmark has run.
+- Next: inspect the completed job log once step 9 exits. If it passes, inspect the benchmark artifact and all formal/activity/STA fields. If it fails, preserve exact error and fix the exporter/CEC integration. Do not claim a proof or close Milestone #1 until evidence exists.

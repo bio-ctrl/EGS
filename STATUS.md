@@ -1035,3 +1035,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - After auditing Run #242, identified a remaining spec nuance: the fused heap manifest currently contains 62 full-adder nodes and zero instantiated half-adder nodes, although the half-adder primitive SAT lemma passes. Planned to instantiate one explicit low-column HA node to fully exercise both typed node kinds.
 - The GitHub write orchestration returned a remote protocol disconnect before a branch update was confirmed. Re-read the PR branch ref and `orcus/typed_heap.py`: branch remains `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`; no HA source changes landed. No new CI run was triggered. Run #242 artifact and metrics remain valid for that exact source head.
 - Next: retry the HA-node patch in smaller, independently confirmed operations, then rerun tests and benchmark if implemented. Do not describe the current graph as containing HA nodes. PR #19 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 112. Explicit half-adder graph node committed — 2026-11-27T05:38:51.102Z
+
+- Added an actual 2:2 half-adder node to the typed heap on PR branch commit `df08d3a0259817204a7d7ca348d06a65f5edef2e` (parent `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`). The deterministic schedule compresses the two remaining low-column bits with `ha_s_0 = a ^ b` and `ha_c_0 = a & b`, routing carry to column 1. The audit now parses and validates both FA and HA node arities/equations; unit test asserts an HA node exists.
+- This preserves the weighted sum exactly and leaves modulo top-column truncation unchanged. The half-adder primitive SAT lemma already passed in Run #242; however, this graph change has not yet been tested or benchmarked. Run #242 artifact applies to the prior source head and must not be represented as measurements for this changed graph.
+- Next: sync latest main STATUS/ancestry to branch, run CI, verify the HA graph node and all tamper tests, then audit the new six-variant artifact. If all proof/benchmark gates pass, update the final comparison using the new source head. Prior Run #242 remains a valid historical result for its own head.
+- PR #19 remains open/unmerged. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

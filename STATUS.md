@@ -1771,3 +1771,11 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Compared current main (1bd7a080940d0a16dc48e5ac37031ddc5f142840) against PR branch (35f45253dec3b0476d6c4f8977c9508b9df6005b). Git reports diverged, ahead_by=11, behind_by=8, merge base 05604d1a36b354a7127739281be58bdb75a64378. PR diff contains exactly four source/workflow paths: .github/workflows/ci.yml, benchmarks/int4_lane_scaling.py, orcus/lane_scaling.py, tests/test_lane_scaling.py. STATUS.md is not in the PR diff; the PR branch has no post-merge-base STATUS edit.
 - Current main has eight later STATUS-only commits since the PR sync's second parent; branch STATUS blob is the exact blob from that sync point. This explains branch-behind metadata; no source-file conflict is shown by the comparison. Normalized PR mergeable=false / raw mergeable=null remains indeterminate, not a confirmed conflict.
 - Next sync branch ancestry and STATUS to the latest main head via non-force two-parent merge commit, then rerun CI on the new exact head. Keep PR #20 unmerged until synchronized checks pass and mergeability stabilizes. Ceres untouched; NEM distinct.
+
+
+## 205. PR #20 branch synchronized to latest main after divergence audit — 2026-11-27T06:49:19.405Z
+
+- Re-read main STATUS before this update. STATUS blob incorporated into sync commit: 47cec539e6552e8af56b7b42eae48ef49e4a3d62.
+- Main second parent: 018ae5ec573159c39251e1153e7a38645daebe10. Previous PR branch head: 35f45253dec3b0476d6c4f8977c9508b9df6005b.
+- Created non-force two-parent sync commit 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99 with prior PR branch as first parent and latest main as second parent; preserved branch tree and replaced STATUS.md with exact main blob. Ref update used force=false and expected old head; GitHub returned success.
+- This should remove the eight-commit behind count and trigger another exact-head PR CI run. Next verify new head/run, artifact, and refreshed mergeability; do not merge until successful checks and no conflict. Ceres untouched; NEM distinct.

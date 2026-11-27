@@ -1287,3 +1287,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Reviewed the Dadda scheduler and corrected a substantive stage-height accounting bug: each stage must count both unconsumed work bits and sum outputs emitted into the next-stage column when enforcing its target height. New generator blob 231fdcb83bb418d606a3e759a8499f5013ebd4e4 includes that correction and retains separate stage buffers so sum outputs are not recursively recompressed in the same stage.
 - This is an uncommitted draft. The Dadda schedule must still pass independent graph audits and CI tests before any delay comparison is reported.
+
+## 145. CI workflow/test blob assembly variable error — 2026-11-27T06:06:05.906Z
+
+- Attempted to create the lane-scaling test file and add the scaling benchmark/artifact steps to .github/workflows/ci.yml. The orchestration script referenced an undefined variable name while assembling the workflow patch, so execution stopped before either blob was created.
+- No branch or source changes occurred. Retry the workflow insertion with the correct variable and then create both blobs.

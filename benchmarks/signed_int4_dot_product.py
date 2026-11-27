@@ -419,16 +419,23 @@ def main() -> int:
                 f"generic_cells={synthesis['generic_cell_count']}; mapped_area={synthesis['mapped_standard_cell_area']}",
                 flush=True,
             )
+            stage_start = time.perf_counter()
+            print(f"[ORCUS] {variant}: Icarus simulation starting (timeout={SIMULATION_TIMEOUT_SECONDS}s)", flush=True)
             activity, vcd_text = simulate_activity(source, top, iverilog, vvp)
+            activity_seconds = time.perf_counter() - stage_start
+            activity["simulation_runtime_seconds"] = activity_seconds
             print(
-                f"[ORCUS] {variant}: activity complete; vectors={activity['vectors']}; "
-                f"unique={activity['unique_vectors']}",
+                f"[ORCUS] {variant}: simulation complete in {activity_seconds:.2f}s; "
+                f"vectors={activity['vectors']}; unique={activity['unique_vectors']}",
                 flush=True,
             )
+            stage_start = time.perf_counter()
             sta_report = (
                 run_sta(mapped_verilog, top, args.liberty, sta, vcd_text)
                 if mapped_verilog and sta and args.liberty else {"status": "not-run"}
             )
+            if sta_report["status"] == "completed":
+                sta_report["opensta_runtime_seconds"] = time.perf_counter() - stage_start
             if sta_report["status"] == "completed":
                 print(
                     f"[ORCUS] {variant}: OpenSTA complete; delay_ns={sta_report['critical_path_delay']}; "

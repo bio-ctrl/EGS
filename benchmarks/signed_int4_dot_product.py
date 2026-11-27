@@ -217,6 +217,8 @@ def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) ->
                 pair.append(value if value < 8 else value - 16)
             vector.extend(pair)
         vectors.append(tuple(vector))
+    if len(vectors) != 512 or len(set(vectors)) != 512:
+        raise RuntimeError(f"Expected 512 unique xorshift32 vectors; got {len(set(vectors))}/{len(vectors)}")
     tb = [
         "`timescale 1ns/1ps",
         "module tb;", *regs, "wire signed [9:0] y;",
@@ -283,17 +285,33 @@ def run_sta(mapped_verilog: str, top: str, liberty: Path, sta: str, vcd_text: st
         timing = re.findall(r"(?im)^\s*([-+0-9.eE]+)\s+data arrival time\b", result.stdout)
         if not timing:
             raise RuntimeError("OpenSTA did not report a numeric constrained data-arrival time; report tail:\n" + result.stdout[-7000:])
-        power_rows = re.findall(
-            r"^\s*Total\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)",
-            result.stdout, re.MULTILINE,
+        # OpenSTA's report_power table labels its numeric columns in Watts,
+        # independent of the report_units display scale. Preserve the raw report
+        # and publish explicit microWatt fields for the STATUS.md comparison.
+        power_match = re.search(
+            r"(?m)^Total\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+[-+0-9.eE]+%?\\s*$",
+            result.stdout,
         )
+        if not power_match or "(Watts)" not in result.stdout:
+            raise RuntimeError("OpenSTA report_power total row or Watts unit missing; report tail:\\n" + result.stdout[-7000:])
+        power_internal_w, power_switching_w, power_leakage_w, power_total_w = (
+            float(value) for value in power_match.groups()
+        )
+        annotation = re.search(r"(?m)^Annotated\\s+(\\d+)\\s+pin activities\\.", result.stdout)
+        if not annotation or int(annotation.group(1)) <= 0:
+            raise RuntimeError("OpenSTA did not confirm VCD pin activity annotation; report tail:\\n" + result.stdout[-7000:])
+        watts_to_uw = 1_000_000.0
         return {
             "status": "completed",
-            "critical_path_delay": float(timing[0]) if timing else None,
+            "critical_path_delay": float(timing[0]),
             "critical_path_delay_unit": "ns (OpenSTA report_units)",
-            "power_total": float(power_rows[-1][3]) if power_rows else None,
-            "power_unit": "library-defined power unit; see report_units in raw report",
+            "power_internal_uw": power_internal_w * watts_to_uw,
+            "power_switching_uw": power_switching_w * watts_to_uw,
+            "power_leakage_uw": power_leakage_w * watts_to_uw,
+            "power_total_uw": power_total_w * watts_to_uw,
+            "power_source_unit": "W from OpenSTA report_power table; structured fields converted to µW",
             "power_method": "OpenSTA Liberty power models with RTL VCD input activity; pre-layout, no parasitics",
+            "annotated_pin_activities": int(annotation.group(1)),
             "sta_version": subprocess.run([sta, "-version"], text=True, capture_output=True).stdout.strip(),
             "raw_report": result.stdout[-7000:],
         }

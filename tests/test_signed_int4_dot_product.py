@@ -4,40 +4,41 @@ import unittest
 from benchmarks.signed_int4_dot_product import (
     VARIANTS,
     _parse_opensta_power_report,
-    _fused_heap_gate_source,
-    _fused_heap_reference_source,
-    _run_equivalence,
-    _run_fused_compositional_equivalence,
+    _run_abc_cec,
     module_source,
 )
 
 
-FORMAL_TEST_TIMEOUT_SECONDS = 60
+FORMAL_TEST_TIMEOUT_SECONDS = 120
 
 
 class SignedInt4DotProductTests(unittest.TestCase):
 
-    def test_fused_compositional_equivalence_proves_and_rejects_one_bit_tamper(self):
+    def test_fused_abc_cec_proves_full_output_and_rejects_one_bit_tamper(self):
         yosys = shutil.which("yosys")
-        if not yosys:
-            self.skipTest("Yosys is required for end-to-end formal equivalence test")
+        abc = shutil.which("yosys-abc") or shutil.which("abc")
+        if not yosys or not abc:
+            self.skipTest("Yosys and Berkeley ABC are required for formal CEC test")
 
-        proof = _run_fused_compositional_equivalence(
-            yosys, timeout_seconds=FORMAL_TEST_TIMEOUT_SECONDS
+        reference = module_source("reference", "direct")
+        candidate = module_source("orcus_fused_partial_product", "fused_partial_product")
+        proof = _run_abc_cec(
+            candidate, reference, "orcus_fused_partial_product", yosys, abc,
+            timeout_seconds=FORMAL_TEST_TIMEOUT_SECONDS,
         )
         self.assertEqual(proof["formal_equivalence"], "formal-pass")
-        self.assertIn("Compositional Yosys proof", proof["proof_method"])
-        self.assertIn("all 10 output bits", proof["proof_method"])
+        self.assertIn("Berkeley ABC cec", proof["proof_method"])
+        self.assertIn("all 10 primary outputs", proof["proof_method"])
 
-        # Negative control: invert only y[0] in the heap implementation.
-        # The heap lemma must reject this invalid circuit.
-        tampered = _fused_heap_gate_source("orcus_heap_gate", tamper=True)
-        reference = _fused_heap_reference_source()
-        with self.assertRaisesRegex(RuntimeError, "equivalence"):
-            _run_equivalence(
-                tampered, reference, "orcus_heap_gate", yosys,
+        correct_assignment = "assign y = fused_row0 + fused_row1;"
+        tampered_assignment = "assign y = (fused_row0 + fused_row1) ^ 10'b0000000001;"
+        self.assertIn(correct_assignment, candidate)
+        tampered = candidate.replace(correct_assignment, tampered_assignment, 1)
+        self.assertNotEqual(tampered, candidate)
+        with self.assertRaisesRegex(RuntimeError, "NOT EQUIVALENT"):
+            _run_abc_cec(
+                tampered, reference, "orcus_fused_partial_product", yosys, abc,
                 timeout_seconds=FORMAL_TEST_TIMEOUT_SECONDS,
-                use_structural=False,
             )
 
 

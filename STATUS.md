@@ -2053,3 +2053,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before this diagnostic. STATUS blob: 5ed57cf6d840b08ae22373c828079bf51966a1fb.
 - The character-code replacement guard found nine double-backslash-n sequences, not eight, and stopped before update_file. This is another count mismatch only; no repository mutation occurred. The source excerpt enumerated eight visible line entries, indicating one additional occurrence was outside that filtered output.
 - Next replace every occurrence of the exact two-backslash+n token without an expected-count assertion, then fetch and inspect all remaining backslash-n sequences. Ceres untouched; NEM distinct.
+
+
+## 232. All FPGA script newline escapes normalized — 2026-11-27T07:01:11.524Z
+
+- Re-read main STATUS before source mutation. Main STATUS blob: a550cd3ade4ac222ae169442f3388b5c7ef6ca37.
+- Updated benchmarks/fpga_ecp5.py on main; commit: 8b7d9729a3d8eeb4a1986245fab56d3fe1c59164; source blob: 0b12d90d1b3405cc2afc8a1033d15e5ce04afe40. Replaced every occurrence of the exact two-backslash+n token with one Python newline escape; replacement count was 9. No expected-count guard was used.
+- Next fetch the committed file and verify generated Verilog/log/JSON string literals now contain a single newline escape. Then run targeted tests and inspect CI. No FPGA measurements yet. Ceres untouched; NEM distinct.

@@ -1408,3 +1408,26 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 169. Run #248 remains in test step 9 — 2026-11-27T06:16:36.327Z
 
 - Latest workflow job poll confirms no state change: unit tests in_progress; all subsequent steps pending. No CI completion or artifact available.
+
+## 170. Milestone #2 current handoff and Milestone #3 gate — 2026-11-27T06:17:16.233Z
+
+### Milestone #1 closure
+- PR #19 merged successfully. ORCUS v0.3 merge commit: 35207adff3371fcadae68cbaa58181267c361359.
+- Pre-merge verification: Run #246 (45948158005) success; artifact 15175189288. The complete four-lane proof and six-variant results are documented in sections 117 and 130.
+
+### Milestone #2 active state
+- Research branch: research/orcus-int4-lane-scaling.
+- PR #20: https://github.com/bio-ctrl/EGS/pull/20 (open; not merged).
+- PR head: f6144e9e5e10bab4d2bb5b2c9b0df232764571b8.
+- CI Run #248: 45950053878, created 2026-11-27T06:09:28Z, exact head f6144e9e5e10bab4d2bb5b2c9b0df232764571b8; current status in_progress.
+- Job 140343567995 remains in_progress at step 9, Run unit tests. Setup, dependency/cache, and OpenSTA verification steps 1–8 passed. Compileall, Liberty fetch, existing four-lane benchmark, new 8/16/32-lane scaling benchmark, both artifact uploads, and smoke check have not started.
+- The live workflow logs were not available from the GitHub log endpoint while the job was active (HTTP 404 BlobNotFound). No unit-test count, failure, timeout, proof timing, artifact, or physical measurements have been observed. Do not infer or fabricate any 8/16/32-lane values.
+- Implementation commit: fbe204f3593bc45cb1342f2f440db1ac13f4a7b1; latest branch STATUS ancestry sync head: f6144e9e5e10bab4d2bb5b2c9b0df232764571b8. Main STATUS updates after this sync mean the branch will need a fresh non-force two-parent STATUS/ancestry sync before any eventual merge, followed by another exact-head CI run.
+- Target contract: 8 lanes / 11-bit accumulator / bias 0x790; 16 lanes / 12-bit / bias 0xF90; 32 lanes / 13-bit / bias 0x1F90. Variants: Direct, multi-stage carry-save, fused linear, fused Dadda. The width/bias derivation is mathematically recorded in section 138; formal proof and graph/RTL validation remain pending CI.
+- Next immediate actions: continue polling Run #248; inspect completed logs and artifact; fix the exact failing or timing issue if any; rerun CI; audit all 12 variant rows for formal status, unique vectors, VCD toggles, generic cells, area, delay, all four power components, and stage timings; report Dadda-vs-linear delay by width. Keep PR #20 open/unmerged absent explicit merge authorization.
+
+### Milestone #3 — FPGA place-and-route validation (not started)
+- Begin only after Milestone #2 proof/benchmark matrix is complete and architecture candidates are selected from measured area/delay/power trade-offs.
+- Select a specific FPGA family/part and toolchain; document resource constraints and timing target; create synthesizable top-level wrappers and pin/clock constraints; run synthesis, placement, routing, static timing analysis, and utilization reports; preserve exact tool versions, seeds, constraints, logs, and build artifacts.
+- Compare direct, carry-save, fused-linear, and fused-Dadda designs on identical FPGA target/constraints. Report LUT/ALM, register, DSP, memory use, fmax/slack, routing congestion, and implementation runtime. FPGA results are distinct from Nangate45 ASIC-library estimates and must not be conflated.
+- Ceres remains untouched. NEM remains distinct. ORCUS v0.3 remains merged on main.

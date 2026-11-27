@@ -1787,3 +1787,10 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Latest PR #20 head 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99 triggered ORCUS CI Run #256, ID 45954312238, created 2026-11-27T06:49:13Z, in_progress at poll time.
 - PR #20 remains open/unmerged; raw GitHub PR metadata now reports mergeable=true, mergeable_state=unstable, base 018ae5ec573159c39251e1153e7a38645daebe10, head 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99. Normalized wrapper reports mergeable=false while the new check is active. This is not a merge conflict indication; wait for exact-head CI and re-fetch.
 - Run #255 exact-head CI and artifact audit succeeded. Run #256 is the final post-latest-main synchronization verification. Ceres untouched; NEM distinct.
+
+
+## 207. Run #256 post-sync CI progress — 2026-11-27T06:50:18.665Z
+
+- Re-read main STATUS before this poll. STATUS blob: 7b2584d858bcb30bc227d35f428c7ba3a2ee925f.
+- Run #256 (45954312238), exact head 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99, remains in_progress at step 14 scaling benchmark. Steps 1–13 succeeded, including unit tests, compileall, Liberty fetch, four-lane benchmark and upload. Steps 15–16 pending.
+- Four-lane artifact ID 15177987185 uploaded; scaling artifact not yet available. PR raw mergeability recalculated to null/unknown while checks run; normalized wrapper reports false. Do not merge while step 14 is active. Ceres untouched; NEM distinct.

@@ -1312,3 +1312,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Added tests/test_lane_scaling.py covering target widths/bias, six graph audits, negative tamper cases, vector uniqueness, six fused compositional proof configurations, and six direct/CSA equivalence configurations.
 - Updated .github/workflows/ci.yml to run the scaling benchmark in required physical mode and upload artifact orcus-int4-lane-scaling.
 - This commit has not yet been CI-tested. Potential failures must be recorded precisely; no PPA or formal timing results for 8/16/32 are available yet. Next create PR, monitor CI, fix any failures, and audit the artifact before reporting comparisons.
+
+## 149. Lane-scaling implementation branch synchronized to latest main — 2026-11-27T06:08:50.241Z
+
+- Synced main cfda9ee95121292132322a86f6529aebb2633281 and current STATUS blob into research/orcus-int4-lane-scaling via non-force two-parent commit f6144e9e5e10bab4d2bb5b2c9b0df232764571b8. Expected-head update succeeded.
+- Verified branch contains the 25,539-byte parameterized generator, 12,928-byte scaling benchmark with repository-root import path, six-test suite, and CI scaling benchmark/artifact steps.
+- Next create the Milestone #2 pull request from research/orcus-int4-lane-scaling into main. CI has not run on this branch yet. No measured 8/16/32-lane results exist.

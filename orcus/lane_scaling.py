@@ -20,7 +20,7 @@ SCHEDULES = ("linear", "dadda")
 
 
 def accumulator_width(lanes: int) -> int:
-    if lanes not in TARGET_LANES:
+    if lanes not in (4, *TARGET_LANES):
         raise ValueError(f"supported scaling targets are {TARGET_LANES}, got {lanes}")
     return 8 + math.ceil(math.log2(lanes))
 

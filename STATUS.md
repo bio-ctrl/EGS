@@ -2439,3 +2439,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Added `tests/test_dadda_pipeline.py` to the experiment branch in commit `fdc8f664ffc82257103cf7029657435331fc2547`.
 - Tests cover all four lane counts, accumulator widths, stage/latency metadata, complete registered heap including pass-through tokens, synchronous reset and valid interface, sequential reference alignment, 512-vector back-to-back testbench generation, and signed reference-vector bounds.
 - These are authored tests, not executed tests. The generator, miter, and testbench still need actual Python/Yosys/Icarus execution through CI. Next inspect test/runner interfaces and modify only the experiment branch workflow to run the new tests and pipeline P&R while retaining the baseline ECP5 job unchanged. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 270. Experiment-branch CI wired for pipeline validation — 2026-11-27T23:47:00Z
+
+- Updated `.github/workflows/ci.yml` on `research/orcus-ecp5-dadda-pipeline` in commit `7bf6856a1b96058a05ee5784810f77f11b943512`.
+- The ECP5 job now installs Icarus, runs `tests/test_dadda_pipeline.py`, runs the separate `benchmarks/fpga_ecp5_pipeline.py` (sequential formal + 512-vector streaming + Yosys ECP5 synthesis + nextpnr P&R), and uploads a dedicated `orcus-fpga-ecp5-pipelined-dadda` artifact. The existing baseline ECP5 command/matrix remains present and unchanged in the workflow; baseline evidence is still Run #262.
+- This is CI wiring only. No Actions run has yet been observed for this branch/head; no formal, simulation, or P&R result is available. Next inspect all newly added source/workflow files, correct any issues, synchronize branch `STATUS.md` with the authoritative main handoff, then open a Draft PR to trigger CI. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.

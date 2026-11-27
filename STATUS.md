@@ -2,7 +2,7 @@
 
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-27 04:32:50 UTC  
+**Last updated:** 2026-11-27 04:33:18 UTC  
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -75,7 +75,7 @@ These are results for this specific benchmark and flow. They do not establish a 
 **Branch:** `research/orcus-fused-int4-mac`  
 **Current head:** `fb11b4dcfabb92e651759259edb953ff8521dbde` (short SHA: `fb11b4d`)  
 **PR state:** open, ready for review, unmerged  
-**Last checked:** 2026-11-27 04:32:50 UTC  
+**Last checked:** 2026-11-27 04:33:18 UTC  
 **Run #203:** ID `45893609205`, head `561ac0725e34f47413445c582f8b64d2188adfd3`; conclusion `cancelled`; no artifact was uploaded.  
 **Fresh PR run:** none observed for current head `fb11b4d` as of 2026-11-27 04:32:50 UTC. A post-update `fetch_commit_workflow_runs` query for exact head `fb11b4dcfabb92e651759259edb953ff8521dbde` returned an empty list. Do not mistake main-branch runs #207–#210 for PR #19 validation.
 
@@ -157,12 +157,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Update this file on `main` after every major engineering milestone, using exact verified values and clearly dated pending states.
 
 
-## 7. Session handoff — 2026-11-27 04:32:50 UTC
+## 7. Session handoff — 2026-11-27 04:33:18 UTC
 
 - Read this `STATUS.md` from `main` before any repository action in this session.
 - PR #19 remains open, ready for review, unmerged; latest verified head is `fb11b4dcfabb92e651759259edb953ff8521dbde`.
 - Branch update commits: `888c8e4aaacf5dc6e54b0e095dd2d53837b1cbc3` (comment-only CI retrigger marker; its first write accidentally doubled CMake continuation slashes) and `fb11b4dcfabb92e651759259edb953ff8521dbde` (immediate correction restoring the original single-backslash shell continuations). No RTL or benchmark code was intentionally changed by these commits.
-- The exact-head PR workflow-run query after the corrected update returned zero runs. No new CI run ID, stage timings, artifact, SAT outcome, vector count, VCD annotation count, area, delay, or power result is available. PR #19 technical outcome remains NOT DETERMINED.
+- The exact-head PR workflow-run query after the corrected update returned zero runs. A final verification at 2026-11-27 04:33:18 UTC confirmed `STATUS.md` on `main` contains the exact current PR head; PR #19 remains open/unmerged with `mergeable=false`; the workflow file contains the restored single-backslash CMake continuations; and the exact-head run query remains empty. No new CI run ID, stage timings, artifact, SAT outcome, vector count, VCD annotation count, area, delay, or power result is available. PR #19 technical outcome remains NOT DETERMINED.
 - The PR's `mergeable` field was `false` at the last metadata read. Do not merge.
 - No merge of `main` into the PR branch was performed: the available connector did not expose a branch-merge action. No workflow dispatch was performed: the available connector did not expose a workflow-dispatch action. The `synchronize` event was emitted by the two branch commits above, but no run was visible in the immediate exact-head query.
 - Next action: inspect GitHub Actions UI/event delivery for the `synchronize` event or manually dispatch the workflow on the exact branch head. Then inspect run logs/artifact and complete all six-variant evidence gates. Keep Ceres untouched; NEM separate; preserve ORCUS v0.2.

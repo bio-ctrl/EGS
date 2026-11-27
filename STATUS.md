@@ -2194,3 +2194,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - A diagnostic request using a guessed Run #256 identifier returned HTTP 404; no data was obtained. The valid Run #256 ID 45954312238 is confirmed by the Actions listing.
 - Current Milestone #3 remains PR #21, draft/unmerged, branch research/orcus-ecp5-fpga-validation at c6936a61fb103636140c4afec9f1b2f64b884e38; latest observed PR metadata mergeable=false, base SHA 4030edbcc34d4986d0a34337864f3938ba0d8cda. No FPGA P&R metrics are verified. Main contains the documented four-lane width fix b5b8b3c118282139cfa6eb52afd5bafb1136d271 and test fix 93f23518a7f8ba2699f58a8c7fd0322b09a442ba; exact branch/main overlap and CI still require reconciliation.
 - Next: retrieve completed Run #248 logs for precise failure detail if needed; prioritize Milestone #3 by inspecting main vs PR #21 overlap, syncing non-destructively, then run exact-head ECP5 CI. Audit all eight nextpnr builds and raw artifacts before reporting LUT4, CCU2C/carry, FF, utilization, or post-route Fmax. Keep PR #21 draft/unmerged until evidence passes. Ceres untouched; NEM distinct.
+
+
+## 243. Run #261 FPGA artifact uploaded; Run #262 P&R active — 2026-11-27T07:06:06.114Z
+
+- Re-read main STATUS before this poll. STATUS blob: 7bc44014acc66dc0c3e6f1a00db0ee7f6365c47a.
+- Run #261 FPGA job 140362341777 completed SUCCESS: pinned toolchain installation, FPGA tests, and all 8 ECP5 builds completed; artifact upload succeeded. FPGA artifact ID 15178134912, name orcus-fpga-ecp5-pnr, 1,297,762 bytes, SHA-256 c6e38d5b2779a6d5d4f70304336822d321f21ac9a078031c4361faa05b84025d. Overall Run #261 remains in_progress only because the separate ASIC scaling benchmark in the other job is still running.
+- Run #262 latest source/test head 93f23518a7f8ba2699f58a8c7fd0322b09a442ba: FPGA job 140362432705 passed toolchain install and FPGA wrapper/parser tests; step 6 full 8-build synthesis/P&R matrix is in_progress. ASIC job unit tests and compileall passed; step 14 scaling benchmark is in_progress.
+- Next download and audit Run #261 FPGA artifact (all eight resource/Fmax reports, raw logs, configs), then inspect Run #262 exact-head artifact when available. No FPGA metrics are accepted until raw reports and per-build outputs are validated. Ceres untouched; NEM distinct.

@@ -18,6 +18,11 @@ import tempfile
 import time
 
 LANES = 4
+FORMAL_TIMEOUT_SECONDS = 300
+SYNTHESIS_TIMEOUT_SECONDS = 120
+MAPPING_TIMEOUT_SECONDS = 120
+SIMULATION_TIMEOUT_SECONDS = 60
+OPENSTA_TIMEOUT_SECONDS = 120
 VARIANTS = ("direct", "left_deep", "balanced_01_23", "balanced_02_13", "carry_save", "fused_partial_product")
 
 
@@ -118,12 +123,41 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
             f"proc; miter -equiv -flatten reference {top} m; "
             "sat -verify -prove trigger 0 m"
         )
-        proof = subprocess.run([yosys, "-p", proof_script], text=True, capture_output=True)
+        stage_timings = {}
+        print(f"[ORCUS] {top}: formal SAT starting (timeout={FORMAL_TIMEOUT_SECONDS}s)", flush=True)
+        stage_start = time.perf_counter()
+        try:
+            proof = subprocess.run(
+                [yosys, "-p", proof_script], text=True, capture_output=True,
+                timeout=FORMAL_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired as exc:
+            elapsed = time.perf_counter() - stage_start
+            raise TimeoutError(
+                f"FORMAL_TIMEOUT: Yosys SAT exceeded {FORMAL_TIMEOUT_SECONDS}s for {top}; "
+                f"elapsed={elapsed:.2f}s. Proof method: miter -equiv -flatten + sat -verify -prove trigger 0."
+            ) from exc
+        stage_timings["formal_sat_seconds"] = time.perf_counter() - stage_start
+        print(f"[ORCUS] {top}: formal SAT finished in {stage_timings['formal_sat_seconds']:.2f}s", flush=True)
         if proof.returncode or "SAT proof finished - no model found: SUCCESS!" not in proof.stdout:
             raise RuntimeError("Yosys SAT equivalence failed: " + proof.stdout[-2500:] + proof.stderr[-1000:])
 
         generic_script = f"read_verilog {candidate}; hierarchy -top {top}; synth -top {top}; stat"
-        generic = subprocess.run([yosys, "-p", generic_script], text=True, capture_output=True)
+        print(f"[ORCUS] {top}: generic synthesis starting (timeout={SYNTHESIS_TIMEOUT_SECONDS}s)", flush=True)
+        stage_start = time.perf_counter()
+        try:
+            generic = subprocess.run(
+                [yosys, "-p", generic_script], text=True, capture_output=True,
+                timeout=SYNTHESIS_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired as exc:
+            elapsed = time.perf_counter() - stage_start
+            raise TimeoutError(
+                f"SYNTHESIS_TIMEOUT: Yosys generic synthesis exceeded {SYNTHESIS_TIMEOUT_SECONDS}s "
+                f"for {top}; elapsed={elapsed:.2f}s."
+            ) from exc
+        stage_timings["generic_synthesis_seconds"] = time.perf_counter() - stage_start
+        print(f"[ORCUS] {top}: generic synthesis finished in {stage_timings['generic_synthesis_seconds']:.2f}s", flush=True)
         if generic.returncode:
             raise RuntimeError(generic.stdout[-2500:] + generic.stderr[-1000:])
         counts = re.findall(r"Number of cells:\s+(\d+)", generic.stdout)
@@ -137,7 +171,21 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
                 f"synth -top {top} -noabc; abc -liberty {liberty}; "
                 f"clean; stat -liberty {liberty}; write_verilog -noattr {mapped}"
             )
-            mapping = subprocess.run([yosys, "-p", mapped_script], text=True, capture_output=True)
+            print(f"[ORCUS] {top}: Nangate45 mapping starting (timeout={MAPPING_TIMEOUT_SECONDS}s)", flush=True)
+            stage_start = time.perf_counter()
+            try:
+                mapping = subprocess.run(
+                    [yosys, "-p", mapped_script], text=True, capture_output=True,
+                    timeout=MAPPING_TIMEOUT_SECONDS,
+                )
+            except subprocess.TimeoutExpired as exc:
+                elapsed = time.perf_counter() - stage_start
+                raise TimeoutError(
+                    f"MAPPING_TIMEOUT: Yosys/ABC Liberty mapping exceeded {MAPPING_TIMEOUT_SECONDS}s "
+                    f"for {top}; elapsed={elapsed:.2f}s."
+                ) from exc
+            stage_timings["liberty_mapping_seconds"] = time.perf_counter() - stage_start
+            print(f"[ORCUS] {top}: Nangate45 mapping finished in {stage_timings['liberty_mapping_seconds']:.2f}s", flush=True)
             if mapping.returncode or not mapped.exists():
                 raise RuntimeError("Liberty mapping failed: " + mapping.stdout[-2500:] + mapping.stderr[-1000:])
             areas = re.findall(r"Chip area for module .*?:\s*([0-9.eE+-]+)", mapping.stdout)
@@ -147,6 +195,8 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
 
         return {
             "formal_equivalence": "formal-pass",
+            "proof_method": "Yosys miter -equiv -flatten; sat -verify -prove trigger 0",
+            "stage_timings_seconds": stage_timings,
             "yosys_version": subprocess.run([yosys, "-V"], text=True, capture_output=True).stdout.strip(),
             "generic_cell_count": int(counts[-1]) if counts else None,
             "generic_cell_count_evidence": "Yosys synth/stat; not standard-cell area",
@@ -239,11 +289,14 @@ def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) ->
         testbench.write_text("\n".join(tb) + "\n")
         compile_result = subprocess.run(
             [iverilog, "-g2012", "-s", "tb", "-o", str(root/"sim"), str(source), str(testbench)],
-            text=True, capture_output=True,
+            text=True, capture_output=True, timeout=SIMULATION_TIMEOUT_SECONDS,
         )
         if compile_result.returncode:
             raise RuntimeError(compile_result.stdout + compile_result.stderr)
-        run_result = subprocess.run([vvp, str(root/"sim")], cwd=root, text=True, capture_output=True)
+        run_result = subprocess.run(
+            [vvp, str(root/"sim")], cwd=root, text=True, capture_output=True,
+            timeout=SIMULATION_TIMEOUT_SECONDS,
+        )
         if run_result.returncode:
             raise RuntimeError(run_result.stdout + run_result.stderr)
         vcd = (root / "activity.vcd").read_text()
@@ -310,7 +363,10 @@ def run_sta(mapped_verilog: str, top: str, liberty: Path, sta: str, vcd_text: st
             "report_power -digits 6",
         ]
         script.write_text("\n".join(tcl) + "\n")
-        result = subprocess.run([sta, "-no_splash", "-exit", str(script)], text=True, capture_output=True)
+        result = subprocess.run(
+            [sta, "-no_splash", "-exit", str(script)], text=True, capture_output=True,
+            timeout=OPENSTA_TIMEOUT_SECONDS,
+        )
         if result.returncode or re.search(r"(?m)^Error:", result.stdout):
             raise RuntimeError("OpenSTA analysis failed: " + result.stdout[-5000:] + result.stderr[-1000:])
         # The first data-arrival line is the actual path delay; OpenSTA repeats
@@ -355,7 +411,7 @@ def main() -> int:
             top = f"orcus_{variant}"
             source = module_source(top, variant)
             start = time.perf_counter()
-            print(f"[ORCUS] {variant}: starting Yosys SAT and synthesis/mapping", flush=True)
+            print(f"[ORCUS] {variant}: starting formal, synthesis, and mapping stages", flush=True)
             synthesis = _run_yosys(source, reference, top, yosys, args.liberty)
             mapped_verilog = synthesis.pop("mapped_verilog")
             print(

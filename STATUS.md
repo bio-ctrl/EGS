@@ -770,3 +770,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #231 failure `45945384577` is preserved. Its fix is committed in `668122146ed2c546d0f47dc8ff53e3d2ba750d80`; Run #233 is the first CI run on the corrected source-node manifest and current main STATUS ancestry.
 - No SAT proof result, tamper-test result, runtime, benchmark artifact, stage timing, or PPA result exists yet. Next: poll Run #233; inspect full unit-test output and proceed to benchmark only if tests pass.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 81. Run #233 dependency installation still active — 2026-11-27T05:24:49.448Z
+
+- Run #233 `45945601986`, job `140329457878`, exact head `1b2c502e056009f922d47bcab4c0b21f089c8107` remains `in_progress`. Setup/checkout/Python setup succeeded; dependency installation step 4 remains active. No test or benchmark step has run yet.
+- No new proof, tamper-test, runtime, artifact, or PPA evidence. Continue polling; Run #231's manifest classification failure remains historical and unchanged.

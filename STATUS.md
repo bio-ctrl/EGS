@@ -437,3 +437,13 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #220 `45942838109` has failed at step 9 (`Run unit tests`) after setup and cached OpenSTA verification succeeded. Benchmark and artifact steps were skipped. Job `140320786399`.
 - Exact test failure is not yet inspected; fetch completed job logs next. No proof pass, benchmark run, or artifact exists from this run.
+
+
+## 40. Run #220 heap-lemma failure diagnosis — 2026-11-27T05:06:00Z
+
+- Retrieved completed Run #220 job logs. The new compositional test ran 64 tests in 2.863s; 63 passed and the fused compositional test errored during the symbolic heap lemma.
+- Important positive result: the standalone 4x4 signed Baugh-Wooley lane lemma completed successfully; the test advanced into `_run_equivalence` for `orcus_heap_gate`. Thus the lane-level multiplier identity did prove under the partitioned Yosys flow.
+- Exact heap failure: `equiv_status -assert` reported `ERROR: Found 37 unproven $equiv cells in 'equiv_status -assert'`. Log shows `equiv_struct -icells` created invalid/unhelpful internal structural matches between the arithmetic reference and compressor gate (e.g. reference add outputs matched to internal `fa_s_*` / `fa_c_*` / PP nodes). This is a structural-partitioning problem, not a demonstrated output counterexample and not a timeout.
+- Run #220 benchmark, artifact upload, and smoke verification were skipped. No fused PPA metrics.
+- Next: disable `equiv_struct` only for the symbolic heap proof so the tool proves the 10-bit outputs directly with `equiv_simple`, while retaining the successful lane lemma. Run the negative one-bit tamper check with the same output-only heap proof. If output-only SAT does not prove quickly, inspect proof partitions/logs before changing strategy.
+- PR #19 remains open/unmerged. Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.

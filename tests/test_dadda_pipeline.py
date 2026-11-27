@@ -57,6 +57,7 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
             self.assertIn("flush mismatch", source)
             self.assertIn("in_valid = 1'b1", source)
             self.assertIn("in_valid = 1'b0", source)
+            self.assertIn("stale transaction leaked after reset", source)
             self.assertGreater(latency, 0)
 
     def test_reference_vectors_are_signed_and_width_bounded(self):

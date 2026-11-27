@@ -811,3 +811,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #233 `45945601986` failed due to constant-bias RTL token mismatch in FA expression audit; corrected in branch commit `ebb0c82601715fcb2a0425231fcbf7948736279f`, synchronized in head `60d551fa4512f3367e8c1d748f2abecd3c6f932e`.
 - Next: poll Run #235 and inspect unit tests, all four SAT lemmas, three negative tamper tests, then benchmark only if all pass. No proof runtime or benchmark evidence yet.
 - Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 86. Run #235 setup progress — 2026-11-27T05:26:47.136Z
+
+- Run #235 `45945802919`, job `140330080622`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e` remains `in_progress`. Setup, checkout, and Python setup passed; dependency installation step 4 is active. Unit tests, SAT lemmas, benchmark, and artifact steps remain pending.
+- No new formal or negative-tamper result; no runtime or PPA metrics. Continue polling. PR #19 mergeability remains reported false.

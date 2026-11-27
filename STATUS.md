@@ -1808,3 +1808,12 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Re-read main STATUS before this poll. STATUS blob: 665085ae695311e2419bf3bf3cd57699c0bdbd6b.
 - Run #256 (45954312238) remains in_progress at the 8/16/32 scaling benchmark step 14. Steps 1–13 succeeded. No failure, timeout, or scaling artifact has been reported. PR #20 mergeability remains raw null/unknown while workflow is active; no merge attempted.
 - Continue waiting for completed benchmark, artifact upload and target verification. Ceres untouched; NEM distinct.
+
+
+## 210. Run #256 exact latest-main head CI SUCCESS — 2026-11-27T06:51:52.557Z
+
+- Re-read main STATUS before this update. STATUS blob: 1e365107067d69f231b39cf7e5f97c88ed88a4f4.
+- ORCUS CI Run #256 (45954312238) completed SUCCESS at 2026-11-27T06:51:16Z on exact head 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99. Job 140357142298 passed; steps 1–16 all succeeded, including unit tests, compileall, Liberty fetch, four-lane benchmark/upload, 8/16/32 scaling benchmark/upload, and benchmark-target verification.
+- Exact-head scaling artifact ID 15177808570, size 138807 bytes, SHA-256 908681030f5bd2af1963268ded0c42581690c363b2cf8601265f611471e78cab. It has not yet been downloaded/inspected; this is the last artifact audit gate before merge.
+- PR #20 remains open/unmerged. Raw mergeable=null / mergeable_state=unknown and normalized mergeable=false despite successful checks; GitHub has not stabilized the mergeability calculation. Wait for fresh PR metadata after artifact audit; if still indeterminate, use the merge endpoint with exact expected head only if the API safely accepts it, otherwise report blocked rather than force.
+- Milestone #2 technical matrix verified in prior artifacts; latest main ancestry is in the branch. Milestone #3 not started. Ceres untouched; NEM distinct.

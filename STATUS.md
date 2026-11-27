@@ -628,3 +628,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Actions listing confirms automatic PR Run #229, ID `45943490330`, event `pull_request`, exact head `b7a479a03b51ac633963947170186ba7c41afb3a`, created `2026-11-27T05:03:23Z`, currently `in_progress`.
 - Next: inspect job steps, then completed logs. Required gate remains full direct-vs-fused ABC CEC PASS and one-bit tamper rejection. No proof or PPA data yet.
+
+
+## 65. Run #229 setup progress — 2026-11-27T05:03:40.744Z
+
+- Run #229 `45943490330` remains `in_progress` on branch head `b7a479a03b51ac633963947170186ba7c41afb3a`. Job `140322812925`: setup, checkout, and Python setup succeeded; dependency installation is active. Unit tests and benchmark remain pending; no artifact.
+- Next: monitor step 9. The critical check is whether ABC reads the binary AIGER files and returns an affirmative full-design equivalence verdict, followed by successful one-bit tamper rejection.

@@ -1261,3 +1261,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Created an uncommitted Git blob for new module orcus/lane_scaling.py, blob SHA f40dd622f18301dbc03c1b7fb60dd97780745b41 (23,056 bytes). It implements supported lane targets 8/16/32; accumulator widths 11/12/13; derived per-lane bias 2^W-112; typed weighted heap; linear and Dadda compressor schedules; independent RTL/manifest graph audit; SAT lemmas for lane identity, FA, HA, and modulo-W CPA; Yosys equivalence helper for direct/CSA; and tamper helpers.
 - No branch commit yet and no CI evidence. Next add scaling benchmark pipeline and tests, inspect implementation carefully, then commit to the research branch.
+
+## 140. Scaling benchmark draft tool-payload syntax failure — 2026-11-27T06:01:19.033Z
+
+- Attempted to create benchmarks/int4_lane_scaling.py, but the JavaScript payload failed to parse at the Verilog timescale directive because its backtick terminated the surrounding template literal. No GitHub blob or repository change was created.
+- Retry with the Verilog timescale directive assembled without a literal backtick in the template string; then continue tests and workflow integration.

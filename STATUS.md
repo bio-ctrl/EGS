@@ -1337,3 +1337,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #20 automatic workflow Run #248, ID 45950053878, exact head f6144e9e5e10bab4d2bb5b2c9b0df232764571b8; created 2026-11-27T06:09:28Z; status in_progress.
 - Raw PR API reports mergeable=null / mergeable_state=unknown while GitHub recalculates. No result yet.
 - Next inspect job steps/logs, particularly the new all-scale unit tests and the 12-configuration physical benchmark. Artifact and measured data are pending.
+
+## 153. Run #248 unit tests active — 2026-11-27T06:10:10.010Z
+
+- Run #248 45950053878, job 140343567995, exact head f6144e9e5e10bab4d2bb5b2c9b0df232764571b8: dependency setup and OpenSTA verification passed; unit test step 9 is running. Compileall, Liberty fetch, existing four-lane benchmark, new 8/16/32 scaling benchmark, artifact uploads, and smoke check remain pending.

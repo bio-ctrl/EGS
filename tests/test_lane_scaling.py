@@ -24,6 +24,14 @@ class LaneScalingTests(unittest.TestCase):
                 with self.subTest(lanes=lanes, schedule=schedule):
                     lines, manifest = generate_fused_heap(lanes, schedule)
                     audit = audit_fused_heap(lines, manifest)
+                    self.assertTrue(all(bit["kind"] in ("partial_product", "constant")
+                                        for bit in manifest["initial_bits"]))
+                    initial_ids = {bit["id"] for bit in manifest["initial_bits"]}
+                    compressor_ids = {
+                        output for node in manifest["compressors"]
+                        for output in (node["sum"], node["carry"]) if output
+                    }
+                    self.assertTrue(initial_ids.isdisjoint(compressor_ids))
                     self.assertEqual(audit["status"], "pass")
                     self.assertEqual(audit["lanes"], lanes)
                     self.assertEqual(audit["width"], accumulator_width(lanes))
@@ -80,6 +88,16 @@ class LaneScalingTests(unittest.TestCase):
                     candidate = module_source(top, lanes, variant)
                     result = run_yosys_equivalence(candidate, reference, top, yosys)
                     self.assertEqual(result["formal_equivalence"], "formal-pass")
+                    if variant == "carry_save":
+                        self.assertIn("compositional Yosys SAT", result["proof_method"])
+                        self.assertEqual(result["graph_audit"]["status"], "pass")
+                        self.assertEqual(
+                            set(result["proof_lemmas"]),
+                            {"carry_save_vector_invariant", "final_cpa_modulo_width"},
+                        )
+                        tampered = candidate.replace("cs_s_0_0 = ", "cs_s_0_0 = ~(", 1)
+                        with self.assertRaisesRegex(ValueError, "regenerated audited tree"):
+                            run_yosys_equivalence(tampered, reference, top, yosys)
 
 
 if __name__ == "__main__":

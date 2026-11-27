@@ -60,7 +60,8 @@ def generate_dadda_pipelined(lanes: int) -> PipelineDesign:
     while targets[-1] < maximum:
         targets.append((3 * targets[-1]) // 2)
     stage_targets = list(reversed(targets[:-1]))
-    stage_records: list[dict[str, Any]] = []
+    compressor_records: list[dict[str, Any]] = []
+    boundary_records: list[dict[str, Any]] = []
     stage_registers: list[list[tuple[str, str]]] = []
 
     for stage, target in enumerate(stage_targets):
@@ -75,7 +76,7 @@ def generate_dadda_pipelined(lanes: int) -> PipelineDesign:
                 arity = 3 if kind == "full_adder" else 2
                 inputs = work[:arity]
                 del work[:arity]
-                idx = len(stage_records)
+                idx = len(compressor_records)
                 prefix = "fa" if kind == "full_adder" else "ha"
                 sum_name = f"{prefix}_s_{idx}"
                 carry_name = f"{prefix}_c_{idx}" if column < width - 1 else None
@@ -92,7 +93,7 @@ def generate_dadda_pipelined(lanes: int) -> PipelineDesign:
                 if carry_name:
                     stage_logic.append(f"  wire {carry_name} = {carry_expr};")
                     stage_carries[column + 1].append(carry_name)
-                stage_records.append({
+                compressor_records.append({
                     "id": f"{prefix}_{idx}", "kind": kind, "column": column,
                     "stage": stage, "inputs": inputs, "sum": sum_name,
                     "carry": carry_name,
@@ -113,15 +114,14 @@ def generate_dadda_pipelined(lanes: int) -> PipelineDesign:
                 registered_columns[col].append(qname)
         lines.extend(stage_logic)
         stage_registers.append(register_pairs)
-        stage_records_for_stage = [node for node in stage_records if node["stage"] == stage]
-        stage_records_for_stage.append({
-            "stage": stage, "target_height": target,
+        boundary_records.append({
+            "stage": stage,
+            "target_height": target,
             "input_heap": [list(col) for col in columns],
             "output_heap": [list(col) for col in next_columns],
             "registered_heap": [list(col) for col in registered_columns],
             "registered_bit_count": len(register_pairs),
         })
-        stage_records[-1].setdefault("_stage_snapshots", []) if stage_records else None
         columns = registered_columns
         stage_records.append({
             "stage_boundary": stage,
@@ -172,8 +172,8 @@ def generate_dadda_pipelined(lanes: int) -> PipelineDesign:
         "lanes": lanes, "width": width, "latency_cycles": latency,
         "stage_targets": stage_targets,
         "initial_heap_bits": initial,
-        "compressors": [node for node in stage_records if "kind" in node],
-        "stage_boundaries": [node for node in stage_records if "stage_boundary" in node],
+        "compressors": compressor_records,
+        "stage_boundaries": boundary_records,
         "final_rows": [row0, row1],
         "reset": "synchronous-active-high",
         "valid_protocol": "in_valid delayed exactly LATENCY rising edges to out_valid",

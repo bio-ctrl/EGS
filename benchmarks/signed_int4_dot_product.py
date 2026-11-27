@@ -355,13 +355,31 @@ def main() -> int:
             top = f"orcus_{variant}"
             source = module_source(top, variant)
             start = time.perf_counter()
+            print(f"[ORCUS] {variant}: starting Yosys SAT and synthesis/mapping", flush=True)
             synthesis = _run_yosys(source, reference, top, yosys, args.liberty)
             mapped_verilog = synthesis.pop("mapped_verilog")
+            print(
+                f"[ORCUS] {variant}: Yosys complete; formal={synthesis['formal_equivalence']}; "
+                f"generic_cells={synthesis['generic_cell_count']}; mapped_area={synthesis['mapped_standard_cell_area']}",
+                flush=True,
+            )
             activity, vcd_text = simulate_activity(source, top, iverilog, vvp)
+            print(
+                f"[ORCUS] {variant}: activity complete; vectors={activity['vectors']}; "
+                f"unique={activity['unique_vectors']}",
+                flush=True,
+            )
             sta_report = (
                 run_sta(mapped_verilog, top, args.liberty, sta, vcd_text)
                 if mapped_verilog and sta and args.liberty else {"status": "not-run"}
             )
+            if sta_report["status"] == "completed":
+                print(
+                    f"[ORCUS] {variant}: OpenSTA complete; delay_ns={sta_report['critical_path_delay']}; "
+                    f"power_uw={sta_report['power_total_uw']}; "
+                    f"annotated_pins={sta_report['annotated_pin_activities']}",
+                    flush=True,
+                )
             results.append({
                 "variant": variant,
                 "multiplier_contract": (
@@ -376,6 +394,10 @@ def main() -> int:
                 "search_and_evaluation_runtime_seconds": time.perf_counter() - start,
                 "physical_metrics_status": "pre-layout Nangate45 research-library estimates" if sta_report["status"] == "completed" else "not-measured",
             })
+            print(
+                f"[ORCUS] {variant}: complete in {time.perf_counter() - start:.2f}s",
+                flush=True,
+            )
         report = {
             "schema_version": "orcus-int4-dot-product-v2",
             "workload": {"name": "four-lane signed INT4 dot-product accumulation",

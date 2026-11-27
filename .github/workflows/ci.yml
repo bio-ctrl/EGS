@@ -3,6 +3,8 @@ name: ORCUS CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - STATUS.md
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened, ready_for_review]
@@ -88,5 +90,3 @@ jobs:
 
       - name: Verify benchmark targets
         run: python -m orcus benchmark --max-gates 7 --output /tmp/orcus-ci-smoke.jsonl
-
-# CI re-trigger marker: no workflow behavior changed; this commit requests a fresh PR synchronize event.

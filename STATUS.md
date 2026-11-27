@@ -2590,3 +2590,23 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Inspected the downloaded immutable Run #262 artifact ZIP inventory. It contains `results.json` plus, for each of 4/8/16/32 lanes and both Direct and Fused Dadda, generated RTL, Yosys synthesis JSON/log, nextpnr report JSON/log, and routed configuration. All eight configuration directories are present.
 - This confirms the baseline artifact has the raw files needed for a structured per-lane comparison. The artifact inventory alone does not establish any new pipeline result. Next parse `results.json` and each nextpnr report to extract Fmax, logic/routing critical-path delay, LUT4, TRELLIS_FF, and MULT18X18D per configuration. Preserve exact labels and do not infer missing metrics.
 - No repository source, baseline, PR, Ceres, or NEM state changed.
+
+
+## 292. Run #262 lane-by-lane ECP5 baseline metrics parsed from raw artifact — 2026-11-27T23:46:43.199Z
+
+- Parsed `results.json` and each of the eight raw `nextpnr-report.json` files in artifact `orcus-fpga-ecp5-pnr` (Run #262, exact head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`). Target: LFE5U-85F-6BG381C / CABGA381 / speed grade 6 / 100 MHz. Yosys 0.33; nextpnr-ecp5 0.6-3build5.
+- The first synchronous critical path in each report was decomposed by summing the report's explicit `logic` and `routing` segment delays. The additional clock-to-Q term was 0.525 ns in all eight rows. These are report-derived path sums, not an independent timing model.
+
+| Lanes | Variant | Fmax MHz | 100 MHz | LUT4 | FF | MULT18X18D | Critical logic ns | Critical routing ns |
+|---:|---|---:|---|---:|---:|---:|---:|---:|
+| 4 | Direct | 91.92 | FAIL | 116 | 42 | 4 | 5.875 | 4.479 |
+| 4 | Fused Dadda | 106.26 | PASS | 260 | 42 | 0 | 3.496 | 5.390 |
+| 8 | Direct | 62.74 | FAIL | 167 | 75 | 8 | 7.132 | 8.283 |
+| 8 | Fused Dadda | 84.02 | FAIL | 579 | 75 | 0 | 4.489 | 6.888 |
+| 16 | Direct | 51.29 | FAIL | 513 | 140 | 16 | 8.683 | 10.288 |
+| 16 | Fused Dadda | 73.10 | FAIL | 1,252 | 140 | 0 | 4.987 | 8.168 |
+| 32 | Direct | 43.50 | FAIL | 936 | 269 | 32 | 9.391 | 13.074 |
+| 32 | Fused Dadda | 55.82 | FAIL | 2,400 | 269 | 0 | 5.931 | 11.458 |
+
+- Fused Dadda reduces critical logic delay relative to Direct in every lane count, but critical routing delay is higher in these reports. It removes use of MULT18X18D blocks in the fused rows, while LUT4 usage rises. Only 4-lane Fused Dadda meets the 100 MHz target. All results are FPGA P&R results with unconstrained external IOs, not board-level validation or silicon claims.
+- These metrics are the fixed Run #262 comparison baseline. They are not results from the new pipelined design. Next use the same extraction method on PR #22's exact-head artifact once its run ID is identified.

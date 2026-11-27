@@ -279,3 +279,27 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Test timeout is 60 seconds per proof invocation. Full output equivalence remains the intended formal gate; no 2^32 exhaustive simulation is attempted.
 - Current PR branch head: `4777754c2410e0250568e2c7d2efd2e4d552f13b`. No CI result is yet confirmed. Next: run/review unit tests and inspect the new proof command's behavior, including that the negative test rejects the tampered output.
 - Milestone #1 remains open; no PPA comparison for fused Baugh-Wooley is available. Ceres untouched; NEM separate.
+
+
+## 20. PR branch STATUS synchronization — 2026-11-27T04:50:10Z
+
+- Copied the exact current `main:STATUS.md` content (blob `18da1cc406d18491bd483639dda10c6c18aa73b2`) onto `research/orcus-fused-int4-mac`. Branch sync commit: `ccc409f8b76cad0d088b589d7834f9b017dc77a6`. This preserves the complete audit history and makes the branch's STATUS file content identical to main at the time of sync.
+- PR #19 now points to head `ccc409f8b76cad0d088b589d7834f9b017dc77a6`; GitHub metadata still reports `mergeable=false` (may be recalculating; not yet resolved). Base ref is main. PR remains open/unmerged.
+- `fetch_commit_workflow_runs` for this new head returned no PR-triggered run at the time checked. No CI run ID is confirmed yet. Do not claim the workflow was triggered.
+- Next: inspect PR mergeability and Actions run list for the exact head. If no run starts, diagnose the base/head divergence and resolve it with a non-force merge commit, preserving PR code and current main STATUS. Do not merge PR #19 into main.
+- Proof implementation and one-bit negative test are committed on the PR branch but remain unexecuted. No proof or PPA claim is made. Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 21. GitHub Actions query limitation — 2026-11-27T04:50:30Z
+
+- Attempted to query the Actions runs collection with a `head_sha` query parameter; the GitHub connector rejected that URL as unsupported (HTTP 400). No run data was retrieved by that request. This is a connector endpoint limitation, not evidence that GitHub Actions itself failed.
+- No code or branch refs were changed by this failed diagnostic. PR #19 remains open/unmerged; proof implementation and negative test remain unexecuted.
+- Next: use the supported workflow-run lookup by commit SHA and PR metadata/compare endpoints, then update this status with the exact run or mergeability diagnosis.
+
+
+## 22. PR mergeability metadata diagnostic — 2026-11-27T04:51:00Z
+
+- Direct pull-request API read reports `mergeable=null` and `mergeable_state=unknown` while GitHub recalculates; the simplified PR wrapper had previously reported `mergeable=false`. Treat mergeability as UNKNOWN, not confirmed false or true.
+- Current main head is `878f2cd2a40071742e97d27c19e2c3e95cf7b00f`; PR branch head is `ccc409f8b76cad0d088b589d7834f9b017dc77a6`. The PR's reported base SHA remains `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e`, so the PR branch does not yet contain the latest main commit ancestry.
+- The current branch STATUS content predates main's latest audit entries. Next: synchronize the latest STATUS content and create a non-force two-parent merge commit with current main as a parent, preserving the PR branch's benchmark/tests and the main STATUS file. This is branch synchronization only, not merging PR #19 into main.
+- No CI run is confirmed yet. Ceres remains untouched; NEM separate.

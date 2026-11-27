@@ -802,3 +802,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Parents: corrected branch commit `ebb0c82601715fcb2a0425231fcbf7948736279f` first; main `3bc16f01d189d6fc117eccc94ad1f32edd10cedf` second. Expected-head-protected branch update succeeded; no PR merge.
 - This branch head should trigger a new PR workflow. Run #233 remains failed on prior head `1b2c502e056009f922d47bcab4c0b21f089c8107`; preserved. No SAT proof result or benchmark evidence yet.
 - Next: check exact-head Actions listing and poll the new run. PR #19 remains open/unmerged. Ceres untouched; NEM distinct; baseline intact.
+
+
+## 85. Corrected RTL audit CI Run #235 started — 2026-11-27T05:26:36.410Z
+
+- Actions run listing confirms automatic PR Run #235, ID `45945802919`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e`, event `pull_request`, created `2026-11-27T05:26:16Z`, status `in_progress`. The commit-specific run lookup was stale/empty; repository Actions listing confirms the run.
+- PR #19 remains open/unmerged; GitHub still reports `mergeable=false`. Do not claim it is mergeable.
+- Run #233 `45945601986` failed due to constant-bias RTL token mismatch in FA expression audit; corrected in branch commit `ebb0c82601715fcb2a0425231fcbf7948736279f`, synchronized in head `60d551fa4512f3367e8c1d748f2abecd3c6f932e`.
+- Next: poll Run #235 and inspect unit tests, all four SAT lemmas, three negative tamper tests, then benchmark only if all pass. No proof runtime or benchmark evidence yet.
+- Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.

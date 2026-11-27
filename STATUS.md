@@ -1388,3 +1388,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Re-read the committed Dadda stage loop on the PR branch. It uses separate next-stage sum buffers and same-stage carry buffers; the loop accounts for both current work and emitted sums against each target height. This matches the isolated recurrence spot-check in section 158. No code change made.
 - Run #248 remains in_progress at unit test step 9. Live logs are not currently retrievable. If this step eventually fails, inspect the completed job log and address the exact failing test rather than speculate.
+
+## 165. Run #248 unit-test stage approaching first proof timeout bound — 2026-11-27T06:15:01.939Z
+
+- The unit-test step has remained in_progress for approximately five minutes, but GitHub has not returned a failure or timeout. The Yosys equivalence helper has a per-invocation 300-second bound; this is only a configured limit, not an observed timeout. Continue polling for the actual conclusion.

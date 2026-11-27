@@ -1,8 +1,8 @@
 # EGS — Engineering Status
 
-> **MANDATORY HANDOFF RULE FOR EVERY FUTURE AI SESSION:** "Read this file first, never fabricate numbers, keep Ceres untouched, and update `STATUS.md` on `main` after every major milestone."
+> **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-27  
+**Last updated:** 2026-11-27 04:22 UTC  
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -73,9 +73,11 @@ These are results for this specific benchmark and flow. They do not establish a 
 
 **PR:** [#19 — Experiment: fused four-lane signed INT4 partial-product compressor](https://github.com/bio-ctrl/EGS/pull/19)  
 **Branch:** `research/orcus-fused-int4-mac`  
-**Current head:** `80cf57c562993305a3f98b8d26292d484c7b682c` (short SHA: `80cf57c`)  
-**PR state:** open, draft, unmerged  
-**CI Run #203:** ID `45893609205`, head `561ac0725e34f47413445c582f8b64d2188adfd3`; conclusion `cancelled`; no artifact was uploaded.
+**Current head:** `cc244ed257aa8739b68ba8ae7b3d2cfdeb1fa1de` (short SHA: `cc244ed`)  
+**PR state:** open, ready for review, unmerged  
+**Last checked:** 2026-11-27 04:22 UTC  
+**Run #203:** ID `45893609205`, head `561ac0725e34f47413445c582f8b64d2188adfd3`; conclusion `cancelled`; no artifact was uploaded.  
+**Fresh PR run:** none observed on current head `cc244ed` at the last check. Do not mistake the main-branch run #207 for PR #19 validation.
 
 ### Run #203 failure history and diagnosis
 
@@ -91,35 +93,45 @@ The benchmark step was cancelled; artifact upload and benchmark-target verificat
 
 Run #202 (ID `45892529710`) remains recorded as a prior failed attempt: its unit test incorrectly assumed all variants shared identical multiplier expressions. The test was corrected to distinguish the fused Baugh-Wooley implementation from the product-level reduction baselines. Preserve this failure history.
 
-### Corrective work committed to the PR branch
+### Corrective work on the PR branch
 
-The branch now contains:
-- A structured OpenSTA parser for internal, switching, leakage, and total power. It retains raw Watts values and emits explicit µW fields.
-- A fail-closed check for a parsed OpenSTA total-power row and nonzero VCD pin-activity annotation.
-- A fail-closed check that the deterministic xorshift32 stimulus contains exactly 512 unique vectors.
-- Unit tests for all four power components and rejection of missing VCD annotation.
-- Per-variant, per-stage progress logging for Yosys SAT/synthesis, simulation, and OpenSTA; CI invokes Python unbuffered so the last completed stage is visible in logs.
+Latest branch head `cc244ed` includes:
+- Structured OpenSTA parsing for internal, switching, leakage, and total power, retaining raw Watts values and emitting explicit µW fields.
+- Fail-closed checks for a parsed OpenSTA total-power row and nonzero VCD pin-activity annotation.
+- A fail-closed check for exactly 512 unique deterministic xorshift32 vectors.
+- Unit tests for power-component extraction and rejection of missing VCD annotation.
+- Unbuffered per-variant progress logs.
+- Per-stage timeouts: Yosys SAT 300 s; generic synthesis 120 s; Nangate45 mapping 120 s; Icarus simulation 60 s; OpenSTA 120 s.
+- Separate elapsed-time fields for formal SAT, generic synthesis, Liberty mapping, simulation, OpenSTA, and total per-variant runtime.
+- Explicit formal method remains Yosys `miter -equiv -flatten` plus `sat -verify -prove trigger 0`. A timeout is surfaced as a named stage timeout; no alternate proof method has been substituted.
 
-Relevant branch commits include parser correction `ff07eefa`, parser tests `cd52b71e`, stage logging `cd6ea2f5`, and unbuffered CI logging `80cf57c5`. The latest branch head is `80cf57c5`. These code changes have **not yet passed a new CI run**. Reopening PR #19 did not produce a new Actions run in the latest check.
+### Workflow trigger investigation and current CI state
+
+The original `.github/workflows/ci.yml` listened to `pull_request` for branches targeting `main`, with no explicit event-type list or `workflow_dispatch`. The PR branch workflow was updated to include `opened`, `synchronize`, `reopened`, and `ready_for_review`, plus `workflow_dispatch` and a 90-minute job timeout. The same trigger/timeout/unbuffered-logging changes were committed to `main` in commit `1205f16f8f74c86f82f718ae8c3fe4f848ff8c64`.
+
+PR #19 was marked ready for review, then closed and reopened to emit a `reopened` event. The latest Actions query still showed no new `pull_request` run for the current head. The main-branch push triggered Run #207 (ID `45939477100`) at 2026-11-27 04:21:37 UTC; at the last check it was `in_progress` in dependency installation. Run #207 tests `main`, not PR #19, and cannot validate the fused candidate.
+
+The available GitHub integration exposes read operations and rerun operations for existing jobs, but no workflow-dispatch action. Do not claim a manual dispatch occurred. The exact reason the PR event did not create a run remains unconfirmed; do not assert a token limitation or disabled Actions without evidence. Next, inspect Run #207 completion, then use repository Actions UI or an authorized workflow-dispatch mechanism to dispatch `ORCUS CI` against `research/orcus-fused-int4-mac` / head `cc244ed`. If the workflow event is still not triggered, inspect repository Actions settings and event delivery before changing RTL or proof logic.
 
 ### Required PR #19 closure gates
 
-1. Obtain a fresh CI run on the current branch head. If the benchmark again approaches the six-hour job limit, use the new progress logs to identify the exact variant and stage; then reduce or partition that work rather than claiming an unobserved failure cause.
-2. Inspect the uploaded artifact and raw OpenSTA reports for all six variants.
-3. Verify Yosys SAT equivalence for all six variants, exactly 512 unique fixed-seed xorshift32 vectors per variant, and nonzero clean VCD pin-activity annotation for every OpenSTA run.
-4. Populate the exact comparison table only from the artifact: Variant, Yosys SAT, Generic cells, Nangate45 area, OpenSTA delay, Internal µW, Switching µW, Leakage µW, Total µW.
-5. Compare fused Baugh-Wooley with the direct-expression baseline and existing two-stage carry-save baseline. Record whether it wins or loses on this workload, including any trade-offs; do not generalize beyond the measured configuration.
-6. Keep PR #19 open and unmerged until all evidence is reviewed. Do not merge without explicit authorization.
+1. Obtain a fresh CI run against the current PR head `cc244ed`; record its run ID and exact head SHA.
+2. Use unbuffered stage logs to record exact wall-clock times for Yosys SAT, generic synthesis, Nangate45 mapping, Icarus simulation, and OpenSTA for each of the six variants.
+3. If fused formal SAT reaches the 300-second timeout, preserve the timeout and solver logs. Investigate the bit-blasted multiplier/bit-heap proof bottleneck; compare an explicitly documented alternative such as partitioned equivalence or ABC `cec` only after validating its exact semantics. Do not silently relabel a timeout as a proof pass.
+4. Inspect the uploaded artifact and raw OpenSTA reports for all six variants.
+5. Verify Yosys SAT equivalence for all six variants, exactly 512 unique fixed-seed xorshift32 vectors per variant, and nonzero clean VCD pin-activity annotation for every OpenSTA run.
+6. Populate the exact comparison table only from the artifact: Variant, Yosys SAT / Proof, Generic cells, Nangate45 area, OpenSTA delay (ns), Internal (µW), Switching (µW), Leakage (µW), Total (µW).
+7. Compare fused Baugh-Wooley with direct expression and two-stage carry-save. Record whether it wins or loses on this workload, including trade-offs; do not generalize beyond the measured configuration.
+8. Keep PR #19 unmerged until all evidence is reviewed. Merge only with explicit authorization.
 
 ### Milestone #2 — scale signed INT4 dot products
 
-After PR #19 has a complete, reviewed four-lane result, generalize the workload to 8, 16, and 32 lanes:
-- Use 11-bit, 12-bit, and 13-bit signed accumulators respectively.
-- Compare direct-expression, multi-stage carry-save, and fused Baugh-Wooley multi-lane compression.
-- Require formal equivalence for every candidate and retain reproducible 512-vector xorshift32 activity per configuration.
-- Record generic cells, Nangate45 area, OpenSTA delay, internal/switching/leakage/total power, tool versions, constraints, and raw artifacts separately for each lane count.
-- Keep all Nangate45 results labelled as pre-layout research-library estimates without routed parasitics, not silicon PPA.
-- Preserve the v0.2 four-lane baseline as the fixed reference; do not overwrite or silently rebase its historical measurements.
+After PR #19 has a complete, reviewed four-lane result, generalize to:
+- 8 lanes: 11-bit signed accumulator.
+- 16 lanes: 12-bit signed accumulator.
+- 32 lanes: 13-bit signed accumulator.
+
+For each width, compare direct expression, multi-stage carry-save, and fused Baugh-Wooley multi-lane compression. Require formal equivalence for every candidate, deterministic 512-vector xorshift32 activity, nonzero VCD annotation, raw artifacts, and per-stage timing. Record generic cells, Nangate45 area, OpenSTA delay, internal/switching/leakage/total power, tool versions, constraints, and proof method separately for each lane count. Keep all Nangate45 results labelled as pre-layout research-library estimates without routed parasitics, not silicon PPA. Preserve the v0.2 four-lane baseline as the fixed historical reference.
 
 ## 5. Engineering roadmap
 

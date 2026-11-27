@@ -1303,3 +1303,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Synced main a667496d04a199db77a926dcaf921f65c7ba1d45 and latest STATUS into research/orcus-int4-lane-scaling via non-force two-parent commit cba32af72897fa20ca15eec3aa906353b0ea9b52. Parent order: prior branch head 71fd77fb68aa4b900ed3c948604dd518847f12cd first; main a667496d04a199db77a926dcaf921f65c7ba1d45 second. Expected-head update succeeded.
 - Next create a single implementation commit adding lane_scaling.py, scaling benchmark, tests, and CI step. Then inspect exact branch files and CI logs; no measurement values should be filled until the new artifact is audited.
+
+## 148. Milestone #2 initial implementation committed — 2026-11-27T06:07:44.154Z
+
+- Committed scaling implementation on research/orcus-int4-lane-scaling: fbe204f3593bc45cb1342f2f440db1ac13f4a7b1 (parent cba32af72897fa20ca15eec3aa906353b0ea9b52).
+- Added orcus/lane_scaling.py: target lane contracts 8/16/32 -> 11/12/13-bit accumulators; width-dependent Baugh-Wooley bias; typed heap generator with linear and staged Dadda reduction; independent RTL/manifest audit; SAT lane/FA/HA/CPA lemmas; direct/CSA Yosys equivalence; negative tamper helpers.
+- Added benchmarks/int4_lane_scaling.py: 12-configuration benchmark matrix (3 lane counts × 4 architectures), formal proof, generic synthesis, Nangate45 mapping, deterministic 512 unique xorshift32 vectors with per-vector expected-value assertions, VCD activity, OpenSTA timing and internal/switching/leakage/total power, and stage timing capture.
+- Added tests/test_lane_scaling.py covering target widths/bias, six graph audits, negative tamper cases, vector uniqueness, six fused compositional proof configurations, and six direct/CSA equivalence configurations.
+- Updated .github/workflows/ci.yml to run the scaling benchmark in required physical mode and upload artifact orcus-int4-lane-scaling.
+- This commit has not yet been CI-tested. Potential failures must be recorded precisely; no PPA or formal timing results for 8/16/32 are available yet. Next create PR, monitor CI, fix any failures, and audit the artifact before reporting comparisons.

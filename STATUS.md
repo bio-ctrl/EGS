@@ -1119,3 +1119,48 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Milestone #1 technical evidence is complete for Run #244. PR #19 remains open/unmerged pending review and explicit merge authorization. Latest GitHub metadata before the next sync still reported `mergeable=false`; recheck after syncing the latest main STATUS/ancestry.
 - Milestone #2 can now be planned/started after PR #19 review: 8 lanes/11-bit accumulator, 16 lanes/12-bit, 32 lanes/13-bit; compare direct, multi-stage carry-save, and fused Baugh-Wooley with formal proofs, deterministic 512 unique vectors, VCD annotation, raw OpenSTA, and stage timings. Do not assume sub-second proof at larger widths; measure it.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 118. Final Run #244 evidence synchronized to PR branch — 2026-11-27T05:42:13.125Z
+
+- Synced final main STATUS blob from `c0e153e2cb7e24c9ca90344528711287e8b5164c` and main ancestry into PR branch using non-force two-parent merge commit `50afab04361308c74254d5466e0d6c0b1638ffae`.
+- Merge parents: verified FA+HA implementation source `df08d3a0259817204a7d7ca348d06a65f5edef2e` first; main `c0e153e2cb7e24c9ca90344528711287e8b5164c` second. Expected-head-protected update succeeded.
+- The synced branch now contains the Run #244 final artifact audit and full six-variant comparison in STATUS. This STATUS-only merge may trigger another PR workflow; Run #244 remains the verified implementation/benchmark run for the pre-sync source tree.
+- Next: recheck PR #19 mergeability and latest branch head. Do not merge without explicit authorization. Milestone #1 technical evidence complete; Milestone #2 planning may proceed, with scaling proof runtimes measured rather than assumed.
+
+
+## 119. Final PR #19 mergeability and CI confirmation — 2026-11-27T05:43:33.068Z
+
+- Raw GitHub PR API for PR #19 reports `mergeable=true`, `mergeable_state=clean`, base `c0e153e2cb7e24c9ca90344528711287e8b5164c`, head `50afab04361308c74254d5466e0d6c0b1638ffae`. The simplified PR metadata wrapper had returned stale `false`; raw API is authoritative and shows clean/mergeable. PR remains open and unmerged.
+- STATUS/ancestry sync commit `50afab04361308c74254d5466e0d6c0b1638ffae` triggered Run #245, ID `45947359445`, exact head `50afab04361308c74254d5466e0d6c0b1638ffae`; Run #245 completed success. All 14 workflow steps including unit tests, compileall, benchmark, artifact upload, and smoke verification passed.
+- Run #244 artifact remains the fully audited measurement source for the FA+HA graph. Run #245 is the post-sync CI confirmation. No PR merge was performed; explicit user authorization is still required.
+- Milestone #1 four-lane proof and benchmark evidence complete. Milestone #2 may proceed as a separate scaling research milestone: 8 lanes/11-bit accumulator, 16 lanes/12-bit, 32 lanes/13-bit. Revalidate formal lemmas and graph invariants at each width; benchmark actual runtimes rather than assume they stay sub-second. Compare direct, multi-stage carry-save, and fused Baugh-Wooley.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 120. Final mergeability recheck — 2026-11-27T05:44:18.228Z
+
+- Rechecked raw GitHub API after a transient `mergeable=null / mergeable_state=unknown` response. Latest raw PR #19 response now reports `mergeable=true`, `mergeable_state=clean`, head `50afab04361308c74254d5466e0d6c0b1638ffae`; main ref at this check was `559863dd99d3ca2067a6d7e1fc79567909bd7e1e`. PR remains open/unmerged.
+- Run #245 `45947359445` completed success on the exact synced branch head and uploaded artifact ID `15174839413`. Run #244 `45947084195` artifact ID `15175157667` remains the fully audited evidence source for the actual FA+HA implementation; its complete six-variant metrics and raw OpenSTA reports are recorded in section 117.
+- Final four-lane Milestone #1 evidence is complete. No merge performed. Next work is Milestone #2 scaling (8/11-bit, 16/12-bit, 32/13-bit) as a separate research phase, after explicit authorization to proceed if repository work is to be started.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 121. PR #19 pre-merge inspection tool-schema failure — 2026-11-27T05:49:12.484Z
+
+- Attempted pre-merge comparison/diff inspection. The compare API request was accepted, but the diff wrapper rejected the argument key `repository_full_name`; its actual schema requires `repo_full_name`. No repository mutation or merge occurred.
+- Main remains `331693af60e2535867a12e620eb14057eee8b43a`; PR #19 remains open at `50afab04361308c74254d5466e0d6c0b1638ffae`. Retry inspection using the exact schema, then merge only after confirming base/head relationship and current clean state.
+
+
+## 122. PR #19 pre-merge comparison endpoint rejected — 2026-11-27T05:49:28.017Z
+
+- Retried PR diff with the correct `repo_full_name` argument. GitHub connector rejected one of the concurrent fetch requests as an unsupported public endpoint (HTTP 400); no diff was obtained and no repository mutation occurred.
+- Main is now at the status-only commit `3dec130b508de87a9a7b7d59ec79e129b9467964`; PR #19 branch head remains `50afab04361308c74254d5466e0d6c0b1638ffae`. Continue with supported PR metadata/patch tools and compare API endpoint if accessible; do not infer merge-base cleanliness from earlier metadata alone.
+
+
+## 123. PR #19 merge preflight — 2026-11-27T05:49:53.856Z
+
+- Read current main STATUS first. Current main `73163fa034bd8e9bfd193dc0fa1a8612035d299a`; PR branch `50afab04361308c74254d5466e0d6c0b1638ffae`; PR #19 open/unmerged. The PR patch changes exactly three files: `benchmarks/signed_int4_dot_product.py`, new `orcus/typed_heap.py`, and `tests/test_signed_int4_dot_product.py`; no Ceres paths appear.
+- PR metadata reports mergeable false because main has advanced with STATUS-only commits. The branch's STATUS is stale relative to main. Next step: construct a non-force two-parent sync commit with latest main as second parent and latest main STATUS blob in the branch tree, then recheck mergeability and CI before merging.
+- Patch inspection confirms the current fused generator is parameterized only by a `lanes` argument at generation level but hardcodes 10-bit width and its proof/benchmark harness is four-lane-specific. Milestone #2 must separately derive accumulator width and prove generalized lane scaling; do not assume simply changing the lane count is sufficient.
+- No merge or Milestone #2 implementation has occurred yet. Ceres remains untouched; NEM distinct.

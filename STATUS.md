@@ -2526,3 +2526,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Attempted a parallel Actions API and combined commit-status check for PR #22 head `b4f1a9ef60d19258e3941e00389649f52ad3e392`. The combined-status call rejected the supplied argument names; its required schema is `repo_full_name` + `commit_sha`, not `repository_full_name` + `ref`. No repository source was changed and no CI conclusion was obtained from this failed diagnostic.
 - Next retry with the exact required schema and separately inspect the Actions runs API result. Preserve this failed diagnostic in the handoff.
+
+
+## 283. PR #22 head has no Actions run or commit status — 2026-11-28T05:41:00Z
+
+- Retried the Actions runs API query and combined commit-status check using the correct connector schema for exact head `b4f1a9ef60d19258e3941e00389649f52ad3e392`.
+- Actions API returned no workflow run matching that SHA; GitHub combined commit status returned an empty `statuses` array. CI has not been queued/observed for the current PR head. This is not a test failure; it is an absent run/status.
+- The available GitHub integration exposes no workflow-dispatch action. The Draft PR remains open to trigger the configured workflow, but GitHub has not delivered a visible PR run. Next: inspect workflow file and repository Actions configuration/events; if no integration action can start it, leave the PR draft and clearly report that the user must manually run ORCUS CI from the Actions UI. Do not claim the four requested engineering tasks are complete.

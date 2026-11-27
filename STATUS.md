@@ -2338,3 +2338,158 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - This gives a technically grounded timing-closure direction: create a separate staged/pipelined Dadda implementation that inserts register boundaries between selected compressor-reduction stages while preserving the current combinational implementation and Run #262 artifact as immutable baseline. Keep one-result-per-cycle throughput as the design target, but explicitly measure added latency and register cost.
 - Formal validation must cover both arithmetic equivalence and pipeline latency/transaction alignment; a combinational heap proof alone is insufficient to claim the sequential pipeline is verified. Run exact-head ECP5 P&R on the same device, seed, and 100 MHz target, audit raw reports, and compare against the unchanged baseline. No source or branch was modified in this inspection.
 - Next: establish a dedicated experiment branch from current main and implement the first pipelined Dadda candidate as a separate architecture/benchmark path. Do not modify the existing baseline generator or workflow in place. Ceres untouched; NEM separate.
+
+
+## 256. Dedicated ECP5 Dadda pipeline experiment branch created — 2026-11-27T23:22:00Z
+
+- Re-read latest main STATUS before recording branch creation. STATUS blob: `faf1f3d847f354b24e32e95f9ee96d5d0b4c5e87`.
+- Created new branch `research/orcus-ecp5-dadda-pipeline` from main commit `d45e9c00d39828dd45d06d4597238667eabdfdae` (the main head containing the prior Milestone #3 handoff and timing-closure inspection).
+- This is a clean, separate experiment branch. The audited 100 MHz baseline implementation on main is unchanged. PR #21 remains untouched, open, draft, and unmerged. No RTL or benchmark source has been changed yet.
+- Next: implement a separate pipelined Dadda candidate and verification path on this branch; prove arithmetic and transaction latency, then run same-target ECP5 P&R and compare with the immutable Run #262 baseline. Preserve all results and failures. Ceres untouched; NEM separate.
+
+
+## 257. Pipeline-branch source and CI inspection — 2026-11-27T23:23:00Z
+
+- Re-read the latest main STATUS before inspection. Inspected `STATUS.md`, `orcus/lane_scaling.py`, `benchmarks/fpga_ecp5.py`, `tests/test_fpga_ecp5.py`, and `.github/workflows/ci.yml` on `research/orcus-ecp5-dadda-pipeline`.
+- Confirmed the branch is still at the original branch-point snapshot: the ECP5 benchmark currently supports only `direct` and combinational `fused_dadda`; its wrapper registers inputs and output around a combinational core. The CI workflow currently runs only the existing eight-row baseline matrix. No pipeline implementation, sequential proof, streaming test, or pipeline P&R target exists yet.
+- Existing lane-scaling Dadda generator and full test source were fetched for further inspection; this read-only inspection made no source or branch mutation. Branch STATUS blob is older than main and does not include later handoff entries; do not treat branch STATUS as authoritative.
+- Next: inspect the exact Dadda RTL generator and formal/test helpers in focused ranges, then implement a separate pipeline architecture and dedicated validation path. Keep Run #262 and all baseline RTL untouched. Ceres untouched; NEM separate; PR #21 untouched.
+
+
+## 258. Dadda stage-graph and proof-flow inspection — 2026-11-27T23:24:00Z
+
+- Re-read latest main STATUS before the diagnostic. Inspected the complete `generate_fused_heap`, `module_source`, `run_compositional_proofs`, `run_yosys_equivalence`, and ECP5 wrapper/runner implementation on `research/orcus-ecp5-dadda-pipeline`.
+- The existing Dadda generator emits a stage-indexed compressor manifest but emits all compressor logic as combinational wires and ends in one combinational modulo-width CPA. The stage scheduler permits same-stage carry propagation across adjacent columns, so pipeline cuts must occur only after a complete Dadda reduction stage, not between arbitrary compressor nodes. All live tokens crossing a stage boundary—including unconsumed pass-through bits—must be registered and consistently renamed in subsequent stage logic.
+- Existing `run_compositional_proofs` proves per-lane Baugh-Wooley identity, full-/half-adder weighted invariants, modulo-width CPA, and an independent graph audit. It does not prove sequential behavior or pipeline transaction alignment. The current `run_yosys_equivalence` helper is for combinational architectures and is not a substitute for a sequential unrolled miter.
+- Existing ECP5 benchmark runner has no pipeline variant, no reset/valid interface, no latency metadata, and no back-to-back streaming test. The CI workflow currently targets baseline ECP5 only and push events only on `main`; a feature-branch validation run will need a deliberate CI trigger path (e.g. pull request to main or explicit workflow_dispatch performed by the user/UI).
+- No source or branch files were changed and no formal, simulation, synthesis, or P&R command was run. Next: implement the pipeline as a separate generator/module and add explicit sequential proof and cycle-accurate streaming verification before treating any P&R result as eligible evidence. Ceres untouched; NEM separate; PR #21 untouched.
+
+
+## 259. Local execution-environment capability check — 2026-11-27T23:25:00Z
+
+- Re-read latest main STATUS before the environment check. The active tool container has no checked-out EGS repository at its working root, and `yosys`, `nextpnr-ecp5`, and `iverilog` are not installed/on PATH. No local RTL compilation, formal proof, simulation, synthesis, or P&R can be run in this container as currently provisioned.
+- GitHub repository read/write and Actions inspection are available through the GitHub integration. The current workflow has no automatic push trigger for the experiment branch; a pull request targeting `main` would trigger CI, while workflow_dispatch exists in YAML but no dispatch action is exposed by the available integration. No PR has been created and no branch source was changed.
+- This is an execution limitation, not a technical result about the proposed pipeline. Do not report any pipeline implementation, proof, simulation, or timing outcome until code is committed and an exact-head CI run/artifact is available. Next viable validation path is a separate draft PR after source/tests are implemented, then audit its exact-head Actions run and artifacts. Ceres untouched; NEM separate; PR #21 untouched.
+
+
+## 260. Pipeline implementation task resumed — 2026-11-27T23:27:00Z
+
+- Re-read the latest `main` STATUS before the new session's repository work. Confirmed active Milestone #3 and all hard boundaries.
+- Re-fetched the pipeline branch's exact `STATUS.md`, `orcus/lane_scaling.py`, `benchmarks/fpga_ecp5.py`, `tests/test_fpga_ecp5.py`, and `.github/workflows/ci.yml`. The branch still contains only the original combinational baseline snapshot; no pipeline source/tests/CI target exist yet. Workflow has PR `opened/synchronize/reopened/ready_for_review` triggers and a `workflow_dispatch` declaration, while the current GitHub integration exposes no dispatch operation.
+- The CI workflow has existing Yosys/iverilog build dependencies in the general job and a separate ECP5 job installing pinned Yosys/nextpnr. Current ECP5 job runs only the baseline 8-row matrix.
+- This fetch was read-only. No branch files changed and no tests/formal/P&R were run. Next inspect generator stage manifest and helper interfaces in bounded snippets, then design the independent sequential architecture. Keep main source and Run #262 baseline immutable; update this file after every subsequent repo action. Ceres untouched; NEM separate; PR #21 untouched.
+
+
+## 261. Pipeline generator source audit — 2026-11-27T23:29:00Z
+
+- Re-read latest main STATUS before the focused source audit. Inspected the complete `generate_fused_heap` Dadda stage scheduler, `module_source`, compositional SAT helper, and combinational `run_yosys_equivalence` helper on `research/orcus-ecp5-dadda-pipeline`.
+- Confirmed exact stage scheduling: each reduction stage emits sum bits into its own column, routes carries into the next column for processing within that same stage, and carries all remaining work bits unchanged into the next stage. The existing generator manifest does not persist per-stage complete heap snapshots, so a separate pipeline generator must reconstruct and record those snapshots rather than mutate the baseline generator.
+- Existing `run_yosys_equivalence` supports combinational `equiv_make/equiv_simple` (and a specific CSA compositional path), not sequential input/output latency. A dedicated sequential proof flow must explicitly model reset and a shift-register valid pipeline; no existing helper can be relabeled as sequential proof.
+- This was read-only source inspection. No pipeline source was written and no test, formal proof, simulation, synthesis, or P&R was run. Next implement the new generator in a separate module, with complete per-stage heap capture and explicit latency; keep all baseline files unchanged. Ceres untouched; NEM separate; PR #21 untouched.
+
+
+## 262. Separate pipelined Dadda generator added — 2026-11-27T23:31:00Z
+
+- Added new file `orcus/dadda_pipeline.py` on `research/orcus-ecp5-dadda-pipeline` in commit `d1727c23c3a8614a798862cf5f3362d512a15937`. The legacy `orcus/lane_scaling.py` generator and baseline RTL were not modified.
+- The new generator independently reconstructs the Dadda schedule, registers every live heap bit at each reduction-level boundary (including pass-through bits), then computes/captures the final modulo-width CPA result. It emits a distinct top name `orcus_dadda_pipelined_<lanes>`, synchronous active-high reset, `in_valid`/`out_valid` pipeline, `LATENCY` metadata, and a stage/heap manifest.
+- This is source added, not yet executed or validated. No lane-specific latency is being published as verified until generator execution and emitted RTL inspection establish the exact values. No formal proof, simulation, Yosys synthesis, or nextpnr P&R has run. The current file requires code review/refinement before tests are wired. Next: inspect the committed generator and correct any source-generation issues before proceeding. Ceres untouched; NEM separate; PR #21 untouched; Run #262 immutable.
+
+
+## 263. Pipeline generator manifest correction — 2026-11-27T23:33:00Z
+
+- Inspected the newly committed `orcus/dadda_pipeline.py` after addition. Found a manifest-construction issue: stage-boundary snapshots were not being stored cleanly because compressor and boundary records shared one list.
+- Corrected the branch file in commit `847814af55c8c797d8f9e86989477e2d7b2bc379`: compressor records and boundary records are now separate, and each boundary records its complete input heap, output heap, registered heap, target height, and register count. This keeps unchanged/pass-through tokens explicit in the manifest.
+- This is a source correction only. The generator has not been executed; latency values, Verilog syntax, formal behavior, and resource/timing outcomes remain unverified. Next add unit-level generator/manifest checks and a dedicated sequential formal + streaming runner. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.
+
+
+## 264. Sequential formal and streaming validation harness added — 2026-11-27T23:35:00Z
+
+- Added `benchmarks/dadda_pipeline.py` to `research/orcus-ecp5-dadda-pipeline` in commit `3eb96dadfabeb6bd4d17dd0cb92e745cb306f50e`.
+- The harness generates a sequential reference miter for each lane count, compares DUT `out_valid` and valid-qualified `out_data` against a delayed direct-arithmetic reference, and invokes Yosys bounded sequential SAT at depth `2*L+4`. It also generates a back-to-back deterministic 512-vector Icarus streaming test with latency checks and flush checks. The seed is fixed at `0x0C0FFEE` with per-lane deterministic streams.
+- This harness has not yet been run. Its generated Verilog and signed-literal formatting require review before CI is wired. No formal PASS or streaming PASS is claimed. Next inspect/fix testbench source generation, then run via GitHub Actions after CI integration. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 265. Streaming testbench literal correction attempt — 2026-11-27T23:37:00Z
+
+- Reviewed the new streaming testbench generator and found that negative signed decimal literals were emitted in invalid Verilog form (`4'sd-3` / `10'sd-3`). Added `_sv_signed()` and corrected lane-input literal generation in branch commit `dcce5d4e06da677e8023041cac69e4d74e3f977a`.
+- A follow-up string check showed that the two expected-output comparison lines were not changed by that patch (`_sv_signed(exp, width)` is not yet used there). This incomplete correction is recorded as such; no generated testbench was compiled or simulated. Next patch both output comparisons and re-inspect the generated-source template before CI integration.
+
+
+## 266. Streaming testbench signed-value fix completed — 2026-11-27T23:39:00Z
+
+- Patched the remaining two generated expected-output comparisons in `benchmarks/dadda_pipeline.py` on the experiment branch, commit `d8cdb63af97641ce5e7a0bfe508cbd3a77250c96`. Both the streaming-loop and flush checks now format negative signed expected values through `_sv_signed(exp, width)`; lane inputs use the same formatter.
+- Static source inspection confirms two expected-output call sites now use the formatter. No Verilog generation, compilation, simulation, or formal proof was run. Next review the complete pipeline generator and benchmark source for additional generation issues, then add the ECP5 P&R script and CI steps. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.
+
+
+## 267. Pipeline generator stale accumulator fix — 2026-11-27T23:41:00Z
+
+- Re-inspected the committed generator and found a stale `stage_records.append(...)` block left behind after separating compressor and boundary manifests. That block referenced an undefined list and would have raised at generator execution.
+- Removed the stale block in pipeline branch commit `de4413dbebe61698f5addae62d9d5eb55372c16f`. This is a source-level correction based on inspection; generator execution remains unperformed. Next inspect the complete generator and benchmark source for further defects, then implement the isolated ECP5 pipeline P&R runner. No CI results exist yet. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 268. Separate pipeline ECP5 P&R runner added — 2026-11-27T23:43:00Z
+
+- Added `benchmarks/fpga_ecp5_pipeline.py` to `research/orcus-ecp5-dadda-pipeline` in commit `87f2174a58ac5b5b65744898b6e5ba28dc7d159f`.
+- The isolated runner generates each new pipelined top, runs the sequential formal and streaming harness first, then invokes Yosys `synth_ecp5` and nextpnr ECP5 P&R for the existing exact target (`LFE5U-85F-6BG381C`, CABGA381, speed grade 6), 100 MHz by default, with unconstrained external IOs. It parses LUT4, FF, MULT18X18D counts, Fmax, utilization, and detailed timing from the nextpnr report and retains raw logs/reports/configs.
+- This is source added only. No P&R, formal, or simulation has run. The runner and its imports still require test/CI review; no performance or utilization values are available. Next add tests and wire new steps into the experiment-branch workflow without altering the baseline matrix. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 269. Pipeline generator and harness unit tests added — 2026-11-27T23:45:00Z
+
+- Added `tests/test_dadda_pipeline.py` to the experiment branch in commit `fdc8f664ffc82257103cf7029657435331fc2547`.
+- Tests cover all four lane counts, accumulator widths, stage/latency metadata, complete registered heap including pass-through tokens, synchronous reset and valid interface, sequential reference alignment, 512-vector back-to-back testbench generation, and signed reference-vector bounds.
+- These are authored tests, not executed tests. The generator, miter, and testbench still need actual Python/Yosys/Icarus execution through CI. Next inspect test/runner interfaces and modify only the experiment branch workflow to run the new tests and pipeline P&R while retaining the baseline ECP5 job unchanged. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 270. Experiment-branch CI wired for pipeline validation — 2026-11-27T23:47:00Z
+
+- Updated `.github/workflows/ci.yml` on `research/orcus-ecp5-dadda-pipeline` in commit `7bf6856a1b96058a05ee5784810f77f11b943512`.
+- The ECP5 job now installs Icarus, runs `tests/test_dadda_pipeline.py`, runs the separate `benchmarks/fpga_ecp5_pipeline.py` (sequential formal + 512-vector streaming + Yosys ECP5 synthesis + nextpnr P&R), and uploads a dedicated `orcus-fpga-ecp5-pipelined-dadda` artifact. The existing baseline ECP5 command/matrix remains present and unchanged in the workflow; baseline evidence is still Run #262.
+- This is CI wiring only. No Actions run has yet been observed for this branch/head; no formal, simulation, or P&R result is available. Next inspect all newly added source/workflow files, correct any issues, synchronize branch `STATUS.md` with the authoritative main handoff, then open a Draft PR to trigger CI. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 271. Pre-PR source review and artifact audit gap — 2026-11-27T23:49:00Z
+
+- Re-fetched all five new/modified pipeline files on the experiment branch and checked that the stale generator accumulator was removed, the sequential miter/512-vector source is present, the P&R runner exists, and CI references the new pipeline flow while retaining the baseline command.
+- Identified an evidence-retention gap before opening a PR: the formal and streaming harness currently write logs only inside temporary directories, then delete them; the P&R artifact would therefore lack persistent sequential proof and simulator logs. The pipeline manifest is also not currently persisted as a standalone JSON artifact. These are being fixed before the draft PR.
+- This was a read-only review. No tests/formal/simulation/P&R were run. No latency or Fmax values are yet verified. Next persist raw miter/testbench/solver/compiler/simulator logs and full heap manifests in the P&R artifact, then open a Draft PR. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.
+
+
+## 272. Raw pipeline validation evidence retention fixed — 2026-11-27T23:51:00Z
+
+- Updated `benchmarks/dadda_pipeline.py` in pipeline branch commit `2805b72742627f1377fd105f8ad3d713a3ab2ece`: formal harness can persist generated miter Verilog and full Yosys SAT log; streaming harness can persist generated testbench, Icarus compile log, and simulator log.
+- Updated `benchmarks/fpga_ecp5_pipeline.py` in commit `4db5857d56bfc7aaad7d4d4abe99a8b66e91fac2`: each lane row now saves `pipeline-manifest.json` and passes a persistent `validation/` directory to the formal and streaming harnesses. This closes the identified artifact-retention gap for successful runs.
+- Neither change has been executed. Failure-path persistence for a command that raises before the normal post-run copy still needs attention; next add fail-safe log persistence and verify imports/source before PR. No formal, simulation, synthesis, or P&R results exist yet. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.
+
+
+## 273. Failure-path validation log retention added — 2026-11-27T23:53:00Z
+
+- Updated `benchmarks/dadda_pipeline.py` in pipeline branch commit `e4b2442affb117667bd81b390277a0e0a65495f8` so Yosys SAT timeouts persist the partial solver log and miter source; Icarus compile logs are persisted before checking compile success; VVP timeout logs are also retained. This complements the successful-run log persistence recorded in section 272.
+- Source was not executed. The CI workflow still needs exact-head validation. Next complete the final source review, synchronize branch `STATUS.md` with current main handoff, and open a Draft PR. No Fmax or resource metrics exist yet. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 274. Reset-state leakage added to streaming validation — 2026-11-27T23:55:00Z
+
+- Extended `build_streaming_testbench()` in `benchmarks/dadda_pipeline.py` on the pipeline branch, commit `a197b3edccf5f4c2bd2494351457332a45ec6150`.
+- After the 512 consecutive transactions and pipeline drain, the testbench now injects one additional valid transaction, asserts synchronous reset while that transaction is in flight, then checks `out_valid` remains low for `L+1` cycles. This explicitly checks that reset flushes pending state and no stale transaction leaks after reset.
+- The generated testbench has not been compiled or simulated. Next update the unit test to assert the reset-leak check is present, then continue source review and branch handoff. No formal or P&R result is claimed.
+
+
+## 275. Reset-leak unit assertion added — 2026-11-27T23:57:00Z
+
+- Updated `tests/test_dadda_pipeline.py` on the pipeline branch in commit `815944e9d53e32068a004785f56d5dcbc34bb601` to assert that the generated streaming testbench includes the post-reset stale-transaction leakage check.
+- This only adds a source assertion; no tests have been run. Next inspect exact generated source logic and fix any remaining issues before syncing branch STATUS and opening the Draft PR.
+
+
+
+## Pipeline experiment branch handoff — 2026-11-27
+
+- Active experiment branch: research/orcus-ecp5-dadda-pipeline.
+- New implementation files: orcus/dadda_pipeline.py, benchmarks/dadda_pipeline.py, benchmarks/fpga_ecp5_pipeline.py, tests/test_dadda_pipeline.py.
+- CI adds separate pipelined Dadda sequential SAT, 512-vector Icarus streaming/reset checks, ECP5 synthesis and nextpnr P&R, with a dedicated artifact. Existing baseline ECP5 job/matrix remains unchanged.
+- Generator architecture: one complete live-heap register boundary after every Dadda reduction level, including pass-through bits; final CPA captured in output register; synchronous active-high reset; in_valid/out_valid; one transaction per cycle.
+- Schedule-derived latency metadata: 4 lanes L=6, 8 lanes L=8, 16 lanes L=10, 32 lanes L=11. These are derived from the Dadda stage schedule and have not yet been confirmed by executing the generator or RTL.
+- Branch code head before this STATUS synchronization included commit 815944e9d53e32068a004785f56d5dcbc34bb601. This STATUS synchronization creates a new branch commit.
+- Validation status: no Python tests, sequential SAT, streaming simulation, Yosys synthesis, or nextpnr P&R has run yet. Do not claim timing closure or performance gains. Run #262 remains immutable baseline; external IOs remain unconstrained.
+- PR #21 untouched/unmerged; Ceres untouched; NEM remains separate.
+- Next: open a Draft PR to trigger exact-head CI, then audit logs/artifact and record actual per-lane latency, formal results, 512-vector streaming results, LUT4/FF/MULT18X18D, critical paths and Fmax. Preserve all failures and timeouts.

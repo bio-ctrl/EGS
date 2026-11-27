@@ -1992,3 +1992,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Yosys ECP5 synthesis maps primitives LUT4, CCU2C, TRELLIS_FF, etc. ECP5 nextpnr packer describes carry LUT accounting as 2 LUT4s per CCU2C; each CCU2C carries two carry stages. Use the Yosys mapped JSON cell counts for exact LUT4, CCU2C and TRELLIS_FF counts, plus nextpnr post-route BEL utilization and achieved Fmax. Preserve PFUMX/L6MUX21/MULT18X18D and all utilization data too; do not equate TRELLIS_COMB with LUT4. Sources: https://github.com/YosysHQ/nextpnr/blob/main/ecp5/pack.cc and https://github.com/YosysHQ/nextpnr/blob/main/ecp5/docs/primitives.md.
 - Synthesis command confirmed: read Verilog, then `synth_ecp5 -top <top> -json <netlist.json>`; nextpnr uses the JSON, `--85k --package CABGA381 --speed 6 --freq 100 --seed 1 --report <report.json> --detailed-timing-report --textcfg <config> --lpf-allow-unconstrained --timing-allow-fail`. Run exact versions Yosys 0.33-5build2 and nextpnr-ecp5/chipdb 0.6-3build5 on Ubuntu 24.04.
 - No FPGA code or measurement yet. Next implement isolated FPGA benchmark script and tests, then add separate Ubuntu 24.04 CI job and inspect real output schema before trusting resource counts. Ceres untouched; NEM distinct.
+
+
+## 221. ECP5 LUT/carry resource parsing approach confirmed — 2026-11-27T06:57:28.336Z
+
+- Re-read main STATUS before ECP5 resource research. STATUS blob: a723773394b67836988949204354df3353494942.
+- nextpnr ECP5 packer reports logic LUTs and carry LUTs separately before packing; each CCU2C contributes two carry LUT stages. Yosys mapped JSON can count explicit LUT4, CCU2C and TRELLIS_FF cells; CCU2C count ×2 gives carry stages. Keep this distinct from post-pack slice/BEL utilization. Source: https://github.com/YosysHQ/nextpnr/blob/main/ecp5/pack.cc.
+- Use the Yosys JSON netlist cell map for exact pre-P&R LUT4, CCU2C, TRELLIS_FF, PFUMX, L6MUX21, MULT18X18D and TRELLIS_IO counts; use nextpnr post-route JSON for BEL utilization and achieved clock Fmax. Do not label a BEL count as LUT4s unless the cell type explicitly is LUT4.
+- No FPGA files changed. Next inspect the shared proof helper and then implement the wrapper generator, resource/report parser, tests, and a dedicated Ubuntu 24.04 job. Ceres untouched; NEM distinct.

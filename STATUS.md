@@ -1350,3 +1350,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 155. Run #248 remains in formal/unit-test stage — 2026-11-27T06:10:42.220Z
 
 - Re-polled Run #248 job 140343567995. Dependency and OpenSTA checks remain passed; unit test step 9 is still in_progress. No failure or completion has been reported. Remaining benchmark steps have not started.
+
+## 156. Run #248 formal test stage still running — 2026-11-27T06:10:58.602Z
+
+- Run #248 remains in_progress with unit test step 9 active; setup steps 1–8 succeeded. No conclusion yet. The expected duration includes six scaled fused compositional proof configurations and six direct/carry-save equivalence configurations, so do not treat the elapsed time alone as a timeout.

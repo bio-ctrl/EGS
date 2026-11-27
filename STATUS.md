@@ -2242,3 +2242,41 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before recording the tool failure. STATUS blob: 15e5f03296b880342d1dcb451eceb92a2b2ded48.
 - Attempted to append the detailed Run #261 ECP5 resource/Fmax/stage-timing matrix to STATUS.md. The JavaScript orchestration payload failed to parse because literal backtick characters in the Markdown entry terminated its template string. No STATUS or source mutation occurred.
 - The artifact audit itself completed in the container and is recorded in section 246 as a first pass; detailed raw report values are available from the downloaded artifact. Retry the status append using a safely constructed plain string or escaped backticks. Ceres untouched; NEM distinct.
+
+
+## 249. Run #261 ECP5 raw report and resource audit complete — 2026-11-27T07:08:15.708Z
+
+- Re-read main STATUS before this detailed artifact audit. STATUS blob: 37c40e2066e0de3d8a205eca556f736d8d15dbfe.
+- Independently parsed all eight Yosys JSON netlists and all eight raw nextpnr report JSONs from /mnt/data/orcus-fpga-ecp5-run-261.zip. ZIP SHA-256 matches GitHub metadata. Each summary Fmax exactly equals raw report Fmax; each summary utilization dictionary exactly equals raw report utilization. All eight nextpnr jobs completed and emitted routed.config plus detailed report/log files.
+- Resource labels: LUT4, CCU2C, MULT18X18D and TRELLIS_FF are exact Yosys mapped primitive counts before P&R; carry stages = 2 × CCU2C. TRELLIS_COMB is the separate nextpnr post-pack combinational BEL count, not interchangeable with LUT4. All wrappers have identical FF counts across Direct/Dadda at each lane count. Direct maps one hard MULT18X18D per lane; Dadda maps zero hard multipliers.
+
+| Lanes | Variant | Yosys LUT4 | CCU2C | Carry stages | FF | MULT18X18D | PFUMX | L6MUX21 | Post-route TRELLIS_COMB | Fmax MHz | 100 MHz met? |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| 4 | Direct | 116 | 5 | 10 | 42 | 4 | 56 | 42 | 132 | 91.9202 | No |
+| 4 | Fused Dadda | 260 | 5 | 10 | 42 | 0 | 89 | 49 | 276 | 106.2586 | Yes |
+| 8 | Direct | 167 | 11 | 22 | 75 | 8 | 58 | 38 | 199 | 62.7353 | No |
+| 8 | Fused Dadda | 579 | 6 | 12 | 75 | 0 | 226 | 101 | 597 | 84.0195 | No |
+| 16 | Direct | 513 | 11 | 22 | 140 | 16 | 207 | 119 | 545 | 51.2926 | No |
+| 16 | Fused Dadda | 1252 | 6 | 12 | 140 | 0 | 491 | 230 | 1270 | 73.0994 | No |
+| 32 | Direct | 936 | 12 | 24 | 269 | 32 | 309 | 144 | 970 | 43.4972 | No |
+| 32 | Fused Dadda | 2400 | 7 | 14 | 269 | 0 | 892 | 392 | 2420 | 55.8223 | No |
+
+### Stage runtimes (seconds)
+
+| Lanes | Variant | Dadda formal | Yosys synth_ecp5 | nextpnr P&R | Total |
+|---:|---|---:|---:|---:|---:|
+| 4 | Direct | Baseline | 0.328728 | 1.019306 | 1.348034 |
+| 4 | Fused Dadda | 0.051535 | 0.622171 | 0.732039 | 1.405745 |
+| 8 | Direct | Baseline | 0.407003 | 0.994898 | 1.401900 |
+| 8 | Fused Dadda | 0.052118 | 1.104498 | 1.455583 | 2.612199 |
+| 16 | Direct | Baseline | 0.702119 | 2.201740 | 2.903859 |
+| 16 | Fused Dadda | 0.051078 | 2.015852 | 2.662878 | 4.729809 |
+| 32 | Direct | Baseline | 1.247080 | 4.426633 | 5.673713 |
+| 32 | Fused Dadda | 0.053892 | 4.011671 | 5.146946 | 9.212509 |
+
+- Dadda formal proof (compositional SAT + heap audit) passed for all four lane counts, runtimes approximately 0.0511–0.0539 s. Direct rows are explicitly baseline-reference; no Direct formal-pass claim is made in this FPGA artifact.
+- Dadda Fmax improvement versus Direct: 4 lanes +15.60%; 8 lanes +33.93%; 16 lanes +42.52%; 32 lanes +28.33%.
+- 100 MHz timing target: only 4-lane Dadda meets it (106.2586 MHz). 4-lane Direct is 91.9202 MHz; both 8-lane variants, both 16-lane variants and both 32-lane variants are below 100 MHz. The P&R pipeline is working, but larger designs do not yet meet the initial 100 MHz target.
+- Dadda trades LUT4s for fewer carry cells and avoids hard DSP multipliers: at 32 lanes it uses 2400 LUT4 / 7 CCU2C / 14 carry stages / 269 FF / 0 MULT18X18D, versus Direct 936 LUT4 / 12 CCU2C / 24 carry stages / 269 FF / 32 MULT18X18D. Fmax rises from 43.4972 to 55.8223 MHz (+28.33%). This is a meaningful DSP-free alternative, not a universal area win; Direct is much more LUT-efficient because it infers ECP5 hard multipliers.
+- Run uses a clocked input-register/core/output-register wrapper with --freq 100, seed 1 and unconstrained external IOs (--lpf-allow-unconstrained). This is architecture-level P&R, not a board-pin-constrained build, bitstream pack, or physical-board test. No ecppack bitstream was produced. Tool versions: Yosys 0.33 git 2584903a060; nextpnr-ecp5 0.6-3build5.
+- Run #262 latest source/test head remains active; its artifact must be audited too before Milestone #3 is treated as fully CI-verified. Next inspect exact-head Run #262, then decide whether to lower clock target, pipeline, or test alternate scheduling only after preserving this 100 MHz baseline. Ceres untouched; NEM distinct.

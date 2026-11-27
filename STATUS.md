@@ -2008,3 +2008,13 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Inspected run_compositional_proofs in orcus/lane_scaling.py. It computes accumulator_width(lanes), generates the selected fused heap, audits the emitted RTL/manifest, checks candidate source contains the exact generated heap lines, then runs Yosys SAT for signed Baugh-Wooley lane identity, FA, HA and modulo-W CPA. It has no TARGET_LANES-only restriction, so it can formally verify the 4-lane/10-bit Dadda core as well as 8/16/32.
 - FPGA benchmark will run this proof for each Dadda lane count 4/8/16/32 before synthesis/P&R, using the exact core embedded in the clocked wrapper. Direct rows remain the baseline and will use the same wrapper, clock, target frequency and seed.
 - No FPGA code or P&R yet. Next create isolated benchmark/test files and append a separate Ubuntu 24.04 FPGA job without modifying existing ASIC benchmark steps. Ceres untouched; NEM distinct.
+
+
+## 223. Milestone #3 initial ECP5 implementation committed on main — 2026-11-27T06:59:14.046Z
+
+- Re-read main STATUS before the repository mutation. STATUS blob: 7c6b106330bf0a12adba73df3b567b56459e5110.
+- Committed initial Milestone #3 implementation to main: 58503cc62a1a2cdfe51e8cce523e3d22f94f0368 (parent 092b986b951b4cc90a47ca10db2d68358660536f). GitHub ref update succeeded with force=false and expected prior main SHA.
+- Added benchmarks/fpga_ecp5.py (blob 136529c82648202c8dcd00b890e890946d6fd068): 4/8/16/32-lane Direct and Fused Dadda matrix; clocked wrapper; Dadda compositional proofs; Yosys synth_ecp5; nextpnr-ecp5 for LFE5U-85F-6BG381C / CABGA381 / speed 6; LUT4/CCU2C/carry-stage/TRELLIS_FF parsing; nextpnr Fmax/utilization JSON; raw logs, netlists, configs and reports.
+- Added tests/test_fpga_ecp5.py (blob 5f377a5f7379e8090bbe9b72ce6b4318f4bbe15a): target/width contract, wrapper register-boundary tests, mapped-cell parser tests, nextpnr Fmax/report parser tests.
+- Extended .github/workflows/ci.yml (blob 08b9789fb3a66d22b1bd70fbbd1ea8a55c2971c2) with a separate Ubuntu 24.04 FPGA job pinning Yosys 0.33-5build2 and nextpnr-ecp5/chipdb 0.6-3build5, running wrapper tests and all 8 FPGA builds, and uploading the full FPGA evidence directory even on failure. Existing Ubuntu 22.04 ASIC benchmark job remains unchanged.
+- This is an initial implementation commit, not verified P&R evidence. Next inspect the committed script for source-generation/escaping issues, run the new unit tests and full CI, inspect actual nextpnr report schema, and fix any failures non-destructively. No FPGA Fmax/resource results are available yet. Ceres untouched; NEM distinct.

@@ -288,3 +288,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - `fetch_commit_workflow_runs` for this new head returned no PR-triggered run at the time checked. No CI run ID is confirmed yet. Do not claim the workflow was triggered.
 - Next: inspect PR mergeability and Actions run list for the exact head. If no run starts, diagnose the base/head divergence and resolve it with a non-force merge commit, preserving PR code and current main STATUS. Do not merge PR #19 into main.
 - Proof implementation and one-bit negative test are committed on the PR branch but remain unexecuted. No proof or PPA claim is made. Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 21. GitHub Actions query limitation — 2026-11-27T04:50:30Z
+
+- Attempted to query the Actions runs collection with a `head_sha` query parameter; the GitHub connector rejected that URL as unsupported (HTTP 400). No run data was retrieved by that request. This is a connector endpoint limitation, not evidence that GitHub Actions itself failed.
+- No code or branch refs were changed by this failed diagnostic. PR #19 remains open/unmerged; proof implementation and negative test remain unexecuted.
+- Next: use the supported workflow-run lookup by commit SHA and PR metadata/compare endpoints, then update this status with the exact run or mergeability diagnosis.

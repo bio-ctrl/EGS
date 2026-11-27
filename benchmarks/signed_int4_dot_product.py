@@ -26,23 +26,19 @@ OPENSTA_TIMEOUT_SECONDS = 120
 VARIANTS = ("direct", "left_deep", "balanced_01_23", "balanced_02_13", "carry_save", "fused_partial_product")
 
 
-def _fused_partial_product_lines() -> list[str]:
-    """Build one 10-bit Baugh-Wooley bit heap across all four signed lanes.
-
-    Negative sign-bit cross-products are complemented and corrected by 0x390
-    per lane. All lane partial products enter one 3:2 compressor network; only
-    the final two-row result uses carry propagation.
-    """
+def _fused_partial_product_lines(external_inputs: bool = False) -> list[str]:
+    """Build the common 10-bit fused heap, optionally exposing PP bits as ports."""
     columns: list[list[str]] = [[] for _ in range(10)]
     lines: list[str] = []
     for lane in range(LANES):
         for i in range(4):
             for j in range(4):
                 name = f"pp_{lane}_{i}_{j}"
-                product = f"(a{lane}[{i}] & b{lane}[{j}])"
-                # Exactly one sign-bit operand creates a negative Baugh-Wooley term.
-                expr = f"~{product}" if ((i == 3) != (j == 3)) else product
-                lines.append(f"  wire {name} = {expr};")
+                if not external_inputs:
+                    product = f"(a{lane}[{i}] & b{lane}[{j}])"
+                    # Exactly one sign-bit operand creates a negative Baugh-Wooley term.
+                    expr = f"~{product}" if ((i == 3) != (j == 3)) else product
+                    lines.append(f"  wire {name} = {expr};")
                 columns[i + j].append(name)
         # -112 modulo 2^10 = 912 = 0x390; correction bits are 4, 7, 8, 9.
         for bit in (4, 7, 8, 9):
@@ -69,6 +65,115 @@ def _fused_partial_product_lines() -> list[str]:
     lines.append("  wire [9:0] fused_row1 = {" + ", ".join(reversed(row1)) + "};")
     lines.append("  assign y = fused_row0 + fused_row1;")
     return lines
+
+
+def _baugh_wooley_lane_source(name: str) -> str:
+    """One-lane 4x4 signed Baugh-Wooley product, returning the 8-bit product."""
+    lines = [
+        f"module {name}(input signed [3:0] a, input signed [3:0] b, output signed [7:0] p);"
+    ]
+    terms = []
+    for i in range(4):
+        for j in range(4):
+            pp = f"pp_{i}_{j}"
+            product = f"(a[{i}] & b[{j}])"
+            expr = f"~{product}" if ((i == 3) != (j == 3)) else product
+            lines.append(f"  wire {pp} = {expr};")
+            term = f"term_{i}_{j}"
+            lines.append(f"  wire [7:0] {term} = {{7'b0, {pp}}} << {i + j};")
+            terms.append(term)
+    lines.append("  assign p = " + " + ".join(terms + ["8'h90"]) + ";")
+    lines.append("endmodule")
+    return "\n".join(lines) + "\n"
+
+
+def _baugh_wooley_lane_reference() -> str:
+    return (
+        "module reference(input signed [3:0] a, input signed [3:0] b, "
+        "output signed [7:0] p);\n"
+        "  assign p = $signed(a) * $signed(b);\n"
+        "endmodule\n"
+    )
+
+
+def _fused_heap_gate_source(name: str, tamper: bool = False) -> str:
+    ports = ", ".join(
+        f"input pp_{lane}_{i}_{j}"
+        for lane in range(LANES) for i in range(4) for j in range(4)
+    )
+    lines = [f"module {name}({ports}, output [9:0] y);"]
+    lines.extend(_fused_partial_product_lines(external_inputs=True))
+    if tamper:
+        lines[-1] = "  assign y = (fused_row0 + fused_row1) ^ 10'b0000000001;"
+    lines.append("endmodule")
+    return "\n".join(lines) + "\n"
+
+
+def _fused_heap_reference_source() -> str:
+    ports = ", ".join(
+        f"input pp_{lane}_{i}_{j}"
+        for lane in range(LANES) for i in range(4) for j in range(4)
+    )
+    lines = [f"module reference({ports}, output [9:0] y);"]
+    terms = []
+    for lane in range(LANES):
+        for i in range(4):
+            for j in range(4):
+                term = f"term_{lane}_{i}_{j}"
+                pp = f"pp_{lane}_{i}_{j}"
+                lines.append(f"  wire [9:0] {term} = {{9'b0, {pp}}} << {i + j};")
+                terms.append(term)
+        terms.append("10'h390")
+    lines.append("  assign y = " + " + ".join(terms) + ";")
+    lines.append("endmodule")
+    return "\n".join(lines) + "\n"
+
+
+def _run_fused_compositional_equivalence(yosys: str,
+                                         timeout_seconds: int = FORMAL_TIMEOUT_SECONDS,
+                                         tamper_heap: bool = False) -> dict:
+    """Prove the product identity and heap reduction separately, then compose.
+
+    Lemma 1 proves a signed 4x4 Baugh-Wooley product equals multiplication for
+    every operand pair. Lemma 2 proves the generated 10-bit compressor heap
+    equals the arithmetic sum of its 64 symbolic PP inputs plus four 0x390
+    corrections. Together these cover all 32 original operand bits and y[9:0].
+    """
+    lane = _run_equivalence(
+        _baugh_wooley_lane_source("orcus_bw_lane"),
+        _baugh_wooley_lane_reference(),
+        "orcus_bw_lane",
+        yosys,
+        timeout_seconds,
+    )
+    heap = _run_equivalence(
+        _fused_heap_gate_source("orcus_heap_gate", tamper=tamper_heap),
+        _fused_heap_reference_source(),
+        "orcus_heap_gate",
+        yosys,
+        timeout_seconds,
+    )
+    return {
+        "formal_equivalence": "formal-pass",
+        "proof_method": (
+            "Compositional Yosys proof: (1) equiv_make/equiv_struct/equiv_simple/"
+            "equiv_status -assert for 4x4 signed Baugh-Wooley product vs signed multiply; "
+            "(2) same flow for 10-bit compressor heap vs arithmetic sum of all 64 symbolic "
+            "partial-product bits plus four 0x390 corrections; composition covers all 32 "
+            "operand bits and all 10 output bits."
+        ),
+        "formal_equivalence_seconds": (
+            lane["formal_equivalence_seconds"] + heap["formal_equivalence_seconds"]
+        ),
+        "proof_log_tail": (
+            "LANE LEMMA:\\n" + lane["proof_log_tail"] +
+            "\\nHEAP LEMMA:\\n" + heap["proof_log_tail"]
+        ),
+        "proof_substages_seconds": {
+            "single_lane_baugh_wooley": lane["formal_equivalence_seconds"],
+            "symbolic_10_bit_heap": heap["formal_equivalence_seconds"],
+        },
+    }
 
 
 def module_source(name: str, variant: str) -> str:

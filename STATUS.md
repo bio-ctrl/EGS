@@ -456,3 +456,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Commit `0fd9465315675ce7042486d01a789c127b3138c0` clarifies the distinct proof sequence in the recorded proof-method string.
 - This is a diagnostic refinement only. No CI has yet tested this output-only heap proof. Run #220 remains failed; no benchmark artifact or fused PPA data.
 - Next: sync latest main STATUS/ancestry to the PR branch with a non-force merge commit, trigger a fresh run, and inspect the heap proof. Do not assert success until the negative tamper is rejected.
+
+
+## 42. Heap proof refinement synchronized to PR branch — 2026-11-27T05:08:00Z
+
+- Advanced `research/orcus-fused-int4-mac` to non-force two-parent merge commit `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`.
+- Parents: previous PR head `0fd9465315675ce7042486d01a789c127b3138c0` and main head `e54958cbcce4e94ec453383bcfcf64df82a41c7d`. Merge tree `3f6f65e6f61ab29ea2b02f54822d16fc8e1aa967` includes current main STATUS blob and preserves the output-only heap proof change and negative test.
+- Branch ref update succeeded with `force=false` and expected-head protection. This is a main-to-PR-branch sync, not a PR merge.
+- Next: confirm new automatic PR CI run for head `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`; then inspect whether output-only heap equivalence proves and the tampered output is rejected.

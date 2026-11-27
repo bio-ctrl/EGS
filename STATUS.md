@@ -700,3 +700,13 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Implementation will be additive and fail-closed: a typed deterministic heap representation, generated RTL/manifest, independent manifest/RTL audit, SAT harnesses, and three negative tamper cases. Any proof or CI outcome will be reported only after execution. No branch files changed and no CI run triggered at this preflight point.
 - Do not claim `mergeable=true` merely by syncing STATUS; GitHub computes mergeability and the PR base/head ancestry may also need synchronization. No merge authorization has been given.
 - Ceres was not accessed. NEM remains distinct. ORCUS v0.2 baseline remains intact.
+
+
+## 73. Typed heap implementation committed to PR #19 — 2026-11-27T05:21:46.973Z
+
+- PR #19 branch commit: `01d30e739b5030481313022a5d485c1b6a4d82d8`; branch `research/orcus-fused-int4-mac` advanced from `b7a479a03b51ac633963947170186ba7c41afb3a` using a non-force, expected-head-protected update. Files changed: new `orcus/typed_heap.py`; integrated fused RTL generator and proof flow in `benchmarks/signed_int4_dot_product.py`; replaced monolithic CEC unit test with compositional SAT and three negative tamper tests in `tests/test_signed_int4_dot_product.py`.
+- Implementation includes typed initial weighted bits (partial products and per-lane bias bits), deterministic 3:2 compressor nodes, two final rows, explicit top-column carry truncation modulo 2^10, generated RTL and JSON-serializable graph manifest. Benchmark artifact now records the manifest and individual SAT lemma timings.
+- Compositional proof harness includes: 10-bit signed Baugh-Wooley lane identity SAT lemma using bias 0x390; full-adder weighted-sum SAT lemma; half-adder weighted-sum SAT lemma; 10-bit modulo CPA SAT lemma; independent RTL/graph audit; tamper tests for partial-product polarity, compressor carry weight, and output assignment.
+- **Not yet verified:** no local Yosys or Python test execution was performed in this repository write action. No proof runtime is measured yet. No CI run ID, stage timings, or benchmark artifact is confirmed. Do not claim the SAT lemmas or negative tests pass until CI logs confirm them.
+- Next: sync current main STATUS ancestry/blob onto the PR branch with a non-force two-parent merge commit, confirm PR mergeability after GitHub recalculates, then inspect the new synchronize-triggered CI run. If tests fail, preserve logs and fix the exact failure. Benchmark is permitted only after proof and unit tests pass. Milestone #1 remains open; Milestone #2 blocked.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline unchanged.

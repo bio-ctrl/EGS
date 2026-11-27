@@ -1404,3 +1404,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 168. Run #248 formal-test stage duration update — 2026-11-27T06:16:16.826Z
 
 - Run #248 remains in_progress at unit-test step 9 after approximately six minutes. This exceeds the four-lane test time but does not itself establish failure. Candidate causes include large-width Yosys equivalence; no logs are available to identify the active test. Keep the configured timeouts and await actual job outcome.
+
+## 169. Run #248 remains in test step 9 — 2026-11-27T06:16:36.327Z
+
+- Latest workflow job poll confirms no state change: unit tests in_progress; all subsequent steps pending. No CI completion or artifact available.

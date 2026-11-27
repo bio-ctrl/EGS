@@ -955,3 +955,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Merge parents: non-structural baseline equivalence change `412efcd85f857e231dd76d78354d827a9a35dcdc` first; main `03cf8e6b5703dfa8b8975b6b61f9ccaf782a859e` second. Branch ref update succeeded with expected-head protection.
 - New branch head should trigger PR CI. Run #240 remains failed on prior head; preserved. No fused benchmark artifact yet.
 - Next: verify new run and validate the non-structural equivalence method for all five baselines and the compositional proof for fused. PR #19 remains open/unmerged.
+
+
+## 106. Baseline proof adjustment CI Run #242 started — 2026-11-27T05:33:29.455Z
+
+- Automatic PR Run #242, ID `45946483363`, confirmed for exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`; created `2026-11-27T05:33:13Z`; status `in_progress`.
+- This run includes non-structural equivalence for the five product-level baselines and the compositional fused proof. No results yet; prior Run #240 failure preserved.
+- Next: monitor unit tests, all baseline formal checks, fused compositional SAT, and benchmark artifact. PR #19 remains open/unmerged.

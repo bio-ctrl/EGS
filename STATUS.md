@@ -866,3 +866,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 93. Run #238 second dependency poll — 2026-11-27T05:29:06.717Z
 
 - Run #238 `45946018320`, job `140330785714`, remains `in_progress`; dependency installation step 4 is still active. No unit tests or proof lemmas have started. No new benchmark or artifact evidence.
+
+
+## 94. Run #238 dependency cache restore active — 2026-11-27T05:29:16.015Z
+
+- Run #238 `45946018320`, job `140330785714`: dependency installation completed successfully; cache restore step 5 is active. Unit tests and all later stages remain pending. No proof result or benchmark data.

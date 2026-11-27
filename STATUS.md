@@ -710,3 +710,46 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - **Not yet verified:** no local Yosys or Python test execution was performed in this repository write action. No proof runtime is measured yet. No CI run ID, stage timings, or benchmark artifact is confirmed. Do not claim the SAT lemmas or negative tests pass until CI logs confirm them.
 - Next: sync current main STATUS ancestry/blob onto the PR branch with a non-force two-parent merge commit, confirm PR mergeability after GitHub recalculates, then inspect the new synchronize-triggered CI run. If tests fail, preserve logs and fix the exact failure. Benchmark is permitted only after proof and unit tests pass. Milestone #1 remains open; Milestone #2 blocked.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline unchanged.
+
+
+## 74. PR #19 STATUS ancestry synchronized — 2026-11-27T05:22:12.973Z
+
+- Synced current `main` STATUS blob `55dd9d70540190e4b7db13102ca46e3421bdc2f5` and `main` ancestry commit `547f20c063ec60905f8fcaf60c65774f0e552500` into `research/orcus-fused-int4-mac` with non-force two-parent merge commit `6d11c50eadcf36d56b756578d505d75248791130`.
+- Merge parents: PR implementation commit `01d30e739b5030481313022a5d485c1b6a4d82d8` first, main `547f20c063ec60905f8fcaf60c65774f0e552500` second. Branch ref update succeeded with `force=false` and expected-head protection. No PR merge.
+- This sync is intended to restore ancestry and current STATUS on the branch; it does not guarantee GitHub's computed `mergeable` field is true. Verify PR metadata after GitHub recalculates.
+- No new CI result is confirmed at this exact step. Next: inspect PR #19 metadata and Actions runs for exact new branch head `6d11c50eadcf36d56b756578d505d75248791130`; monitor unit tests and compositional proof. No proof runtime or benchmark result is yet established.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 75. Compositional proof CI Run #231 started — 2026-11-27T05:22:30.197Z
+
+- PR #19 current head: `6d11c50eadcf36d56b756578d505d75248791130`; base/main: `547f20c063ec60905f8fcaf60c65774f0e552500`. GitHub PR metadata after synchronization still reports `mergeable=false`; do not claim it is mergeable. PR remains open and unmerged.
+- Automatic PR workflow Run #231, ID `45945384577`, event `pull_request`, was discovered for exact head `6d11c50eadcf36d56b756578d505d75248791130`; status `in_progress`. Job `140328775094`: setup, checkout, and Python setup succeeded; dependency installation step 4 is active. Unit tests (step 9), compile, benchmark, artifact upload, and smoke verification are pending.
+- The branch includes typed heap generator, manifest, compositional SAT harness, and polarity/carry-weight/output tamper tests, but no test or proof result is confirmed yet. Do not report a runtime or formal pass until the job logs establish it.
+- Next: poll Run #231. If unit tests pass, inspect all four SAT lemma outputs and tamper rejections; then allow six-variant benchmark to run and inspect artifact/raw reports. If failure occurs, retrieve exact logs and record diagnosis. Milestone #1 remains open; Milestone #2 blocked.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline unchanged.
+
+
+## 76. Run #231 dependency/cache progress — 2026-11-27T05:22:42.406Z
+
+- Run #231 `45945384577`, job `140328775094`, exact head `6d11c50eadcf36d56b756578d505d75248791130` remains `in_progress`. Dependency installation completed successfully; cache restore step 5 is active. Steps 6–14, including unit tests and the compositional proof suite, have not yet completed.
+- PR #19 metadata still reports `mergeable=false` after the ancestry sync. It remains open/unmerged. Do not represent STATUS sync as proof that mergeability is true.
+- No SAT result, tamper-test result, proof runtime, benchmark stage timing, artifact, or PPA data is available at this poll.
+- Next: continue polling Run #231 and inspect the unit-test logs as soon as step 9 completes. Ceres untouched; NEM distinct; baseline intact.
+
+
+## 77. Run #231 unit-test failure — 2026-11-27T05:23:26.832Z
+
+- Run #231 `45945384577`, job `140328775094`, exact branch head `6d11c50eadcf36d56b756578d505d75248791130` failed at unit-test step 9. Dependency/cache/OpenSTA verification passed. Python compilation, Nangate45 fetch, benchmark, artifact upload, and smoke verification were skipped.
+- Full logs show 67 tests: 64 passed, 2 failed, 1 errored. The compositional audit exposed a manifest schema bug: the generator placed compressor-output records in `initial_bits` as well as recording them as compressor nodes. The auditor correctly rejected the unexpected `compressor_sum` kind before running SAT lemmas. Consequently the carry-weight and output-tamper tests also failed early for that same schema issue; the partial-product polarity tamper test passed.
+- No SAT lemma ran to completion; no proof runtime, benchmark stage timing, artifact, or PPA data exists. This is a software/manifest classification defect, not evidence of arithmetic inequivalence.
+- Next: fix manifest serialization so `initial_bits` contains only partial-product and constant-bias sources; compressor sum/carry nodes remain exclusively in compressor records. Strengthen the audit to require the exact expected initial PP/bias ID set. Re-run unit tests in fresh CI and inspect all four SAT lemma verdicts and all three negative tests. Do not start/claim benchmark results until the proof suite passes.
+- PR #19 remains open/unmerged; latest known GitHub metadata still `mergeable=false`. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 78. Typed heap manifest classification fix committed — 2026-11-27T05:23:57.502Z
+
+- Fixed the Run #231 manifest schema defect on PR branch with commit `668122146ed2c546d0f47dc8ff53e3d2ba750d80` (parent `6d11c50eadcf36d56b756578d505d75248791130`). `initial_bits` now serializes only partial-product and constant-bias source nodes; compressor sum/carry outputs remain represented in compressor records. The independent audit now also requires the exact complete expected source-bit ID set for all lanes.
+- This fix addresses the observed `unexpected initial bit kind: compressor_sum` error. It is not yet verified by tests. Run #231 remains failed and historical; no rerun result is yet confirmed. No SAT lemma or benchmark has completed.
+- Next: sync latest main STATUS/ancestry to the branch and inspect the synchronize-triggered CI run for the new head. Confirm that the four SAT lemmas run and the three tamper tests reject the modified designs. If another failure appears, preserve exact logs and fix only the demonstrated issue. No runtime claim until measured.
+- PR #19 remains open/unmerged. Latest mergeability state from before this fix was `false`; recheck after sync. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.

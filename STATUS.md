@@ -962,3 +962,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Automatic PR Run #242, ID `45946483363`, confirmed for exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`; created `2026-11-27T05:33:13Z`; status `in_progress`.
 - This run includes non-structural equivalence for the five product-level baselines and the compositional fused proof. No results yet; prior Run #240 failure preserved.
 - Next: monitor unit tests, all baseline formal checks, fused compositional SAT, and benchmark artifact. PR #19 remains open/unmerged.
+
+
+## 107. Run #242 setup progress — 2026-11-27T05:33:42.713Z
+
+- Run #242 `45946483363`, job `140332240921`, exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3` remains `in_progress`. Setup, checkout, Python setup passed; dependency installation step 4 active. No unit-test or benchmark result yet.

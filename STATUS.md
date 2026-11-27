@@ -2,7 +2,7 @@
 
 > **MANDATORY HANDOFF RULE FOR EVERY FUTURE AI SESSION:** "Read this file first, never fabricate numbers, keep Ceres untouched, and update `STATUS.md` on `main` after every major milestone."
 
-**Last updated:** 2026-11-26  
+**Last updated:** 2026-11-27  
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -73,22 +73,53 @@ These are results for this specific benchmark and flow. They do not establish a 
 
 **PR:** [#19 — Experiment: fused four-lane signed INT4 partial-product compressor](https://github.com/bio-ctrl/EGS/pull/19)  
 **Branch:** `research/orcus-fused-int4-mac`  
-**Last known head:** `561ac0725e34f47413445c582f8b64d2188adfd3` (short SHA: `561ac07`)  
-**CI:** Run #203, ID `45893609205`  
-**Last observed state (2026-11-26):** workflow `in_progress`; benchmark step was still running; artifact had not yet been uploaded; PR remained open and draft. This is a time-stamped last-known state, not a claim about its current live state.
+**Current head:** `80cf57c562993305a3f98b8d26292d484c7b682c` (short SHA: `80cf57c`)  
+**PR state:** open, draft, unmerged  
+**CI Run #203:** ID `45893609205`, head `561ac0725e34f47413445c582f8b64d2188adfd3`; conclusion `cancelled`; no artifact was uploaded.
 
-The candidate expands each of four signed 4×4 products into Baugh-Wooley partial products and compresses all lanes in one shared 10-bit bit heap before a final carry-propagate addition. It is distinct from the v0.2 two-stage carry-save candidate, which compresses already-computed products.
+### Run #203 failure history and diagnosis
 
-At the last observed Run #203 checkpoint:
-- Pinned CUDD and OpenSTA builds passed.
-- OpenSTA executable/version verification passed.
-- Unit tests passed.
-- Python compilation passed.
-- Nangate45 Liberty retrieval passed.
-- The six-variant benchmark was still running.
-- Artifact upload and final benchmark-target verification were pending.
+Run #203 completed with `cancelled`, not with a failed SAT proof. The runner began setup at 2026-11-26 20:47:50 UTC and logged cancellation at 2026-11-27 02:48:02 UTC, approximately six hours later. The signed INT4 benchmark command began at 20:51:33 UTC. The job therefore reached GitHub Actions' default 360-minute job timeout while the benchmark command was still running. The available log does not identify which internal benchmark stage or which variant consumed the time; do not attribute the timeout to the fused variant's SAT proof without new stage-level evidence.
 
-**No verified PR #19 performance numbers are recorded here.** Do not infer or invent SAT status, generic cell count, area, delay, or power for the fused candidate. Once Run #203 completes, inspect its artifact and confirm formal SAT equivalence, all 512 unique xorshift32 vectors, VCD annotation, and the raw OpenSTA evidence before reporting results or merging the PR. If the run failed or the evidence parser is incomplete, fix the branch, rerun CI, and preserve the failure history.
+Before the benchmark command, the following steps passed:
+- Pinned CUDD and OpenSTA builds and OpenSTA version verification.
+- Unit tests.
+- Python compilation.
+- Nangate45 Liberty retrieval.
+
+The benchmark step was cancelled; artifact upload and benchmark-target verification were skipped. **No Run #203 SAT results, 512-vector confirmations, VCD annotation counts, generic-cell counts, area, delay, or power results are available.** The fused candidate's win/loss outcome is therefore **NOT DETERMINED**. Do not fill the PR #19 comparison table with estimates or copy v0.2 metrics into PR #19 results.
+
+Run #202 (ID `45892529710`) remains recorded as a prior failed attempt: its unit test incorrectly assumed all variants shared identical multiplier expressions. The test was corrected to distinguish the fused Baugh-Wooley implementation from the product-level reduction baselines. Preserve this failure history.
+
+### Corrective work committed to the PR branch
+
+The branch now contains:
+- A structured OpenSTA parser for internal, switching, leakage, and total power. It retains raw Watts values and emits explicit µW fields.
+- A fail-closed check for a parsed OpenSTA total-power row and nonzero VCD pin-activity annotation.
+- A fail-closed check that the deterministic xorshift32 stimulus contains exactly 512 unique vectors.
+- Unit tests for all four power components and rejection of missing VCD annotation.
+- Per-variant, per-stage progress logging for Yosys SAT/synthesis, simulation, and OpenSTA; CI invokes Python unbuffered so the last completed stage is visible in logs.
+
+Relevant branch commits include parser correction `ff07eefa`, parser tests `cd52b71e`, stage logging `cd6ea2f5`, and unbuffered CI logging `80cf57c5`. The latest branch head is `80cf57c5`. These code changes have **not yet passed a new CI run**. Reopening PR #19 did not produce a new Actions run in the latest check.
+
+### Required PR #19 closure gates
+
+1. Obtain a fresh CI run on the current branch head. If the benchmark again approaches the six-hour job limit, use the new progress logs to identify the exact variant and stage; then reduce or partition that work rather than claiming an unobserved failure cause.
+2. Inspect the uploaded artifact and raw OpenSTA reports for all six variants.
+3. Verify Yosys SAT equivalence for all six variants, exactly 512 unique fixed-seed xorshift32 vectors per variant, and nonzero clean VCD pin-activity annotation for every OpenSTA run.
+4. Populate the exact comparison table only from the artifact: Variant, Yosys SAT, Generic cells, Nangate45 area, OpenSTA delay, Internal µW, Switching µW, Leakage µW, Total µW.
+5. Compare fused Baugh-Wooley with the direct-expression baseline and existing two-stage carry-save baseline. Record whether it wins or loses on this workload, including any trade-offs; do not generalize beyond the measured configuration.
+6. Keep PR #19 open and unmerged until all evidence is reviewed. Do not merge without explicit authorization.
+
+### Milestone #2 — scale signed INT4 dot products
+
+After PR #19 has a complete, reviewed four-lane result, generalize the workload to 8, 16, and 32 lanes:
+- Use 11-bit, 12-bit, and 13-bit signed accumulators respectively.
+- Compare direct-expression, multi-stage carry-save, and fused Baugh-Wooley multi-lane compression.
+- Require formal equivalence for every candidate and retain reproducible 512-vector xorshift32 activity per configuration.
+- Record generic cells, Nangate45 area, OpenSTA delay, internal/switching/leakage/total power, tool versions, constraints, and raw artifacts separately for each lane count.
+- Keep all Nangate45 results labelled as pre-layout research-library estimates without routed parasitics, not silicon PPA.
+- Preserve the v0.2 four-lane baseline as the fixed reference; do not overwrite or silently rebase its historical measurements.
 
 ## 5. Engineering roadmap
 

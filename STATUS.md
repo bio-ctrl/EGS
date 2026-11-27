@@ -431,3 +431,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #220 remains in progress; dependency installation step 4 is still active. Formal tests and benchmark remain pending. No artifacts or metrics.
 - No code or workflow changes in this poll. Continue monitoring exact job state; do not infer a proof outcome from setup duration.
+
+
+## 39. Run #220 failed at unit tests — 2026-11-27T05:05:00Z
+
+- Run #220 `45942838109` has failed at step 9 (`Run unit tests`) after setup and cached OpenSTA verification succeeded. Benchmark and artifact steps were skipped. Job `140320786399`.
+- Exact test failure is not yet inspected; fetch completed job logs next. No proof pass, benchmark run, or artifact exists from this run.

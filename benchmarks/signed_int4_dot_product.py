@@ -290,7 +290,8 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
         if top == "orcus_fused_partial_product":
             proof = run_compositional_proofs(candidate_text, yosys)
         else:
-            proof = _run_equivalence(candidate_text, reference_text, top, yosys)
+            # Avoid false internal cutpoint matches across different adder trees.
+            proof = _run_equivalence(candidate_text, reference_text, top, yosys, use_structural=False)
         stage_timings["formal_equivalence_seconds"] = time.perf_counter() - stage_start
         print(f"[ORCUS] {top}: partitioned formal equivalence finished in {stage_timings['formal_equivalence_seconds']:.2f}s", flush=True)
 

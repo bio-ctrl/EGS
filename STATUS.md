@@ -2202,3 +2202,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Run #261 FPGA job 140362341777 completed SUCCESS: pinned toolchain installation, FPGA tests, and all 8 ECP5 builds completed; artifact upload succeeded. FPGA artifact ID 15178134912, name orcus-fpga-ecp5-pnr, 1,297,762 bytes, SHA-256 c6e38d5b2779a6d5d4f70304336822d321f21ac9a078031c4361faa05b84025d. Overall Run #261 remains in_progress only because the separate ASIC scaling benchmark in the other job is still running.
 - Run #262 latest source/test head 93f23518a7f8ba2699f58a8c7fd0322b09a442ba: FPGA job 140362432705 passed toolchain install and FPGA wrapper/parser tests; step 6 full 8-build synthesis/P&R matrix is in_progress. ASIC job unit tests and compileall passed; step 14 scaling benchmark is in_progress.
 - Next download and audit Run #261 FPGA artifact (all eight resource/Fmax reports, raw logs, configs), then inspect Run #262 exact-head artifact when available. No FPGA metrics are accepted until raw reports and per-build outputs are validated. Ceres untouched; NEM distinct.
+
+
+## 242. Run #248 log/PR diff query schema mismatch — 2026-11-27T07:06:23.008Z
+
+- Re-read STATUS.md on main before this diagnostic. Current STATUS blob: 5a857f316f86086c50bac478b620348ad018331a.
+- Attempted a parallel query for completed Run #248 job steps/logs and PR #21 diff. The GitHub tool rejected the PR diff request because its exact schema requires {repo_full_name, pr_number}; the call supplied repository_full_name. The Promise batch returned an error before yielding the other query results. No repository source or branch mutation occurred, and no Run #248 failure-stage diagnosis was obtained.
+- Next retry the Run #248 job/log retrieval independently and use the exact PR diff schema {repo_full_name:"bio-ctrl/EGS",pr_number:21}. Current Milestone #3 PR #21 remains draft/unmerged; no FPGA P&R metrics are verified. Ceres untouched; NEM distinct.

@@ -1779,3 +1779,11 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Main second parent: 018ae5ec573159c39251e1153e7a38645daebe10. Previous PR branch head: 35f45253dec3b0476d6c4f8977c9508b9df6005b.
 - Created non-force two-parent sync commit 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99 with prior PR branch as first parent and latest main as second parent; preserved branch tree and replaced STATUS.md with exact main blob. Ref update used force=false and expected old head; GitHub returned success.
 - This should remove the eight-commit behind count and trigger another exact-head PR CI run. Next verify new head/run, artifact, and refreshed mergeability; do not merge until successful checks and no conflict. Ceres untouched; NEM distinct.
+
+
+## 206. Run #256 after latest-main sync — 2026-11-27T06:49:48.807Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: aaff864e0818304f648db0f8cbd5e213710755b3.
+- Latest PR #20 head 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99 triggered ORCUS CI Run #256, ID 45954312238, created 2026-11-27T06:49:13Z, in_progress at poll time.
+- PR #20 remains open/unmerged; raw GitHub PR metadata now reports mergeable=true, mergeable_state=unstable, base 018ae5ec573159c39251e1153e7a38645daebe10, head 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99. Normalized wrapper reports mergeable=false while the new check is active. This is not a merge conflict indication; wait for exact-head CI and re-fetch.
+- Run #255 exact-head CI and artifact audit succeeded. Run #256 is the final post-latest-main synchronization verification. Ceres untouched; NEM distinct.

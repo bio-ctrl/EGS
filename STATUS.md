@@ -719,3 +719,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - This sync is intended to restore ancestry and current STATUS on the branch; it does not guarantee GitHub's computed `mergeable` field is true. Verify PR metadata after GitHub recalculates.
 - No new CI result is confirmed at this exact step. Next: inspect PR #19 metadata and Actions runs for exact new branch head `6d11c50eadcf36d56b756578d505d75248791130`; monitor unit tests and compositional proof. No proof runtime or benchmark result is yet established.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 75. Compositional proof CI Run #231 started — 2026-11-27T05:22:30.197Z
+
+- PR #19 current head: `6d11c50eadcf36d56b756578d505d75248791130`; base/main: `547f20c063ec60905f8fcaf60c65774f0e552500`. GitHub PR metadata after synchronization still reports `mergeable=false`; do not claim it is mergeable. PR remains open and unmerged.
+- Automatic PR workflow Run #231, ID `45945384577`, event `pull_request`, was discovered for exact head `6d11c50eadcf36d56b756578d505d75248791130`; status `in_progress`. Job `140328775094`: setup, checkout, and Python setup succeeded; dependency installation step 4 is active. Unit tests (step 9), compile, benchmark, artifact upload, and smoke verification are pending.
+- The branch includes typed heap generator, manifest, compositional SAT harness, and polarity/carry-weight/output tamper tests, but no test or proof result is confirmed yet. Do not report a runtime or formal pass until the job logs establish it.
+- Next: poll Run #231. If unit tests pass, inspect all four SAT lemma outputs and tamper rejections; then allow six-variant benchmark to run and inspect artifact/raw reports. If failure occurs, retrieve exact logs and record diagnosis. Milestone #1 remains open; Milestone #2 blocked.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline unchanged.

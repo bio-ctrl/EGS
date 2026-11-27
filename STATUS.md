@@ -342,3 +342,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #216 / `45942353836` remains `in_progress`; job `140319281323` is now executing step 9, `Run unit tests`.
 - Steps 1–5 and 8 completed successfully; CUDD/OpenSTA source-build steps 6–7 were skipped on cache hit. Python compile, Liberty fetch, benchmark, artifact upload, and smoke verification remain pending.
 - No unit-test result has been returned yet; no formal proof result, benchmark metrics, or artifact exists at this poll. Next: retrieve job logs after unit tests/benchmark progress or completion. No code change made during this poll.
+
+
+## 28. Run #216 unit-test poll — 2026-11-27T04:56:30Z
+
+- Second poll confirms Run #216 remains `in_progress`, with unit-test step 9 still active. Steps 1–8 remain successful/cache-skipped; steps 10–14 are pending. No artifact is published.
+- The new formal unit test performs two separate equivalence attempts (correct fused RTL and a one-bit-tampered copy), each capped at 60 seconds. The live step status does not expose which invocation is running or its result. Do not infer success or timeout until logs are available.
+- No code changes or new benchmark evidence from this poll. Next: wait for step 9 to finish, then inspect the exact unit-test log before interpreting the benchmark.

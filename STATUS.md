@@ -1358,3 +1358,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 157. Run #248 live logs still unavailable — 2026-11-27T06:11:22.352Z
 
 - Second attempt to fetch job 140343567995 logs while step 9 is active returned HTTP 404 BlobNotFound. The job-step endpoint remains the available source of progress; no test outcome inferred.
+
+## 158. Independent Dadda stage-height algorithm spot-check — 2026-11-27T06:12:12.664Z
+
+- Ran an isolated Python simulation of the staged Dadda height-reduction recurrence for 8/11, 16/12, and 32/13 targets. All three schedules reached a maximum final column height <=2. Target-height sequences begin 8 lanes: 28,19,13,9; 16 lanes: 63,42,28,19; 32 lanes: 94,63,42,28 (full target arrays are generated algorithmically).
+- This validates the height recurrence only; it is not a RTL graph audit, SAT proof, or measured critical-path result. Run #248 unit tests remain in progress.

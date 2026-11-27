@@ -2018,3 +2018,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Added tests/test_fpga_ecp5.py (blob 5f377a5f7379e8090bbe9b72ce6b4318f4bbe15a): target/width contract, wrapper register-boundary tests, mapped-cell parser tests, nextpnr Fmax/report parser tests.
 - Extended .github/workflows/ci.yml (blob 08b9789fb3a66d22b1bd70fbbd1ea8a55c2971c2) with a separate Ubuntu 24.04 FPGA job pinning Yosys 0.33-5build2 and nextpnr-ecp5/chipdb 0.6-3build5, running wrapper tests and all 8 FPGA builds, and uploading the full FPGA evidence directory even on failure. Existing Ubuntu 22.04 ASIC benchmark job remains unchanged.
 - This is an initial implementation commit, not verified P&R evidence. Next inspect the committed script for source-generation/escaping issues, run the new unit tests and full CI, inspect actual nextpnr report schema, and fix any failures non-destructively. No FPGA Fmax/resource results are available yet. Ceres untouched; NEM distinct.
+
+
+## 224. FPGA script review found newline-escape defect before CI — 2026-11-27T06:59:39.602Z
+
+- Re-read main STATUS before source review. STATUS blob: e4e7889a7e34f50b0f1ec2bab1e805e272808b3c.
+- Inspected committed FPGA script and tests. Found an authoring/escaping defect in benchmarks/fpga_ecp5.py: several Python source string literals contain two backslashes before n, so runtime code would write literal backslash-n sequences instead of newline separators in generated Verilog, logs and JSON files. This was caught before any FPGA workflow run; no P&R result is claimed.
+- The workflow and test design otherwise target Ubuntu 24.04 with pinned Yosys/nextpnr packages; the 8-build matrix and Dadda proof calls are present. Next replace each double-backslash-n source escape with a single Python newline escape, inspect the corrected file, then run tests and CI. Main source commit 58503cc62a1a2cdfe51e8cce523e3d22f94f0368 remains intact in history. Ceres untouched; NEM distinct.

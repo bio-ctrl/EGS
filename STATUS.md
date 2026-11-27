@@ -1346,3 +1346,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Attempted to retrieve job logs while unit tests were still running. GitHub returned HTTP 404 BlobNotFound for the live log blob; no test result was inferred. No repository mutation occurred.
 - Continue polling the job-step endpoint; retrieve complete logs after the step/run completes. Run #248 remains the active exact-head CI run unless a later status says otherwise.
+
+## 155. Run #248 remains in formal/unit-test stage — 2026-11-27T06:10:42.220Z
+
+- Re-polled Run #248 job 140343567995. Dependency and OpenSTA checks remain passed; unit test step 9 is still in_progress. No failure or completion has been reported. Remaining benchmark steps have not started.

@@ -761,3 +761,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Merge parents: branch fix commit `668122146ed2c546d0f47dc8ff53e3d2ba750d80` first, main `dac135dea73743d306c8c37d5720e3abe10265f5` second. Branch ref update succeeded with expected-head protection and `force=false`.
 - This new branch head should trigger PR CI. Run #231 `45945384577` remains failed on prior head `6d11c50eadcf36d56b756578d505d75248791130`; it is preserved as history. No proof pass or benchmark result is claimed.
 - Next: inspect PR metadata and Actions listing for exact head `1b2c502e056009f922d47bcab4c0b21f089c8107`; monitor tests and proof logs. Ceres untouched; NEM separate; ORCUS v0.2 baseline intact.
+
+
+## 80. Compositional proof CI Run #233 started — 2026-11-27T05:24:38.223Z
+
+- Automatic PR Run #233, ID `45945601986`, is confirmed for exact branch head `1b2c502e056009f922d47bcab4c0b21f089c8107`; event `pull_request`; status `in_progress`. Job `140329457878`: setup, checkout, Python setup succeeded; dependency installation step 4 active. Unit tests and benchmark pending.
+- PR #19 remains open/unmerged. GitHub still reports `mergeable=false` after both ancestry/STATUS syncs; this is a reported state, not to be overridden or described as true.
+- Run #231 failure `45945384577` is preserved. Its fix is committed in `668122146ed2c546d0f47dc8ff53e3d2ba750d80`; Run #233 is the first CI run on the corrected source-node manifest and current main STATUS ancestry.
+- No SAT proof result, tamper-test result, runtime, benchmark artifact, stage timing, or PPA result exists yet. Next: poll Run #233; inspect full unit-test output and proceed to benchmark only if tests pass.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.

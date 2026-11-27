@@ -303,3 +303,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Current main head is `878f2cd2a40071742e97d27c19e2c3e95cf7b00f`; PR branch head is `ccc409f8b76cad0d088b589d7834f9b017dc77a6`. The PR's reported base SHA remains `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e`, so the PR branch does not yet contain the latest main commit ancestry.
 - The current branch STATUS content predates main's latest audit entries. Next: synchronize the latest STATUS content and create a non-force two-parent merge commit with current main as a parent, preserving the PR branch's benchmark/tests and the main STATUS file. This is branch synchronization only, not merging PR #19 into main.
 - No CI run is confirmed yet. Ceres remains untouched; NEM separate.
+
+
+## 23. Branch STATUS refresh — 2026-11-27T04:52:00Z
+
+- Refreshed `research/orcus-fused-int4-mac:STATUS.md` to the latest main audit content. Branch sync commit: `8d03410c25779dbff32ac000e5d0871f6b342929`; resulting STATUS blob `c81cb607f35fa229155bd0b3c43ede75f271d590`.
+- This is a content refresh only; it does not yet establish main ancestry. Next: create a non-force two-parent branch synchronization commit using the current main head as a parent and the PR branch tree, with main's latest STATUS blob incorporated. Then recheck mergeability and workflow dispatch.
+- No CI run or proof result yet. PR #19 remains open/unmerged; Milestone #1 remains open.

@@ -1363,3 +1363,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Ran an isolated Python simulation of the staged Dadda height-reduction recurrence for 8/11, 16/12, and 32/13 targets. All three schedules reached a maximum final column height <=2. Target-height sequences begin 8 lanes: 28,19,13,9; 16 lanes: 63,42,28,19; 32 lanes: 94,63,42,28 (full target arrays are generated algorithmically).
 - This validates the height recurrence only; it is not a RTL graph audit, SAT proof, or measured critical-path result. Run #248 unit tests remain in progress.
+
+## 159. Run #248 remains in unit tests — 2026-11-27T06:12:37.744Z
+
+- Latest job query still shows Run #248 job 140343567995, step 9 (unit tests) in_progress; setup and OpenSTA checks passed. No benchmark stage has started and no pass/fail conclusion exists. Continue monitoring; do not publish PPA or proof timing estimates from this pending run.

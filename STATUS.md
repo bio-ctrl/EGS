@@ -1763,3 +1763,11 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Re-read main STATUS before this diagnostic. STATUS blob: d132088e9ed432b373070c4ebb9d75e100743d1b.
 - Re-fetched PR #20 metadata at 2026-11-27T06:47:24Z. Raw REST reports mergeable=null and mergeable_state=unknown; normalized wrapper currently reports mergeable=false. Head remains 35f45253dec3b0476d6c4f8977c9508b9df6005b; base snapshot remains 05604d1a36b354a7127739281be58bdb75a64378. This differs from the prior poll's normalized mergeable=true and is not a stable mergeability confirmation.
 - No merge was attempted. Run #255 and its exact-head scaling artifact are successful and fully audited, but GitHub mergeability is still indeterminate/reported false. Next inspect base/head ancestry and PR file conflict state; refresh mergeability again before any merge. Do not bypass a real conflict. Milestone #2 evidence is verified but not yet merged. Ceres untouched; NEM distinct.
+
+
+## 204. PR #20 divergence inspection — STATUS-only base commits, no source conflict — 2026-11-27T06:48:36.489Z
+
+- Re-read main STATUS before comparison. STATUS blob: 25a946bf8c0a7a8d77f89fe31e6e4b387d9e3b72.
+- Compared current main (1bd7a080940d0a16dc48e5ac37031ddc5f142840) against PR branch (35f45253dec3b0476d6c4f8977c9508b9df6005b). Git reports diverged, ahead_by=11, behind_by=8, merge base 05604d1a36b354a7127739281be58bdb75a64378. PR diff contains exactly four source/workflow paths: .github/workflows/ci.yml, benchmarks/int4_lane_scaling.py, orcus/lane_scaling.py, tests/test_lane_scaling.py. STATUS.md is not in the PR diff; the PR branch has no post-merge-base STATUS edit.
+- Current main has eight later STATUS-only commits since the PR sync's second parent; branch STATUS blob is the exact blob from that sync point. This explains branch-behind metadata; no source-file conflict is shown by the comparison. Normalized PR mergeable=false / raw mergeable=null remains indeterminate, not a confirmed conflict.
+- Next sync branch ancestry and STATUS to the latest main head via non-force two-parent merge commit, then rerun CI on the new exact head. Keep PR #20 unmerged until synchronized checks pass and mergeability stabilizes. Ceres untouched; NEM distinct.

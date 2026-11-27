@@ -1947,3 +1947,12 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Yosys `synth_ecp5` generates the ECP5 netlist; nextpnr-ecp5 performs placement/routing and writes JSON reports. Script attempts to extract LUT-comb count, CCU2C/ALU54B carry indicators, flip-flops, and post-route Fmax. These report-field parsers and the actual 4/8/16/32 implementation remain unverified until CI runs.
 - The initial blob-staging helper had a local `ReferenceError: lane is not defined` after creating three unreferenced Git blobs; it did not update a branch or tree. The complete four-file implementation was then successfully staged and committed as `c6936a6`.
 - Immediate next steps: obtain a CI run for PR #21; fix any Python/unit-test, Yosys mapping, nextpnr command, utilization parser, or Fmax parser errors; audit all eight P&R records and raw logs; verify the device/part/tool versions and timing constraints; preserve actual results and failures. Keep PR #21 draft/unmerged until the matrix is complete and reviewed. Do not claim FPGA resource or Fmax values before successful nextpnr P&R. Ceres untouched; NEM distinct.
+
+
+## 216. Ubuntu ECP5 toolchain package versions verified — 2026-11-27T06:55:47.663Z
+
+- Re-read main STATUS before package research. STATUS blob: 6cf1a55b4776dcba748d0162007209a0aa40af37.
+- Ubuntu package search confirms `nextpnr-ecp5` is published for Ubuntu 24.04 Noble at version 0.6-3build5, with matching `nextpnr-ecp5-chipdb` 0.6-3build5. Ubuntu 22.04 Jammy package search does not list nextpnr-ecp5; therefore the separate FPGA job should use `ubuntu-24.04`, not the existing Ubuntu 22.04 runner. Sources: https://packages.ubuntu.com/nextpnr-ecp5 and https://packages.ubuntu.com/noble/nextpnr-ecp5-chipdb.
+- Ubuntu 24.04 Noble publishes Yosys 0.33-5build2; `yosys-abc` same version. Pin these apt versions with nextpnr/chipdb in the FPGA job, and log exact runtime version outputs. Source: https://packages.ubuntu.com/noble/amd64/electronics/yosys.
+- nextpnr-ecp5 package supports ECP5; its CLI source confirms 85k device option, CABGA381 package selection and speed grades 6/7/8. Command target tuple remains `--85k --package CABGA381 --speed 6`. Keep the existing Ubuntu 22.04 ASIC CI job unchanged; add a separate Ubuntu 24.04 ECP5 job.
+- No FPGA source/workflow change or P&R run yet. Next inspect Yosys ECP5 synthesis command and current RTL module generator, then implement wrappers, report parser, tests, and isolated CI. Ceres untouched; NEM distinct.

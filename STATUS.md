@@ -1739,3 +1739,12 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Re-read main STATUS before this update. STATUS blob: afeca2bf06adfdb8a8d110e05263af8890bd0361.
 - Downloaded Run #255 exact-head scaling artifact ID 15177593284 to /mnt/data/orcus-int4-lane-scaling-run-255.zip. ZIP digest reported by GitHub: c0a954eb6735e1d7e0c43abab3d6ac78993284399aeb9aa354fd04f63d5e4eac. Artifact inspection has not yet been performed in this step.
 - Next compare its 12 records, formal proof statuses, 512 unique vectors, VCD pin counts, raw power reports and metrics against Run #254's audited artifact. PR #20 remains unmerged and GitHub reports mergeable=false; investigate the raw PR mergeable_state after artifact verification. Ceres untouched; NEM distinct.
+
+
+## 201. Run #255 scaling artifact audited — exact-head matrix reconfirmed — 2026-11-27T06:46:30.470Z
+
+- Re-read main STATUS before artifact inspection. STATUS blob: d600a0ab119407a9631142438821320b639445ae.
+- Inspected /mnt/data/orcus-int4-lane-scaling-run-255.zip. SHA-256 computed from downloaded bytes: c0a954eb6735e1d7e0c43abab3d6ac78993284399aeb9aa354fd04f63d5e4eac, exactly matching GitHub artifact metadata. ZIP contains one JSON file, schema orcus-int4-lane-scaling-v1, exactly 12 variant records.
+- Independent validation returned zero problems: all 12 formal-pass; 512 vectors and 512 unique vectors each; nonzero pin annotations (456/527/520/490 for 8 lanes, 913/1019/1018/1020 for 16, 1939/2050/2050/1998 for 32); all four raw power components present and their W→µW conversions match the recorded values within 1e-9 µW; every raw report contains its Total power row. All 12 PPA rows exactly match Run #254 artifact values; only formal runtimes differ because the rerun was faster. Exact-head Run #255 therefore independently reconfirms the complete matrix.
+- Formal runtimes from Run #255 (s): 8 lanes Direct 0.095857, Carry-Save 0.025541, Fused Linear 0.048489, Fused Dadda 0.048152; 16 lanes 1.026898, 0.029722, 0.049703, 0.052506; 32 lanes 1.326839, 0.030136, 0.063303, 0.062506. Proof methods and PPA table remain as in section 193.
+- No missing scaling evidence remains. PR #20 still open/unmerged pending mergeability diagnosis and final merge. Milestone #2 technical evidence verified; Milestone #3 not started. Ceres untouched; NEM distinct.

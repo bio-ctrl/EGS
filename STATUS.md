@@ -573,3 +573,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - The Actions run listing confirms automatic PR Run #227, ID `45943382079`, event `pull_request`, head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`, created `2026-11-27T05:02:16Z`; it is `in_progress`.
 - The earlier commit-specific run lookup returned empty before the Actions listing updated. This was a lookup timing delay; the workflow has in fact triggered.
 - Next: poll Run #227's job steps; the key gate is the full-design ABC CEC positive proof and one-bit negative test. No result or PPA metrics yet.
+
+
+## 57. Run #227 setup progress — 2026-11-27T05:02:36.205Z
+
+- Run #227 `45943382079` remains `in_progress` on ABC CEC branch head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`. Job `140322472966`: setup, checkout, and Python setup passed; dependency installation is active. Unit tests and benchmark remain pending; no artifact.
+- Next: poll through unit tests, inspect the ABC CEC verdict and negative tamper test, then benchmark only if both pass.

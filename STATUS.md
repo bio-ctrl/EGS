@@ -776,3 +776,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #233 `45945601986`, job `140329457878`, exact head `1b2c502e056009f922d47bcab4c0b21f089c8107` remains `in_progress`. Setup/checkout/Python setup succeeded; dependency installation step 4 remains active. No test or benchmark step has run yet.
 - No new proof, tamper-test, runtime, artifact, or PPA evidence. Continue polling; Run #231's manifest classification failure remains historical and unchanged.
+
+
+## 82. Run #233 second unit-test failure — 2026-11-27T05:25:17.854Z
+
+- Run #233 `45945601986`, job `140329457878`, exact head `1b2c502e056009f922d47bcab4c0b21f089c8107` failed at unit-test step 9. Setup, dependencies/cache, and OpenSTA verification passed. Compile, benchmark, artifact upload, and smoke steps were skipped.
+- Logs show 67 tests: 65 passed, 1 failed, 1 errored. The polarity and carry-weight tamper tests passed. The compositional audit errored at `full-adder sum equation mismatch: fa_24`; the output-tamper test failed early at the same audit check, before reaching its intended CPA-output assertion. The prior source-node classification error is fixed.
+- No SAT lemma completed; the failure occurs in graph/RTL audit before SAT invocation. No proof runtime, benchmark artifact, stage timing, or PPA data exists.
+- Next: inspect the exact emitted FA declaration and manifest operand order around `fa_24`; reconcile the auditor's parsed RTL expressions with the generator's emitted expression representation. Keep audit fail-closed. Then rerun all tests. Do not relax the check or skip the failing node.
+- PR #19 remains open/unmerged; latest mergeability remains `false`. Run #231 and #233 failures are preserved. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.

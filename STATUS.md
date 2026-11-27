@@ -939,3 +939,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - The compositional proof test did pass in the unit suite. Its log interval was approximately 0.0756 s (from timestamps 05:29:12.4003378Z to 05:29:12.4759235Z), including four Yosys SAT lemmas and graph audit. This is a unit-test wall interval, not a per-lemma runtime breakdown. The three tamper tests all passed.
 - Next: inspect the baseline equivalence flow and remove/avoid unsafe structural matching for the product-level variants (e.g. test `equiv_simple` without `equiv_struct` or use a sound full-output miter); preserve fail-closed behavior. Then rerun CI. Do not change the fused proof or declare benchmark complete based on the two early variants.
 - PR #19 remains open/unmerged; GitHub last reported `mergeable=false`. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 104. Baseline equivalence cutpoint fix committed — 2026-11-27T05:32:51.959Z
+
+- Changed the non-fused product-level variants to run Yosys `equiv_make` + `equiv_simple` + `equiv_status -assert` without `equiv_struct -icells` on PR branch commit `412efcd85f857e231dd76d78354d827a9a35dcdc` (parent `84635f54bdb885f6825d28c087687916d1072411`). This avoids the unsafe structural internal cutpoint matches observed in Run #240 for balanced_01_23. It retains full-output fail-closed equivalence checking; no proof is assumed until CI verifies it.
+- Run #240 `45946252250` remains failed before fused variant. Direct and left-deep early metrics recorded in section 103. Compositional proof unit test and all tamper tests passed; benchmark artifact absent.
+- Next: sync current main STATUS to branch and trigger fresh CI. Verify non-structural baseline formal for all first five variants, then fused compositional SAT/audit, then six-variant PPA artifact. No claim of milestone completion yet.
+- PR #19 open/unmerged; Ceres untouched; NEM distinct; baseline intact.

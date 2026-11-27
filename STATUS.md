@@ -1817,3 +1817,10 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Exact-head scaling artifact ID 15177808570, size 138807 bytes, SHA-256 908681030f5bd2af1963268ded0c42581690c363b2cf8601265f611471e78cab. It has not yet been downloaded/inspected; this is the last artifact audit gate before merge.
 - PR #20 remains open/unmerged. Raw mergeable=null / mergeable_state=unknown and normalized mergeable=false despite successful checks; GitHub has not stabilized the mergeability calculation. Wait for fresh PR metadata after artifact audit; if still indeterminate, use the merge endpoint with exact expected head only if the API safely accepts it, otherwise report blocked rather than force.
 - Milestone #2 technical matrix verified in prior artifacts; latest main ancestry is in the branch. Milestone #3 not started. Ceres untouched; NEM distinct.
+
+
+## 211. Run #256 scaling artifact downloaded — 2026-11-27T06:52:17.568Z
+
+- Re-read main STATUS before this update. STATUS blob: 799452b3dff8981d41fe98da0f424bef363038bc.
+- Downloaded Run #256 exact-head scaling artifact ID 15177808570 to /mnt/data/orcus-int4-lane-scaling-run-256.zip. GitHub-reported ZIP SHA-256: 908681030f5bd2af1963268ded0c42581690c363b2cf8601265f611471e78cab. Artifact inspection is pending.
+- Next independently validate its 12 configurations, all proof statuses, 512 unique vectors, VCD pin activity, raw OpenSTA power components, and exact metric consistency. PR #20 remains unmerged; mergeability metadata still indeterminate. Ceres untouched; NEM distinct.

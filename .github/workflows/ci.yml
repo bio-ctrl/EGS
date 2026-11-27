@@ -88,5 +88,15 @@ jobs:
           path: /tmp/orcus-int4-dot-product.json
           if-no-files-found: error
 
+      - name: Run 8/16/32-lane INT4 scaling benchmark
+        run: python -u benchmarks/int4_lane_scaling.py --require-tools --require-physical --sta /tmp/opensta-install/bin/sta --liberty /tmp/NangateOpenCellLibrary_typical.lib --output /tmp/orcus-int4-lane-scaling.json
+
+      - name: Upload lane-scaling benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: orcus-int4-lane-scaling
+          path: /tmp/orcus-int4-lane-scaling.json
+          if-no-files-found: error
+
       - name: Verify benchmark targets
         run: python -m orcus benchmark --max-gates 7 --output /tmp/orcus-ci-smoke.jsonl

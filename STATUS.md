@@ -533,3 +533,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Benchmark and artifact steps were skipped; no fused metrics or complete six-variant table. Negative tamper test was not reached.
 - Next proof strategy to evaluate: ABC's dedicated combinational equivalence checker (`cec`) on flattened AIGs, or a rigorously compositional compressor-stage proof using local full-adder lemmas. Do not simply increase timeouts or claim equivalence. Preserve both failed Yosys attempts and their exact evidence.
 - PR #19 remains open/unmerged; latest branch head at Run #224 is `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 52. ABC CEC proof strategy researched — 2026-11-27T05:01:38.776Z
+
+- After Run #224, both full-output Yosys equivalence and output-only heap equivalence have timed out; the lane-only 4x4 lemma passes. No PPA benchmark has run on this branch.
+- Reviewed ABC's documented `cec` command, which compares the primary-input/primary-output behavior of two networks and uses a hybrid FRAIG/SAT approach by default. Next strategy: export the full direct-reference and fused candidate designs to AIGER with Yosys, then run ABC `cec` on the two AIGs. Preserve exact PI order/names and require an explicit equivalent verdict; treat inequivalent, unknown, or timeout as failure.
+- Add the same one-bit output tamper as a negative CEC control. This is only a proposed next experiment; it has not yet run and no proof claim is made.
+- PR #19 remains open/unmerged; branch head from Run #224 `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM separate.

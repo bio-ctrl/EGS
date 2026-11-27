@@ -1509,3 +1509,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - The previous initial-bit manifest mismatch no longer appears in this run's failures. The new error occurs in audit_fused_heap for all six fused schedule/width combinations and all six graph-audit combinations: ValueError: bias bits do not equal lanes times the derived per-lane bias. Root cause from code inspection: the audit sums the repeated per-lane constant bits into an integer `bias` but compares that unreduced integer to the expected modulo-2^W result. For multi-lane heaps the expected value must be compared after reducing the observed sum modulo 2^W. No proof or graph audit is yet accepted because this check fails first.
 - Run #250 does not establish whether the new carry-save compositional proof passes; tests stopped on fused audit errors. No physical benchmark, artifact, 512-vector result, VCD activity, PPA, or Dadda delay data is available.
 - Next: change the audit to compare `(bias % (1 << width))` with `(lanes * baugh_wooley_bias(width)) % (1 << width)`; add a direct test for observed bias wraparound at all lane targets; rerun. Then inspect whether compositional CSA proof passes. Keep PR #20 open/unmerged; Milestone #2 incomplete; Milestone #3 not started. Ceres untouched; NEM distinct.
+
+
+## 179. Corrected aggregate bias modulo check — 2026-11-27T06:32:08.728Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: 38dd0706e79f07ce25bd6f8a5ea614e30c89900b.
+- Updated orcus/lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: bcce068e280c222fa4b4abad5b8f9fc17486ccb4; source blob: c3f162e05ffb1c20323d4b1cafafbf8487717f79.
+- Corrected the aggregate constant-bit audit to reduce the observed sum modulo 2^W before comparing it with lanes × per-lane bias modulo 2^W. This addresses Run #250's 12 repeated fused-audit errors. This correction remains unverified until CI passes.
+- Next add an explicit modulo-wrap regression assertion, then rerun CI. No scaling metrics; PR #20 remains open/unmerged; Ceres untouched; NEM distinct.

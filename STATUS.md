@@ -2486,3 +2486,12 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Synchronized `research/orcus-ecp5-dadda-pipeline/STATUS.md` to the latest authoritative `main` STATUS content and appended a pipeline-specific handoff in branch commit `9a7f426055692f1f2543718060bdeea21eb052e9`.
 - The branch handoff records the separate generator, sequential formal/streaming harness, isolated ECP5 P&R runner, unit tests, CI wiring, architecture, and schedule-derived latency metadata: 4 lanes L=6, 8 lanes L=8, 16 lanes L=10, 32 lanes L=11. These latencies are derived from the source Dadda stage schedule and are not yet execution-verified.
 - Branch STATUS explicitly records that no tests/formal/simulation/synthesis/P&R have run and preserves all boundaries. Next create the requested Draft PR to trigger exact-head CI; PR number/head SHA and run status will be appended after GitHub confirms them.
+
+
+## 277. Draft PR #22 opened for exact-head pipeline CI — 2026-11-28T05:36:48Z
+
+- Opened Draft PR #22: https://github.com/bio-ctrl/EGS/pull/22
+- Head branch: `research/orcus-ecp5-dadda-pipeline`; exact PR head SHA at creation: `9a7f426055692f1f2543718060bdeea21eb052e9`; base `main` SHA: `9b035b805ae208c262ea5cee12de6afa17f8e088`.
+- GitHub confirmed PR #22 is open, draft, unmerged, and `mergeable=false` at creation. The PR event should trigger the workflow configured for `opened`; verify the exact-head Actions run rather than assuming it started or passed.
+- PR body records the separate pipelined Dadda architecture, schedule-derived latencies (4/8/16/32 lanes: L=6/8/10/11, not yet execution-verified), sequential SAT/512-vector Icarus tests, and separate ECP5 P&R target. It explicitly claims no pipeline verification or timing result yet.
+- No merge, force-push, PR #21 action, baseline modification, Ceres action, or NEM mixing occurred. Next: query Actions for exact head `9a7f426055692f1f2543718060bdeea21eb052e9`, inspect run/jobs/logs/artifacts, and fix any failures with a STATUS update after each action.

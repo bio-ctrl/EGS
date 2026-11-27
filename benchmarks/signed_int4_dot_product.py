@@ -287,16 +287,26 @@ def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) ->
         source, testbench = root / "candidate.v", root / "tb.v"
         source.write_text(candidate_text)
         testbench.write_text("\n".join(tb) + "\n")
-        compile_result = subprocess.run(
-            [iverilog, "-g2012", "-s", "tb", "-o", str(root/"sim"), str(source), str(testbench)],
-            text=True, capture_output=True, timeout=SIMULATION_TIMEOUT_SECONDS,
-        )
+        try:
+            compile_result = subprocess.run(
+                [iverilog, "-g2012", "-s", "tb", "-o", str(root/"sim"), str(source), str(testbench)],
+                text=True, capture_output=True, timeout=SIMULATION_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise TimeoutError(
+                f"IVERILOG_COMPILE_TIMEOUT: testbench compilation exceeded {SIMULATION_TIMEOUT_SECONDS}s for {top}."
+            ) from exc
         if compile_result.returncode:
             raise RuntimeError(compile_result.stdout + compile_result.stderr)
-        run_result = subprocess.run(
-            [vvp, str(root/"sim")], cwd=root, text=True, capture_output=True,
-            timeout=SIMULATION_TIMEOUT_SECONDS,
-        )
+        try:
+            run_result = subprocess.run(
+                [vvp, str(root/"sim")], cwd=root, text=True, capture_output=True,
+                timeout=SIMULATION_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise TimeoutError(
+                f"IVERILOG_SIMULATION_TIMEOUT: VCD simulation exceeded {SIMULATION_TIMEOUT_SECONDS}s for {top}."
+            ) from exc
         if run_result.returncode:
             raise RuntimeError(run_result.stdout + run_result.stderr)
         vcd = (root / "activity.vcd").read_text()
@@ -363,10 +373,15 @@ def run_sta(mapped_verilog: str, top: str, liberty: Path, sta: str, vcd_text: st
             "report_power -digits 6",
         ]
         script.write_text("\n".join(tcl) + "\n")
-        result = subprocess.run(
-            [sta, "-no_splash", "-exit", str(script)], text=True, capture_output=True,
-            timeout=OPENSTA_TIMEOUT_SECONDS,
-        )
+        try:
+            result = subprocess.run(
+                [sta, "-no_splash", "-exit", str(script)], text=True, capture_output=True,
+                timeout=OPENSTA_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise TimeoutError(
+                f"OPENSTA_TIMEOUT: timing/power analysis exceeded {OPENSTA_TIMEOUT_SECONDS}s for {top}."
+            ) from exc
         if result.returncode or re.search(r"(?m)^Error:", result.stdout):
             raise RuntimeError("OpenSTA analysis failed: " + result.stdout[-5000:] + result.stderr[-1000:])
         # The first data-arrival line is the actual path delay; OpenSTA repeats

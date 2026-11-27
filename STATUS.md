@@ -622,3 +622,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Commit-specific workflow lookup for branch head `b7a479a03b51ac633963947170186ba7c41afb3a` returned no PR run at this instant. This lookup can lag; check the Actions run listing before concluding no workflow fired.
 - No new test, proof, or benchmark result. The branch change is committed and main STATUS is current through the branch sync record.
+
+
+## 64. Binary AIGER ABC CEC Run #229 started — 2026-11-27T05:03:33.271Z
+
+- Actions listing confirms automatic PR Run #229, ID `45943490330`, event `pull_request`, exact head `b7a479a03b51ac633963947170186ba7c41afb3a`, created `2026-11-27T05:03:23Z`, currently `in_progress`.
+- Next: inspect job steps, then completed logs. Required gate remains full direct-vs-fused ABC CEC PASS and one-bit tamper rejection. No proof or PPA data yet.

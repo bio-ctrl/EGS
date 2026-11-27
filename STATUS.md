@@ -478,3 +478,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #224 `45943017177` remains `in_progress` on exact head `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`. Job `140321357589`: setup, checkout, and Python setup passed; apt dependency installation is active. Unit tests and benchmark have not started; no artifact.
 - Next: poll the unit-test stage and inspect logs once available. No proof pass or PPA result yet.
+
+
+## 45. Run #224 cache progress — 2026-11-27T05:10:00Z
+
+- Run #224 remains `in_progress`; apt dependencies succeeded and step 5 (pinned CUDD/OpenSTA cache restore) is active. Unit tests and benchmark remain pending; no artifact.
+- No new proof outcome or metrics. Continue monitoring; inspect the formal stage only after it starts/completes.

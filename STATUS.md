@@ -1525,3 +1525,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Updated tests/test_lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: c563f66b9094e106ff1b5675c1dd5c695c5e4ad8; test blob: 1102313e0871f05eac09cec0768c636ffd7e8fa2.
 - Each of the six linear/Dadda × 8/16/32 graph-audit subtests now explicitly checks that the aggregate initial constant-bit sum, reduced modulo 2^W, equals the lane-count-scaled Baugh-Wooley bias modulo 2^W. This specifically guards the defect diagnosed in Run #250.
 - CI has not yet tested this latest head. No PPA or FPGA results. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 181. Run #252 started after bias-wrap correction — 2026-11-27T06:32:55.668Z
+
+- Re-read main STATUS before polling. STATUS blob: 592cf5c4114ec20b3b8c2bb93e66d1dd7f52913d.
+- Latest PR #20 head c563f66b9094e106ff1b5675c1dd5c695c5e4ad8 triggered ORCUS CI Run #252, ID 45952532314, created 2026-11-27T06:32:39Z; status in_progress at poll time. This head includes the initial-bit manifest filter, compositional CSA proof path, modulo-2^W aggregate bias audit correction, and explicit bias-wrap regression.
+- Run #250 remains failed historical evidence. Run #252 must confirm the audit fix and inspect all formal tests before any benchmark stage. No PPA/artifact/FPGA evidence available. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.

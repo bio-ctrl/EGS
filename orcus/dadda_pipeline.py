@@ -123,12 +123,6 @@ def generate_dadda_pipelined(lanes: int) -> PipelineDesign:
             "registered_bit_count": len(register_pairs),
         })
         columns = registered_columns
-        stage_records.append({
-            "stage_boundary": stage,
-            "target_height": target,
-            "registered_bit_count": len(register_pairs),
-            "registered_heap": [list(col) for col in registered_columns],
-        })
 
     if any(len(col) > 2 for col in columns):
         raise RuntimeError("pipelined Dadda schedule did not reduce heap to two rows")

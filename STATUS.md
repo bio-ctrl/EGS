@@ -2145,3 +2145,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 ### STATUS-only update scope
 - This operation changes only `STATUS.md` on `main`; no benchmarks, FPGA tools, CI workflows, RTL, branches, PR state, or other project files were changed by this update.
 - Main head before this commit: `616c9b8a3719c033da878720afa202d216f9435b`. Prior STATUS blob: `36670b75417a51253aa6a8c21cdf9fddd1446cd3`.
+
+
+## 238. Four-lane width-fix GitHub transaction failed — state requires inspection — 2026-11-27T07:03:47.153Z
+
+- Re-read main STATUS before recording the failed transaction. STATUS blob: 19b2259a7213ed03ea74ecef509ed89492242cea.
+- Attempted to commit the four-lane accumulator-width guard change and FPGA test assertion through GitHub blob/tree/commit APIs. The orchestration returned a GitHub GraphQL UNKNOWN error at 2026-11-27T07:03:31Z with incident reference 36D1:21B34:45EC11D:DD69E9B:6B092B42. The tool did not return the commit/ref update result; do not assume the transaction partially or fully succeeded.
+- No new source SHA or main commit SHA is confirmed. Next inspect current main ref and exact file contents to determine whether the transaction mutated main; if not, retry with a simpler update. Run #260 failure remains: accumulator_width rejects 4 lanes. No P&R run yet. Ceres untouched; NEM distinct.

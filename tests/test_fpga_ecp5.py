@@ -13,6 +13,8 @@ class ECP5BenchmarkTests(unittest.TestCase):
         self.assertEqual(VARIANTS, ("direct", "fused_dadda"))
         self.assertEqual(DEVICE, "LFE5U-85F-6BG381C")
         self.assertEqual([accumulator_width(n) for n in TARGET_LANES], [10, 11, 12, 13])
+        with self.assertRaisesRegex(ValueError, "supported scaling targets"):
+            accumulator_width(6)
 
     def test_clocked_wrappers_have_identical_register_boundary(self):
         for lanes in TARGET_LANES:

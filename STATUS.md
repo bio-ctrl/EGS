@@ -1824,3 +1824,12 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Re-read main STATUS before this update. STATUS blob: 799452b3dff8981d41fe98da0f424bef363038bc.
 - Downloaded Run #256 exact-head scaling artifact ID 15177808570 to /mnt/data/orcus-int4-lane-scaling-run-256.zip. GitHub-reported ZIP SHA-256: 908681030f5bd2af1963268ded0c42581690c363b2cf8601265f611471e78cab. Artifact inspection is pending.
 - Next independently validate its 12 configurations, all proof statuses, 512 unique vectors, VCD pin activity, raw OpenSTA power components, and exact metric consistency. PR #20 remains unmerged; mergeability metadata still indeterminate. Ceres untouched; NEM distinct.
+
+
+## 212. Run #256 exact-head scaling artifact audited — 2026-11-27T06:52:50.286Z
+
+- Re-read main STATUS before artifact inspection. STATUS blob: c071131af352eb0829e6e7123585f33f6e395f60.
+- Inspected /mnt/data/orcus-int4-lane-scaling-run-256.zip. Computed SHA-256 908681030f5bd2af1963268ded0c42581690c363b2cf8601265f611471e78cab exactly matches GitHub metadata. Archive contains one JSON file, schema orcus-int4-lane-scaling-v1, exactly 12 configuration rows.
+- Independent audit found zero problems: 12/12 formal-pass; 512 vectors and 512 unique vectors for every row; nonzero VCD pin annotations for all rows; all four raw power components present and consistent with µW fields to within 1e-9 µW; every raw OpenSTA report includes the total power row. This reconfirms the same PPA values as Run #254/#255 on the latest-main-synchronized head.
+- Latest exact-head formal runtimes (s): 8 lanes Direct 0.152509, Carry-Save 0.043157, Fused Linear 0.087204, Fused Dadda 0.087165; 16 lanes 1.559440, 0.051170, 0.094327, 0.092816; 32 lanes 2.031699, 0.052684, 0.109747, 0.109804. Full metric tables remain section 193; stage timings for earlier exact head Run #254 are also documented there.
+- All technical verification gates for PR #20 are now independently confirmed on exact latest-main-synchronized head 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99. Only mergeability refresh/merge remains. Milestone #2 not yet merged. Ceres untouched; NEM distinct.

@@ -1400,3 +1400,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 167. Run #248 unit-test stage still pending — 2026-11-27T06:15:45.069Z
 
 - Job 140343567995 remains active at step 9; no later CI steps have begun. No proof timings, test counts, or physical measurements are available. Await exact GitHub conclusion and logs.
+
+## 168. Run #248 formal-test stage duration update — 2026-11-27T06:16:16.826Z
+
+- Run #248 remains in_progress at unit-test step 9 after approximately six minutes. This exceeds the four-lane test time but does not itself establish failure. Candidate causes include large-width Yosys equivalence; no logs are available to identify the active test. Keep the configured timeouts and await actual job outcome.

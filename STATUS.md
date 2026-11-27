@@ -1517,3 +1517,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Updated orcus/lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: bcce068e280c222fa4b4abad5b8f9fc17486ccb4; source blob: c3f162e05ffb1c20323d4b1cafafbf8487717f79.
 - Corrected the aggregate constant-bit audit to reduce the observed sum modulo 2^W before comparing it with lanes × per-lane bias modulo 2^W. This addresses Run #250's 12 repeated fused-audit errors. This correction remains unverified until CI passes.
 - Next add an explicit modulo-wrap regression assertion, then rerun CI. No scaling metrics; PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 180. Aggregate bias wraparound regression added — 2026-11-27T06:32:30.281Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: d9e0d13e6d47b45673c0c4edd57e430658587d74.
+- Updated tests/test_lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: c563f66b9094e106ff1b5675c1dd5c695c5e4ad8; test blob: 1102313e0871f05eac09cec0768c636ffd7e8fa2.
+- Each of the six linear/Dadda × 8/16/32 graph-audit subtests now explicitly checks that the aggregate initial constant-bit sum, reduced modulo 2^W, equals the lane-count-scaled Baugh-Wooley bias modulo 2^W. This specifically guards the defect diagnosed in Run #250.
+- CI has not yet tested this latest head. No PPA or FPGA results. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.

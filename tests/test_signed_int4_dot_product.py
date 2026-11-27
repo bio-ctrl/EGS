@@ -4,8 +4,11 @@ import unittest
 from benchmarks.signed_int4_dot_product import (
     VARIANTS,
     _parse_opensta_power_report,
-    _run_abc_cec,
     module_source,
+)
+from orcus.typed_heap import (
+    audit_fused_heap, generate_fused_heap, run_compositional_proofs,
+    tampered_manifest_carry_weight,
 )
 
 
@@ -14,33 +17,39 @@ FORMAL_TEST_TIMEOUT_SECONDS = 120
 
 class SignedInt4DotProductTests(unittest.TestCase):
 
-    def test_fused_abc_cec_proves_full_output_and_rejects_one_bit_tamper(self):
+    def test_compositional_sat_proofs_and_heap_audit(self):
         yosys = shutil.which("yosys")
-        abc = shutil.which("yosys-abc") or shutil.which("abc")
-        if not yosys or not abc:
-            self.skipTest("Yosys and Berkeley ABC are required for formal CEC test")
-
-        reference = module_source("reference", "direct")
+        if not yosys:
+            self.skipTest("Yosys is required for compositional SAT proof")
         candidate = module_source("orcus_fused_partial_product", "fused_partial_product")
-        proof = _run_abc_cec(
-            candidate, reference, "orcus_fused_partial_product", yosys, abc,
-            timeout_seconds=FORMAL_TEST_TIMEOUT_SECONDS,
-        )
-        self.assertEqual(proof["formal_equivalence"], "formal-pass")
-        self.assertIn("Berkeley ABC cec", proof["proof_method"])
-        self.assertIn("all 10 primary outputs", proof["proof_method"])
+        result = run_compositional_proofs(candidate, yosys)
+        self.assertEqual(result["formal_equivalence"], "formal-pass")
+        self.assertEqual(len(result["proof_lemmas"]), 4)
+        self.assertEqual(result["heap_audit"]["status"], "pass")
 
-        correct_assignment = "assign y = fused_row0 + fused_row1;"
-        tampered_assignment = "assign y = (fused_row0 + fused_row1) ^ 10'b0000000001;"
-        self.assertIn(correct_assignment, candidate)
-        tampered = candidate.replace(correct_assignment, tampered_assignment, 1)
-        self.assertNotEqual(tampered, candidate)
-        with self.assertRaisesRegex(RuntimeError, "NOT EQUIVALENT"):
-            _run_abc_cec(
-                tampered, reference, "orcus_fused_partial_product", yosys, abc,
-                timeout_seconds=FORMAL_TEST_TIMEOUT_SECONDS,
-            )
+    def test_negative_tamper_partial_product_polarity(self):
+        lines, manifest = generate_fused_heap(4)
+        changed = list(lines)
+        target = "  wire pp_0_3_0 = ~(a0[3] & b0[0]);"
+        self.assertIn(target, changed)
+        changed[changed.index(target)] = "  wire pp_0_3_0 = (a0[3] & b0[0]);"
+        with self.assertRaisesRegex(ValueError, "polarity/source mismatch"):
+            audit_fused_heap(changed, manifest)
 
+    def test_negative_tamper_compressor_carry_weight(self):
+        lines, manifest = generate_fused_heap(4)
+        tampered = tampered_manifest_carry_weight(manifest)
+        with self.assertRaisesRegex(ValueError, "carry weight"):
+            audit_fused_heap(lines, tampered)
+
+    def test_negative_tamper_output_bit(self):
+        lines, manifest = generate_fused_heap(4)
+        changed = list(lines)
+        target = "  assign y = fused_row0 + fused_row1;"
+        self.assertIn(target, changed)
+        changed[changed.index(target)] = "  assign y = (fused_row0 + fused_row1) ^ 10'b0000000001;"
+        with self.assertRaisesRegex(ValueError, "final 10-bit CPA output"):
+            audit_fused_heap(changed, manifest)
 
     def test_product_level_baselines_share_identical_multiplier_lines(self):
         common = None

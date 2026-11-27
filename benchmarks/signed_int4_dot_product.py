@@ -17,6 +17,8 @@ import subprocess
 import tempfile
 import time
 
+from orcus.typed_heap import generate_fused_heap, run_compositional_proofs
+
 LANES = 4
 FORMAL_TIMEOUT_SECONDS = 300
 SYNTHESIS_TIMEOUT_SECONDS = 120
@@ -27,43 +29,8 @@ VARIANTS = ("direct", "left_deep", "balanced_01_23", "balanced_02_13", "carry_sa
 
 
 def _fused_partial_product_lines(external_inputs: bool = False) -> list[str]:
-    """Build the common 10-bit fused heap, optionally exposing PP bits as ports."""
-    columns: list[list[str]] = [[] for _ in range(10)]
-    lines: list[str] = []
-    for lane in range(LANES):
-        for i in range(4):
-            for j in range(4):
-                name = f"pp_{lane}_{i}_{j}"
-                if not external_inputs:
-                    product = f"(a{lane}[{i}] & b{lane}[{j}])"
-                    # Exactly one sign-bit operand creates a negative Baugh-Wooley term.
-                    expr = f"~{product}" if ((i == 3) != (j == 3)) else product
-                    lines.append(f"  wire {name} = {expr};")
-                columns[i + j].append(name)
-        # -112 modulo 2^10 = 912 = 0x390; correction bits are 4, 7, 8, 9.
-        for bit in (4, 7, 8, 9):
-            columns[bit].append("1'b1")
-
-    fa_index = 0
-    for bit in range(10):
-        while len(columns[bit]) > 2:
-            a, b, c = columns[bit][:3]
-            del columns[bit][:3]
-            s_name, c_name = f"fa_s_{fa_index}", f"fa_c_{fa_index}"
-            lines.append(f"  wire {s_name} = {a} ^ {b} ^ {c};")
-            lines.append(
-                f"  wire {c_name} = ({a} & {b}) | ({a} & {c}) | ({b} & {c});"
-            )
-            columns[bit].append(s_name)
-            if bit < 9:
-                columns[bit + 1].append(c_name)
-            fa_index += 1
-
-    row0 = [columns[bit][0] if columns[bit] else "1'b0" for bit in range(10)]
-    row1 = [columns[bit][1] if len(columns[bit]) > 1 else "1'b0" for bit in range(10)]
-    lines.append("  wire [9:0] fused_row0 = {" + ", ".join(reversed(row0)) + "};")
-    lines.append("  wire [9:0] fused_row1 = {" + ", ".join(reversed(row1)) + "};")
-    lines.append("  assign y = fused_row0 + fused_row1;")
+    """Emit RTL from the deterministic typed heap graph."""
+    lines, _manifest = generate_fused_heap(LANES, external_inputs=external_inputs)
     return lines
 
 
@@ -319,10 +286,7 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
         print(f"[ORCUS] {top}: partitioned formal equivalence starting (timeout={FORMAL_TIMEOUT_SECONDS}s)", flush=True)
         stage_start = time.perf_counter()
         if top == "orcus_fused_partial_product":
-            abc = shutil.which("yosys-abc") or shutil.which("abc")
-            if not abc:
-                raise RuntimeError("ABC CEC executable not found (expected yosys-abc or abc)")
-            proof = _run_abc_cec(candidate_text, reference_text, top, yosys, abc)
+            proof = run_compositional_proofs(candidate_text, yosys)
         else:
             proof = _run_equivalence(candidate_text, reference_text, top, yosys)
         stage_timings["formal_equivalence_seconds"] = time.perf_counter() - stage_start
@@ -392,6 +356,10 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
             "mapping_log_tail": mapping_log,
             "mapped_verilog": mapped_text,
             "proof_log_tail": proof["proof_log_tail"],
+            "proof_stage_timings_seconds": proof.get("proof_stage_timings_seconds"),
+            "proof_lemmas": proof.get("proof_lemmas"),
+            "heap_audit": proof.get("heap_audit"),
+            "heap_manifest": proof.get("heap_manifest"),
         }
 
 

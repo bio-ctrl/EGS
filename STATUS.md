@@ -1231,3 +1231,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Attempted to create `research/orcus-int4-lane-scaling` by calling the Git ref update endpoint with a new branch name. GitHub returned HTTP 422 `Reference does not exist`; update_ref only updates existing refs and did not create the branch.
 - No branch was created and no source changes occurred. Next: discover the dedicated create-reference action/schema, then create the branch at the latest main head using that action.
+
+
+## 134. Dedicated branch-creation action discovered — 2026-11-27T05:54:17.976Z
+
+- Discovered the repository connector's dedicated `create_branch` action. It requires `repository_full_name`, `branch_name`, and exactly one of `sha` or `base_ref`. The prior `update_ref` failure was expected because the branch did not exist.
+- No branch or source changes yet. Next create `research/orcus-int4-lane-scaling` from latest main SHA, then inspect `.github/workflows/ci.yml` and parameterize the generator and benchmark.

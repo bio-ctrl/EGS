@@ -592,3 +592,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #227 `45943382079` completed with conclusion `failure`. Job failed at step 9 (`Run unit tests`); setup/cache/OpenSTA verification passed. Compile, benchmark, artifact, and smoke steps were skipped.
 - Exact ABC CEC test failure has not yet been inspected. Next retrieve completed job logs and determine whether AIG export, ABC executable invocation, CEC verdict parsing, or actual equivalence caused the failure.
 - No fused proof pass, negative-test rejection, artifact, or PPA metrics from this run.
+
+
+## 60. Run #227 exact ABC CEC failure — 2026-11-27T05:02:57.989Z
+
+- Retrieved completed Run #227 `45943382079`, job `140322472966` logs. All 63 non-CEC tests passed; the new ABC CEC test errored immediately before any equivalence computation.
+- Exact error from ABC: `Wrong input file format. Reading AIG from file has failed.` The export command used Yosys `write_aiger -ascii -symbols` but named the resulting ASCII AIGER file with the binary `.aig` extension. ABC's `cec` reader rejected the format. This is a file-format mismatch, not an equivalence counterexample or proof timeout.
+- Benchmark and artifact steps were skipped. No proof pass or PPA result.
+- Next: export binary AIGER (remove `-ascii`) while keeping `.aig`, or use an ASCII extension supported by ABC. Re-run the full positive/negative CEC test; require explicit `Networks are equivalent` for the valid design and `Networks are NOT EQUIVALENT` for the one-bit tamper.
+- PR #19 remains open/unmerged. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM separate.

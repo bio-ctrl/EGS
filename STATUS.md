@@ -491,3 +491,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #224 setup and cached OpenSTA verification passed; unit-test step 9 is now in progress. Benchmark, artifact, and smoke steps remain pending.
 - The new proof sequence under test is: signed 4x4 Baugh-Wooley lane lemma with structural matching; 10-bit symbolic heap lemma with structural matching disabled; one-bit output tamper must fail the same output-only heap proof.
 - No test result is available yet. Next: wait for step 9 completion and inspect logs before treating the proof as successful.
+
+
+## 47. Run #224 unit-test poll — 2026-11-27T05:11:00Z
+
+- Run #224 remains in progress at unit-test step 9. All setup/cache steps passed; benchmark and artifact steps remain pending.
+- No unit-test log or subprocess-level proof stage is available from the step summary. The symbolic heap proof may still be running within its 60-second test timeout. No pass/failure inference yet.
+- Next: poll for step transition and retrieve logs after completion. No code changes in this poll.

@@ -310,3 +310,96 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Refreshed `research/orcus-fused-int4-mac:STATUS.md` to the latest main audit content. Branch sync commit: `8d03410c25779dbff32ac000e5d0871f6b342929`; resulting STATUS blob `c81cb607f35fa229155bd0b3c43ede75f271d590`.
 - This is a content refresh only; it does not yet establish main ancestry. Next: create a non-force two-parent branch synchronization commit using the current main head as a parent and the PR branch tree, with main's latest STATUS blob incorporated. Then recheck mergeability and workflow dispatch.
 - No CI run or proof result yet. PR #19 remains open/unmerged; Milestone #1 remains open.
+
+
+## 24. Non-force main synchronization merge — 2026-11-27T04:53:00Z
+
+- Advanced `research/orcus-fused-int4-mac` with a non-force two-parent merge commit `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. Parents: previous PR branch head `8d03410c25779dbff32ac000e5d0871f6b342929` and current main head `d0767836cf95ace97e7789909a93a3108dedcfb6`. The merge tree preserves the PR branch's code/tests and includes the exact main STATUS blob `4f666fdb90af1cd8b1bd54eedd137f6e05e71f9e`.
+- Branch ref update succeeded with expected-head protection and `force=false`; no force-push occurred. This is a merge of main into the experiment branch only. PR #19 has NOT been merged into main.
+- Next: poll PR mergeability and Actions for the new branch head `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. No new run or test result is confirmed yet. The proof flow and negative tamper test remain pending execution.
+
+
+## 25. PR #19 CI Run #216 started — 2026-11-27T04:54:00Z
+
+- New automatic `pull_request` workflow Run #216: ID `45942353836`, run URL `https://github.com/bio-ctrl/EGS/actions/runs/45942353836`, exact head `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`, branch `research/orcus-fused-int4-mac`, created/started at `2026-11-27T04:51:28Z`. It is currently `in_progress`.
+- The run was triggered by the non-force branch synchronization merge commit `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`; the run's base SHA is `d0767836cf95ace97e7789909a93a3108dedcfb6`. This confirms the PR synchronize workflow has fired.
+- PR #19 remains open and unmerged. Simplified metadata still reports `mergeable=false`, but direct API reported `mergeable=null` / `mergeable_state=unknown` while recalculating; do not treat this as a confirmed merge conflict or a clean merge.
+- Run #216 has no verified completion, job-stage outcome, artifact, proof result, or PPA measurements yet. Next: poll run/jobs; after completion inspect logs and artifact, including the new positive/negative formal unit test. No solver proof pass or fused performance claim is made.
+- Main status was updated on main only; PR branch code and NEM/Ceres boundaries remain unchanged. Milestone #1 remains open; Milestone #2 (8/16/32 lanes) remains blocked pending complete four-lane evidence.
+
+
+## 26. Run #216 early poll and code-path review — 2026-11-27T04:55:00Z
+
+- Run #216 `45942353836` remains `in_progress` on head `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. Job `140319281323` has completed setup, checkout, and Python setup; dependency installation is in progress. Unit tests, formal proof, benchmark, and artifact upload have not started. Artifact list is empty.
+- Reviewed the committed proof helper and its integration into `_run_yosys`: proof result/method/log are carried into each variant result; synthesis and mapping still execute only after formal proof returns. No obvious stale `proof.stdout` references remain in the returned result assembly.
+- This is a source review only, not execution of the new proof. The 60-second positive/negative unit-test timeout and 300-second benchmark proof timeout are still unvalidated.
+- Next: poll Run #216. If unit tests fail, inspect the exact Yosys command/output and correct the proof/test implementation on the PR branch; do not claim equivalence or fused PPA until both the positive and tamper-negative checks pass.
+- PR #19 remains open/unmerged. No new stage timings or six-variant data yet. Milestone #1 remains open; Milestone #2 remains blocked. Ceres untouched; NEM separate.
+
+
+## 27. Run #216 unit-test stage — 2026-11-27T04:56:00Z
+
+- Run #216 / `45942353836` remains `in_progress`; job `140319281323` is now executing step 9, `Run unit tests`.
+- Steps 1–5 and 8 completed successfully; CUDD/OpenSTA source-build steps 6–7 were skipped on cache hit. Python compile, Liberty fetch, benchmark, artifact upload, and smoke verification remain pending.
+- No unit-test result has been returned yet; no formal proof result, benchmark metrics, or artifact exists at this poll. Next: retrieve job logs after unit tests/benchmark progress or completion. No code change made during this poll.
+
+
+## 28. Run #216 unit-test poll — 2026-11-27T04:56:30Z
+
+- Second poll confirms Run #216 remains `in_progress`, with unit-test step 9 still active. Steps 1–8 remain successful/cache-skipped; steps 10–14 are pending. No artifact is published.
+- The new formal unit test performs two separate equivalence attempts (correct fused RTL and a one-bit-tampered copy), each capped at 60 seconds. The live step status does not expose which invocation is running or its result. Do not infer success or timeout until logs are available.
+- No code changes or new benchmark evidence from this poll. Next: wait for step 9 to finish, then inspect the exact unit-test log before interpreting the benchmark.
+
+
+## 29. Run #216 live-log retrieval limitation — 2026-11-27T04:57:00Z
+
+- Attempted to retrieve job `140319281323` logs while Run #216 is still executing. GitHub returned `BlobNotFound` (404) at `2026-11-27T04:52:32.2531857Z`. As in Run #211, this indicates the log bundle is not yet available through the endpoint; it is not a test failure.
+- Run #216 remains last observed `in_progress` at unit-test step 9. No test output, formal result, artifact, or benchmark metrics are yet available.
+- Next: poll step 9 and fetch logs again only after job/run completion. Do not change proof code based on this unavailable log response.
+
+
+## 30. Run #216 continued poll — 2026-11-27T04:58:00Z
+
+- Latest run/job/artifact poll: Run #216 `45942353836` remains `in_progress`; job `140319281323` remains at unit-test step 9. The API's run `updated_at` has not advanced from `04:51:32Z`; artifact list is still empty.
+- No test outcome can be established while the step remains active and its log bundle is unavailable. The positive proof may be consuming its 60-second cap or the unit test process may be stalled; this is not yet distinguishable from step status alone.
+- No proof pass, negative-test rejection, benchmark completion, or fused PPA numbers are verified. Next: wait for the job to transition, then inspect the completed logs and any artifact. Preserve the current proof implementation until the exact result is known.
+
+
+## 31. Run #216 still at unit-test stage — 2026-11-27T04:58:30Z
+
+- Run `45942353836` remains in progress. Job `140319281323` remains at step 9 (unit tests); steps 10–14 have not started. Artifact list remains empty.
+- This repeated poll provides no new test output. The proof test may still be within its configured 60-second timeout, but the job API does not expose subprocess-level progress. Do not call it a pass or a timeout without the log/conclusion.
+- Next: wait for the job state transition; after completion retrieve logs and artifact. No code changes in this poll.
+
+
+## 32. Run #216 completed — unit-test failure — 2026-11-27T04:59:00Z
+
+- Run #216 / ID `45942353836` completed with conclusion `failure`; job `140319281323` failed at step 9, `Run unit tests`. Steps 1–8 succeeded or were cache-skipped. Steps 10–14 were skipped, so no benchmark ran and no artifact was uploaded.
+- Direct pull-request API still reports mergeability as `unknown` while recalculating; PR #19 remains open/unmerged. Head remains `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`.
+- Exact unit-test failure is not yet known; next retrieve completed job logs and identify whether the positive proof timed out, the Yosys command was unsupported, or the negative test behavior was wrong. Do not alter proof code until logs are inspected.
+- No six-variant results, fused PPA, or formal proof pass are available. Milestone #1 remains open; Milestone #2 blocked.
+
+
+## 33. Run #216 exact formal unit-test failure — 2026-11-27T04:59:30Z
+
+- Retrieved completed job logs for Run #216 `45942353836`, job `140319281323`. The test suite ran 64 tests; 63 passed and the new fused equivalence test errored.
+- Exact failure: the positive fused candidate proof timed out after `60.06s` in `_run_equivalence`. The invoked Yosys sequence was:
+  `read_verilog reference.v candidate.v; proc; equiv_make reference orcus_fused_partial_product equiv; hierarchy -top equiv; clean -purge; equiv_struct -icells; equiv_simple -v; equiv_status -assert`.
+- Exception: `FORMAL_EQUIV_TIMEOUT: Yosys partitioned equivalence exceeded 60s for orcus_fused_partial_product`. The negative tamper subtest was never reached. The new partitioned full-output check therefore does NOT solve the proof wall; no false pass occurred.
+- Benchmark step 12 and artifact upload were skipped. No new fused metrics or six-variant table exist. This confirms that simply replacing the monolithic miter with output-bit partitioning is insufficient.
+- Next engineering step: decompose the proof compositionally. Independently prove the 4x4 signed Baugh-Wooley product identity (8-bit result) for one lane; then prove the shared 10-bit compressor heap against the sum of symbolic weighted partial-product inputs (no multipliers in that second proof). The composition of those lemmas must imply the complete 10-bit four-lane result. The negative tamper test must target the heap-level proof and be rejected. Keep the original failed attempts recorded.
+- PR #19 remains open/unmerged; branch head at the failed run is `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 34. Compositional proof decomposition implemented — 2026-11-27T05:01:00Z
+
+- After Run #216 showed that output-bit partitioning still timed out at 60.06s, the PR branch was updated with a compositional proof design:
+  1. A standalone 4x4 signed Baugh-Wooley lane module (8-bit output) is formally checked against signed multiplication.
+  2. A separate 10-bit heap module takes all 64 partial-product bits as unconstrained symbolic inputs. Its compressor network is formally checked against the arithmetic sum of those weighted inputs plus four `10'h390` lane corrections. This second lemma contains no multipliers.
+  3. The two lemmas compose: each lane's Baugh-Wooley expansion equals its signed product, and the shared heap equals the sum of all lane expansions, covering the original 32 operand bits and complete 10-bit result.
+- The heap proof generator reuses the exact `_fused_partial_product_lines(external_inputs=True)` compressor-generation function used by the fused RTL, preventing a separately hand-coded compressor from drifting from the implementation.
+- The negative control now inverts only output bit 0 in the heap implementation and requires the heap equivalence proof to reject it.
+- Python-side arithmetic cross-check enumerated all 256 pairs of 4-bit operands and confirmed the Baugh-Wooley 8-bit correction constant `8'h90` matches signed multiplication. This is a secondary local arithmetic check; formal equivalence remains the primary proof gate.
+- PR branch code commits: `031ca7fd378c2650cf5c4acb3add4db0eefc4abd` (lane/heap proof generators), `cb7494267f20566b55821538874ff337b072d2e4` (route fused candidate through compositional proof), `408324aed545acc65a25a0ee6a6640a150c3b3d0` (positive proof + one-bit negative test).
+- These changes have not yet run in CI. The prior Run #216 remains failed at unit tests; no proof pass or PPA data is claimed. Next: synchronize the latest main STATUS and ancestry to the branch, trigger a new PR CI run, inspect both positive lemmas and the negative tamper result, then benchmark only if all formal tests pass.
+- Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.

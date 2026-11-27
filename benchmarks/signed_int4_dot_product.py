@@ -159,8 +159,9 @@ def _run_fused_compositional_equivalence(yosys: str,
         "proof_method": (
             "Compositional Yosys proof: (1) equiv_make/equiv_struct/equiv_simple/"
             "equiv_status -assert for 4x4 signed Baugh-Wooley product vs signed multiply; "
-            "(2) same flow for 10-bit compressor heap vs arithmetic sum of all 64 symbolic "
-            "partial-product bits plus four 0x390 corrections; composition covers all 32 "
+            "(2) output-only equiv_simple/equiv_status -assert for the 10-bit compressor "
+            "heap vs arithmetic sum of all 64 symbolic partial-product bits plus four "
+            "0x390 corrections (no equiv_struct matching on the heap); composition covers all 32 "
             "operand bits and all 10 output bits."
         ),
         "formal_equivalence_seconds": (

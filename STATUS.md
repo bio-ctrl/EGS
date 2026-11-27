@@ -515,3 +515,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Next: inspect completed Run #224 logs; if unit tests pass, inspect benchmark output/artifact for all six variants, 512 unique xorshift32 vectors, nonzero VCD annotation, and all four OpenSTA power components. If unit tests fail, preserve exact failure and refine the proof; do not claim a pass.
 - Timestamp correction: section timestamps 34–48 were corrected to the actual UTC commit creation times of their corresponding STATUS commits. Earlier displayed 05:xx labels were estimates and were not actual event timestamps.
 - Current STATUS update is on main. Ceres untouched; NEM separate; ORCUS v0.2 remains intact.
+
+
+## 50. Run #224 completed with unit-test failure — 2026-11-27T05:00:49.992Z
+
+- Run #224 / ID `45943017177` completed with conclusion `failure`. Job `140321357589` failed at step 9 (`Run unit tests`). Setup and cached OpenSTA verification succeeded; compile, benchmark, artifact upload, and smoke steps were skipped.
+- No artifact is available. Exact unit-test failure has not yet been inspected; next retrieve the completed job logs and identify whether output-only heap equivalence timed out or returned unproven partitions.
+- No formal PASS, negative tamper rejection, fused PPA metrics, or six-variant table can be claimed from Run #224. Milestone #1 remains open; Milestone #2 blocked. PR #19 remains open/unmerged.

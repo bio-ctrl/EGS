@@ -840,3 +840,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - An intermediate branch commit `fa9f8f8db3b28d413176c23026d93054de5103be` was created with an unchanged blob because the first regex replacement did not match; it made no source-content change. The corrected implementation is in `ef85ed7`.
 - Run #235 `45945802919` failed before SAT because the audit parser omitted packed row declarations. Polarity and carry-weight tamper tests passed; output-tamper test was blocked by the same parser gap. No SAT lemma, benchmark, artifact, runtime, or PPA result yet.
 - Next: sync latest main STATUS and ancestry to branch; inspect next CI run. Require all tests and four SAT lemmas to pass before benchmark. PR #19 open/unmerged; last mergeability false. Ceres untouched; NEM distinct; baseline intact.
+
+
+## 90. PR #19 resynchronized after packed-wire parser correction — 2026-11-27T05:28:34.039Z
+
+- Synced latest main STATUS blob from `732b00d62b86fb48e086d14aa912aa2abb0f6e01` and main ancestry into branch using non-force two-parent merge commit `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`.
+- Merge parents: corrected source commit `ef85ed7de100b24d6e1fbd881ac48d2a5b615681` first; main `732b00d62b86fb48e086d14aa912aa2abb0f6e01` second. Branch update succeeded with expected-head protection and `force=false`.
+- New branch head should trigger another PR CI run. Run #235 `45945802919` remains failed on the prior head; no SAT lemma or benchmark result was produced.
+- Next: inspect Actions run listing for exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`; monitor unit tests and proof. PR #19 remains open/unmerged. Ceres untouched; NEM separate; baseline intact.

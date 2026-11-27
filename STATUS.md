@@ -585,3 +585,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #227 `45943382079` remains `in_progress`. Dependency installation completed successfully; cache restore step 5 is active. Formal unit tests, benchmark, and artifact upload remain pending.
 - No proof verdict or PPA data exists at this poll. Continue monitoring exact step transitions.
+
+
+## 59. Run #227 failed at unit tests — 2026-11-27T05:02:50.109Z
+
+- Run #227 `45943382079` completed with conclusion `failure`. Job failed at step 9 (`Run unit tests`); setup/cache/OpenSTA verification passed. Compile, benchmark, artifact, and smoke steps were skipped.
+- Exact ABC CEC test failure has not yet been inspected. Next retrieve completed job logs and determine whether AIG export, ABC executable invocation, CEC verdict parsing, or actual equivalence caused the failure.
+- No fused proof pass, negative-test rejection, artifact, or PPA metrics from this run.

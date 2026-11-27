@@ -2545,3 +2545,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Attempted a read-only GET of the repository Actions permissions endpoint to diagnose why PR #22 has no workflow run. The GitHub fetch integration rejected this endpoint as not allow-listed (HTTP 400); no repository or PR state changed.
 - No workflow-dispatch or Actions-settings read/write operation is exposed by the available integration. The current evidence remains: PR #22 open/draft, exact branch has zero Actions runs, and the exact head has no commit statuses. A human with repository Actions access may need to inspect the Actions tab/settings and manually run the workflow.
+
+
+## 286. Re-check of PR #22 after user-reported CI execution — 2026-11-27T23:45:02.506Z
+
+- Re-read the latest authoritative `main` STATUS.md before repository work. Then re-queried PR #22 metadata, the branch-filtered Actions runs API (100-run page), the pull-request-triggered workflow-run wrapper for exact head `b4f1a9ef60d19258e3941e00389649f52ad3e392`, and the exact-head combined commit status.
+- GitHub still reports PR #22 open, Draft, unmerged, and `mergeable=false`, at the stated head SHA. The branch-filtered Actions API returned `total_count=0`; exact-head workflow runs returned an empty list; combined commit statuses were empty.
+- This conflicts with the user's report that ORCUS CI has now executed. No run ID, workflow URL, artifact, or job log is currently discoverable through these endpoints. Therefore no sequential SAT, 512-vector streaming/reset-leakage, latency, synthesis, utilization, critical-path, or Fmax result can yet be audited. This is an observability discrepancy, not evidence that tests failed.
+- No source, branch, PR, baseline, Ceres, or NEM state was modified. Next: search the repository-wide Actions runs collection without a branch filter and inspect workflow metadata for any run that may have executed on another SHA or ref. Do not modify or merge PR #22; preserve Draft state.

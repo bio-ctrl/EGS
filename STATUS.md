@@ -378,3 +378,14 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Direct pull-request API still reports mergeability as `unknown` while recalculating; PR #19 remains open/unmerged. Head remains `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`.
 - Exact unit-test failure is not yet known; next retrieve completed job logs and identify whether the positive proof timed out, the Yosys command was unsupported, or the negative test behavior was wrong. Do not alter proof code until logs are inspected.
 - No six-variant results, fused PPA, or formal proof pass are available. Milestone #1 remains open; Milestone #2 blocked.
+
+
+## 33. Run #216 exact formal unit-test failure — 2026-11-27T04:59:30Z
+
+- Retrieved completed job logs for Run #216 `45942353836`, job `140319281323`. The test suite ran 64 tests; 63 passed and the new fused equivalence test errored.
+- Exact failure: the positive fused candidate proof timed out after `60.06s` in `_run_equivalence`. The invoked Yosys sequence was:
+  `read_verilog reference.v candidate.v; proc; equiv_make reference orcus_fused_partial_product equiv; hierarchy -top equiv; clean -purge; equiv_struct -icells; equiv_simple -v; equiv_status -assert`.
+- Exception: `FORMAL_EQUIV_TIMEOUT: Yosys partitioned equivalence exceeded 60s for orcus_fused_partial_product`. The negative tamper subtest was never reached. The new partitioned full-output check therefore does NOT solve the proof wall; no false pass occurred.
+- Benchmark step 12 and artifact upload were skipped. No new fused metrics or six-variant table exist. This confirms that simply replacing the monolithic miter with output-bit partitioning is insufficient.
+- Next engineering step: decompose the proof compositionally. Independently prove the 4x4 signed Baugh-Wooley product identity (8-bit result) for one lane; then prove the shared 10-bit compressor heap against the sum of symbolic weighted partial-product inputs (no multipliers in that second proof). The composition of those lemmas must imply the complete 10-bit four-lane result. The negative tamper test must target the heap-level proof and be rejected. Keep the original failed attempts recorded.
+- PR #19 remains open/unmerged; branch head at the failed run is `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.

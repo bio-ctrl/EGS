@@ -1,8 +1,22 @@
 # EGS — Engineering Status
 
+> **PERMANENT SESSION-START AND HANDOFF RULE:** At the start of EVERY new ChatGPT session, and immediately whenever the founder says **"let's start today"**, first fetch and read the latest `STATUS.md` from the `main` branch of `bio-ctrl/EGS`. Do not rely on chat history, remembered summaries, stale copies, or a user-supplied prior SHA. Treat this file as the authoritative engineering handoff. Resume from the exact active milestone and next action recorded below (currently **Milestone #3 — PR #21, ECP5 FPGA place-and-route validation**). Obey all repository, project-boundary, evidence, and safety rules in this file. Never fabricate measurements or claim unverified work. Preserve all failure and timeout history. **After EVERY repository action, experiment, diagnostic, failure, timeout, or milestone, update and commit this `STATUS.md` directly on `main` before proceeding. This rule is permanent across sessions.** Do not modify unrelated project files when the requested task is a STATUS-only update.
+
+> **NON-NEGOTIABLE PROJECT BOUNDARIES:** Work only within EGS/ORCUS when authorized. NEM is a separate sister company/venture: no mixed code, roadmaps, or assumptions. Ceres is a separate project and must NEVER be touched, inspected, modified, merged, renamed, or mixed into EGS/ORCUS. Do not force-push, delete history, or merge a PR without explicit authorization and verified gates.
+
+> **MISSION:** EGS is the parent semiconductor and advanced-computing company, aspiring to compete alongside Nvidia and AMD over the long term. Build exceptional computing architectures first, then expand toward the infrastructure needed to support them. This is a strategic ambition, not a claim of present capability. Engineering evidence must lead every technical, commercial, or performance claim.
+
+> **FOUNDER MOTTOS:**
+> - "Big dreams push past what other people view as possible, often because 'unrealistic' just means a goal hasn't been done yet by the people around you. You have to dream unrealistic because life is not realistic"
+> - "Get what I want and when I want it"
+
+> **CURRENT AUTHORITATIVE HANDOFF:** Milestone #2 is closed on main at merge commit `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`. Current active work is **Milestone #3 — PR #21**, branch `research/orcus-ecp5-fpga-validation`, head `c6936a61fb103636140c4afec9f1b2f64b884e38`, draft and unmerged. Latest observed PR metadata: open, draft=true, mergeable=false; PR base SHA `4030edbcc34d4986d0a34337864f3938ba0d8cda`. Latest observed main head before this STATUS-only update: `616c9b8a3719c033da878720afa202d216f9435b`. No verified FPGA place-and-route metrics exist. First reconcile PR #21 with current main and inspect overlapping ECP5 implementation files already on main; resolve mergeability without deleting history, then mark ready for review, ensure CI runs on the exact final PR head, audit all eight place-and-route records, and only then consider merge. Do not report synthesis-only results as place-and-route.
+
+---
+
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-27 04:33:18 UTC  
+**Last updated:** 2026-11-27T07:03:15.456Z
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -33,7 +47,7 @@ Operating principles:
 |---|---|---|
 | **EGS** | Parent company | The company-level mission and long-term advanced-computing / semiconductor ambition. |
 | **ORCUS** | Active architecture-discovery and hardware platform | The engineering and research platform for exploring, validating, and evaluating computational architectures and hardware building blocks. |
-| **NEM** | Separate project / possible product | Keep distinct from EGS and ORCUS. Do not assume it is the same product or platform. |
+| **NEM** | Separate sister company / distinct venture | Keep completely separate from EGS and ORCUS: no mixed code, roadmaps, or assumptions. |
 | **Ceres** | Separate project | **Never touch, modify, merge, rename, or mix Ceres with EGS or ORCUS.** No Ceres files, code, branches, or product assumptions belong in this work. |
 
 All work described below is for EGS/ORCUS only. Ceres is explicitly out of scope.
@@ -2090,3 +2104,44 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Main push Run #260 (45955602117), source head 8b7d9729a3d8eeb4a1986245fab56d3fe1c59164, failed both jobs. FPGA job 140361234602 installed pinned Yosys 0.33 (git sha1 2584903a060) and nextpnr-ecp5 0.6-3build5 successfully, then failed wrapper tests at step 5. P&R step 6 was skipped. Existing ASIC job unit tests also failed because it runs the shared full suite.
 - Exact error in tests/test_fpga_ecp5.py lines 15 and 19: accumulator_width(4) raises ValueError because orcus/lane_scaling.py restricts lane counts to TARGET_LANES=(8,16,32). The FPGA matrix needs 4 lanes/10-bit accumulator; the general helper currently blocks this additional use. Full suite: 79 tests, errors=2; all other tests passed. No FPGA artifact or P&R measurements were generated.
 - Fix: extend accumulator_width to accept 4 as an additional supported width-contract input while leaving TARGET_LANES=(8,16,32) unchanged for the Milestone #2 ASIC benchmark. Add a regression assertion for 4→10 and preserve invalid-count rejection. Then rerun CI. This is a parameter-validation issue, not a synthesis or routing failure. Ceres untouched; NEM distinct.
+
+
+## 235. Authoritative session-start handoff refreshed — 2026-11-27T07:03:15.456Z
+
+### Mission, boundaries, and session protocol
+- This section and the top-of-file permanent protocol supersede stale handoff instructions and older roadmap "next step" text elsewhere in this historical STATUS file.
+- At every new session, or whenever the founder says "let's start today", read the latest STATUS.md on main before any repository action; resume the active Milestone #3 / PR #21 state; obey all rules; commit an updated STATUS.md on main after every action/experiment/diagnostic/failure/timeout/milestone.
+- EGS is the parent semiconductor and advanced-computing company, aspiring to compete alongside Nvidia and AMD over the long term. The engineering sequence is exceptional computing architectures first, then infrastructure expansion. Ambition is not evidence of present capability.
+- Founder mottos, preserved verbatim:
+  - "Big dreams push past what other people view as possible, often because 'unrealistic' just means a goal hasn't been done yet by the people around you. You have to dream unrealistic because life is not realistic"
+  - "Get what I want and when I want it"
+- ORCUS is the active architecture-discovery and hardware platform inside EGS.
+- NEM is a separate sister company / distinct venture. Never combine code, roadmaps, identity, or assumptions with EGS/ORCUS.
+- Ceres is separate and strictly off-limits: never touch, inspect, modify, merge, rename, or mix it.
+- Evidence rules: never fabricate; distinguish generic cells, Nangate45 pre-layout estimates, FPGA synthesis resources, and actual post-route results. Nangate45 values are not silicon measurements. FPGA synthesis-only estimates are not place-and-route proof. Preserve all failures, timeouts, logs, and historical commits.
+
+### Verified evidence timeline
+1. **ORCUS v0.2 — PR #18 / Run #201 / merge `3fcf0024d621db90ac913d9671c1f60d8588c5d9`:** Four-lane signed INT4 baseline. Two-stage carry-save measured 460.712 Nangate45 area, 0.89 ns OpenSTA delay, and 84.60975 µW estimated total power versus Direct at 574.56 area, 0.95 ns, and 105.02060 µW. All five tested variants passed Yosys SAT.
+2. **Milestone #1 / ORCUS v0.3 — PR #19 / merge `35207adff3371fcadae68cbaa58181267c361359`:** Four-lane fused Baugh-Wooley with typed bit-heap. Run #244 artifact `15175157667` and Run #245 evidence recorded in prior handoffs. Four compositional SAT lemmas plus independent graph audit in 0.0686 s; three negative tamper tests. Fused result: area 413.896 (-27.96% vs Direct), total power 74.24132 µW (-29.31% vs Direct), delay 1.13 ns. Nangate45 metrics remain pre-layout estimates.
+3. **Milestone #2 — PR #20 / merge `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a` / Run #256 artifact `15177808570`:** All 12 configurations across 8/16/32 lanes and Direct, Carry-Save, Fused Linear, and Fused Dadda passed formal checks; every configuration had 512 unique xorshift32 vectors, nonzero VCD annotation, and verified OpenSTA Internal/Switching/Leakage/Total power fields. Exact tables, runtimes, graph-audit timings, VCD pin counts, and per-configuration metrics are retained in the Milestone #2 section above.
+   - At 32 lanes / 13-bit accumulator, Fused Dadda: 3,595.522 area, 643.7901 µW total power, 1.57 ns delay, 0.109804 s formal proof; 3,328 generic cells.
+   - Versus Direct: area -36.10%, total power -37.57%, delay -16.93%.
+   - Versus Carry-Save: Dadda is lower area, lower power, and 3.09% faster.
+   - **Precision correction:** Dadda did NOT beat fused-linear on every metric. At 32 lanes fused-linear had lower area (3,534.874 vs 3,595.522) and lower total power (624.5949 vs 643.7901 µW), while Dadda was much faster (1.57 vs 2.60 ns). Dadda trades 1.72% more area and 3.07% more total power for 39.62% lower delay than fused-linear. Do not repeat the overbroad claim that it wins every metric against all four variants.
+   - All listed Nangate45 numbers are pre-layout research-library estimates without routed parasitics, not silicon measurements.
+
+### Exact current Milestone #3 state — PR #21
+- Active branch: `research/orcus-ecp5-fpga-validation`.
+- Branch head: `c6936a61fb103636140c4afec9f1b2f64b884e38`.
+- Draft PR #21: https://github.com/bio-ctrl/EGS/pull/21.
+- Latest observed PR metadata at 2026-11-27T07:03:15.456Z: open, unmerged, draft=true, mergeable=false; PR base SHA `4030edbcc34d4986d0a34337864f3938ba0d8cda`. The latest main head observed immediately before this STATUS-only update was `616c9b8a3719c033da878720afa202d216f9435b`. The PR branch is therefore not yet confirmed synchronized/mergeable.
+- Target: Lattice ECP5 `LFE5U-85F-6BG381C`, Yosys `synth_ecp5` + `nextpnr-ecp5`, package `CABGA381`, speed grade 6.
+- Matrix: 4, 8, 16, and 32 lanes; Direct vs Fused Baugh-Wooley Dadda; accumulator widths 10, 11, 12, and 13 bits. Report exact LUT4, CCU2C/carry stages, flip-flops, other relevant mapped resources, post-route utilization, achieved post-route Fmax, device/tool versions, constraints, and raw logs/reports.
+- No verified FPGA P&R run, utilization table, or Fmax value is available. Do not invent or infer one.
+- **Repository-state warning:** historical entries below record a separate ECP5 implementation committed directly on main (including `benchmarks/fpga_ecp5.py` and an ECP5 CI job) and subsequent newline-escape correction commit `8b7d9729a3d8eeb4a1986245fab56d3fe1c59164`. PR #21 also contains its own initial ECP5 implementation. These overlapping implementations must be inspected and reconciled before marking PR #21 ready or merging; preserve both histories and do not blindly overwrite or duplicate workflows.
+- **Exact next action:** compare PR #21's changed files and base against current main; inspect the overlapping ECP5 implementation and resolve the stale base / `mergeable=false` condition with a non-destructive branch sync. Then mark PR #21 Ready for Review, trigger/obtain CI on the exact resulting head, and audit the eight completed ECP5 nextpnr builds, including post-route Fmax and LUT/carry/FF utilization. Fix and rerun any failure with complete status logging. Merge PR #21 only after formal, synthesis, place-and-route, report, and artifact gates pass and merge authorization is explicit. After Milestone #3 closes, begin **Milestone #4 — EGS MAC + Local-Memory Inference Tile**.
+- PR #21 must remain unmerged and no FPGA metrics claimed until those gates pass. Ceres remains untouched; NEM remains separate.
+
+### STATUS-only update scope
+- This operation changes only `STATUS.md` on `main`; no benchmarks, FPGA tools, CI workflows, RTL, branches, PR state, or other project files were changed by this update.
+- Main head before this commit: `616c9b8a3719c033da878720afa202d216f9435b`. Prior STATUS blob: `36670b75417a51253aa6a8c21cdf9fddd1446cd3`.

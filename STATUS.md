@@ -2346,3 +2346,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Created new branch `research/orcus-ecp5-dadda-pipeline` from main commit `d45e9c00d39828dd45d06d4597238667eabdfdae` (the main head containing the prior Milestone #3 handoff and timing-closure inspection).
 - This is a clean, separate experiment branch. The audited 100 MHz baseline implementation on main is unchanged. PR #21 remains untouched, open, draft, and unmerged. No RTL or benchmark source has been changed yet.
 - Next: implement a separate pipelined Dadda candidate and verification path on this branch; prove arithmetic and transaction latency, then run same-target ECP5 P&R and compare with the immutable Run #262 baseline. Preserve all results and failures. Ceres untouched; NEM separate.
+
+
+## 257. Pipeline-branch source and CI inspection — 2026-11-27T23:23:00Z
+
+- Re-read the latest main STATUS before inspection. Inspected `STATUS.md`, `orcus/lane_scaling.py`, `benchmarks/fpga_ecp5.py`, `tests/test_fpga_ecp5.py`, and `.github/workflows/ci.yml` on `research/orcus-ecp5-dadda-pipeline`.
+- Confirmed the branch is still at the original branch-point snapshot: the ECP5 benchmark currently supports only `direct` and combinational `fused_dadda`; its wrapper registers inputs and output around a combinational core. The CI workflow currently runs only the existing eight-row baseline matrix. No pipeline implementation, sequential proof, streaming test, or pipeline P&R target exists yet.
+- Existing lane-scaling Dadda generator and full test source were fetched for further inspection; this read-only inspection made no source or branch mutation. Branch STATUS blob is older than main and does not include later handoff entries; do not treat branch STATUS as authoritative.
+- Next: inspect the exact Dadda RTL generator and formal/test helpers in focused ranges, then implement a separate pipeline architecture and dedicated validation path. Keep Run #262 and all baseline RTL untouched. Ceres untouched; NEM separate; PR #21 untouched.

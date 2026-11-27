@@ -2407,3 +2407,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Added `benchmarks/dadda_pipeline.py` to `research/orcus-ecp5-dadda-pipeline` in commit `3eb96dadfabeb6bd4d17dd0cb92e745cb306f50e`.
 - The harness generates a sequential reference miter for each lane count, compares DUT `out_valid` and valid-qualified `out_data` against a delayed direct-arithmetic reference, and invokes Yosys bounded sequential SAT at depth `2*L+4`. It also generates a back-to-back deterministic 512-vector Icarus streaming test with latency checks and flush checks. The seed is fixed at `0x0C0FFEE` with per-lane deterministic streams.
 - This harness has not yet been run. Its generated Verilog and signed-literal formatting require review before CI is wired. No formal PASS or streaming PASS is claimed. Next inspect/fix testbench source generation, then run via GitHub Actions after CI integration. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 265. Streaming testbench literal correction attempt — 2026-11-27T23:37:00Z
+
+- Reviewed the new streaming testbench generator and found that negative signed decimal literals were emitted in invalid Verilog form (`4'sd-3` / `10'sd-3`). Added `_sv_signed()` and corrected lane-input literal generation in branch commit `dcce5d4e06da677e8023041cac69e4d74e3f977a`.
+- A follow-up string check showed that the two expected-output comparison lines were not changed by that patch (`_sv_signed(exp, width)` is not yet used there). This incomplete correction is recorded as such; no generated testbench was compiled or simulated. Next patch both output comparisons and re-inspect the generated-source template before CI integration.

@@ -1171,3 +1171,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Synced current main `696f169d437a0997892e8cadc084ce439426fb85` and its latest STATUS blob into PR branch using a non-force two-parent commit `934e94addbda390ab56571eeca565d75dbd0fcc6`.
 - Parents: original PR branch head `50afab04361308c74254d5466e0d6c0b1638ffae` first; main `696f169d437a0997892e8cadc084ce439426fb85` second. Ref update succeeded with expected-head protection. No source changes were made in this sync.
 - Next: check raw PR metadata and exact-head CI. If clean and green, merge PR #19 with expected head `934e94addbda390ab56571eeca565d75dbd0fcc6`, then verify merge commit and update STATUS.
+
+
+## 125. PR #19 resync CI Run #246 started — 2026-11-27T05:50:44.164Z
+
+- Non-force ancestry/STATUS sync commit `934e94addbda390ab56571eeca565d75dbd0fcc6` triggered PR Run #246, ID `45948158005`, exact head `934e94addbda390ab56571eeca565d75dbd0fcc6`; created `2026-11-27T05:50:17Z`; status `in_progress`.
+- PR #19 is open/unmerged. Raw API currently reports `mergeable=null`, `mergeable_state=unknown` while GitHub recalculates; base `696f169d437a0997892e8cadc084ce439426fb85`, head as above.
+- Wait for exact-head CI and mergeability calculation before merging PR #19. No Milestone #2 branch yet.

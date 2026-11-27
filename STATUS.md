@@ -2460,3 +2460,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Updated `benchmarks/dadda_pipeline.py` in pipeline branch commit `2805b72742627f1377fd105f8ad3d713a3ab2ece`: formal harness can persist generated miter Verilog and full Yosys SAT log; streaming harness can persist generated testbench, Icarus compile log, and simulator log.
 - Updated `benchmarks/fpga_ecp5_pipeline.py` in commit `4db5857d56bfc7aaad7d4d4abe99a8b66e91fac2`: each lane row now saves `pipeline-manifest.json` and passes a persistent `validation/` directory to the formal and streaming harnesses. This closes the identified artifact-retention gap for successful runs.
 - Neither change has been executed. Failure-path persistence for a command that raises before the normal post-run copy still needs attention; next add fail-safe log persistence and verify imports/source before PR. No formal, simulation, synthesis, or P&R results exist yet. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.
+
+
+## 273. Failure-path validation log retention added — 2026-11-27T23:53:00Z
+
+- Updated `benchmarks/dadda_pipeline.py` in pipeline branch commit `e4b2442affb117667bd81b390277a0e0a65495f8` so Yosys SAT timeouts persist the partial solver log and miter source; Icarus compile logs are persisted before checking compile success; VVP timeout logs are also retained. This complements the successful-run log persistence recorded in section 272.
+- Source was not executed. The CI workflow still needs exact-head validation. Next complete the final source review, synchronize branch `STATUS.md` with current main handoff, and open a Draft PR. No Fmax or resource metrics exist yet. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.

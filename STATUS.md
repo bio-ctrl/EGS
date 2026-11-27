@@ -2152,3 +2152,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before recording the failed transaction. STATUS blob: 19b2259a7213ed03ea74ecef509ed89492242cea.
 - Attempted to commit the four-lane accumulator-width guard change and FPGA test assertion through GitHub blob/tree/commit APIs. The orchestration returned a GitHub GraphQL UNKNOWN error at 2026-11-27T07:03:31Z with incident reference 36D1:21B34:45EC11D:DD69E9B:6B092B42. The tool did not return the commit/ref update result; do not assume the transaction partially or fully succeeded.
 - No new source SHA or main commit SHA is confirmed. Next inspect current main ref and exact file contents to determine whether the transaction mutated main; if not, retry with a simpler update. Run #260 failure remains: accumulator_width rejects 4 lanes. No P&R run yet. Ceres untouched; NEM distinct.
+
+
+## 239. Four-lane accumulator helper guard fixed — 2026-11-27T07:04:19.606Z
+
+- Re-read main STATUS before source update. STATUS blob: a7b46599f241680c2c6cb2733f285e979407aa3f.
+- Confirmed the previous GitHub tree transaction did not modify main source or tests. Updated orcus/lane_scaling.py directly; commit b5b8b3c118282139cfa6eb52afd5bafb1136d271; new blob 2e37fa240dcc4454d5cd2805c7b5f7f7806e4311. accumulator_width now accepts lane count 4 plus the existing TARGET_LANES=(8,16,32), without changing that ASIC benchmark tuple. 4 lanes therefore use 10 accumulator bits.
+- Next add explicit invalid-lane regression assertion to the FPGA tests, then run CI. This fixes Run #260's width guard error; no P&R has run. Ceres untouched; NEM distinct.

@@ -55,7 +55,7 @@ def build_wrapper_source(lanes: int, variant: str) -> str:
     lines.append("    y <= core_y;")
     lines.append("  end")
     lines.append("endmodule")
-    return core + "\\n".join(lines) + "\\n"
+    return core + "\n".join(lines) + "\n"
 
 
 def parse_yosys_netlist(netlist: dict, top: str = TOP) -> dict:
@@ -110,13 +110,13 @@ def _run(command: list[str], log_path: Path, timeout: int) -> float:
     except subprocess.TimeoutExpired as exc:
         stdout = exc.stdout.decode("utf-8", "replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
         stderr = exc.stderr.decode("utf-8", "replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
-        log_path.write_text(stdout + "\\n" + stderr)
+        log_path.write_text(stdout + "\n" + stderr)
         raise TimeoutError(f"command timed out after {timeout}s: {' '.join(command)}") from exc
     elapsed = time.perf_counter() - start
-    log_path.write_text(result.stdout + "\\n" + result.stderr)
+    log_path.write_text(result.stdout + "\n" + result.stderr)
     if result.returncode:
         raise RuntimeError(
-            f"command failed ({result.returncode}): {' '.join(command)}\\n"
+            f"command failed ({result.returncode}): {' '.join(command)}\n"
             + (result.stdout + result.stderr)[-6000:]
         )
     return elapsed
@@ -230,14 +230,14 @@ def run_matrix(yosys: str, nextpnr: str, outdir: Path,
                 row = run_one(yosys, nextpnr, lanes, variant, row_dir,
                               freq_mhz, seed, timeout)
                 results.append(row)
-                output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\\n")
+                output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
         report["status"] = "complete"
     except Exception as exc:
         report["status"] = "failed"
         report["error"] = f"{type(exc).__name__}: {exc}"
-        output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\\n")
+        output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
         raise
-    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\\n")
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     return report
 
 
@@ -265,7 +265,7 @@ def main() -> int:
         }
     else:
         report = run_matrix(yosys, nextpnr, args.outdir, args.freq, args.seed, args.timeout)
-    rendered = json.dumps(report, indent=2, sort_keys=True) + "\\n"
+    rendered = json.dumps(report, indent=2, sort_keys=True) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(rendered)

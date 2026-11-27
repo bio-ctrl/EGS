@@ -823,3 +823,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #235 `45945802919`, job `140330080622`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e` remains `in_progress`. Dependency installation, cache restore, and OpenSTA verification passed; unit-test step 9 is active. Python compilation, benchmark, artifact upload, and smoke check remain pending.
 - No SAT lemma verdict or tamper-test outcome is confirmed until step 9 completes. No proof runtime or PPA metrics yet.
+
+
+## 88. Run #235 final audit failure — 2026-11-27T05:27:18.867Z
+
+- Run #235 `45945802919`, job `140330080622`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e` failed at unit-test step 9. Setup/dependencies/cache/OpenSTA verification passed; compile, benchmark, artifact, and smoke steps were skipped.
+- Logs show 67 tests: 65 passed, 1 failed, 1 errored. The prior FA constant-token mismatch is fixed; partial-product polarity and compressor carry-weight tamper tests pass. The compositional audit now fails when checking `fused_row0`; output-tamper test also fails early at the same point.
+- Exact cause from source inspection: the independent RTL declaration parser matches scalar `wire name = ...` declarations but not vector declarations such as `wire [9:0] fused_row0 = ...`. Thus the row vector is absent from the parsed declaration map. This is an audit parser coverage bug, not a SAT counterexample. No SAT lemma has run; no proof runtime or benchmark data exists.
+- Next: extend the declaration parser to accept optional packed-width declarations and retain exact RHS checking. Re-run all tests. Keep the output-tamper test expected to reach and reject the altered CPA assignment, not fail earlier.
+- PR #19 remains open/unmerged; last GitHub mergeability state `false`. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.

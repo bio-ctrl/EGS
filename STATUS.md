@@ -464,3 +464,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Parents: previous PR head `0fd9465315675ce7042486d01a789c127b3138c0` and main head `e54958cbcce4e94ec453383bcfcf64df82a41c7d`. Merge tree `3f6f65e6f61ab29ea2b02f54822d16fc8e1aa967` includes current main STATUS blob and preserves the output-only heap proof change and negative test.
 - Branch ref update succeeded with `force=false` and expected-head protection. This is a main-to-PR-branch sync, not a PR merge.
 - Next: confirm new automatic PR CI run for head `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`; then inspect whether output-only heap equivalence proves and the tampered output is rejected.
+
+
+## 43. PR #19 CI Run #224 started — 2026-11-27T05:09:00Z
+
+- Automatic PR Run #224 confirmed: ID `45943017177`, branch head `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`, event `pull_request`, currently `in_progress`.
+- PR #19 remains open/unmerged; direct GitHub API reports mergeability `unknown` during recalculation. Base SHA `e54958cbcce4e94ec453383bcfcf64df82a41c7d`.
+- Next: monitor Run #224 unit tests and benchmark. Required evidence: lane lemma pass, output-only symbolic heap lemma pass, negative one-bit tamper rejection, then all six variants' formal proof, 512 unique vectors, VCD pin activity, and all four power components.
+- No new proof or PPA result yet; Milestone #1 open and Milestone #2 blocked. Ceres untouched; NEM separate.

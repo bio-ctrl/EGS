@@ -120,7 +120,18 @@ def build_streaming_testbench(lanes: int) -> tuple[str, int]:
         lines.append(f"    if (out_valid !== 1'b1 || out_data !== {_sv_signed(exp, width)}) $fatal(1, \"flush mismatch {flush}\");")
     lines.extend(["    @(negedge clk); in_valid = 0;", "    @(posedge clk); #1;",
                   "    if (out_valid !== 1'b0) $fatal(1, \"out_valid did not drain\");",
-                  f"    $display(\"PASS lanes={lanes} vectors={VECTOR_COUNT} latency={latency}\");",
+                  "    @(negedge clk); in_valid = 1'b1;"])
+    for lane in range(lanes):
+        lines.append(f"    a{lane} = 4'sd0; b{lane} = 4'sd0;")
+    lines.extend(["    @(posedge clk); #1;",
+                  "    @(negedge clk); reset = 1'b1; in_valid = 1'b0;",
+                  "    @(posedge clk); #1;",
+                  "    if (out_valid !== 1'b0) $fatal(1, \"reset failed to clear valid\");",
+                  "    @(negedge clk); reset = 1'b0;"])
+    for _ in range(latency + 1):
+        lines.extend(["    @(posedge clk); #1;",
+                      "    if (out_valid !== 1'b0) $fatal(1, \"stale transaction leaked after reset\");"])
+    lines.extend([f"    $display(\"PASS lanes={lanes} vectors={VECTOR_COUNT} latency={latency}\");",
                   "    $finish;", "  end", "endmodule"])
     return "\n".join(lines) + "\n", latency
 

@@ -1059,3 +1059,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #19 remains open/unmerged; GitHub still reports `mergeable=false` after the latest STATUS ancestry sync. No merge.
 - This run validates the explicit half-adder graph node added after Run #242. No result or metrics for the changed source yet.
 - Next: monitor unit tests and benchmark; if successful, inspect the new manifest HA count, all proof lemmas, tamper tests, and full artifact.
+
+
+## 115. Run #244 unit tests passed; benchmark active — 2026-11-27T05:39:59.337Z
+
+- Run #244 `45947084195`, job `140334145107`, exact head `70949ed253e849453aaa0542d6f102a0130b81de`: dependency/cache/OpenSTA checks passed; unit tests passed; Python compileall passed; Liberty fetch passed. Benchmark step 12 is active; artifact upload and smoke verification pending.
+- This confirms the new test asserting an actual half-adder node is present passes in CI. Full benchmark/proof timings and HA-node artifact inspection remain pending.

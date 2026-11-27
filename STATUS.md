@@ -1136,3 +1136,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #244 artifact remains the fully audited measurement source for the FA+HA graph. Run #245 is the post-sync CI confirmation. No PR merge was performed; explicit user authorization is still required.
 - Milestone #1 four-lane proof and benchmark evidence complete. Milestone #2 may proceed as a separate scaling research milestone: 8 lanes/11-bit accumulator, 16 lanes/12-bit, 32 lanes/13-bit. Revalidate formal lemmas and graph invariants at each width; benchmark actual runtimes rather than assume they stay sub-second. Compare direct, multi-stage carry-save, and fused Baugh-Wooley.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 120. Final mergeability recheck — 2026-11-27T05:44:18.228Z
+
+- Rechecked raw GitHub API after a transient `mergeable=null / mergeable_state=unknown` response. Latest raw PR #19 response now reports `mergeable=true`, `mergeable_state=clean`, head `50afab04361308c74254d5466e0d6c0b1638ffae`; main ref at this check was `559863dd99d3ca2067a6d7e1fc79567909bd7e1e`. PR remains open/unmerged.
+- Run #245 `45947359445` completed success on the exact synced branch head and uploaded artifact ID `15174839413`. Run #244 `45947084195` artifact ID `15175157667` remains the fully audited evidence source for the actual FA+HA implementation; its complete six-variant metrics and raw OpenSTA reports are recorded in section 117.
+- Final four-lane Milestone #1 evidence is complete. No merge performed. Next work is Milestone #2 scaling (8/11-bit, 16/12-bit, 32/13-bit) as a separate research phase, after explicit authorization to proceed if repository work is to be started.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

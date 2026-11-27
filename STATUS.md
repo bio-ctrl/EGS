@@ -2473,3 +2473,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Extended `build_streaming_testbench()` in `benchmarks/dadda_pipeline.py` on the pipeline branch, commit `a197b3edccf5f4c2bd2494351457332a45ec6150`.
 - After the 512 consecutive transactions and pipeline drain, the testbench now injects one additional valid transaction, asserts synchronous reset while that transaction is in flight, then checks `out_valid` remains low for `L+1` cycles. This explicitly checks that reset flushes pending state and no stale transaction leaks after reset.
 - The generated testbench has not been compiled or simulated. Next update the unit test to assert the reset-leak check is present, then continue source review and branch handoff. No formal or P&R result is claimed.
+
+
+## 275. Reset-leak unit assertion added — 2026-11-27T23:57:00Z
+
+- Updated `tests/test_dadda_pipeline.py` on the pipeline branch in commit `815944e9d53e32068a004785f56d5dcbc34bb601` to assert that the generated streaming testbench includes the post-reset stale-transaction leakage check.
+- This only adds a source assertion; no tests have been run. Next inspect exact generated source logic and fix any remaining issues before syncing branch STATUS and opening the Draft PR.

@@ -794,3 +794,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #233 `45945601986` remains failed on its earlier head; 65/67 tests passed, with the compositional audit and output-tamper test blocked by the same audit-token mismatch. The polarity and carry-weight tamper tests passed. No SAT lemma ran and no benchmark/artifact exists.
 - Next: synchronize latest main STATUS onto the PR branch and inspect the next CI run. Require all four SAT lemmas, full graph audit, and all three tamper tests to pass before benchmarking. No proof runtime or scaling claim until measured.
 - PR #19 remains open/unmerged; last metadata `mergeable=false`. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 84. PR #19 resynchronized after RTL audit fix — 2026-11-27T05:26:19.579Z
+
+- Synced current main STATUS blob from `3bc16f01d189d6fc117eccc94ad1f32edd10cedf` and main ancestry into PR branch using non-force two-parent merge commit `60d551fa4512f3367e8c1d748f2abecd3c6f932e`.
+- Parents: corrected branch commit `ebb0c82601715fcb2a0425231fcbf7948736279f` first; main `3bc16f01d189d6fc117eccc94ad1f32edd10cedf` second. Expected-head-protected branch update succeeded; no PR merge.
+- This branch head should trigger a new PR workflow. Run #233 remains failed on prior head `1b2c502e056009f922d47bcab4c0b21f089c8107`; preserved. No SAT proof result or benchmark evidence yet.
+- Next: check exact-head Actions listing and poll the new run. PR #19 remains open/unmerged. Ceres untouched; NEM distinct; baseline intact.

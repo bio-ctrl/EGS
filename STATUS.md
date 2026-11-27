@@ -1732,3 +1732,10 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - New exact-head scaling artifact ID 15177593284, name orcus-int4-lane-scaling, 138898 bytes, SHA-256 zip digest c0a954eb6735e1d7e0c43abab3d6ac78993284399aeb9aa354fd04f63d5e4eac. This is the artifact for the ancestry-synchronized branch head; it still requires inspection/confirmation against the previously audited 12-row matrix before merge.
 - PR #20 remains open/unmerged; GitHub metadata still reports mergeable=false despite successful exact-head CI. Base snapshot is 05604d1a36b354a7127739281be58bdb75a64378; head is the two-parent sync commit 35f45253dec3b0476d6c4f8977c9508b9df6005b. Investigate mergeable_state/required checks and refresh metadata before merging; do not force a merge through unresolved conflict state.
 - Milestone #2 measurements remain as audited in section 193. No FPGA work started. Ceres untouched; NEM distinct.
+
+
+## 200. Run #255 scaling artifact downloaded for final audit — 2026-11-27T06:45:54.737Z
+
+- Re-read main STATUS before this update. STATUS blob: afeca2bf06adfdb8a8d110e05263af8890bd0361.
+- Downloaded Run #255 exact-head scaling artifact ID 15177593284 to /mnt/data/orcus-int4-lane-scaling-run-255.zip. ZIP digest reported by GitHub: c0a954eb6735e1d7e0c43abab3d6ac78993284399aeb9aa354fd04f63d5e4eac. Artifact inspection has not yet been performed in this step.
+- Next compare its 12 records, formal proof statuses, 512 unique vectors, VCD pin counts, raw power reports and metrics against Run #254's audited artifact. PR #20 remains unmerged and GitHub reports mergeable=false; investigate the raw PR mergeable_state after artifact verification. Ceres untouched; NEM distinct.

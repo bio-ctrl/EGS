@@ -2507,3 +2507,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Queried `https://api.github.com/repos/bio-ctrl/EGS/actions/runs?per_page=20` and filtered the returned workflow runs for exact PR head `9a7f426055692f1f2543718060bdeea21eb052e9`. No matching run was present; the latest listed runs were older main/PR #21 runs.
 - CI is therefore **not yet confirmed queued**. The workflow file on the PR branch has the expected `pull_request` event types including `opened` and `synchronize`, but no run was delivered/visible for the PR-open event. Next emit a fresh `synchronize` event with a minimal workflow comment-only update, then check exact-head run status. This is a trigger attempt, not evidence of CI success.
+
+
+## 280. PR #22 synchronize trigger emitted — 2026-11-28T05:38:30Z
+
+- Added a comment-only synchronization marker to `.github/workflows/ci.yml` on `research/orcus-ecp5-dadda-pipeline`, commit `b4f1a9ef60d19258e3941e00389649f52ad3e392`, to emit a fresh PR `synchronize` event after the initial `opened` event produced no visible Actions run.
+- This is a trigger attempt only. The pipeline workflow behavior is otherwise unchanged; baseline ECP5 command remains unchanged. Next query PR #22 metadata and exact-head workflow runs for `b4f1a9ef60d19258e3941e00389649f52ad3e392`. Do not report CI queued until a run is confirmed.

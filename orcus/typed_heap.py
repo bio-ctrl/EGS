@@ -163,6 +163,10 @@ def audit_fused_heap(lines: list[str], manifest: dict) -> dict:
         else:
             raise ValueError(f"unexpected initial bit kind: {bit['kind']}")
 
+    def rtl_token(bit_id: str) -> str:
+        bit = bits.get(bit_id)
+        return "1'b1" if bit and bit["kind"] == "constant" else bit_id
+
     consumers = {bit_id: 0 for bit_id in bits}
     generated = {}
     for node in manifest["compressors"]:
@@ -175,7 +179,7 @@ def audit_fused_heap(lines: list[str], manifest: dict) -> dict:
             if (bits.get(item) or generated[item])["column"] != column:
                 raise ValueError(f"compressor input has wrong weight: {item}")
             consumers[item] = consumers.get(item, 0) + 1
-        a, b, c = node["inputs"]
+        a, b, c = (rtl_token(item) for item in node["inputs"])
         expected_sum = f"{a} ^ {b} ^ {c}"
         expected_carry = f"({a} & {b}) | ({a} & {c}) | ({b} & {c})"
         if declarations.get(node["sum"]) != expected_sum:
@@ -208,8 +212,7 @@ def audit_fused_heap(lines: list[str], manifest: dict) -> dict:
             if bit is None or bit["column"] != column:
                 raise ValueError(f"final row bit has wrong weight: {bit_id}")
             consumers[bit_id] = consumers.get(bit_id, 0) + 1
-            source_bit = rtl_expr.get(bit_id, bit_id)
-            row_tokens.append(source_bit)
+            row_tokens.append(rtl_token(bit_id))
         expected = "{" + ", ".join(reversed(row_tokens)) + "}"
         if declarations.get(row_name) != expected:
             raise ValueError(f"final row RTL wiring mismatch: {row_name}")

@@ -1312,3 +1312,390 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Added tests/test_lane_scaling.py covering target widths/bias, six graph audits, negative tamper cases, vector uniqueness, six fused compositional proof configurations, and six direct/CSA equivalence configurations.
 - Updated .github/workflows/ci.yml to run the scaling benchmark in required physical mode and upload artifact orcus-int4-lane-scaling.
 - This commit has not yet been CI-tested. Potential failures must be recorded precisely; no PPA or formal timing results for 8/16/32 are available yet. Next create PR, monitor CI, fix any failures, and audit the artifact before reporting comparisons.
+
+## 149. Lane-scaling implementation branch synchronized to latest main — 2026-11-27T06:08:50.241Z
+
+- Synced main cfda9ee95121292132322a86f6529aebb2633281 and current STATUS blob into research/orcus-int4-lane-scaling via non-force two-parent commit f6144e9e5e10bab4d2bb5b2c9b0df232764571b8. Expected-head update succeeded.
+- Verified branch contains the 25,539-byte parameterized generator, 12,928-byte scaling benchmark with repository-root import path, six-test suite, and CI scaling benchmark/artifact steps.
+- Next create the Milestone #2 pull request from research/orcus-int4-lane-scaling into main. CI has not run on this branch yet. No measured 8/16/32-lane results exist.
+
+## 150. Milestone #2 PR creation payload syntax failure — 2026-11-27T06:09:10.223Z
+
+- Attempted to create the lane-scaling PR. The JavaScript payload failed to parse because the body string included malformed backtick concatenation. No PR was created and no repository state changed.
+- Retry with a plain quoted PR body and verify the resulting PR number/head.
+
+## 151. Milestone #2 PR #20 opened — CI pending — 2026-11-27T06:09:34.644Z
+
+- Opened PR #20: https://github.com/bio-ctrl/EGS/pull/20
+- Title: ORCUS Milestone 2: 8/16/32-lane INT4 architecture scaling.
+- Head branch research/orcus-int4-lane-scaling at f6144e9e5e10bab4d2bb5b2c9b0df232764571b8; base main at 6cd44f34f36b0945680c279a87a4d8737daf33aa.
+- PR #20 is open. Initial GitHub metadata reports mergeable=false; this may reflect recalculation or base/branch status divergence. CI Run ID not yet retrieved. No scaling results or proof timings yet.
+- Next: inspect raw PR metadata and exact-head workflow runs, monitor tests and benchmark, then fix failures and audit artifact. Do not merge PR #20 without separate explicit authorization.
+
+## 152. Milestone #2 CI Run #248 started — 2026-11-27T06:09:54.198Z
+
+- PR #20 automatic workflow Run #248, ID 45950053878, exact head f6144e9e5e10bab4d2bb5b2c9b0df232764571b8; created 2026-11-27T06:09:28Z; status in_progress.
+- Raw PR API reports mergeable=null / mergeable_state=unknown while GitHub recalculates. No result yet.
+- Next inspect job steps/logs, particularly the new all-scale unit tests and the 12-configuration physical benchmark. Artifact and measured data are pending.
+
+## 153. Run #248 unit tests active — 2026-11-27T06:10:10.010Z
+
+- Run #248 45950053878, job 140343567995, exact head f6144e9e5e10bab4d2bb5b2c9b0df232764571b8: dependency setup and OpenSTA verification passed; unit test step 9 is running. Compileall, Liberty fetch, existing four-lane benchmark, new 8/16/32 scaling benchmark, artifact uploads, and smoke check remain pending.
+
+## 154. Run #248 live job-log retrieval unavailable — 2026-11-27T06:10:27.396Z
+
+- Attempted to retrieve job logs while unit tests were still running. GitHub returned HTTP 404 BlobNotFound for the live log blob; no test result was inferred. No repository mutation occurred.
+- Continue polling the job-step endpoint; retrieve complete logs after the step/run completes. Run #248 remains the active exact-head CI run unless a later status says otherwise.
+
+## 155. Run #248 remains in formal/unit-test stage — 2026-11-27T06:10:42.220Z
+
+- Re-polled Run #248 job 140343567995. Dependency and OpenSTA checks remain passed; unit test step 9 is still in_progress. No failure or completion has been reported. Remaining benchmark steps have not started.
+
+## 156. Run #248 formal test stage still running — 2026-11-27T06:10:58.602Z
+
+- Run #248 remains in_progress with unit test step 9 active; setup steps 1–8 succeeded. No conclusion yet. The expected duration includes six scaled fused compositional proof configurations and six direct/carry-save equivalence configurations, so do not treat the elapsed time alone as a timeout.
+
+## 157. Run #248 live logs still unavailable — 2026-11-27T06:11:22.352Z
+
+- Second attempt to fetch job 140343567995 logs while step 9 is active returned HTTP 404 BlobNotFound. The job-step endpoint remains the available source of progress; no test outcome inferred.
+
+## 158. Independent Dadda stage-height algorithm spot-check — 2026-11-27T06:12:12.664Z
+
+- Ran an isolated Python simulation of the staged Dadda height-reduction recurrence for 8/11, 16/12, and 32/13 targets. All three schedules reached a maximum final column height <=2. Target-height sequences begin 8 lanes: 28,19,13,9; 16 lanes: 63,42,28,19; 32 lanes: 94,63,42,28 (full target arrays are generated algorithmically).
+- This validates the height recurrence only; it is not a RTL graph audit, SAT proof, or measured critical-path result. Run #248 unit tests remain in progress.
+
+## 159. Run #248 remains in unit tests — 2026-11-27T06:12:37.744Z
+
+- Latest job query still shows Run #248 job 140343567995, step 9 (unit tests) in_progress; setup and OpenSTA checks passed. No benchmark stage has started and no pass/fail conclusion exists. Continue monitoring; do not publish PPA or proof timing estimates from this pending run.
+
+## 160. Run #248 still in progress — 2026-11-27T06:13:06.968Z
+
+- GitHub run object remains status in_progress, conclusion null, run attempt 1. Job step 9 unit tests still has no reported completion. No evidence of a timeout or failure yet.
+
+## 161. Run #248 unit-test step remains active — 2026-11-27T06:13:33.044Z
+
+- Latest job-step poll again reports step 9 in_progress; steps 10–16 have not started. The run has not reported failure, timeout, or a test count. No scaling metrics are available.
+
+## 162. Direct job-detail endpoint rejected — 2026-11-27T06:13:55.916Z
+
+- Attempted a direct workflow-job detail GET to inspect start timestamps and runner state. GitHub connector rejected that URL as an unsupported endpoint (HTTP 400); no additional diagnostics obtained. The supported job-steps wrapper remains the source of truth and still reports unit tests in_progress.
+
+## 163. Run #248 test suite has not advanced past step 9 — 2026-11-27T06:14:15.964Z
+
+- Run #248 job 140343567995 remains active; unit test step 9 is still in_progress and all later steps remain pending. No live logs available, no pass/fail count, and no scaling artifact yet. This is a status observation, not a declared timeout.
+
+## 164. Dadda implementation inspected during Run #248 — 2026-11-27T06:14:41.014Z
+
+- Re-read the committed Dadda stage loop on the PR branch. It uses separate next-stage sum buffers and same-stage carry buffers; the loop accounts for both current work and emitted sums against each target height. This matches the isolated recurrence spot-check in section 158. No code change made.
+- Run #248 remains in_progress at unit test step 9. Live logs are not currently retrievable. If this step eventually fails, inspect the completed job log and address the exact failing test rather than speculate.
+
+## 165. Run #248 unit-test stage approaching first proof timeout bound — 2026-11-27T06:15:01.939Z
+
+- The unit-test step has remained in_progress for approximately five minutes, but GitHub has not returned a failure or timeout. The Yosys equivalence helper has a per-invocation 300-second bound; this is only a configured limit, not an observed timeout. Continue polling for the actual conclusion.
+
+## 166. Run #248 logs unavailable during active test step — 2026-11-27T06:15:23.094Z
+
+- Third attempt to retrieve job logs during the active unit-test step returned 404 BlobNotFound. No failure diagnosis is available. Job step 9 still reports in_progress.
+
+## 167. Run #248 unit-test stage still pending — 2026-11-27T06:15:45.069Z
+
+- Job 140343567995 remains active at step 9; no later CI steps have begun. No proof timings, test counts, or physical measurements are available. Await exact GitHub conclusion and logs.
+
+## 168. Run #248 formal-test stage duration update — 2026-11-27T06:16:16.826Z
+
+- Run #248 remains in_progress at unit-test step 9 after approximately six minutes. This exceeds the four-lane test time but does not itself establish failure. Candidate causes include large-width Yosys equivalence; no logs are available to identify the active test. Keep the configured timeouts and await actual job outcome.
+
+## 169. Run #248 remains in test step 9 — 2026-11-27T06:16:36.327Z
+
+- Latest workflow job poll confirms no state change: unit tests in_progress; all subsequent steps pending. No CI completion or artifact available.
+
+## 170. Milestone #2 current handoff and Milestone #3 gate — 2026-11-27T06:17:16.233Z
+
+### Milestone #1 closure
+- PR #19 merged successfully. ORCUS v0.3 merge commit: 35207adff3371fcadae68cbaa58181267c361359.
+- Pre-merge verification: Run #246 (45948158005) success; artifact 15175189288. The complete four-lane proof and six-variant results are documented in sections 117 and 130.
+
+### Milestone #2 active state
+- Research branch: research/orcus-int4-lane-scaling.
+- PR #20: https://github.com/bio-ctrl/EGS/pull/20 (open; not merged).
+- PR head: f6144e9e5e10bab4d2bb5b2c9b0df232764571b8.
+- CI Run #248: 45950053878, created 2026-11-27T06:09:28Z, exact head f6144e9e5e10bab4d2bb5b2c9b0df232764571b8; current status in_progress.
+- Job 140343567995 remains in_progress at step 9, Run unit tests. Setup, dependency/cache, and OpenSTA verification steps 1–8 passed. Compileall, Liberty fetch, existing four-lane benchmark, new 8/16/32-lane scaling benchmark, both artifact uploads, and smoke check have not started.
+- The live workflow logs were not available from the GitHub log endpoint while the job was active (HTTP 404 BlobNotFound). No unit-test count, failure, timeout, proof timing, artifact, or physical measurements have been observed. Do not infer or fabricate any 8/16/32-lane values.
+- Implementation commit: fbe204f3593bc45cb1342f2f440db1ac13f4a7b1; latest branch STATUS ancestry sync head: f6144e9e5e10bab4d2bb5b2c9b0df232764571b8. Main STATUS updates after this sync mean the branch will need a fresh non-force two-parent STATUS/ancestry sync before any eventual merge, followed by another exact-head CI run.
+- Target contract: 8 lanes / 11-bit accumulator / bias 0x790; 16 lanes / 12-bit / bias 0xF90; 32 lanes / 13-bit / bias 0x1F90. Variants: Direct, multi-stage carry-save, fused linear, fused Dadda. The width/bias derivation is mathematically recorded in section 138; formal proof and graph/RTL validation remain pending CI.
+- Next immediate actions: continue polling Run #248; inspect completed logs and artifact; fix the exact failing or timing issue if any; rerun CI; audit all 12 variant rows for formal status, unique vectors, VCD toggles, generic cells, area, delay, all four power components, and stage timings; report Dadda-vs-linear delay by width. Keep PR #20 open/unmerged absent explicit merge authorization.
+
+### Milestone #3 — FPGA place-and-route validation (not started)
+- Begin only after Milestone #2 proof/benchmark matrix is complete and architecture candidates are selected from measured area/delay/power trade-offs.
+- Select a specific FPGA family/part and toolchain; document resource constraints and timing target; create synthesizable top-level wrappers and pin/clock constraints; run synthesis, placement, routing, static timing analysis, and utilization reports; preserve exact tool versions, seeds, constraints, logs, and build artifacts.
+- Compare direct, carry-save, fused-linear, and fused-Dadda designs on identical FPGA target/constraints. Report LUT/ALM, register, DSP, memory use, fmax/slack, routing congestion, and implementation runtime. FPGA results are distinct from Nangate45 ASIC-library estimates and must not be conflated.
+- Ceres remains untouched. NEM remains distinct. ORCUS v0.3 remains merged on main.
+
+
+## 171. Run #248 re-audit — still in progress — 2026-11-27T06:22:26.684Z
+
+- Re-read STATUS.md on main before this repository action. Current main head at this update: e4ea1b018534dd4703f134c9a5b7c903f9ded909; STATUS blob before update: c048eca722ac143361538731df5e6e42722dfce4.
+- Re-polled ORCUS CI Run #248 (ID 45950053878), exact branch research/orcus-int4-lane-scaling and head f6144e9e5e10bab4d2bb5b2c9b0df232764571b8. GitHub run status remains in_progress, conclusion null.
+- Job 140343567995 remains in_progress at step 9, “Run unit tests.” Steps 1–5 and 8 succeeded; steps 6–7 were skipped because cached dependencies were available. Steps 10–16 (compileall, Liberty retrieval, four-lane benchmark/artifact, 8/16/32 scaling benchmark/artifact, benchmark-target verification) remain pending. No stage start/end timestamps or unit-test logs were exposed by the job-steps endpoint.
+- Run artifact listing currently returns an empty array; no scaling artifact is available. The prior live-log fetch attempts returned 404 BlobNotFound while the job was active. Therefore there is no confirmed failure, timeout, proof result, test count, formal runtime, vector validation, VCD activity, generic-cell count, Nangate45 area, OpenSTA delay, or power component for any of the 12 configurations. All such measurements remain NOT AVAILABLE.
+- PR #20 metadata currently reports open, unmerged, and mergeable=true; head remains f6144e9e5e10bab4d2bb5b2c9b0df232764571b8, base main remains 6cd44f34f36b0945680c279a87a4d8737daf33aa. Mergeability alone is not CI validation. Do not merge while Run #248 is in progress or before artifact audit.
+- No code fix or branch mutation was made. No merge was performed. Milestone #2 remains open. Milestone #3 FPGA place-and-route is not started and remains gated on completed, audited Milestone #2 results. Ceres was not accessed; NEM remains separate.
+- Next: poll Run #248 and job 140343567995; once complete, fetch logs and artifacts. If success, inspect all 12 records for formal proof, 512 unique vectors, nonzero VCD pins, four OpenSTA power components, and stage runtimes before reporting tables. If failure/timeout, record exact failing step/test and fix on the research branch, then rerun. Only after successful evidence review, sync latest main STATUS into the branch non-force, rerun exact-head CI, verify PR checks and mergeability, and merge under the user's conditional authorization. Then start Milestone #3 with a pinned FPGA target/toolchain and Yosys + nextpnr P&R CI.
+
+
+## 172. Run #248 completed FAILURE — exact unit-test diagnostics — 2026-11-27T06:26:41.901Z
+
+- Re-read STATUS.md on main before repository work. STATUS blob at start of this update: d8110a2ec9b81db4bb3acdfd26bad0b778da0208.
+- ORCUS CI Run #248 (ID 45950053878), exact head f6144e9e5e10bab4d2bb5b2c9b0df232764571b8, completed with conclusion FAILURE at 2026-11-27T06:25:07Z. Job 140343567995 completed failure. Test step 9 ran from 2026-11-27T06:09:58.421Z to 2026-11-27T06:25:03.303Z; Python unittest summary: 73 tests in 906.122 seconds; FAILED (failures=6, errors=15). Exact log retrieval succeeded after completion.
+- Failure group A: six fused compositional SAT cases (8/11, 16/12, 32/13 × linear/Dadda) errored before proof completion in orcus/lane_scaling.py audit_fused_heap, raising ValueError: initial bit set is incomplete or contains unexpected nodes at line 232. These are audit/generator mismatches; no fused SAT proof PASS is established.
+- Failure group B: six graph-audit cases (8/16/32 × linear/Dadda) errored at tests/test_lane_scaling.py line 26 with the same initial-bit-set error. Six negative-tamper subtests (8/16/32 × linear/Dadda) failed because the audit raised that error before the expected polarity/source mismatch exception; the negative-test assertions therefore did not exercise the intended tamper diagnostic.
+- Failure group C: three Yosys direct-vs-carry-save equivalence subtests timed out independently at the configured 300 seconds: 8 lanes equiv_carry_save_8 at 2026-11-27T06:14:58.740Z; 16 lanes equiv_carry_save_16 at 2026-11-27T06:20:00.457Z; 32 lanes equiv_carry_save_32 at 2026-11-27T06:25:02.584Z. Commands used equiv_make, equiv_simple -v, equiv_status -assert. These are solver timeouts, not proof failures or evidence of inequivalence. Exact wrapper errors: YOSYS_EQUIV_TIMEOUT: equiv_carry_save_{8,16,32} exceeded 300s.
+- CI stopped at unit tests. Steps 10–16 were skipped: Python compileall, Nangate45 Liberty fetch, four-lane benchmark, four-lane artifact upload, 8/16/32 scaling benchmark, scaling artifact upload, and benchmark-target verification. Artifact list is empty. No scaling measurements, OpenSTA reports, 512-vector verification, VCD activity, proof runtimes, generic cells, area, delay, or power components exist from Run #248. Dadda-vs-linear critical path is NOT DETERMINED.
+- PR #20 remains open and unmerged; previous metadata showed mergeable=true, but CI is failed. Do not merge. Milestone #2 remains incomplete. Milestone #3 is not started.
+- Diagnosis: at least two independent blockers exist: (1) fused heap manifest/RTL initial-bit-set audit construction is inconsistent across all lane counts and both schedules; (2) monolithic Yosys equivalence on the carry-save expression exceeds 300 seconds even at 8 lanes. Fix initial heap/source manifest accounting first, ensuring positive audit succeeds and each negative tamper is rejected for the intended invariant. Then replace the intractable whole-design proof with a rigorously compositional/tree-level proof exposing and proving each lane product and each carry-save compressor/CPA invariant, plus top-level composition/end-to-end equivalence; alternatively use documented ABC CEC partitioning only if it proves exact top-level equivalence. Do not merely increase timeouts or call a timeout a pass.
+- No branch source changes or merge occurred during this audit. Ceres was not accessed; NEM remains distinct. Preserve all failed-run history and raw logs.
+- Next: inspect committed generator, tests, and RTL emitters at exact branch head; identify why expected initial PP/constant bits differ from manifest; implement non-destructive fixes on research/orcus-int4-lane-scaling; add focused tests for exact initial-bit multiset and tamper rejection; implement scalable compositional direct/CSA proof with explicit assumptions/lemmas and end-to-end closure; run targeted tests, then full CI. Only after successful artifact audit, sync main STATUS ancestry into the branch, rerun exact-head CI, verify PR checks, merge PR #20, and then begin Milestone #3. FPGA plan: pinned Ubuntu workflow, Yosys + nextpnr targeting a confirmed supported ECP5 part, compare direct baselines and winning verified reduction architecture at 4/8/16/32 lanes, report LUT4, carry resources, FFs, post-route Fmax, tool versions, constraints, and raw artifacts. Verify exact part/tool support before assuming availability.
+
+
+## 173. Run #248 source-level root-cause inspection — 2026-11-27T06:27:38.524Z
+
+- Re-read STATUS.md on main before inspecting branch sources. STATUS blob at inspection start: 69eb324dd1acba4728df665eead5d8d5fad0c735.
+- Inspected exact PR #20 branch blobs: orcus/lane_scaling.py (blob 231fdcb83bb418d606a3e759a8499f5013ebd4e4), tests/test_lane_scaling.py (7a66b82fe04a42b02c66bdc939b1c46e853579a2), and benchmarks/int4_lane_scaling.py (3752360638a608849239624bb2f70d3b98441caf). No source edits made.
+- Root cause identified for all 12 fused graph/SAT audit errors: generate_fused_heap stores both initial partial-product/constant bits and generated compressor sum/carry nodes in the same working `bits` dictionary, then serializes `manifest['initial_bits']` as all `bits.values()`. audit_fused_heap correctly expects only original PP and bias IDs in initial_bits, so the manifest incorrectly labels internal compressor nodes as initial sources. Fix by serializing only original source-bit kinds (`partial_product` and `constant`) while retaining compressor nodes in the separate compressor manifest; then verify independent audit checks every compressor edge and emitted declaration.
+- The six tamper-test failures are downstream of that same malformed initial_bits manifest: the source audit fails before it reaches the intentionally flipped PP polarity. After fixing manifest source separation, confirm tampered polarity, carry weight, and CPA output each fail at their intended independent check.
+- Carry-save formal root cause is algorithmic proof scalability, not a demonstrated functional mismatch: current `run_yosys_equivalence` uses a monolithic `equiv_make` + `equiv_simple` over multiplier expressions and a structurally different reduction tree. Run #248 timed out after 300s at each of 8, 16, and 32 lanes. Replace with explicit compositional proof of the actual generated carry-save tree: prove lane-product/sign-extension identity, each vector 3:2 compressor modulo-W weighted-sum invariant, and final modulo-W CPA, while independently auditing tree connectivity and proving the complete output is the weighted sum of all lane products. Do not drop end-to-end closure or treat primitive lemmas alone as sufficient.
+- Next source action: implement the initial-bit manifest filter and a typed carry-save graph/RTL audit plus per-node SAT proof and end-to-end composition argument; add targeted regression tests before full CI. Keep PR #20 open and unmerged. No PPA, Dadda delay conclusion, or FPGA results are available. Ceres untouched; NEM distinct.
+
+
+## 174. Milestone #2 proof-path correction committed to research branch — 2026-11-27T06:29:22.274Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: fc793f0874e2ff6de9b03347e8fd28546d040c91.
+- Updated orcus/lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: 3632725e9f565d1505a743455a5c2ed5c2920c3f; new source blob: f5d2dde1cf103d2c319f2c80561a28596d8328e8.
+- Fix 1: manifest initial_bits now serializes only original partial_product and constant source bits, excluding compressor sum/carry nodes that are separately represented in the compressor manifest. This directly addresses Run #248's six-width/schedule audit failures.
+- Fix 2: carry-save formal path no longer invokes the monolithic multiplier/reduction miter that timed out at 300s for all three lane counts. It now requires exact deterministic regeneration of the candidate CSA tree, identical signed product and sign-extension nodes in candidate/reference, complete sum/carry node pairs, and Yosys SAT proofs of the generic W-bit 3:2 compressor invariant and modulo-W final CPA. Direct-expression equivalence retains the original Yosys equivalence flow. This is a compositional proof implementation draft and must pass CI plus adversarial source/graph tests before being considered verified; do not claim proof success yet.
+- No PPA or FPGA results exist. PR #20 remains unmerged; Ceres untouched; NEM distinct. Next add regression coverage for manifest source-bit separation, CSA tree tampering rejection, and per-node/whole-tree closure, then run targeted CI.
+
+
+## 175. Milestone #2 regression tests added — 2026-11-27T06:30:02.545Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: f347d2fdf4c82424fea95cbc19b204c4ab2156da.
+- Updated tests/test_lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: edec4fe677f70ea32110210561465272cfacc2a6; new test blob: ffa600114f2883c7033f8d88905ebf5e4285f830.
+- Added explicit assertions that manifest initial_bits contains only original partial products/constants and is disjoint from compressor outputs. Existing six positive graph-audit cases now exercise the corrected manifest.
+- Added carry-save proof assertions for compositional proof method, graph-audit status, and required vector-CSA/final-CPA lemmas. Added a negative mutation check to ensure altered CSA RTL is rejected by exact audited-tree comparison. Full CI has not yet run against these changes.
+- No scaling metrics or FPGA evidence available. PR #20 remains unmerged. Ceres untouched; NEM distinct.
+
+
+## 176. Corrected Milestone #2 branch CI Run #250 started — 2026-11-27T06:30:35.162Z
+
+- Re-read main STATUS before polling repository state. STATUS blob at start: ddfed9eaf199ce8d228bf6b82c604c6dc8b5e57c.
+- PR #20 research branch now points to edec4fe677f70ea32110210561465272cfacc2a6 (source fix commit 3632725e9f565d1505a743455a5c2ed5c2920c3f plus regression-test commit edec4fe677f70ea32110210561465272cfacc2a6). The new branch push triggered ORCUS CI Run #250, ID 45952254080, created 2026-11-27T06:30:10Z, exact head edec4fe677f70ea32110210561465272cfacc2a6; currently in_progress.
+- PR #20 remains open and unmerged; current GitHub metadata reports mergeable=false while recalculating/reflecting new head. No merge performed. Run #248 remains a failed historical run and is preserved.
+- Run #250 must verify corrected initial-bit manifest, all six graph audits, all six fused compositional SAT cases, negative tamper tests, and direct/CSA equivalence at 8/16/32. Benchmark/artifact stages only proceed if unit tests pass. No scaling metrics or FPGA results yet. Ceres untouched; NEM distinct.
+- Next: poll Run #250 and exact logs/artifacts; if any failures, capture exact stage and correct non-destructively. Do not merge or begin FPGA claims until all 12 physical configurations have successful artifact evidence.
+
+
+## 177. Run #250 unit-test stage active — 2026-11-27T06:31:00.837Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 2c1f112e48db7c3c2f6d134cea82374809482e4f.
+- Run #250 (45952254080), exact head edec4fe677f70ea32110210561465272cfacc2a6, job 140350583073 remains in_progress. Setup/dependency/OpenSTA verification steps 1–8 succeeded or were skipped from cache. Step 9 Run unit tests is in_progress. Steps 10–16 (compileall, Liberty fetch, both benchmarks, artifacts, verification) remain pending. Artifact list is empty while run is active.
+- No unit-test result, proof runtime, test count, physical benchmark result, or artifact has been observed. Continue polling; do not infer success from the source fix alone. Run #248 remains failed history. PR #20 remains open/unmerged. Ceres untouched; NEM distinct.
+
+
+## 178. Run #250 failed — second audit blocker identified — 2026-11-27T06:31:51.057Z
+
+- Re-read main STATUS before diagnostics. STATUS blob at start: b81a05b61f474c1be469e9fa4d7d07d53142aa3c.
+- ORCUS CI Run #250 (45952254080), exact head edec4fe677f70ea32110210561465272cfacc2a6, completed FAILURE at 2026-11-27T06:30:51Z. Job 140350583073 failed at step 9 Run unit tests. The test suite ran 73 tests in 5.710 seconds and reported FAILED (errors=12). All later benchmark and artifact steps were skipped; artifact list is empty.
+- The previous initial-bit manifest mismatch no longer appears in this run's failures. The new error occurs in audit_fused_heap for all six fused schedule/width combinations and all six graph-audit combinations: ValueError: bias bits do not equal lanes times the derived per-lane bias. Root cause from code inspection: the audit sums the repeated per-lane constant bits into an integer `bias` but compares that unreduced integer to the expected modulo-2^W result. For multi-lane heaps the expected value must be compared after reducing the observed sum modulo 2^W. No proof or graph audit is yet accepted because this check fails first.
+- Run #250 does not establish whether the new carry-save compositional proof passes; tests stopped on fused audit errors. No physical benchmark, artifact, 512-vector result, VCD activity, PPA, or Dadda delay data is available.
+- Next: change the audit to compare `(bias % (1 << width))` with `(lanes * baugh_wooley_bias(width)) % (1 << width)`; add a direct test for observed bias wraparound at all lane targets; rerun. Then inspect whether compositional CSA proof passes. Keep PR #20 open/unmerged; Milestone #2 incomplete; Milestone #3 not started. Ceres untouched; NEM distinct.
+
+
+## 179. Corrected aggregate bias modulo check — 2026-11-27T06:32:08.728Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: 38dd0706e79f07ce25bd6f8a5ea614e30c89900b.
+- Updated orcus/lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: bcce068e280c222fa4b4abad5b8f9fc17486ccb4; source blob: c3f162e05ffb1c20323d4b1cafafbf8487717f79.
+- Corrected the aggregate constant-bit audit to reduce the observed sum modulo 2^W before comparing it with lanes × per-lane bias modulo 2^W. This addresses Run #250's 12 repeated fused-audit errors. This correction remains unverified until CI passes.
+- Next add an explicit modulo-wrap regression assertion, then rerun CI. No scaling metrics; PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 180. Aggregate bias wraparound regression added — 2026-11-27T06:32:30.281Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: d9e0d13e6d47b45673c0c4edd57e430658587d74.
+- Updated tests/test_lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: c563f66b9094e106ff1b5675c1dd5c695c5e4ad8; test blob: 1102313e0871f05eac09cec0768c636ffd7e8fa2.
+- Each of the six linear/Dadda × 8/16/32 graph-audit subtests now explicitly checks that the aggregate initial constant-bit sum, reduced modulo 2^W, equals the lane-count-scaled Baugh-Wooley bias modulo 2^W. This specifically guards the defect diagnosed in Run #250.
+- CI has not yet tested this latest head. No PPA or FPGA results. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 181. Run #252 started after bias-wrap correction — 2026-11-27T06:32:55.668Z
+
+- Re-read main STATUS before polling. STATUS blob: 592cf5c4114ec20b3b8c2bb93e66d1dd7f52913d.
+- Latest PR #20 head c563f66b9094e106ff1b5675c1dd5c695c5e4ad8 triggered ORCUS CI Run #252, ID 45952532314, created 2026-11-27T06:32:39Z; status in_progress at poll time. This head includes the initial-bit manifest filter, compositional CSA proof path, modulo-2^W aggregate bias audit correction, and explicit bias-wrap regression.
+- Run #250 remains failed historical evidence. Run #252 must confirm the audit fix and inspect all formal tests before any benchmark stage. No PPA/artifact/FPGA evidence available. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 182. Run #252 dependency stage active — 2026-11-27T06:33:16.478Z
+
+- Re-read main STATUS before this poll. STATUS blob: c830b0cbac8596af048809feeabd36ff65c37140.
+- Run #252 (45952532314), exact head c563f66b9094e106ff1b5675c1dd5c695c5e4ad8, job 140351446109 remains in_progress. Setup/checkout/Python/dependency installation passed; step 5 cache pinned CUDD/OpenSTA is active; remaining build, unit-test, benchmark, and artifact steps are pending. No test or measurement result yet.
+- Next poll after cache/build stages. Run #248 and #250 remain failed historical runs; PR #20 stays open/unmerged. Ceres untouched; NEM distinct.
+
+
+## 183. Run #252 unit tests passed; scaling benchmark active — 2026-11-27T06:33:38.790Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: dd28d09e8446e953ae7c8ae9481623dac8d0a9d0.
+- Run #252 (45952532314), exact head c563f66b9094e106ff1b5675c1dd5c695c5e4ad8, job 140351446109 remains in_progress. Step 9 Run unit tests completed SUCCESS; step 10 Python compileall SUCCESS; step 11 Nangate45 Liberty fetch SUCCESS; step 12 existing signed INT4 benchmark SUCCESS; step 13 four-lane evidence upload SUCCESS. Step 14 8/16/32-lane scaling benchmark is currently in_progress; steps 15–16 pending.
+- This verifies the prior 73-test suite and corrected fused graph/bias audit plus compositional carry-save tests passed on this head. No 12-configuration scaling artifact or measurements yet; do not report scaling PPA or Dadda conclusions until step 14/15 completes and artifact is inspected.
+- Run #248/#250 remain failed historical evidence. PR #20 remains open/unmerged. Ceres untouched; NEM distinct.
+
+
+## 184. Run #252 scaling benchmark failed at first carry-save case — 2026-11-27T06:34:30.916Z
+
+- Re-read main STATUS before diagnostics. STATUS blob at start: 4f17ee880361d2c11f307f7ad61f97d4c257654d.
+- Run #252 (45952532314), exact head c563f66b9094e106ff1b5675c1dd5c695c5e4ad8, completed FAILURE at 2026-11-27T06:33:29Z. Unit tests passed; compileall passed; Nangate45 Liberty fetch passed; four-lane signed INT4 benchmark passed and uploaded artifact 15177253103 (artifact name orcus-signed-int4-dot-product; SHA-256 zip digest 1f8d5806054e40f64d524fa255a39e71755de1bf0f91c0014719cd47bf094e12).
+- Step 14 8/16/32-lane benchmark started at 2026-11-27T06:33:24.549Z. First configuration, 8-lane/11-bit Direct, completed at 06:33:26.863Z with logged area=1293.824, delay=1.32 ns, total power=235.117 µW and total runtime=2.236s. This is a partial log record only; no full scaling artifact or all power components were produced, so do not treat it as an audited comparison row.
+- The next configuration, 8-lane Carry-Save, failed immediately in run_yosys_equivalence at orcus/lane_scaling.py line 544: ValueError: carry-save proof top does not encode lane count. Benchmark top is orcus_carry_save_8, while the proof parser incorrectly required the tests-only prefix equiv_carry_save_. This is a top-name parsing bug, not an arithmetic proof failure. Steps 15–16 were skipped; no scaling artifact exists.
+- The compositional fused proof/audit tests did pass in Run #252; the failure occurred when the benchmark invoked the carry-save proof path with its different top-name convention. Run #252 still fails overall; PR #20 remains open/unmerged; Milestone #2 incomplete; Milestone #3 not started. Ceres untouched; NEM distinct.
+- Next fix lane-count extraction to accept the actual top naming convention (anchored `_carry_save_<lanes>` suffix, independent of `orcus_` vs `equiv_` prefix), add regression coverage for both names, and rerun. Then inspect all 12 configs/artifact before any merge or FPGA work.
+
+
+## 185. Carry-save proof top-name parser fixed — 2026-11-27T06:34:51.473Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: 1175fdb0837aa36fd89fb0c299eaa700212749e5.
+- Updated orcus/lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: 382fd6e21792995e7088a608372218e5f9c0654b; source blob: 78766b20eb4992863d9bb3a87131cd66651c3449.
+- Changed lane-count extraction from the unit-test-specific equiv_carry_save_<lanes> prefix to an anchored _carry_save_<lanes> suffix. This accepts both test tops such as equiv_carry_save_8 and benchmark tops such as orcus_carry_save_8 without weakening width or source checks.
+- This fixes the exact Run #252 exception but has not yet been rerun. Next add regression coverage for both top-name patterns and rerun CI. No scaling artifact/complete table. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 186. Carry-save benchmark top-name regression tests added — 2026-11-27T06:35:16.012Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: cbc16341fcbe09e229793224c28048d4aef55608.
+- Updated tests/test_lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: 0052c1895ec04524a9babf4ffe695955fdce99ce; test blob: 117ec6808f4ad004bdd06e98aa3cef12c82c4176.
+- Added explicit 8/16/32-lane compositional-proof tests using actual benchmark top names orcus_carry_save_<lanes>, in addition to the existing equiv_carry_save_<lanes> test names. This tests both naming conventions against the proof helper.
+- Latest branch push should trigger another CI run. No complete scaling measurements; PR #20 remains open/unmerged. Ceres untouched; NEM distinct.
+
+
+## 187. Run #254 started — 2026-11-27T06:35:46.921Z
+
+- Re-read main STATUS before polling. STATUS blob: 6ae490596de2e2777ea8d0f2e1a8cf48df31e997.
+- Latest PR #20 branch head 0052c1895ec04524a9babf4ffe695955fdce99ce triggered ORCUS CI Run #254, ID 45952823219, created 2026-11-27T06:35:23Z; in_progress at poll time. It includes the generic carry-save top-name parser and regression tests for both unit-test and benchmark naming patterns.
+- Run #252 remains failed historical evidence at the first 8-lane carry-save benchmark; the four-lane artifact succeeded but is not the scaling artifact. No scaling table can be reported yet. PR #20 open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 188. Run #254 unit-test stage active — 2026-11-27T06:36:13.018Z
+
+- Re-read main STATUS before this poll. STATUS blob: 4144b800a6c451d5111d3f40dbf1ef824a990de7.
+- Run #254 (45952823219), exact head 0052c1895ec04524a9babf4ffe695955fdce99ce, job 140352372364 is in_progress at step 9 Run unit tests. Steps 1–5 and 8 passed; cached CUDD/OpenSTA build steps 6–7 skipped. Compileall, four-lane benchmark, scaling benchmark, artifact uploads and target verification pending. No result/artifact yet.
+- Next inspect unit-test outcome and then scaling benchmark; no merge or FPGA milestone until all 12 configurations have audited evidence. PR #20 open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 189. Run #254 unit tests passed; scaling benchmark active — 2026-11-27T06:36:35.911Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 359a833f536dbb94eb0e2ba01462f6b79eb1355e.
+- Run #254 (45952823219), exact head 0052c1895ec04524a9babf4ffe695955fdce99ce, job 140352372364 remains in_progress. Step 9 unit tests SUCCESS; step 10 compileall SUCCESS; step 11 Liberty fetch SUCCESS; step 12 four-lane benchmark SUCCESS; step 13 four-lane evidence upload SUCCESS. Step 14 8/16/32 scaling benchmark is in_progress; steps 15–16 pending.
+- This head passed the full unit suite including the corrected modulo bias audit and benchmark top-name regression. No scaling artifact or 12-row measurement evidence yet. Continue polling. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 190. Run #254 scaling benchmark still active — 2026-11-27T06:37:00.852Z
+
+- Re-read main STATUS before this poll. STATUS blob: 34dbe7af9bbe122e2cc6bd59c248f1a1035fac3b.
+- Run #254 remains in_progress at step 14 8/16/32-lane scaling benchmark. All prior steps 1–13 succeeded, including unit tests, compileall, Liberty fetch, four-lane benchmark, and upload. Scaling artifact is not yet listed; the only current artifact is four-lane orcus-signed-int4-dot-product ID 15177069315, digest sha256:c6630d36c5578844cc35068a6862014d7c0a47cb548e2634cd51b1954cee862c.
+- No scaling data has been published. Await step 14 completion and scaling artifact upload; PR #20 remains open/unmerged. Ceres untouched; NEM distinct.
+
+
+## 191. Run #254 live scaling logs unavailable — 2026-11-27T06:37:33.664Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 8185527c91e4924de74464608a3a1b00c7ea7638.
+- Attempted to fetch job 140352372364 logs while Run #254 step 14 is active. The connector returned an empty content payload (0 characters); no live per-variant output could be inspected. Job endpoint still reports step 14 in_progress, steps 15–16 pending. The four-lane artifact is the only artifact currently listed.
+- No failure or timeout inferred from missing live logs. Continue polling job steps and retrieve completed logs/artifact once available. No scaling metrics yet; PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 192. Run #254 CI SUCCESS — scaling artifact downloaded — 2026-11-27T06:38:09.090Z
+
+- Re-read main STATUS before this update. STATUS blob: 81daf5841c918a10f6ade4434e6f3a3d0cca05a3.
+- ORCUS CI Run #254 (45952823219) completed SUCCESS at 2026-11-27T06:37:29Z on exact PR #20 head 0052c1895ec04524a9babf4ffe695955fdce99ce. Job 140352372364 succeeded. Steps 1–16 completed successfully; unit tests, compileall, Liberty fetch, four-lane benchmark/upload, 8/16/32 scaling benchmark, scaling artifact upload, and benchmark-target verification all passed.
+- Scaling artifact: orcus-int4-lane-scaling, artifact ID 15177592132, size 138883 bytes, SHA-256 zip digest b9816aa2e0cfd6e69a1c9a4a7dca0ca98110a846f62f8bffc9379162bdea31ec. Download completed to /mnt/data/orcus-int4-lane-scaling-run-254.zip. The artifact has not yet been inspected; no tables or physical conclusions are accepted until raw JSON/reports are audited.
+- Four-lane artifact is separate: orcus-signed-int4-dot-product ID 15177069315. Scaling artifact inspection is next. PR #20 remains open/unmerged pending artifact audit and branch/main sync. Milestone #2 not yet closed. Ceres untouched; NEM distinct.
+
+
+## 193. Run #254 scaling artifact fully audited — Milestone #2 evidence matrix — 2026-11-27T06:41:28.367Z
+
+- Re-read STATUS.md on main before artifact reporting. STATUS blob at start: 573848ee341304478a8e3a6c9a140182bcfff4c4.
+- Run #254: 45952823219, exact branch head 0052c1895ec04524a9babf4ffe695955fdce99ce, conclusion SUCCESS at 2026-11-27T06:37:29Z. Scaling artifact ID 15177592132, name orcus-int4-lane-scaling, 138,883-byte ZIP, SHA-256 b9816aa2e0cfd6e69a1c9a4a7dca0ca98110a846f62f8bffc9379162bdea31ec. JSON schema orcus-int4-lane-scaling-v1 contains exactly 12 rows (4 variants × 8/16/32 lanes).
+- Artifact audit: all 12 rows have formal_equivalence=formal-pass; all have exactly 512 vectors and 512 unique fixed-seed xorshift32 vectors, with per-vector signed arithmetic assertions; all have nonzero OpenSTA annotated pin activity; all four power components are present and positive; every raw Watts field multiplied by 1e6 exactly matches its reported µW field; each raw OpenSTA report includes the detailed timing path and power table. Yosys version 0.9 (git sha1 1979e0b); OpenSTA 3.2.0; mapping library Nangate45 typical.
+- Formal methods: Direct uses Yosys equiv_make/equiv_simple/equiv_status. Carry-save uses compositional Yosys SAT with exact regenerated CSA-tree audit, shared signed lane-product/sign-extension nodes, a vector carry-save invariant and modulo-W final CPA invariant. Fused linear and Dadda each use width-specific signed Baugh-Wooley lane-identity SAT, FA and HA weighted-sum SAT lemmas, modulo-W CPA SAT, and typed-heap RTL/graph audit. No solver timeout occurred in Run #254.
+- Activity annotation pin counts by architecture (all 512 vectors): 8 lanes Direct 456, Carry-Save 527, Fused Linear 520, Fused Dadda 490; 16 lanes 913, 1019, 1018, 1020; 32 lanes 1939, 2050, 2050, 1998. All nonzero.
+- All PPA figures below are Nangate45 typical **pre-layout research-library estimates without routed parasitics**, not silicon measurements. OpenSTA delay is the reported critical-path data-arrival time in ns; power uses Liberty models and VCD activity.
+
+### 8 lanes — 11-bit accumulator
+
+| Variant | Formal proof / runtime (s) | Generic cells | Nangate45 area | OpenSTA delay (ns) | Internal (µW) | Switching (µW) | Leakage (µW) | Total (µW) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Direct | PASS / 0.154070 | 1154 | 1293.824 | 1.32 | 105.08610 | 99.54069 | 30.49021 | 235.1170 |
+| Carry-Save | PASS / 0.043755 | 944 | 998.298 | 1.13 | 86.12467 | 75.99428 | 23.49400 | 185.6130 |
+| Fused Baugh-Wooley Linear | PASS / 0.086339 | 822 | 840.294 | 1.63 | 69.30518 | 61.37713 | 19.74904 | 150.4314 |
+| Fused Baugh-Wooley Dadda | PASS / 0.087012 | 811 | 866.628 | 1.17 | 72.27067 | 66.01730 | 20.29599 | 158.5840 |
+
+### 16 lanes — 12-bit accumulator
+
+| Variant | Formal proof / runtime (s) | Generic cells | Nangate45 area | OpenSTA delay (ns) | Internal (µW) | Switching (µW) | Leakage (µW) | Total (µW) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Direct | PASS / 1.552587 | 2426 | 2694.580 | 1.59 | 221.59600 | 212.71170 | 63.70527 | 498.0130 |
+| Carry-Save | PASS / 0.050909 | 1971 | 2134.916 | 1.42 | 178.27690 | 164.70780 | 50.44856 | 393.4332 |
+| Fused Baugh-Wooley Linear | PASS / 0.092422 | 1721 | 1730.064 | 2.28 | 140.58560 | 125.82680 | 40.79996 | 307.2124 |
+| Fused Baugh-Wooley Dadda | PASS / 0.092239 | 1645 | 1802.682 | 1.33 | 148.42240 | 135.98050 | 42.08024 | 326.4832 |
+
+### 32 lanes — 13-bit accumulator
+
+| Variant | Formal proof / runtime (s) | Generic cells | Nangate45 area | OpenSTA delay (ns) | Internal (µW) | Switching (µW) | Leakage (µW) | Total (µW) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Direct | PASS / 2.001954 | 4984 | 5626.698 | 1.89 | 452.76070 | 445.30940 | 133.18300 | 1031.2530 |
+| Carry-Save | PASS / 0.051545 | 4063 | 4361.070 | 1.62 | 364.28280 | 339.38230 | 103.02270 | 806.6879 |
+| Fused Baugh-Wooley Linear | PASS / 0.108888 | 3444 | 3534.874 | 2.60 | 282.12170 | 258.87150 | 83.60160 | 624.5949 |
+| Fused Baugh-Wooley Dadda | PASS / 0.110269 | 3328 | 3595.522 | 1.57 | 291.62440 | 267.86850 | 84.29713 | 643.7901 |
+
+### Dadda scheduling conclusion
+
+- Dadda vs fused-linear critical-path delay: 8 lanes 1.17 vs 1.63 ns (-28.22%); 16 lanes 1.33 vs 2.28 ns (-41.67%); 32 lanes 1.57 vs 2.60 ns (-39.62%).
+- At 32 lanes, Dadda eliminates the large linear-schedule delay penalty and is 16.93% faster than Direct (1.57 vs 1.89 ns). It also beats Carry-Save delay (1.57 vs 1.62 ns).
+- Dadda retains area and total-power wins against Direct at 32 lanes: area 3595.522 vs 5626.698 (-36.10%); total power 643.7901 vs 1031.2530 µW (-37.57%). Against fused-linear, Dadda trades 1.72% more area and 3.07% more power for 39.62% lower delay. Thus Dadda fixes the critical-path penalty while preserving area/power wins versus Direct/Carry-Save, but fused-linear remains the smallest and lowest-power fused option at each lane count.
+- At 8 lanes, Dadda vs Direct: area -33.02%, total power -32.55%, delay -11.36%. At 16 lanes: area -33.10%, total power -34.44%, delay -16.35%.
+- This is evidence for these exact RTLs, Nangate45 typical library, constraints, and VCD activity only; it does not generalize to silicon or another process/device.
+
+### Recorded stage timings
+
+Seconds, per architecture and lane count: formal runtime is the benchmark's overall formal stage; generic/map are synthesis stages; sim is Icarus vector simulation; STA is OpenSTA; total is complete per-configuration benchmark runtime.
+
+| Lanes | Variant | Formal | Generic synth | Liberty map | Simulation | OpenSTA | Total |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 8 | Direct | 0.154070 | 0.530324 | 1.051111 | 0.139027 | 0.284117 | 2.159667 |
+| 8 | Carry-Save | 0.043755 | 0.495599 | 0.923586 | 0.163586 | 0.276028 | 1.903137 |
+| 8 | Fused Linear | 0.086339 | 0.997289 | 1.459681 | 0.293185 | 0.278264 | 3.115357 |
+| 8 | Fused Dadda | 0.087012 | 0.986282 | 1.503454 | 0.279749 | 0.277954 | 3.134998 |
+| 16 | Direct | 1.552587 | 1.145181 | 1.999473 | 0.275277 | 0.348755 | 5.321980 |
+| 16 | Carry-Save | 0.050909 | 1.009782 | 1.705958 | 0.319585 | 0.339645 | 3.426488 |
+| 16 | Fused Linear | 0.092422 | 2.085020 | 2.868696 | 0.583793 | 0.330634 | 5.961169 |
+| 16 | Fused Dadda | 0.092239 | 2.077233 | 2.776211 | 0.553933 | 0.337495 | 5.837726 |
+| 32 | Direct | 2.001954 | 2.561131 | 4.334336 | 0.625301 | 0.503141 | 10.026653 |
+| 32 | Carry-Save | 0.051545 | 2.090153 | 3.488336 | 0.642855 | 0.461093 | 6.734688 |
+| 32 | Fused Linear | 0.108888 | 4.424222 | 5.995846 | 1.198561 | 0.446608 | 12.174855 |
+| 32 | Fused Dadda | 0.110269 | 4.489425 | 5.902247 | 1.085129 | 0.454668 | 12.042500 |
+
+- The scaling artifact contains raw JSON including the OpenSTA timing/power reports, mapped and generic synthesis log tails, proof log tails, activity toggle maps, and stage timings. Artifact audit found no missing fields or failed configuration.
+- PR #20 at this audit: open, unmerged, head 0052c1895ec04524a9babf4ffe695955fdce99ce; GitHub metadata currently reports mergeable=false and base main 6cd44f34f36b0945680c279a87a4d8737daf33aa. The PR must be synchronized with current main (including this STATUS update), then exact-head checks/mergeability reverified before merge. Do not merge the stale base.
+- Milestone #2 technical benchmark matrix is VERIFIED on PR head, but not yet merged/locked on main. Milestone #3 not started. Next: sync current main ancestry and STATUS into PR branch non-force; run CI on the synchronized exact head; verify checks and mergeability; merge PR #20; then start FPGA P&R Milestone #3 with a pinned, verified ECP5 target and Yosys + nextpnr flow. Ceres untouched; NEM distinct.
+
+
+## 194. Git commit metadata shape inspection needed — 2026-11-27T06:42:32.691Z
+
+- Re-read main STATUS before repository diagnostics. STATUS blob: 17ef5d515b99d4417c1061c8decebe6b3db02562.
+- Attempted to inspect main/PR branch commit tree SHAs using the normalized commit response. The response shape did not expose the expected nested commit.tree.sha property, so the diagnostic script stopped before emitting refs/tree IDs. No repository mutation occurred and no branch sync was attempted.
+- Retry by inspecting the raw GitHub commit API payload and use exact returned tree IDs. Current audited artifact remains Run #254 success; PR #20 still unmerged. Ceres untouched; NEM distinct.
+
+
+## 195. Pre-merge ancestry-sync refs captured — 2026-11-27T06:43:03.759Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 906dd484ce190c334f48428c5106269b684ea473.
+- Current main ref at diagnostic: d100b35ed109dfa20c4f53ed7e4c77e77b545422; its tree: dee1449e346d27cd3e62306245774f1d0fc62c28.
+- PR #20 research branch ref: 0052c1895ec04524a9babf4ffe695955fdce99ce; its tree: 6bf888886ff20f5d24c18ae50367fd21cfb93fb9.
+- Current main STATUS blob at this diagnostic: 906dd484ce190c334f48428c5106269b684ea473. PR #20 remains unmerged; previous PR metadata reported mergeable=false and stale base 6cd44f34f36b0945680c279a87a4d8737daf33aa. Next action is a non-force two-parent ancestry sync that retains branch files while replacing STATUS.md with the main blob, then rerun CI on the new exact head.

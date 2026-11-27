@@ -1723,3 +1723,12 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Re-read main STATUS before this poll. STATUS blob: d9ce8635a9d0134aaf8fa0dc681a007ba49f6df6.
 - Run #255 (45953708374), exact synced head 35f45253dec3b0476d6c4f8977c9508b9df6005b, remains in_progress. Steps 1–13 succeeded, including unit tests, compileall, Liberty fetch, four-lane benchmark and upload. Step 14 8/16/32 scaling benchmark is in_progress; steps 15–16 pending.
 - Four-lane artifact ID 15178092066 is already uploaded (not the scaling artifact). PR #20 remains open/unmerged and GitHub currently reports mergeable=false while checks are active. Do not merge until run and PR status are final. Run #254 scaling artifact remains the fully audited technical evidence for source head 0052c189. Ceres untouched; NEM distinct.
+
+
+## 199. Run #255 synchronized-head CI SUCCESS — 2026-11-27T06:45:31.620Z
+
+- Re-read main STATUS before this update. STATUS blob: e36596e789411d20151ecde558bd3c04e6f84ae8.
+- ORCUS CI Run #255 (45953708374) completed SUCCESS at 2026-11-27T06:44:56Z on exact synced PR head 35f45253dec3b0476d6c4f8977c9508b9df6005b. Job 140355214024 passed. Steps 1–16 all succeeded, including all unit tests, compileall, Liberty fetch, four-lane benchmark and artifact, full 8/16/32-lane scaling benchmark, scaling artifact upload, and target verification.
+- New exact-head scaling artifact ID 15177593284, name orcus-int4-lane-scaling, 138898 bytes, SHA-256 zip digest c0a954eb6735e1d7e0c43abab3d6ac78993284399aeb9aa354fd04f63d5e4eac. This is the artifact for the ancestry-synchronized branch head; it still requires inspection/confirmation against the previously audited 12-row matrix before merge.
+- PR #20 remains open/unmerged; GitHub metadata still reports mergeable=false despite successful exact-head CI. Base snapshot is 05604d1a36b354a7127739281be58bdb75a64378; head is the two-parent sync commit 35f45253dec3b0476d6c4f8977c9508b9df6005b. Investigate mergeable_state/required checks and refresh metadata before merging; do not force a merge through unresolved conflict state.
+- Milestone #2 measurements remain as audited in section 193. No FPGA work started. Ceres untouched; NEM distinct.

@@ -1475,3 +1475,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Fix 1: manifest initial_bits now serializes only original partial_product and constant source bits, excluding compressor sum/carry nodes that are separately represented in the compressor manifest. This directly addresses Run #248's six-width/schedule audit failures.
 - Fix 2: carry-save formal path no longer invokes the monolithic multiplier/reduction miter that timed out at 300s for all three lane counts. It now requires exact deterministic regeneration of the candidate CSA tree, identical signed product and sign-extension nodes in candidate/reference, complete sum/carry node pairs, and Yosys SAT proofs of the generic W-bit 3:2 compressor invariant and modulo-W final CPA. Direct-expression equivalence retains the original Yosys equivalence flow. This is a compositional proof implementation draft and must pass CI plus adversarial source/graph tests before being considered verified; do not claim proof success yet.
 - No PPA or FPGA results exist. PR #20 remains unmerged; Ceres untouched; NEM distinct. Next add regression coverage for manifest source-bit separation, CSA tree tampering rejection, and per-node/whole-tree closure, then run targeted CI.
+
+
+## 175. Milestone #2 regression tests added — 2026-11-27T06:30:02.545Z
+
+- Re-read main STATUS before branch mutation. Main STATUS blob: f347d2fdf4c82424fea95cbc19b204c4ab2156da.
+- Updated tests/test_lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: edec4fe677f70ea32110210561465272cfacc2a6; new test blob: ffa600114f2883c7033f8d88905ebf5e4285f830.
+- Added explicit assertions that manifest initial_bits contains only original partial products/constants and is disjoint from compressor outputs. Existing six positive graph-audit cases now exercise the corrected manifest.
+- Added carry-save proof assertions for compositional proof method, graph-audit status, and required vector-CSA/final-CPA lemmas. Added a negative mutation check to ensure altered CSA RTL is rejected by exact audited-tree comparison. Full CI has not yet run against these changes.
+- No scaling metrics or FPGA evidence available. PR #20 remains unmerged. Ceres untouched; NEM distinct.

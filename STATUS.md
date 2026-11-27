@@ -498,3 +498,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #224 remains in progress at unit-test step 9. All setup/cache steps passed; benchmark and artifact steps remain pending.
 - No unit-test log or subprocess-level proof stage is available from the step summary. The symbolic heap proof may still be running within its 60-second test timeout. No pass/failure inference yet.
 - Next: poll for step transition and retrieve logs after completion. No code changes in this poll.
+
+
+## 48. Run #224 continued formal test poll — 2026-11-27T05:11:30Z
+
+- Run #224 is still `in_progress` at step 9. No test result or artifact is published.
+- The configured 60-second per-proof timeout has not yet been confirmed as reached from the available step summary. Do not treat elapsed wall time or an unchanged step as a formal timeout without the job log.
+- Next: retrieve completed job logs once step 9 exits; if the output-only heap proof times out, record the exact elapsed time and consider a more strongly decomposed arithmetic proof rather than increasing the timeout blindly.

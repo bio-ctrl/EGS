@@ -947,3 +947,99 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #240 `45946252250` remains failed before fused variant. Direct and left-deep early metrics recorded in section 103. Compositional proof unit test and all tamper tests passed; benchmark artifact absent.
 - Next: sync current main STATUS to branch and trigger fresh CI. Verify non-structural baseline formal for all first five variants, then fused compositional SAT/audit, then six-variant PPA artifact. No claim of milestone completion yet.
 - PR #19 open/unmerged; Ceres untouched; NEM distinct; baseline intact.
+
+
+## 105. PR #19 resynchronized after baseline proof adjustment — 2026-11-27T05:33:16.547Z
+
+- Synced main STATUS blob from `03cf8e6b5703dfa8b8975b6b61f9ccaf782a859e` and main ancestry into branch with non-force two-parent merge commit `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`.
+- Merge parents: non-structural baseline equivalence change `412efcd85f857e231dd76d78354d827a9a35dcdc` first; main `03cf8e6b5703dfa8b8975b6b61f9ccaf782a859e` second. Branch ref update succeeded with expected-head protection.
+- New branch head should trigger PR CI. Run #240 remains failed on prior head; preserved. No fused benchmark artifact yet.
+- Next: verify new run and validate the non-structural equivalence method for all five baselines and the compositional proof for fused. PR #19 remains open/unmerged.
+
+
+## 106. Baseline proof adjustment CI Run #242 started — 2026-11-27T05:33:29.455Z
+
+- Automatic PR Run #242, ID `45946483363`, confirmed for exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`; created `2026-11-27T05:33:13Z`; status `in_progress`.
+- This run includes non-structural equivalence for the five product-level baselines and the compositional fused proof. No results yet; prior Run #240 failure preserved.
+- Next: monitor unit tests, all baseline formal checks, fused compositional SAT, and benchmark artifact. PR #19 remains open/unmerged.
+
+
+## 107. Run #242 setup progress — 2026-11-27T05:33:42.713Z
+
+- Run #242 `45946483363`, job `140332240921`, exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3` remains `in_progress`. Setup, checkout, Python setup passed; dependency installation step 4 active. No unit-test or benchmark result yet.
+
+
+## 108. Run #242 benchmark active — 2026-11-27T05:33:56.613Z
+
+- Run #242 `45946483363`, job `140332240921`, exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`: setup/dependencies/cache/OpenSTA verification passed; unit tests passed; Python compileall passed; Liberty fetch passed. Benchmark step 12 is active. Artifact upload and smoke check pending.
+- No new metrics/artifact yet. The changed non-structural baseline proof path has passed the unit suite; the six-variant benchmark is the next evidence gate.
+
+
+## 109. Run #242 benchmark and CI succeeded — 2026-11-27T05:34:15.733Z
+
+- Run #242 `45946483363`, job `140332240921`, exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3` completed successfully. Unit tests, Python compileall, Liberty fetch, six-variant benchmark, artifact upload, and benchmark smoke verification all passed.
+- This is the first successful end-to-end CI after typed heap integration, script import correction, and non-structural baseline proof correction. Artifact and full logs still need inspection before recording per-variant proof timings, vector/VCD evidence, raw OpenSTA components, and final metrics.
+- Next: fetch and inspect artifact ZIP and complete job logs. Confirm all six variants' proof methods/results, 512 unique vectors, nonzero annotation counts, stage timings, and complete area/delay/power table. Do not close Milestone #1 until the artifact itself is validated.
+- PR #19 remains open/unmerged. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 110. Run #242 artifact audited — six-variant results verified — 2026-11-27T05:36:52.412Z
+
+- Read main STATUS before this audit. Run #242 ID `45946483363`, job `140332240921`, head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3` completed success. Artifact `orcus-signed-int4-dot-product`, ID `15174982131`, size 11,828 bytes, SHA-256 `3c766caabafd71763aa4f225f9b330405b2379e01e58ea2ef764abf63d5ebd5a`, downloaded and parsed from `orcus-int4-dot-product.json`.
+- All six variants report `formal-pass`, exactly 512 vectors and 512 unique vectors, VCD bit toggles >0, OpenSTA status completed, positive annotation count, and a raw report with a Total power row. Raw report Watts values match the structured µW fields.
+
+### Verified six-variant comparison (Run #242)
+
+| Variant | Proof method & result | Generic cells | Nangate45 area | OpenSTA delay (ns) | Internal (µW) | Switching (µW) | Leakage (µW) | Total (µW) |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Direct | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 522 | 574.56 | 0.95 | 47.88638 | 43.71745 | 13.41678 | 105.02060 |
+| Left-deep | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 522 | 574.56 | 0.95 | 47.88638 | 43.71745 | 13.41678 | 105.02060 |
+| Balanced 01/23 | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 522 | 575.89 | 1.00 | 47.84778 | 43.61467 | 13.42982 | 104.89230 |
+| Balanced 02/13 | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 522 | 574.56 | 1.00 | 47.83237 | 43.72201 | 13.40231 | 104.95670 |
+| Two-stage carry-save | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 441 | 460.712 | 0.89 | 39.53044 | 34.28274 | 10.79658 | 84.60975 |
+| Fused Baugh-Wooley | Four Yosys SAT lemmas + typed heap audit PASS | 395 | 414.694 | 1.07 | 34.66065 | 30.57532 | 9.737028 | 74.97300 |
+
+- Fused Baugh-Wooley vs two-stage carry-save: generic cells -10.43%; Nangate45 area -9.99%; delay **+20.22% slower** (1.07 vs 0.89 ns); internal power -12.32%; switching power -10.81%; leakage -9.81%; total power -11.39%. Conclusion: fused Baugh-Wooley wins on mapped area, generic cells, and estimated power, but loses on critical-path delay. This is a trade-off, not an across-the-board win.
+- All results are pre-layout Nangate45 research-library estimates without routed parasitics; not silicon PPA or FPGA results.
+
+### Compositional proof evidence
+
+- Fused formal stage total: 0.084973196 s. SAT lemmas: 10-bit Baugh-Wooley lane identity 0.049390187 s PASS; full-adder weighted-sum invariant 0.012656306 s PASS; half-adder weighted-sum invariant 0.010222454 s PASS; final 10-bit modulo CPA 0.010578794 s PASS. Independent graph audit 0.000808579 s PASS.
+- Fused manifest: schema `orcus-typed-bit-heap-v1`; 4 lanes; 80 initial bits (64 partial products + 16 bias bits); 62 full-adder nodes; 3 top-column carries explicitly truncated modulo 2^10; two final rows. **No half-adder nodes were instantiated in this reduction graph**; the half-adder primitive equation was formally proven as a reusable lemma. This distinction must remain explicit.
+- All three negative tamper unit tests passed: Baugh-Wooley partial-product polarity flip rejected; compressor carry-weight misroute rejected; final output-bit flip rejected. Unit suite 67/67 passed; Python compileall passed; benchmark smoke check passed.
+
+### Stage timings (seconds)
+
+| Variant | Formal | Generic synth | Nangate45 map | Simulation | OpenSTA | Total |
+|---|---:|---:|---:|---:|---:|---:|
+| Direct | 0.040025 | 0.279115 | 0.612835 | 0.065926 | 0.311177 | 1.313782 |
+| Left-deep | 0.043948 | 0.270443 | 0.605340 | 0.067915 | 0.250756 | 1.242482 |
+| Balanced 01/23 | 0.041219 | 0.268807 | 0.596766 | 0.066628 | 0.249609 | 1.227115 |
+| Balanced 02/13 | 0.088969 | 0.268592 | 0.579151 | 0.066791 | 0.250899 | 1.258457 |
+| Carry-save | 0.059779 | 0.268403 | 0.541890 | 0.071516 | 0.253682 | 1.199356 |
+| Fused Baugh-Wooley | 0.084973 | 0.481899 | 0.766629 | 0.132259 | 0.250368 | 1.720107 |
+
+- VCD toggle totals / OpenSTA annotated pins: direct 39,190 / 259; left-deep 44,381 / 259; balanced 01/23 44,347 / 259; balanced 02/13 44,230 / 259; carry-save 48,552 / 268; fused 61,859 / 292. Each variant: 512/512 unique xorshift32 vectors.
+- Raw OpenSTA report inspection confirmed the per-variant Total row and annotated pin count; all four raw power components agree with artifact fields.
+
+### Current disposition and next work
+
+- Four-lane compositional proof and six-variant benchmark are now evidenced for this Run #242 source. However, before formally closing Milestone #1, decide whether the graph should instantiate at least one half-adder node (currently the half-adder primitive is proven but graph uses 62 FAs and zero HAs). If no HA is needed by the chosen reduction schedule, retain this as an explicit documented design choice rather than imply HA node coverage.
+- PR #19 remains open and unmerged. Latest prior GitHub metadata still reported `mergeable=false`; recheck after syncing current STATUS/ancestry. Do not merge without explicit user authorization.
+- Milestone #2 remains gated on reviewing/closing Milestone #1. Next scaling: 8 lanes / 11-bit, 16 lanes / 12-bit, 32 lanes / 13-bit; compare direct, multi-stage carry-save, and fused Baugh-Wooley with compositional proof, 512 unique vectors, nonzero VCD annotation, raw OpenSTA and per-stage timing.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 111. Half-adder graph enhancement attempt — no branch mutation — 2026-11-27T05:37:50.211Z
+
+- After auditing Run #242, identified a remaining spec nuance: the fused heap manifest currently contains 62 full-adder nodes and zero instantiated half-adder nodes, although the half-adder primitive SAT lemma passes. Planned to instantiate one explicit low-column HA node to fully exercise both typed node kinds.
+- The GitHub write orchestration returned a remote protocol disconnect before a branch update was confirmed. Re-read the PR branch ref and `orcus/typed_heap.py`: branch remains `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`; no HA source changes landed. No new CI run was triggered. Run #242 artifact and metrics remain valid for that exact source head.
+- Next: retry the HA-node patch in smaller, independently confirmed operations, then rerun tests and benchmark if implemented. Do not describe the current graph as containing HA nodes. PR #19 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 112. Explicit half-adder graph node committed — 2026-11-27T05:38:51.102Z
+
+- Added an actual 2:2 half-adder node to the typed heap on PR branch commit `df08d3a0259817204a7d7ca348d06a65f5edef2e` (parent `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`). The deterministic schedule compresses the two remaining low-column bits with `ha_s_0 = a ^ b` and `ha_c_0 = a & b`, routing carry to column 1. The audit now parses and validates both FA and HA node arities/equations; unit test asserts an HA node exists.
+- This preserves the weighted sum exactly and leaves modulo top-column truncation unchanged. The half-adder primitive SAT lemma already passed in Run #242; however, this graph change has not yet been tested or benchmarked. Run #242 artifact applies to the prior source head and must not be represented as measurements for this changed graph.
+- Next: sync latest main STATUS/ancestry to branch, run CI, verify the HA graph node and all tamper tests, then audit the new six-variant artifact. If all proof/benchmark gates pass, update the final comparison using the new source head. Prior Run #242 remains a valid historical result for its own head.
+- PR #19 remains open/unmerged. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

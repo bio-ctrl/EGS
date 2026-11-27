@@ -1716,3 +1716,10 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Verified PR #20 branch head is the non-force ancestry sync commit 35f45253dec3b0476d6c4f8977c9508b9df6005b. The new synchronize event triggered ORCUS CI Run #255, ID 45953708374, created 2026-11-27T06:43:41Z, status in_progress, exact head 35f45253dec3b0476d6c4f8977c9508b9df6005b.
 - PR #20 remains open/unmerged. Its base now points to main 05604d1a36b354a7127739281be58bdb75a64378, the second parent of the sync commit. GitHub metadata currently reports mergeable=false while recalculation; do not merge until refreshed and CI #255 succeeds.
 - Run #254 artifact audit remains complete and successful. No FPGA implementation has started. Next poll Run #255 and PR metadata; Ceres untouched; NEM distinct.
+
+
+## 198. Run #255 post-sync verification active — 2026-11-27T06:44:54.039Z
+
+- Re-read main STATUS before this poll. STATUS blob: d9ce8635a9d0134aaf8fa0dc681a007ba49f6df6.
+- Run #255 (45953708374), exact synced head 35f45253dec3b0476d6c4f8977c9508b9df6005b, remains in_progress. Steps 1–13 succeeded, including unit tests, compileall, Liberty fetch, four-lane benchmark and upload. Step 14 8/16/32 scaling benchmark is in_progress; steps 15–16 pending.
+- Four-lane artifact ID 15178092066 is already uploaded (not the scaling artifact). PR #20 remains open/unmerged and GitHub currently reports mergeable=false while checks are active. Do not merge until run and PR status are final. Run #254 scaling artifact remains the fully audited technical evidence for source head 0052c189. Ceres untouched; NEM distinct.

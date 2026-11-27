@@ -1532,3 +1532,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Re-read main STATUS before polling. STATUS blob: 592cf5c4114ec20b3b8c2bb93e66d1dd7f52913d.
 - Latest PR #20 head c563f66b9094e106ff1b5675c1dd5c695c5e4ad8 triggered ORCUS CI Run #252, ID 45952532314, created 2026-11-27T06:32:39Z; status in_progress at poll time. This head includes the initial-bit manifest filter, compositional CSA proof path, modulo-2^W aggregate bias audit correction, and explicit bias-wrap regression.
 - Run #250 remains failed historical evidence. Run #252 must confirm the audit fix and inspect all formal tests before any benchmark stage. No PPA/artifact/FPGA evidence available. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 182. Run #252 dependency stage active — 2026-11-27T06:33:16.478Z
+
+- Re-read main STATUS before this poll. STATUS blob: c830b0cbac8596af048809feeabd36ff65c37140.
+- Run #252 (45952532314), exact head c563f66b9094e106ff1b5675c1dd5c695c5e4ad8, job 140351446109 remains in_progress. Setup/checkout/Python/dependency installation passed; step 5 cache pinned CUDD/OpenSTA is active; remaining build, unit-test, benchmark, and artifact steps are pending. No test or measurement result yet.
+- Next poll after cache/build stages. Run #248 and #250 remain failed historical runs; PR #20 stays open/unmerged. Ceres untouched; NEM distinct.

@@ -1211,3 +1211,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Merge commit SHA: `35207adff3371fcadae68cbaa58181267c361359`. PR #19 is merged. This closes Milestone #1 and locks the verified four-lane typed fused Baugh-Wooley implementation into main as ORCUS v0.3.
 - Run #246 `45948158005` passed on the exact pre-merge PR head; artifact ID `15175189288`. Earlier full six-variant artifact audit and compositional proof details remain recorded in section 117. Main status must now be fetched again after this commit; next action is to create Milestone #2 branch from the merged main head and implement 8/16/32 lane scaling.
 - No Ceres files or branches were accessed. NEM remains distinct. ORCUS v0.2 baseline remains in history.
+
+
+## 131. Milestone #2 repository discovery path miss — 2026-11-27T05:52:45.769Z
+
+- After PR #19 merge, attempted to fetch the presumed workflow path `.github/workflows/orcus-signed-int4-dot-product.yml`; GitHub returned 404. No repository mutation occurred. Do not assume that workflow filename exists.
+- Retry by listing the merged commit tree and inspect actual workflow paths before reading source files. Current known merge commit `35207adff3371fcadae68cbaa58181267c361359`; latest main status commit is `858247089e72e4c34ff273e81ed0f475303255d9`.

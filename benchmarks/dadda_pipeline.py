@@ -125,7 +125,7 @@ def build_streaming_testbench(lanes: int) -> tuple[str, int]:
     return "\n".join(lines) + "\n", latency
 
 
-def run_formal(lanes: int, yosys: str, timeout: int = 180) -> dict:
+def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None = None) -> dict:
     source, latency = build_sequential_miter(lanes)
     depth = 2 * latency + 4
     with tempfile.TemporaryDirectory(prefix=f"orcus-pipe-formal-{lanes}-") as tmp:
@@ -139,15 +139,21 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180) -> dict:
         proc = subprocess.run([yosys, "-p", script], text=True, capture_output=True,
                               timeout=timeout)
         elapsed = time.perf_counter() - started
-        log.write_text(proc.stdout + "\n" + proc.stderr)
+        log_text = proc.stdout + "\n" + proc.stderr
+        log.write_text(log_text)
+        persistent_log = "yosys-formal.log"
+        if log_dir is not None:
+            log_dir.mkdir(parents=True, exist_ok=True)
+            (log_dir / f"{lanes}-lane-miter.v").write_text(source)
+            (log_dir / persistent_log).write_text(log_text)
         if proc.returncode:
-            raise RuntimeError(f"sequential SAT failed for {lanes} lanes: {(proc.stdout+proc.stderr)[-5000:]}")
+            raise RuntimeError(f"sequential SAT failed for {lanes} lanes: {log_text[-5000:]}")
         return {"status": "PASS", "method": "Yosys SAT bounded sequential miter",
                 "depth_cycles": depth, "latency_cycles": latency,
-                "runtime_seconds": elapsed, "log": "yosys-formal.log"}
+                "runtime_seconds": elapsed, "log": persistent_log}
 
 
-def run_streaming(lanes: int, iverilog: str, vvp: str, timeout: int = 60) -> dict:
+def run_streaming(lanes: int, iverilog: str, vvp: str, timeout: int = 60, log_dir: Path | None = None) -> dict:
     source, latency = build_streaming_testbench(lanes)
     with tempfile.TemporaryDirectory(prefix=f"orcus-pipe-stream-{lanes}-") as tmp:
         root = Path(tmp)
@@ -158,10 +164,19 @@ def run_streaming(lanes: int, iverilog: str, vvp: str, timeout: int = 60) -> dic
         if compile_run.returncode:
             raise RuntimeError(f"iverilog compile failed for {lanes} lanes: {compile_run.stderr[-4000:]}")
         sim = subprocess.run([vvp, str(image)], text=True, capture_output=True, timeout=timeout)
+        compile_text = compile_run.stdout + "\n" + compile_run.stderr
+        sim_text = sim.stdout + "\n" + sim.stderr
+        if log_dir is not None:
+            log_dir.mkdir(parents=True, exist_ok=True)
+            (log_dir / f"{lanes}-lane-stream-testbench.v").write_text(source)
+            (log_dir / f"{lanes}-lane-iverilog.log").write_text(compile_text)
+            (log_dir / f"{lanes}-lane-vvp.log").write_text(sim_text)
         if sim.returncode or "PASS" not in sim.stdout:
             raise RuntimeError(f"streaming simulation failed for {lanes} lanes: {sim.stdout[-4000:]} {sim.stderr[-2000:]}")
         return {"status": "PASS", "vectors": VECTOR_COUNT, "latency_cycles": latency,
-                "stdout": sim.stdout.strip()}
+                "stdout": sim.stdout.strip(),
+                "compile_log": f"{lanes}-lane-iverilog.log",
+                "simulation_log": f"{lanes}-lane-vvp.log"}
 
 
 def run_all(yosys: str = "yosys", iverilog: str = "iverilog", vvp: str = "vvp") -> dict:

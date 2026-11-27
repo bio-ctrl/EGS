@@ -1150,3 +1150,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Attempted pre-merge comparison/diff inspection. The compare API request was accepted, but the diff wrapper rejected the argument key `repository_full_name`; its actual schema requires `repo_full_name`. No repository mutation or merge occurred.
 - Main remains `331693af60e2535867a12e620eb14057eee8b43a`; PR #19 remains open at `50afab04361308c74254d5466e0d6c0b1638ffae`. Retry inspection using the exact schema, then merge only after confirming base/head relationship and current clean state.
+
+
+## 122. PR #19 pre-merge comparison endpoint rejected — 2026-11-27T05:49:28.017Z
+
+- Retried PR diff with the correct `repo_full_name` argument. GitHub connector rejected one of the concurrent fetch requests as an unsupported public endpoint (HTTP 400); no diff was obtained and no repository mutation occurred.
+- Main is now at the status-only commit `3dec130b508de87a9a7b7d59ec79e129b9467964`; PR #19 branch head remains `50afab04361308c74254d5466e0d6c0b1638ffae`. Continue with supported PR metadata/patch tools and compare API endpoint if accessible; do not infer merge-base cleanliness from earlier metadata alone.

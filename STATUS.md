@@ -1573,3 +1573,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Updated tests/test_lane_scaling.py on research/orcus-int4-lane-scaling; branch commit: 0052c1895ec04524a9babf4ffe695955fdce99ce; test blob: 117ec6808f4ad004bdd06e98aa3cef12c82c4176.
 - Added explicit 8/16/32-lane compositional-proof tests using actual benchmark top names orcus_carry_save_<lanes>, in addition to the existing equiv_carry_save_<lanes> test names. This tests both naming conventions against the proof helper.
 - Latest branch push should trigger another CI run. No complete scaling measurements; PR #20 remains open/unmerged. Ceres untouched; NEM distinct.
+
+
+## 187. Run #254 started — 2026-11-27T06:35:46.921Z
+
+- Re-read main STATUS before polling. STATUS blob: 6ae490596de2e2777ea8d0f2e1a8cf48df31e997.
+- Latest PR #20 branch head 0052c1895ec04524a9babf4ffe695955fdce99ce triggered ORCUS CI Run #254, ID 45952823219, created 2026-11-27T06:35:23Z; in_progress at poll time. It includes the generic carry-save top-name parser and regression tests for both unit-test and benchmark naming patterns.
+- Run #252 remains failed historical evidence at the first 8-lane carry-save benchmark; the four-lane artifact succeeded but is not the scaling artifact. No scaling table can be reported yet. PR #20 open/unmerged; Ceres untouched; NEM distinct.

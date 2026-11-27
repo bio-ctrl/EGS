@@ -1375,3 +1375,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 161. Run #248 unit-test step remains active — 2026-11-27T06:13:33.044Z
 
 - Latest job-step poll again reports step 9 in_progress; steps 10–16 have not started. The run has not reported failure, timeout, or a test count. No scaling metrics are available.
+
+## 162. Direct job-detail endpoint rejected — 2026-11-27T06:13:55.916Z
+
+- Attempted a direct workflow-job detail GET to inspect start timestamps and runner state. GitHub connector rejected that URL as an unsupported endpoint (HTTP 400); no additional diagnostics obtained. The supported job-steps wrapper remains the source of truth and still reports unit tests in_progress.

@@ -1371,3 +1371,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 160. Run #248 still in progress — 2026-11-27T06:13:06.968Z
 
 - GitHub run object remains status in_progress, conclusion null, run attempt 1. Job step 9 unit tests still has no reported completion. No evidence of a timeout or failure yet.
+
+## 161. Run #248 unit-test step remains active — 2026-11-27T06:13:33.044Z
+
+- Latest job-step poll again reports step 9 in_progress; steps 10–16 have not started. The run has not reported failure, timeout, or a test count. No scaling metrics are available.

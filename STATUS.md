@@ -1616,3 +1616,71 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - ORCUS CI Run #254 (45952823219) completed SUCCESS at 2026-11-27T06:37:29Z on exact PR #20 head 0052c1895ec04524a9babf4ffe695955fdce99ce. Job 140352372364 succeeded. Steps 1–16 completed successfully; unit tests, compileall, Liberty fetch, four-lane benchmark/upload, 8/16/32 scaling benchmark, scaling artifact upload, and benchmark-target verification all passed.
 - Scaling artifact: orcus-int4-lane-scaling, artifact ID 15177592132, size 138883 bytes, SHA-256 zip digest b9816aa2e0cfd6e69a1c9a4a7dca0ca98110a846f62f8bffc9379162bdea31ec. Download completed to /mnt/data/orcus-int4-lane-scaling-run-254.zip. The artifact has not yet been inspected; no tables or physical conclusions are accepted until raw JSON/reports are audited.
 - Four-lane artifact is separate: orcus-signed-int4-dot-product ID 15177069315. Scaling artifact inspection is next. PR #20 remains open/unmerged pending artifact audit and branch/main sync. Milestone #2 not yet closed. Ceres untouched; NEM distinct.
+
+
+## 193. Run #254 scaling artifact fully audited — Milestone #2 evidence matrix — 2026-11-27T06:41:28.367Z
+
+- Re-read STATUS.md on main before artifact reporting. STATUS blob at start: 573848ee341304478a8e3a6c9a140182bcfff4c4.
+- Run #254: 45952823219, exact branch head 0052c1895ec04524a9babf4ffe695955fdce99ce, conclusion SUCCESS at 2026-11-27T06:37:29Z. Scaling artifact ID 15177592132, name orcus-int4-lane-scaling, 138,883-byte ZIP, SHA-256 b9816aa2e0cfd6e69a1c9a4a7dca0ca98110a846f62f8bffc9379162bdea31ec. JSON schema orcus-int4-lane-scaling-v1 contains exactly 12 rows (4 variants × 8/16/32 lanes).
+- Artifact audit: all 12 rows have formal_equivalence=formal-pass; all have exactly 512 vectors and 512 unique fixed-seed xorshift32 vectors, with per-vector signed arithmetic assertions; all have nonzero OpenSTA annotated pin activity; all four power components are present and positive; every raw Watts field multiplied by 1e6 exactly matches its reported µW field; each raw OpenSTA report includes the detailed timing path and power table. Yosys version 0.9 (git sha1 1979e0b); OpenSTA 3.2.0; mapping library Nangate45 typical.
+- Formal methods: Direct uses Yosys equiv_make/equiv_simple/equiv_status. Carry-save uses compositional Yosys SAT with exact regenerated CSA-tree audit, shared signed lane-product/sign-extension nodes, a vector carry-save invariant and modulo-W final CPA invariant. Fused linear and Dadda each use width-specific signed Baugh-Wooley lane-identity SAT, FA and HA weighted-sum SAT lemmas, modulo-W CPA SAT, and typed-heap RTL/graph audit. No solver timeout occurred in Run #254.
+- Activity annotation pin counts by architecture (all 512 vectors): 8 lanes Direct 456, Carry-Save 527, Fused Linear 520, Fused Dadda 490; 16 lanes 913, 1019, 1018, 1020; 32 lanes 1939, 2050, 2050, 1998. All nonzero.
+- All PPA figures below are Nangate45 typical **pre-layout research-library estimates without routed parasitics**, not silicon measurements. OpenSTA delay is the reported critical-path data-arrival time in ns; power uses Liberty models and VCD activity.
+
+### 8 lanes — 11-bit accumulator
+
+| Variant | Formal proof / runtime (s) | Generic cells | Nangate45 area | OpenSTA delay (ns) | Internal (µW) | Switching (µW) | Leakage (µW) | Total (µW) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Direct | PASS / 0.154070 | 1154 | 1293.824 | 1.32 | 105.08610 | 99.54069 | 30.49021 | 235.1170 |
+| Carry-Save | PASS / 0.043755 | 944 | 998.298 | 1.13 | 86.12467 | 75.99428 | 23.49400 | 185.6130 |
+| Fused Baugh-Wooley Linear | PASS / 0.086339 | 822 | 840.294 | 1.63 | 69.30518 | 61.37713 | 19.74904 | 150.4314 |
+| Fused Baugh-Wooley Dadda | PASS / 0.087012 | 811 | 866.628 | 1.17 | 72.27067 | 66.01730 | 20.29599 | 158.5840 |
+
+### 16 lanes — 12-bit accumulator
+
+| Variant | Formal proof / runtime (s) | Generic cells | Nangate45 area | OpenSTA delay (ns) | Internal (µW) | Switching (µW) | Leakage (µW) | Total (µW) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Direct | PASS / 1.552587 | 2426 | 2694.580 | 1.59 | 221.59600 | 212.71170 | 63.70527 | 498.0130 |
+| Carry-Save | PASS / 0.050909 | 1971 | 2134.916 | 1.42 | 178.27690 | 164.70780 | 50.44856 | 393.4332 |
+| Fused Baugh-Wooley Linear | PASS / 0.092422 | 1721 | 1730.064 | 2.28 | 140.58560 | 125.82680 | 40.79996 | 307.2124 |
+| Fused Baugh-Wooley Dadda | PASS / 0.092239 | 1645 | 1802.682 | 1.33 | 148.42240 | 135.98050 | 42.08024 | 326.4832 |
+
+### 32 lanes — 13-bit accumulator
+
+| Variant | Formal proof / runtime (s) | Generic cells | Nangate45 area | OpenSTA delay (ns) | Internal (µW) | Switching (µW) | Leakage (µW) | Total (µW) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Direct | PASS / 2.001954 | 4984 | 5626.698 | 1.89 | 452.76070 | 445.30940 | 133.18300 | 1031.2530 |
+| Carry-Save | PASS / 0.051545 | 4063 | 4361.070 | 1.62 | 364.28280 | 339.38230 | 103.02270 | 806.6879 |
+| Fused Baugh-Wooley Linear | PASS / 0.108888 | 3444 | 3534.874 | 2.60 | 282.12170 | 258.87150 | 83.60160 | 624.5949 |
+| Fused Baugh-Wooley Dadda | PASS / 0.110269 | 3328 | 3595.522 | 1.57 | 291.62440 | 267.86850 | 84.29713 | 643.7901 |
+
+### Dadda scheduling conclusion
+
+- Dadda vs fused-linear critical-path delay: 8 lanes 1.17 vs 1.63 ns (-28.22%); 16 lanes 1.33 vs 2.28 ns (-41.67%); 32 lanes 1.57 vs 2.60 ns (-39.62%).
+- At 32 lanes, Dadda eliminates the large linear-schedule delay penalty and is 16.93% faster than Direct (1.57 vs 1.89 ns). It also beats Carry-Save delay (1.57 vs 1.62 ns).
+- Dadda retains area and total-power wins against Direct at 32 lanes: area 3595.522 vs 5626.698 (-36.10%); total power 643.7901 vs 1031.2530 µW (-37.57%). Against fused-linear, Dadda trades 1.72% more area and 3.07% more power for 39.62% lower delay. Thus Dadda fixes the critical-path penalty while preserving area/power wins versus Direct/Carry-Save, but fused-linear remains the smallest and lowest-power fused option at each lane count.
+- At 8 lanes, Dadda vs Direct: area -33.02%, total power -32.55%, delay -11.36%. At 16 lanes: area -33.10%, total power -34.44%, delay -16.35%.
+- This is evidence for these exact RTLs, Nangate45 typical library, constraints, and VCD activity only; it does not generalize to silicon or another process/device.
+
+### Recorded stage timings
+
+Seconds, per architecture and lane count: formal runtime is the benchmark's overall formal stage; generic/map are synthesis stages; sim is Icarus vector simulation; STA is OpenSTA; total is complete per-configuration benchmark runtime.
+
+| Lanes | Variant | Formal | Generic synth | Liberty map | Simulation | OpenSTA | Total |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 8 | Direct | 0.154070 | 0.530324 | 1.051111 | 0.139027 | 0.284117 | 2.159667 |
+| 8 | Carry-Save | 0.043755 | 0.495599 | 0.923586 | 0.163586 | 0.276028 | 1.903137 |
+| 8 | Fused Linear | 0.086339 | 0.997289 | 1.459681 | 0.293185 | 0.278264 | 3.115357 |
+| 8 | Fused Dadda | 0.087012 | 0.986282 | 1.503454 | 0.279749 | 0.277954 | 3.134998 |
+| 16 | Direct | 1.552587 | 1.145181 | 1.999473 | 0.275277 | 0.348755 | 5.321980 |
+| 16 | Carry-Save | 0.050909 | 1.009782 | 1.705958 | 0.319585 | 0.339645 | 3.426488 |
+| 16 | Fused Linear | 0.092422 | 2.085020 | 2.868696 | 0.583793 | 0.330634 | 5.961169 |
+| 16 | Fused Dadda | 0.092239 | 2.077233 | 2.776211 | 0.553933 | 0.337495 | 5.837726 |
+| 32 | Direct | 2.001954 | 2.561131 | 4.334336 | 0.625301 | 0.503141 | 10.026653 |
+| 32 | Carry-Save | 0.051545 | 2.090153 | 3.488336 | 0.642855 | 0.461093 | 6.734688 |
+| 32 | Fused Linear | 0.108888 | 4.424222 | 5.995846 | 1.198561 | 0.446608 | 12.174855 |
+| 32 | Fused Dadda | 0.110269 | 4.489425 | 5.902247 | 1.085129 | 0.454668 | 12.042500 |
+
+- The scaling artifact contains raw JSON including the OpenSTA timing/power reports, mapped and generic synthesis log tails, proof log tails, activity toggle maps, and stage timings. Artifact audit found no missing fields or failed configuration.
+- PR #20 at this audit: open, unmerged, head 0052c1895ec04524a9babf4ffe695955fdce99ce; GitHub metadata currently reports mergeable=false and base main 6cd44f34f36b0945680c279a87a4d8737daf33aa. The PR must be synchronized with current main (including this STATUS update), then exact-head checks/mergeability reverified before merge. Do not merge the stale base.
+- Milestone #2 technical benchmark matrix is VERIFIED on PR head, but not yet merged/locked on main. Milestone #3 not started. Next: sync current main ancestry and STATUS into PR branch non-force; run CI on the synchronized exact head; verify checks and mergeability; merge PR #20; then start FPGA P&R Milestone #3 with a pinned, verified ECP5 target and Yosys + nextpnr flow. Ceres untouched; NEM distinct.

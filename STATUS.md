@@ -608,3 +608,105 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR branch commit `604edb03dd9da3793aca591911e84a52428aa105` removes `-ascii` from Yosys `write_aiger`, so the `.aig` files are binary AIGER as expected by ABC's AIG reader.
 - This directly addresses Run #227's `Wrong input file format` error. No proof result is claimed until a new CI run confirms the export and CEC verdicts.
 - Next: synchronize main STATUS/ancestry to the PR branch with a non-force merge commit, trigger fresh CI, and inspect the positive full-design proof plus negative one-bit tamper test.
+
+
+## 62. Binary AIGER branch synchronization — 2026-11-27T05:03:19.863Z
+
+- Advanced `research/orcus-fused-int4-mac` to non-force two-parent merge commit `b7a479a03b51ac633963947170186ba7c41afb3a`.
+- Parents: previous PR branch head `604edb03dd9da3793aca591911e84a52428aa105` and main head `da4e86b3c125c7522b405c5f899db9a6c6009d02`. Merge tree preserves the binary AIGER export change and includes the current main STATUS blob.
+- Branch ref update succeeded with `force=false` and expected-head protection. No PR merge.
+- Next: confirm fresh PR CI for head `b7a479a03b51ac633963947170186ba7c41afb3a`; inspect the binary AIGER reader and ABC CEC verdict. No proof pass yet.
+
+
+## 63. Binary AIGER CI trigger lookup — 2026-11-27T05:03:26.169Z
+
+- Commit-specific workflow lookup for branch head `b7a479a03b51ac633963947170186ba7c41afb3a` returned no PR run at this instant. This lookup can lag; check the Actions run listing before concluding no workflow fired.
+- No new test, proof, or benchmark result. The branch change is committed and main STATUS is current through the branch sync record.
+
+
+## 64. Binary AIGER ABC CEC Run #229 started — 2026-11-27T05:03:33.271Z
+
+- Actions listing confirms automatic PR Run #229, ID `45943490330`, event `pull_request`, exact head `b7a479a03b51ac633963947170186ba7c41afb3a`, created `2026-11-27T05:03:23Z`, currently `in_progress`.
+- Next: inspect job steps, then completed logs. Required gate remains full direct-vs-fused ABC CEC PASS and one-bit tamper rejection. No proof or PPA data yet.
+
+
+## 65. Run #229 setup progress — 2026-11-27T05:03:40.744Z
+
+- Run #229 `45943490330` remains `in_progress` on branch head `b7a479a03b51ac633963947170186ba7c41afb3a`. Job `140322812925`: setup, checkout, and Python setup succeeded; dependency installation is active. Unit tests and benchmark remain pending; no artifact.
+- Next: monitor step 9. The critical check is whether ABC reads the binary AIGER files and returns an affirmative full-design equivalence verdict, followed by successful one-bit tamper rejection.
+
+
+## 66. Run #229 second setup poll — 2026-11-27T05:03:49.064Z
+
+- Run #229 `45943490330` is still `in_progress`; step 4 (apt dependency installation) remains active. Steps 5–8 and unit-test step 9 have not completed/started. No artifact.
+- No ABC CEC verdict, negative tamper result, or benchmark evidence yet. No code change in this poll.
+- Next: continue monitoring; once unit tests complete, inspect full job logs. If the run is still active at handoff, leave it explicitly marked in progress rather than assuming outcome.
+
+
+## 67. Run #229 unit-test stage active — 2026-11-27T05:03:56.860Z
+
+- Run #229 `45943490330` remains `in_progress`. Setup, dependencies, cache restore, and OpenSTA verification passed; unit-test step 9 is now active. Benchmark and artifact steps remain pending; artifact list is empty.
+- No CEC verdict or negative-test result is available yet. Next: retrieve logs after step 9 completes; do not report proof pass based only on step start.
+
+
+## 68. Run #229 latest poll — 2026-11-27T05:04:04.254Z
+
+- Run #229 `45943490330` remains `in_progress` at unit-test step 9. Steps 1–8 succeeded or were skipped on cache hit; steps 10–14 remain pending. No artifact is available.
+- The binary AIGER export/ABC CEC test has not yet reported a result. No six-variant benchmark has run.
+- Next: inspect the completed job log once step 9 exits. If it passes, inspect the benchmark artifact and all formal/activity/STA fields. If it fails, preserve exact error and fix the exporter/CEC integration. Do not claim a proof or close Milestone #1 until evidence exists.
+
+
+## 69. Run #229 final audit — 2026-11-27T05:10:52.319Z
+
+- Read the current `main` STATUS before repository work. Current `main` head before this update: `9e9bbd8a7efd86861d33d87b5f0ff52af3bc6ac4`; STATUS blob: `a3b06e0cbd401d7918004a2ab45aad776b3a9585`.
+- Run #229 / ID `45943490330` completed with conclusion `failure` on exact PR head `b7a479a03b51ac633963947170186ba7c41afb3a`. Job `140322812925` failed at step 9 (`Run unit tests`). Steps 1–8 passed or were skipped on cache hit. Steps 10–14, including compile, Liberty fetch, benchmark, artifact upload, and smoke verification, were skipped.
+- Full job logs show 64 unit tests: 63 passed and `test_fused_abc_cec_proves_full_output_and_rejects_one_bit_tamper` errored. Both Yosys AIGER exports completed sufficiently for ABC to start; the previous binary-vs-ASCII AIGER reader error did not recur.
+- Exact failing command: `/usr/bin/yosys-abc -c 'cec -T 120 "/tmp/orcus-abc-cec-nnrodfcu/reference.aig" "/tmp/orcus-abc-cec-nnrodfcu/candidate.aig"'`. Python raised `subprocess.TimeoutExpired` after its 130-second outer timeout. The wrapper reported `ABC_CEC_TIMEOUT: ABC cec exceeded 120s for orcus_fused_partial_product; elapsed=130.39s.` The test ran for 132.010s. This is a proof-complexity timeout, not an AIGER file-format error and not an inequivalence counterexample.
+- Positive full-design ABC CEC did not return an affirmative verdict. The negative one-bit tamper control was not reached. Benchmark did not start. Run #229 has no artifacts. There are no Run #229 six-variant formal results, vector/uniqueness counts, VCD annotation counts, generic-cell counts, Nangate45 area, OpenSTA delay, raw power components, or stage timings.
+- Do not populate a fused comparison row or claim fused Baugh-Wooley wins/loses. The only established comparator remains the historical two-stage carry-save baseline: 460.712 Nangate45 area units, 0.89 ns OpenSTA delay, and 84.60975 µW total estimated power from Run #201. These remain pre-layout research-library estimates without routed parasitics.
+- PR #19 remains open and unmerged; current head remains `b7a479a03b51ac633963947170186ba7c41afb3a`. Latest PR metadata reports `mergeable=false`; do not merge. Milestone #1 remains OPEN; Milestone #2 is BLOCKED.
+- Diagnostic inspection of the PR source confirms the AIGER export is binary (the `-ascii` flag is absent) and ABC reaches the `cec` command. The stored `proof_method` description still incorrectly says `write_aiger -ascii -symbols`; correct that metadata when the proof implementation is next changed. The exact current blocker is that a monolithic 32-input/10-output CEC proof of the complete reference and fused multiplier/heap design exceeds the 120-second configured ABC limit.
+- Next actions: (1) preserve Run #229 logs and failure history; (2) replace the monolithic proof attempt only with a sound compositional proof strategy that proves the 4x4 signed Baugh-Wooley lane identity and each 3:2 compressor's weighted-sum invariant, with a mechanically checked reduction graph/heap invariant tying the local lemmas to the final 10-bit result; (3) add a negative tamper control at the relevant proof boundary; (4) correct proof-method metadata to describe binary AIGER only if retaining that path; (5) run unit tests and trigger a new PR CI via a branch commit; (6) only after all proof gates pass, benchmark all six variants and inspect 512 unique xorshift32 vectors, nonzero VCD pin annotation, raw OpenSTA reports, stage timings, and all power components; (7) then sync STATUS ancestry to the PR branch as needed and review Milestone #1. Milestone #2 remains 8-lane/11-bit, 16-lane/12-bit, and 32-lane/13-bit signed INT4 dot-product scaling, comparing direct, multi-stage carry-save, and fused Baugh-Wooley under equivalent proof and benchmark controls.
+- Ceres remains out of scope and untouched; NEM remains distinct. ORCUS v0.2 baseline commit `3fcf0024d621db90ac913d9671c1f60d8588c5d9` remains the historical reference.
+
+
+## 70. Compositional-proof design audit — 2026-11-27T05:14:18.788Z
+
+- Read `STATUS.md` on `main` before repository inspection. At audit start, `main` was `6e7befdc6dc5e0d01d990320b95f99801fcab268`; current PR #19 branch head is `b7a479a03b51ac633963947170186ba7c41afb3a`; PR remains open, unmerged, and GitHub reports `mergeable=false`.
+- Inspected the exact branch benchmark generator and tests. The fused RTL generator creates four-lane Baugh-Wooley complemented cross-sign partial products, inserts four constant bits per lane at columns 4, 7, 8, and 9 (10-bit bias `0x390)), greedily reduces columns using explicit XOR/majority full-adder equations, then emits a final 10-bit `fused_row0 + fused_row1` adder.
+- Existing lane-only helper separately uses the 8-bit Baugh-Wooley correction `0x90`. Do not conflate that 8-bit identity with the actual 10-bit heap bias `0x390`; formalize the exact generated 10-bit weighted sum and sign-extension semantics. The current monolithic ABC proof-method metadata also still incorrectly says `write_aiger -ascii -symbols` although binary export is used.
+- Mathematical requirements refined: full-adder invariant is `2*c_out + s = x0+x1+x2`; half-adder invariant is `2*c_out+s=x0+x1`. The final carry-propagate adder requires its own modulo-`2^10` arithmetic equivalence proof; it is not the same compressor primitive invariant. A proof must account for dropped carry at the top column as modulo-width truncation, not silently discard an unconstrained signal.
+- A correct compositional proof needs: (A) SAT proof of the exact lane-level Baugh-Wooley encoding at the actual heap width/bias; (B) SAT proofs of exact full-adder and half-adder RTL plus final-adder arithmetic; (C) a deterministic graph/weight audit that proves every generated bit has exactly one source/use, correct column weight, correct carry destination, and correct final-row membership. The generator and audit must share an explicit typed heap representation or independently parse emitted RTL; source substring checks alone are insufficient. Negative tests must mutate polarity, compressor carry destination, and final output bit and demonstrate rejection.
+- The user-provided expectation that this necessarily runs in under one second and effortlessly scales to 8/16/32 lanes is unverified. Runtime and scaling must be measured in CI; do not promise them. Also, the proposed `2*c_out+s` formula must distinguish a one-bit carry from a carry already shifted into the next column.
+- No branch files were modified in this audit. No new CI run was triggered. No proof result, artifact, stage timing, or new PPA data exists. Milestone #1 remains open; Milestone #2 remains blocked. Preserve Run #229's 120-second ABC CEC timeout history.
+- Next: implement typed heap generation plus independently checkable connectivity/weight accounting; add Yosys `sat -verify` lane, FA, HA, and final-adder lemmas; add polarity/carry-weight/output tamper tests; run focused tests before full CI; then benchmark only after all proof gates pass. Keep PR #19 unmerged pending reviewed evidence. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 71. Compositional proof implementation handoff — 2026-11-27T05:14:57.436Z
+
+- Re-read current `main` STATUS before any further repository operation. Previous main STATUS commit: `a8be3df1de89af25ec8e81d1582c40efce77d42e`.
+- Reconfirmed PR #19 remains open/unmerged, head `b7a479a03b51ac633963947170186ba7c41afb3a`, GitHub `mergeable=false`. The PR branch still contains the monolithic ABC CEC implementation that timed out in Run #229; no follow-up run is confirmed.
+- The compositional proof implementation has NOT yet been committed. No claim is made that Lemma A/B/C or any negative tamper test has passed. No CI run has been triggered and no new benchmark artifact or PPA table exists.
+- Reason for stopping before source mutation: the requested Part C must verify the actual generated heap's graph, not merely assert substrings or repeat the generator's assumptions. A safe implementation must first introduce an explicit typed bit-heap/compressor representation, generate the RTL from it, independently audit the emitted connectivity and weights, and include a proof of the final modulo-1024 adder. The existing RTL generator currently emits inline XOR/majority expressions without explicit reusable FA/HA module instances; a test that claims to prove exact compressor RTL without refactoring that representation would be misleading. Keep the existing PR implementation intact until that refactor and tests are ready together.
+- Verified arithmetic convention: each signed 4x4 lane's complemented cross-sign Baugh-Wooley partial products use a 10-bit correction of `0x390` (equivalent to `0x90` modulo 256 in the 8-bit product identity). The actual fused heap is modulo 1024. The FA/HA local identities are respectively `2*c+s=x0+x1+x2` and `2*c+s=x0+x1`; final CPA correctness is a separate modulo-1024 proof. Top-column carry truncation must be explicitly represented as modulo-width arithmetic.
+- Next concrete implementation sequence: (1) add typed bit-heap node/column/compressor records and a deterministic reduction schedule; (2) generate the fused RTL and a machine-readable graph manifest from that representation; (3) add Yosys SAT proof harnesses for 4x4 lane bias identity, exact FA and HA equations, and the 10-bit final adder; (4) independently parse emitted RTL/manifest and reject wrong source polarity, wrong carry column, duplicate/dangling nodes, and final output wiring errors; (5) add polarity, carry-weight, and output-bit tamper tests; (6) run local/CI proof suite and measure runtime; (7) only after proof gates pass, sync STATUS to branch and trigger benchmark CI. Do not claim sub-second runtime or scaling until measured. Milestone #1 remains open; Milestone #2 (8/11-bit, 16/12-bit, 32/13-bit) blocked.
+- No PR branch files were changed in this turn; no PR branch commit or CI run ID exists. Ceres was not accessed; NEM remains distinct; ORCUS v0.2 baseline remains intact.
+
+
+## 72. Requested typed-heap implementation — repository preflight — 2026-11-27T05:16:42.668Z
+
+- Read current `main` STATUS first. Current main head is `6c51efbe83168b52fd29d5e59aa5053172e711ce`; STATUS blob is `0a9ca4acf23e9bd3846804c843d2e4686225081d`. PR #19 head remains `b7a479a03b51ac633963947170186ba7c41afb3a`; PR open/unmerged and GitHub reports `mergeable=false`.
+- Inspected the complete fused generator entry points and unit tests. The existing fused reduction is an inline FA-only greedy heap (no HA node) with lane partial products, four 10-bit correction bits per lane (0x390 per lane), and a 10-bit final row adder. Existing formal test still uses monolithic ABC CEC and timed out in Run #229.
+- Implementation will be additive and fail-closed: a typed deterministic heap representation, generated RTL/manifest, independent manifest/RTL audit, SAT harnesses, and three negative tamper cases. Any proof or CI outcome will be reported only after execution. No branch files changed and no CI run triggered at this preflight point.
+- Do not claim `mergeable=true` merely by syncing STATUS; GitHub computes mergeability and the PR base/head ancestry may also need synchronization. No merge authorization has been given.
+- Ceres was not accessed. NEM remains distinct. ORCUS v0.2 baseline remains intact.
+
+
+## 73. Typed heap implementation committed to PR #19 — 2026-11-27T05:21:46.973Z
+
+- PR #19 branch commit: `01d30e739b5030481313022a5d485c1b6a4d82d8`; branch `research/orcus-fused-int4-mac` advanced from `b7a479a03b51ac633963947170186ba7c41afb3a` using a non-force, expected-head-protected update. Files changed: new `orcus/typed_heap.py`; integrated fused RTL generator and proof flow in `benchmarks/signed_int4_dot_product.py`; replaced monolithic CEC unit test with compositional SAT and three negative tamper tests in `tests/test_signed_int4_dot_product.py`.
+- Implementation includes typed initial weighted bits (partial products and per-lane bias bits), deterministic 3:2 compressor nodes, two final rows, explicit top-column carry truncation modulo 2^10, generated RTL and JSON-serializable graph manifest. Benchmark artifact now records the manifest and individual SAT lemma timings.
+- Compositional proof harness includes: 10-bit signed Baugh-Wooley lane identity SAT lemma using bias 0x390; full-adder weighted-sum SAT lemma; half-adder weighted-sum SAT lemma; 10-bit modulo CPA SAT lemma; independent RTL/graph audit; tamper tests for partial-product polarity, compressor carry weight, and output assignment.
+- **Not yet verified:** no local Yosys or Python test execution was performed in this repository write action. No proof runtime is measured yet. No CI run ID, stage timings, or benchmark artifact is confirmed. Do not claim the SAT lemmas or negative tests pass until CI logs confirm them.
+- Next: sync current main STATUS ancestry/blob onto the PR branch with a non-force two-parent merge commit, confirm PR mergeability after GitHub recalculates, then inspect the new synchronize-triggered CI run. If tests fail, preserve logs and fix the exact failure. Benchmark is permitted only after proof and unit tests pass. Milestone #1 remains open; Milestone #2 blocked.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline unchanged.

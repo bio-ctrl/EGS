@@ -1144,3 +1144,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #245 `45947359445` completed success on the exact synced branch head and uploaded artifact ID `15174839413`. Run #244 `45947084195` artifact ID `15175157667` remains the fully audited evidence source for the actual FA+HA implementation; its complete six-variant metrics and raw OpenSTA reports are recorded in section 117.
 - Final four-lane Milestone #1 evidence is complete. No merge performed. Next work is Milestone #2 scaling (8/11-bit, 16/12-bit, 32/13-bit) as a separate research phase, after explicit authorization to proceed if repository work is to be started.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 121. PR #19 pre-merge inspection tool-schema failure — 2026-11-27T05:49:12.484Z
+
+- Attempted pre-merge comparison/diff inspection. The compare API request was accepted, but the diff wrapper rejected the argument key `repository_full_name`; its actual schema requires `repo_full_name`. No repository mutation or merge occurred.
+- Main remains `331693af60e2535867a12e620eb14057eee8b43a`; PR #19 remains open at `50afab04361308c74254d5466e0d6c0b1638ffae`. Retry inspection using the exact schema, then merge only after confirming base/head relationship and current clean state.

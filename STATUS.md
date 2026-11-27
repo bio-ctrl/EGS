@@ -1699,3 +1699,75 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Current main ref at diagnostic: d100b35ed109dfa20c4f53ed7e4c77e77b545422; its tree: dee1449e346d27cd3e62306245774f1d0fc62c28.
 - PR #20 research branch ref: 0052c1895ec04524a9babf4ffe695955fdce99ce; its tree: 6bf888886ff20f5d24c18ae50367fd21cfb93fb9.
 - Current main STATUS blob at this diagnostic: 906dd484ce190c334f48428c5106269b684ea473. PR #20 remains unmerged; previous PR metadata reported mergeable=false and stale base 6cd44f34f36b0945680c279a87a4d8737daf33aa. Next action is a non-force two-parent ancestry sync that retains branch files while replacing STATUS.md with the main blob, then rerun CI on the new exact head.
+
+
+## 196. PR #20 branch ancestry and STATUS synchronized to main — 2026-11-27T06:43:55.170Z
+
+- Re-read main STATUS before this update. STATUS blob incorporated into the branch sync: 38f0a431625bfc20004b6e3300c6444b3473ed9a.
+- Main commit used as second parent: 05604d1a36b354a7127739281be58bdb75a64378. Prior PR branch head: 0052c1895ec04524a9babf4ffe695955fdce99ce.
+- Created non-force two-parent ancestry sync commit 35f45253dec3b0476d6c4f8977c9508b9df6005b with branch head as first parent and main as second parent; tree based on PR branch with STATUS.md replaced by main's exact blob. Updated research/orcus-int4-lane-scaling ref using force=false and expected_sha; GitHub returned success.
+- PR #20 now includes the audited scaling implementation and the main ancestry/STATUS state as of main 05604d1. The sync commit should trigger a fresh pull_request synchronize CI run. This record is on main and advances main beyond the branch's second parent by a STATUS-only commit; the branch has no subsequent STATUS edit, so the latest main STATUS remains the authoritative merge-side version.
+- Next verify exact new branch head and CI run; once CI success and PR mergeability are confirmed, merge PR #20 under the user's explicit conditional authorization. Do not start FPGA work until merge verified. Ceres untouched; NEM distinct.
+
+
+## 197. Post-sync Run #255 active — 2026-11-27T06:44:24.158Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: e4974d556d39c2fc47bee3d793394e3ed52d1733.
+- Verified PR #20 branch head is the non-force ancestry sync commit 35f45253dec3b0476d6c4f8977c9508b9df6005b. The new synchronize event triggered ORCUS CI Run #255, ID 45953708374, created 2026-11-27T06:43:41Z, status in_progress, exact head 35f45253dec3b0476d6c4f8977c9508b9df6005b.
+- PR #20 remains open/unmerged. Its base now points to main 05604d1a36b354a7127739281be58bdb75a64378, the second parent of the sync commit. GitHub metadata currently reports mergeable=false while recalculation; do not merge until refreshed and CI #255 succeeds.
+- Run #254 artifact audit remains complete and successful. No FPGA implementation has started. Next poll Run #255 and PR metadata; Ceres untouched; NEM distinct.
+
+
+## 198. Run #255 post-sync verification active — 2026-11-27T06:44:54.039Z
+
+- Re-read main STATUS before this poll. STATUS blob: d9ce8635a9d0134aaf8fa0dc681a007ba49f6df6.
+- Run #255 (45953708374), exact synced head 35f45253dec3b0476d6c4f8977c9508b9df6005b, remains in_progress. Steps 1–13 succeeded, including unit tests, compileall, Liberty fetch, four-lane benchmark and upload. Step 14 8/16/32 scaling benchmark is in_progress; steps 15–16 pending.
+- Four-lane artifact ID 15178092066 is already uploaded (not the scaling artifact). PR #20 remains open/unmerged and GitHub currently reports mergeable=false while checks are active. Do not merge until run and PR status are final. Run #254 scaling artifact remains the fully audited technical evidence for source head 0052c189. Ceres untouched; NEM distinct.
+
+
+## 199. Run #255 synchronized-head CI SUCCESS — 2026-11-27T06:45:31.620Z
+
+- Re-read main STATUS before this update. STATUS blob: e36596e789411d20151ecde558bd3c04e6f84ae8.
+- ORCUS CI Run #255 (45953708374) completed SUCCESS at 2026-11-27T06:44:56Z on exact synced PR head 35f45253dec3b0476d6c4f8977c9508b9df6005b. Job 140355214024 passed. Steps 1–16 all succeeded, including all unit tests, compileall, Liberty fetch, four-lane benchmark and artifact, full 8/16/32-lane scaling benchmark, scaling artifact upload, and target verification.
+- New exact-head scaling artifact ID 15177593284, name orcus-int4-lane-scaling, 138898 bytes, SHA-256 zip digest c0a954eb6735e1d7e0c43abab3d6ac78993284399aeb9aa354fd04f63d5e4eac. This is the artifact for the ancestry-synchronized branch head; it still requires inspection/confirmation against the previously audited 12-row matrix before merge.
+- PR #20 remains open/unmerged; GitHub metadata still reports mergeable=false despite successful exact-head CI. Base snapshot is 05604d1a36b354a7127739281be58bdb75a64378; head is the two-parent sync commit 35f45253dec3b0476d6c4f8977c9508b9df6005b. Investigate mergeable_state/required checks and refresh metadata before merging; do not force a merge through unresolved conflict state.
+- Milestone #2 measurements remain as audited in section 193. No FPGA work started. Ceres untouched; NEM distinct.
+
+
+## 200. Run #255 scaling artifact downloaded for final audit — 2026-11-27T06:45:54.737Z
+
+- Re-read main STATUS before this update. STATUS blob: afeca2bf06adfdb8a8d110e05263af8890bd0361.
+- Downloaded Run #255 exact-head scaling artifact ID 15177593284 to /mnt/data/orcus-int4-lane-scaling-run-255.zip. ZIP digest reported by GitHub: c0a954eb6735e1d7e0c43abab3d6ac78993284399aeb9aa354fd04f63d5e4eac. Artifact inspection has not yet been performed in this step.
+- Next compare its 12 records, formal proof statuses, 512 unique vectors, VCD pin counts, raw power reports and metrics against Run #254's audited artifact. PR #20 remains unmerged and GitHub reports mergeable=false; investigate the raw PR mergeable_state after artifact verification. Ceres untouched; NEM distinct.
+
+
+## 201. Run #255 scaling artifact audited — exact-head matrix reconfirmed — 2026-11-27T06:46:30.470Z
+
+- Re-read main STATUS before artifact inspection. STATUS blob: d600a0ab119407a9631142438821320b639445ae.
+- Inspected /mnt/data/orcus-int4-lane-scaling-run-255.zip. SHA-256 computed from downloaded bytes: c0a954eb6735e1d7e0c43abab3d6ac78993284399aeb9aa354fd04f63d5e4eac, exactly matching GitHub artifact metadata. ZIP contains one JSON file, schema orcus-int4-lane-scaling-v1, exactly 12 variant records.
+- Independent validation returned zero problems: all 12 formal-pass; 512 vectors and 512 unique vectors each; nonzero pin annotations (456/527/520/490 for 8 lanes, 913/1019/1018/1020 for 16, 1939/2050/2050/1998 for 32); all four raw power components present and their W→µW conversions match the recorded values within 1e-9 µW; every raw report contains its Total power row. All 12 PPA rows exactly match Run #254 artifact values; only formal runtimes differ because the rerun was faster. Exact-head Run #255 therefore independently reconfirms the complete matrix.
+- Formal runtimes from Run #255 (s): 8 lanes Direct 0.095857, Carry-Save 0.025541, Fused Linear 0.048489, Fused Dadda 0.048152; 16 lanes 1.026898, 0.029722, 0.049703, 0.052506; 32 lanes 1.326839, 0.030136, 0.063303, 0.062506. Proof methods and PPA table remain as in section 193.
+- No missing scaling evidence remains. PR #20 still open/unmerged pending mergeability diagnosis and final merge. Milestone #2 technical evidence verified; Milestone #3 not started. Ceres untouched; NEM distinct.
+
+
+## 202. PR #20 mergeability refreshed after Run #255 — 2026-11-27T06:47:11.831Z
+
+- Re-read main STATUS before mergeability diagnostics. STATUS blob: 335b02b37b618d56f75e23144ef9298238fc2e5b.
+- PR #20 raw REST metadata at 2026-11-27T06:46:30Z: state open, merged=false, mergeable=null, mergeable_state=unknown, base 05604d1a36b354a7127739281be58bdb75a64378, head 35f45253dec3b0476d6c4f8977c9508b9df6005b. The normalized PR metadata wrapper in the same poll reported mergeable=true. Treat the raw null/unknown as GitHub recalculation, not as a confirmed conflict.
+- Exact-head Run #255 45953708374 is SUCCESS, and its scaling artifact 15177593284 has been independently audited with 12/12 formal/activity/power records matching Run #254. The combined commit-status wrapper returned an empty legacy statuses array; the successful exact-head Actions run is the concrete CI evidence.
+- PR #20 has no remaining technical artifact gate. Re-fetch normalized PR metadata immediately before merge; if it still reports mergeable=true and exact head unchanged, merge with expected_head_sha 35f45253dec3b0476d6c4f8977c9508b9df6005b. Preserve latest main STATUS history. Ceres untouched; NEM distinct.
+
+
+## 203. PR #20 mergeability remains indeterminate — no merge attempted — 2026-11-27T06:47:52.294Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: d132088e9ed432b373070c4ebb9d75e100743d1b.
+- Re-fetched PR #20 metadata at 2026-11-27T06:47:24Z. Raw REST reports mergeable=null and mergeable_state=unknown; normalized wrapper currently reports mergeable=false. Head remains 35f45253dec3b0476d6c4f8977c9508b9df6005b; base snapshot remains 05604d1a36b354a7127739281be58bdb75a64378. This differs from the prior poll's normalized mergeable=true and is not a stable mergeability confirmation.
+- No merge was attempted. Run #255 and its exact-head scaling artifact are successful and fully audited, but GitHub mergeability is still indeterminate/reported false. Next inspect base/head ancestry and PR file conflict state; refresh mergeability again before any merge. Do not bypass a real conflict. Milestone #2 evidence is verified but not yet merged. Ceres untouched; NEM distinct.
+
+
+## 204. PR #20 divergence inspection — STATUS-only base commits, no source conflict — 2026-11-27T06:48:36.489Z
+
+- Re-read main STATUS before comparison. STATUS blob: 25a946bf8c0a7a8d77f89fe31e6e4b387d9e3b72.
+- Compared current main (1bd7a080940d0a16dc48e5ac37031ddc5f142840) against PR branch (35f45253dec3b0476d6c4f8977c9508b9df6005b). Git reports diverged, ahead_by=11, behind_by=8, merge base 05604d1a36b354a7127739281be58bdb75a64378. PR diff contains exactly four source/workflow paths: .github/workflows/ci.yml, benchmarks/int4_lane_scaling.py, orcus/lane_scaling.py, tests/test_lane_scaling.py. STATUS.md is not in the PR diff; the PR branch has no post-merge-base STATUS edit.
+- Current main has eight later STATUS-only commits since the PR sync's second parent; branch STATUS blob is the exact blob from that sync point. This explains branch-behind metadata; no source-file conflict is shown by the comparison. Normalized PR mergeable=false / raw mergeable=null remains indeterminate, not a confirmed conflict.
+- Next sync branch ancestry and STATUS to the latest main head via non-force two-parent merge commit, then rerun CI on the new exact head. Keep PR #20 unmerged until synchronized checks pass and mergeability stabilizes. Ceres untouched; NEM distinct.

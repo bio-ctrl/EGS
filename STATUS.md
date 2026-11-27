@@ -1580,3 +1580,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Re-read main STATUS before polling. STATUS blob: 6ae490596de2e2777ea8d0f2e1a8cf48df31e997.
 - Latest PR #20 branch head 0052c1895ec04524a9babf4ffe695955fdce99ce triggered ORCUS CI Run #254, ID 45952823219, created 2026-11-27T06:35:23Z; in_progress at poll time. It includes the generic carry-save top-name parser and regression tests for both unit-test and benchmark naming patterns.
 - Run #252 remains failed historical evidence at the first 8-lane carry-save benchmark; the four-lane artifact succeeded but is not the scaling artifact. No scaling table can be reported yet. PR #20 open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 188. Run #254 unit-test stage active — 2026-11-27T06:36:13.018Z
+
+- Re-read main STATUS before this poll. STATUS blob: 4144b800a6c451d5111d3f40dbf1ef824a990de7.
+- Run #254 (45952823219), exact head 0052c1895ec04524a9babf4ffe695955fdce99ce, job 140352372364 is in_progress at step 9 Run unit tests. Steps 1–5 and 8 passed; cached CUDD/OpenSTA build steps 6–7 skipped. Compileall, four-lane benchmark, scaling benchmark, artifact uploads and target verification pending. No result/artifact yet.
+- Next inspect unit-test outcome and then scaling benchmark; no merge or FPGA milestone until all 12 configurations have audited evidence. PR #20 open/unmerged; Ceres untouched; NEM distinct.

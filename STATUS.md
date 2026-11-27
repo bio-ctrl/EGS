@@ -2159,3 +2159,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before source update. STATUS blob: a7b46599f241680c2c6cb2733f285e979407aa3f.
 - Confirmed the previous GitHub tree transaction did not modify main source or tests. Updated orcus/lane_scaling.py directly; commit b5b8b3c118282139cfa6eb52afd5bafb1136d271; new blob 2e37fa240dcc4454d5cd2805c7b5f7f7806e4311. accumulator_width now accepts lane count 4 plus the existing TARGET_LANES=(8,16,32), without changing that ASIC benchmark tuple. 4 lanes therefore use 10 accumulator bits.
 - Next add explicit invalid-lane regression assertion to the FPGA tests, then run CI. This fixes Run #260's width guard error; no P&R has run. Ceres untouched; NEM distinct.
+
+
+## 240. FPGA lane-width regression strengthened — 2026-11-27T07:04:36.579Z
+
+- Re-read main STATUS before test update. STATUS blob: effe2ab53cc2fb3253ec78ab9d718314c797f6cb.
+- Updated tests/test_fpga_ecp5.py; commit 93f23518a7f8ba2699f58a8c7fd0322b09a442ba; blob 1ef7ef6299eb8a12cce0c3e8f6900c02ff78a47f. Test explicitly checks width mapping 4/8/16/32 -> 10/11/12/13 and confirms unsupported lane count 6 is rejected.
+- Latest source helper change b5b8b3c118282139cfa6eb52afd5bafb1136d271 allows 4 lanes while preserving the ASIC TARGET_LANES tuple. CI should now progress past the prior width guard. No P&R result yet. Ceres untouched; NEM distinct.

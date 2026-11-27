@@ -1379,3 +1379,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 162. Direct job-detail endpoint rejected — 2026-11-27T06:13:55.916Z
 
 - Attempted a direct workflow-job detail GET to inspect start timestamps and runner state. GitHub connector rejected that URL as an unsupported endpoint (HTTP 400); no additional diagnostics obtained. The supported job-steps wrapper remains the source of truth and still reports unit tests in_progress.
+
+## 163. Run #248 test suite has not advanced past step 9 — 2026-11-27T06:14:15.964Z
+
+- Run #248 job 140343567995 remains active; unit test step 9 is still in_progress and all later steps remain pending. No live logs available, no pass/fail count, and no scaling artifact yet. This is a status observation, not a declared timeout.

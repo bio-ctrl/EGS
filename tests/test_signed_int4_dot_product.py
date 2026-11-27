@@ -26,6 +26,7 @@ class SignedInt4DotProductTests(unittest.TestCase):
         self.assertEqual(result["formal_equivalence"], "formal-pass")
         self.assertEqual(len(result["proof_lemmas"]), 4)
         self.assertEqual(result["heap_audit"]["status"], "pass")
+        self.assertIn("half_adder", [n["kind"] for n in result["heap_manifest"]["compressors"]])
 
     def test_negative_tamper_partial_product_polarity(self):
         lines, manifest = generate_fused_heap(4)

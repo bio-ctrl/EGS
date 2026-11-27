@@ -93,6 +93,29 @@ def generate_fused_heap(lanes: int = 4, external_inputs: bool = False):
                 columns[column + 1].append(carry_id)
             fa_index += 1
 
+        # Exercise a 2:2 compressor explicitly in the lowest column.
+        if column == 0 and len(columns[column]) == 2:
+            a_id, b_id = columns[column]
+            columns[column].clear()
+            sum_id, carry_id = "ha_s_0", "ha_c_0"
+            compressors.append({
+                "id": "ha_0", "kind": "half_adder", "column": column,
+                "inputs": [a_id, b_id], "sum": sum_id, "carry": carry_id,
+                "carry_column": column + 1,
+                "carry_truncated_modulo_2_10": False,
+            })
+            bits[sum_id] = {"id": sum_id, "column": column,
+                            "kind": "compressor_sum", "compressor": "ha_0"}
+            bits[carry_id] = {"id": carry_id, "column": column + 1,
+                              "kind": "compressor_carry", "compressor": "ha_0"}
+            expr[sum_id] = rtl_expr[sum_id] = sum_id
+            expr[carry_id] = rtl_expr[carry_id] = carry_id
+            a, b = expr[a_id], expr[b_id]
+            lines.append(f"  wire {sum_id} = {a} ^ {b};")
+            lines.append(f"  wire {carry_id} = {a} & {b};")
+            columns[column].append(sum_id)
+            columns[column + 1].append(carry_id)
+
     rows = [
         [columns[k][0] if len(columns[k]) > 0 else None for k in range(width)],
         [columns[k][1] if len(columns[k]) > 1 else None for k in range(width)],
@@ -171,7 +194,8 @@ def audit_fused_heap(lines: list[str], manifest: dict) -> dict:
     generated = {}
     for node in manifest["compressors"]:
         column = node["column"]
-        if node["kind"] != "full_adder" or len(node["inputs"]) != 3:
+        expected_inputs = 3 if node["kind"] == "full_adder" else 2 if node["kind"] == "half_adder" else 0
+        if expected_inputs == 0 or len(node["inputs"]) != expected_inputs:
             raise ValueError("unsupported compressor node")
         for item in node["inputs"]:
             if item not in bits and item not in generated:
@@ -179,9 +203,15 @@ def audit_fused_heap(lines: list[str], manifest: dict) -> dict:
             if (bits.get(item) or generated[item])["column"] != column:
                 raise ValueError(f"compressor input has wrong weight: {item}")
             consumers[item] = consumers.get(item, 0) + 1
-        a, b, c = (rtl_token(item) for item in node["inputs"])
-        expected_sum = f"{a} ^ {b} ^ {c}"
-        expected_carry = f"({a} & {b}) | ({a} & {c}) | ({b} & {c})"
+        tokens = [rtl_token(item) for item in node["inputs"]]
+        if node["kind"] == "full_adder":
+            a, b, c = tokens
+            expected_sum = f"{a} ^ {b} ^ {c}"
+            expected_carry = f"({a} & {b}) | ({a} & {c}) | ({b} & {c})"
+        else:
+            a, b = tokens
+            expected_sum = f"{a} ^ {b}"
+            expected_carry = f"{a} & {b}"
         if declarations.get(node["sum"]) != expected_sum:
             raise ValueError(f"full-adder sum equation mismatch: {node['id']}")
         generated[node["sum"]] = {"column": column, "kind": "sum"}

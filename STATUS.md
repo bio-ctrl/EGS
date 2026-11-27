@@ -1203,3 +1203,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #246 `45948158005` artifact `orcus-signed-int4-dot-product`, artifact ID `15175189288`, size 11,859 bytes, SHA-256 `2ec1e8e4ca8851f578a5f3a4f43d0c9170e71994fc43dde1fc50e4b21b491ca5`. Artifact belongs to exact branch head `934e94addbda390ab56571eeca565d75dbd0fcc6`.
 - Run #246 completed success; all workflow stages passed. This revalidates PR #19 branch after main ancestry/STATUS sync. The artifact has not been downloaded/parsed in this turn; previous fully parsed Run #244 artifact remains detailed in section 117.
 - Raw PR API continues to return `mergeable=null / unknown` despite CI success. The PR is explicitly authorized by the user for merge. Next attempt GitHub merge endpoint with expected head; if GitHub refuses, preserve the failure and resolve the reported blocker rather than bypass protections.
+
+
+## 130. Milestone #1 closed — PR #19 merged as ORCUS v0.3 — 2026-11-27T05:52:22.009Z
+
+- GitHub merge endpoint succeeded for PR #19 using merge commit method and expected head `934e94addbda390ab56571eeca565d75dbd0fcc6`.
+- Merge commit SHA: `35207adff3371fcadae68cbaa58181267c361359`. PR #19 is merged. This closes Milestone #1 and locks the verified four-lane typed fused Baugh-Wooley implementation into main as ORCUS v0.3.
+- Run #246 `45948158005` passed on the exact pre-merge PR head; artifact ID `15175189288`. Earlier full six-variant artifact audit and compositional proof details remain recorded in section 117. Main status must now be fetched again after this commit; next action is to create Milestone #2 branch from the merged main head and implement 8/16/32 lane scaling.
+- No Ceres files or branches were accessed. NEM remains distinct. ORCUS v0.2 baseline remains in history.

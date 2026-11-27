@@ -896,3 +896,54 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #238 confirmed 67/67 unit tests pass, including all four compositional SAT lemmas and all three negative tamper tests. The compositional test interval from log timestamps was approximately 0.075 s including audit and SAT proofs; exact per-lemma timings were not logged. The benchmark itself failed at import before any benchmark stage ran.
 - No Run #238 artifact, six-variant metrics, stage timings, VCD, or OpenSTA data. Next: sync latest main STATUS to branch, inspect fresh CI, then collect proof timings and benchmark artifact. No milestone closure yet.
 - PR #19 remains open/unmerged; Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 98. PR #19 resynchronized after benchmark import fix — 2026-11-27T05:30:57.359Z
+
+- Synced main STATUS blob from `a154f6bf770d9cfaf6b443ef829e589ff247f210` and main ancestry into PR branch with non-force two-parent merge commit `84635f54bdb885f6825d28c087687916d1072411`.
+- Merge parents: benchmark import fix `1207088254ff02d24e8bcaf28e68379400153564` first; main `a154f6bf770d9cfaf6b443ef829e589ff247f210` second. Branch update succeeded with expected-head protection.
+- New branch head should trigger PR CI. Run #238 remains failed at benchmark import; its unit tests and compositional proof suite passed. No six-variant artifact exists yet.
+- Next: verify new run for exact head `84635f54bdb885f6825d28c087687916d1072411`; monitor benchmark and inspect artifact. PR #19 remains open/unmerged; Ceres untouched; NEM separate.
+
+
+## 99. Benchmark import fix CI Run #240 started — 2026-11-27T05:31:12.048Z
+
+- Automatic PR Run #240, ID `45946252250`, confirmed for exact head `84635f54bdb885f6825d28c087687916d1072411`; created `2026-11-27T05:30:55Z`; status `in_progress`.
+- PR #19 remains open/unmerged; GitHub metadata still reports `mergeable=false`. STATUS sync and branch ancestry have not made GitHub report true mergeability.
+- Run #238 unit tests and compositional SAT proof test passed; benchmark failed only because direct script could not import `orcus`. Run #240 includes repository-root import-path correction. No new result yet.
+- Next: poll Run #240; verify unit tests, benchmark execution, artifact upload, six variants, 512 unique vectors, VCD annotation, raw OpenSTA data, and measured proof timings. Milestone #1 remains open.
+
+
+## 100. Run #240 setup progress — 2026-11-27T05:31:23.556Z
+
+- Run #240 `45946252250`, job `140331518211`, exact head `84635f54bdb885f6825d28c087687916d1072411` is `in_progress`. Setup, checkout, Python setup passed; dependency installation step 4 active. Unit tests and benchmark pending.
+- No new proof runtime, artifact, or PPA evidence. Continue monitoring.
+
+
+## 101. Run #240 dependency install poll — 2026-11-27T05:31:33.699Z
+
+- Run #240 `45946252250`, job `140331518211`, remains `in_progress`; dependency installation step 4 is still active. Unit tests and benchmark have not started. No new evidence.
+
+
+## 102. Run #240 benchmark stage active — 2026-11-27T05:31:45.061Z
+
+- Run #240 `45946252250`, job `140331518211`, exact head `84635f54bdb885f6825d28c087687916d1072411`: setup/dependencies/cache/OpenSTA verification passed; all unit tests passed; Python compileall passed; Nangate45 Liberty fetch passed. Benchmark step 12 is now `in_progress`; artifact upload and smoke verification pending.
+- This is the first run to reach the benchmark after the typed heap proof unit test passed and the script import-path fix landed. No benchmark metrics/artifact are available until the stage completes.
+
+
+## 103. Run #240 baseline equivalence failure — 2026-11-27T05:32:14.624Z
+
+- Run #240 `45946252250`, job `140331518211`, exact head `84635f54bdb885f6825d28c087687916d1072411` failed during benchmark step 12, before the fused variant was reached. Unit tests (67/67), compileall, and Liberty retrieval passed.
+- Benchmark progression: direct variant passed formal, generic synthesis, mapping, 512/512 unique vectors, VCD/OpenSTA (area 574.56, delay 0.95 ns, total power 105.0206 µW; 259 annotated pins); left-deep variant passed the same stages (area 574.56, delay 0.95 ns, total power 105.0206 µW; 259 annotated pins). The run then failed formal verification for `balanced_01_23`.
+- Exact Yosys failure: `equiv_status -assert` reported 28 unproven equivalence cells after `equiv_struct -icells` structurally matched inappropriate internal nodes (log examples matched gold adder output bits to `p0_gold[7]`). This is an internal partition/cutpoint matching failure in the baseline variant, not a fused Baugh-Wooley counterexample. No fused benchmark or artifact was produced; no artifact upload.
+- The compositional proof test did pass in the unit suite. Its log interval was approximately 0.0756 s (from timestamps 05:29:12.4003378Z to 05:29:12.4759235Z), including four Yosys SAT lemmas and graph audit. This is a unit-test wall interval, not a per-lemma runtime breakdown. The three tamper tests all passed.
+- Next: inspect the baseline equivalence flow and remove/avoid unsafe structural matching for the product-level variants (e.g. test `equiv_simple` without `equiv_struct` or use a sound full-output miter); preserve fail-closed behavior. Then rerun CI. Do not change the fused proof or declare benchmark complete based on the two early variants.
+- PR #19 remains open/unmerged; GitHub last reported `mergeable=false`. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 104. Baseline equivalence cutpoint fix committed — 2026-11-27T05:32:51.959Z
+
+- Changed the non-fused product-level variants to run Yosys `equiv_make` + `equiv_simple` + `equiv_status -assert` without `equiv_struct -icells` on PR branch commit `412efcd85f857e231dd76d78354d827a9a35dcdc` (parent `84635f54bdb885f6825d28c087687916d1072411`). This avoids the unsafe structural internal cutpoint matches observed in Run #240 for balanced_01_23. It retains full-output fail-closed equivalence checking; no proof is assumed until CI verifies it.
+- Run #240 `45946252250` remains failed before fused variant. Direct and left-deep early metrics recorded in section 103. Compositional proof unit test and all tamper tests passed; benchmark artifact absent.
+- Next: sync current main STATUS to branch and trigger fresh CI. Verify non-structural baseline formal for all first five variants, then fused compositional SAT/audit, then six-variant PPA artifact. No claim of milestone completion yet.
+- PR #19 open/unmerged; Ceres untouched; NEM distinct; baseline intact.

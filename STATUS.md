@@ -2520,3 +2520,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read PR #22 metadata: still open, draft, unmerged, `mergeable=false`; exact head advanced to `b4f1a9ef60d19258e3941e00389649f52ad3e392` after the comment-only workflow marker.
 - Queried pull-request workflow runs for that exact head; the integration again returned an empty list. CI is not confirmed queued. The PR's `synchronize` event did not produce a visible run in the query. Do not report tests or P&R as running/passing.
 - Next inspect the GitHub Actions runs API for the exact updated head and check the branch's combined commit status. If no run exists, the user may need to inspect/enable Actions or manually run the workflow in GitHub UI; the current integration has no workflow-dispatch action.
+
+
+## 282. Combined-status diagnostic argument error — 2026-11-28T05:40:00Z
+
+- Attempted a parallel Actions API and combined commit-status check for PR #22 head `b4f1a9ef60d19258e3941e00389649f52ad3e392`. The combined-status call rejected the supplied argument names; its required schema is `repo_full_name` + `commit_sha`, not `repository_full_name` + `ref`. No repository source was changed and no CI conclusion was obtained from this failed diagnostic.
+- Next retry with the exact required schema and separately inspect the Actions runs API result. Preserve this failed diagnostic in the handoff.

@@ -832,3 +832,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Exact cause from source inspection: the independent RTL declaration parser matches scalar `wire name = ...` declarations but not vector declarations such as `wire [9:0] fused_row0 = ...`. Thus the row vector is absent from the parsed declaration map. This is an audit parser coverage bug, not a SAT counterexample. No SAT lemma has run; no proof runtime or benchmark data exists.
 - Next: extend the declaration parser to accept optional packed-width declarations and retain exact RHS checking. Re-run all tests. Keep the output-tamper test expected to reach and reject the altered CPA assignment, not fail earlier.
 - PR #19 remains open/unmerged; last GitHub mergeability state `false`. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 89. Packed-wire RTL audit parser correction committed — 2026-11-27T05:28:10.077Z
+
+- Corrected the Run #235 vector declaration parser on PR branch commit `ef85ed7de100b24d6e1fbd881ac48d2a5b615681` (parent `fa9f8f8db3b28d413176c23026d93054de5103be`). The parser now recognizes both scalar `wire name = ...` and packed vector `wire [N:0] name = ...` declarations, preserving exact RHS matching for final rows.
+- An intermediate branch commit `fa9f8f8db3b28d413176c23026d93054de5103be` was created with an unchanged blob because the first regex replacement did not match; it made no source-content change. The corrected implementation is in `ef85ed7`.
+- Run #235 `45945802919` failed before SAT because the audit parser omitted packed row declarations. Polarity and carry-weight tamper tests passed; output-tamper test was blocked by the same parser gap. No SAT lemma, benchmark, artifact, runtime, or PPA result yet.
+- Next: sync latest main STATUS and ancestry to branch; inspect next CI run. Require all tests and four SAT lemmas to pass before benchmark. PR #19 open/unmerged; last mergeability false. Ceres untouched; NEM distinct; baseline intact.

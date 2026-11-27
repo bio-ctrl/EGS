@@ -253,3 +253,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #19 remains open and unmerged. Current metadata reports `mergeable=false`; base SHA `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e`, head SHA `29afabf84e82203bd350ed4ca233bde0d3bde2e1`. No branch code change, solver substitution, PR merge, or milestone closure was made during this audit.
 - Next engineering action: design and validate a proof decomposition for the fused arithmetic, preserving the current SAT timeout and failure history. Candidate approaches to evaluate include equivalence partitioning with independently justified cutpoints, Yosys `equiv_*` passes where structural correspondence exists, or ABC `cec`; do not assume any is equivalent or fast without running it on the exact generated RTL. Keep the original Yosys miter/SAT proof as a recorded baseline. Any alternative must prove the full 10-bit output against the direct signed-INT4 reference, not merely prove isolated compressor equations or a subset of lanes. Run a fresh CI after a verified proof implementation.
 - Research limits remain unchanged: Nangate45 estimates are pre-layout and have no routed parasitics; they are not silicon PPA. Preserve ORCUS v0.2 as fixed baseline. Keep Ceres untouched and NEM separate.
+
+
+## 17. STATUS write verification — 2026-11-27T04:43:40Z
+
+- Verified the Run #211 audit entry is present on `main`; current STATUS.md blob SHA is `ccf9dafef36d21186a85daa55ec39edf5fd54de2`, written by commit `7a9a0f9e2ef578bcf75165a654dd69c8137cf9d4`.
+- Rechecked PR #19 after the STATUS update: it remains open, unmerged, and `mergeable=false`; base `9a0f98563e01d1ee5de472cc9c7cbd72b2f2f37e`, head `29afabf84e82203bd350ed4ca233bde0d3bde2e1`. Do not merge or close Milestone #1.
+- No additional benchmark or proof attempt was performed in this verification.

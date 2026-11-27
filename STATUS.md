@@ -1860,3 +1860,90 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Current orcus/lane_scaling.py blob 78766b20eb4992863d9bb3a87131cd66651c3449 (29,838 bytes) contains parameterized combinational module_source for direct, carry-save, fused-linear, fused-Dadda architectures at 8/16/32 lanes; tests blob 117ec6808f4ad004bdd06e98aa3cef12c82c4176. Existing module_source is combinational with signed INT4 lane inputs and a signed accumulator output; there is no FPGA top wrapper, clocked register boundary, pin/clock constraint, or FPGA-specific report parser yet.
 - Existing benchmarks/int4_lane_scaling.py blob 3752360638a608849239624bb2f70d3b98441caf emits the exact 12 architecture variants, but its flow is generic Yosys + Nangate45 + OpenSTA, not FPGA synthesis/P&R. Preserve this benchmark unchanged.
 - Next: inspect module_source and workflow install/tool pinning options; select how to wrap each combinational datapath for timing-driven nextpnr (clocked input/output registers with explicit clock constraint or a clearly labelled combinational critical-path flow), and ensure every compared variant has identical interface/register/constraint treatment. Then add separate FPGA wrapper/benchmark and CI steps. No FPGA RTL/workflow edits or P&R measurements have been made. Ceres untouched; NEM distinct.
+
+
+## 213. ORCUS Milestone 2 verified, PR #20 merged; Milestone 3 started — 2026-11-27T06:55:12Z
+
+### Run #256 exact-head CI and artifact audit
+
+- PR #20 was synchronized to latest main and tested on exact head `498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99`.
+- ORCUS CI Run #256: ID `45954312238`; job `140357142298`; completed SUCCESS at `2026-11-27T06:51:16Z`. Steps 1–16 all passed, including unit tests, compileall, four-lane benchmark, 8/16/32-lane scaling benchmark, both artifact uploads, and benchmark-target verification.
+- Scaling artifact ID `15177808570`, name `orcus-int4-lane-scaling`, 138807 bytes. Downloaded to `/mnt/data/orcus-int4-lane-scaling-run-256.zip`. Computed SHA-256 `908681030f5bd2af1963268ded0c42581690c363b2cf8601265f611471e78cab`, matching GitHub metadata.
+- Independent artifact audit: schema `orcus-int4-lane-scaling-v1`, exactly 12 rows, zero validation problems. All 12 formal results `formal-pass`; every row has 512 vectors and 512 unique vectors; all 12 OpenSTA runs have nonzero annotated pin activity; raw Internal/Switching/Leakage/Total power values are present and convert correctly from W to µW (tolerance 1e-8 µW); each raw report includes the Total power row. Carry-save graph audits and both fused heap audits pass; each fused architecture has four compositional SAT lemmas.
+- Run #248 on the older head was superseded by exact-head synchronized runs #254–#256. Run #256 is the final merge-gate evidence and is the authoritative exact-head run.
+
+### Verified 8/16/32-lane results from Run #256
+
+All area/delay/power values below are Nangate45 typical-library pre-layout estimates without routed parasitics. They are not silicon measurements or FPGA results.
+
+#### 8 lanes — 11-bit accumulator
+
+| Variant | Formal / s | Generic cells | Nangate45 area | OpenSTA ns | Internal µW | Switching µW | Leakage µW | Total µW |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Direct | PASS / 0.152509 | 1154 | 1293.824 | 1.32 | 105.08610 | 99.54069 | 30.49021 | 235.1170 |
+| Carry-Save | PASS / 0.043157 | 944 | 998.298 | 1.13 | 86.12467 | 75.99428 | 23.49400 | 185.6130 |
+| Fused Baugh-Wooley Linear | PASS / 0.087204 | 822 | 840.294 | 1.63 | 69.30518 | 61.37713 | 19.74904 | 150.4314 |
+| Fused Baugh-Wooley Dadda | PASS / 0.087165 | 811 | 866.628 | 1.17 | 72.27067 | 66.01730 | 20.29599 | 158.5840 |
+
+#### 16 lanes — 12-bit accumulator
+
+| Variant | Formal / s | Generic cells | Nangate45 area | OpenSTA ns | Internal µW | Switching µW | Leakage µW | Total µW |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Direct | PASS / 1.559440 | 2426 | 2694.580 | 1.59 | 221.59600 | 212.71170 | 63.70527 | 498.0130 |
+| Carry-Save | PASS / 0.051170 | 1971 | 2134.916 | 1.42 | 178.27690 | 164.70780 | 50.44856 | 393.4332 |
+| Fused Baugh-Wooley Linear | PASS / 0.094327 | 1721 | 1730.064 | 2.28 | 140.58560 | 125.82680 | 40.79996 | 307.2124 |
+| Fused Baugh-Wooley Dadda | PASS / 0.092816 | 1645 | 1802.682 | 1.33 | 148.42240 | 135.98050 | 42.08024 | 326.4832 |
+
+#### 32 lanes — 13-bit accumulator
+
+| Variant | Formal / s | Generic cells | Nangate45 area | OpenSTA ns | Internal µW | Switching µW | Leakage µW | Total µW |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Direct | PASS / 2.031699 | 4984 | 5626.698 | 1.89 | 452.76070 | 445.30940 | 133.18300 | 1031.2530 |
+| Carry-Save | PASS / 0.052684 | 4063 | 4361.070 | 1.62 | 364.28280 | 339.38230 | 103.02270 | 806.6879 |
+| Fused Baugh-Wooley Linear | PASS / 0.109747 | 3444 | 3534.874 | 2.60 | 282.12170 | 258.87150 | 83.60160 | 624.5949 |
+| Fused Baugh-Wooley Dadda | PASS / 0.109804 | 3328 | 3595.522 | 1.57 | 291.62440 | 267.86850 | 84.29713 | 643.7901 |
+
+### Stage timing record — Run #256 (seconds)
+
+| Lanes | Variant | Formal | Generic synth | Liberty map | Icarus sim | OpenSTA | Total |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 8 | Direct | 0.152509 | 0.564063 | 1.052447 | 0.139535 | 0.290284 | 2.199904 |
+| 8 | Carry-Save | 0.043157 | 0.510061 | 0.952214 | 0.164439 | 0.279314 | 1.949791 |
+| 8 | Fused Linear | 0.087204 | 1.008103 | 1.464536 | 0.295222 | 0.282239 | 3.137883 |
+| 8 | Fused Dadda | 0.087165 | 0.998127 | 1.519459 | 0.285393 | 0.279452 | 3.170136 |
+| 16 | Direct | 1.559440 | 1.257942 | 2.087585 | 0.275678 | 0.352020 | 5.533344 |
+| 16 | Carry-Save | 0.051170 | 1.015126 | 1.713476 | 0.336130 | 0.340695 | 3.457211 |
+| 16 | Fused Linear | 0.094327 | 2.145598 | 2.892471 | 0.588655 | 0.331890 | 6.053578 |
+| 16 | Fused Dadda | 0.092816 | 2.116312 | 2.780771 | 0.557546 | 0.337062 | 5.885155 |
+| 32 | Direct | 2.031699 | 2.640558 | 4.390754 | 0.628536 | 0.507352 | 10.199694 |
+| 32 | Carry-Save | 0.052684 | 2.102928 | 3.514140 | 0.651050 | 0.464924 | 6.786514 |
+| 32 | Fused Linear | 0.109747 | 4.495788 | 6.081022 | 1.209862 | 0.450362 | 12.347532 |
+| 32 | Fused Dadda | 0.109804 | 4.710621 | 5.972092 | 1.103874 | 0.459199 | 12.356354 |
+
+- Independent fused-heap graph-audit runtimes (s): 8 lanes linear 0.002128 / Dadda 0.001970; 16 lanes linear 0.005678 / Dadda 0.005807; 32 lanes linear 0.018935 / Dadda 0.019502.
+- Nonzero VCD annotated pins: 8 lanes Direct/Carry-Save/Linear/Dadda = 456/527/520/490; 16 lanes = 913/1019/1018/1020; 32 lanes = 1939/2050/2050/1998.
+
+### Dadda conclusion
+
+- Dadda vs fused-linear delay: 8 lanes 1.17 vs 1.63 ns (-28.22%); 16 lanes 1.33 vs 2.28 ns (-41.67%); 32 lanes 1.57 vs 2.60 ns (-39.62%).
+- At 32 lanes, Dadda is 16.93% faster than Direct (1.57 vs 1.89 ns) and 3.09% faster than Carry-Save (1.57 vs 1.62 ns). Versus Direct, Dadda reduces area 36.10% (3595.522 vs 5626.698) and total power 37.57% (643.7901 vs 1031.2530 µW).
+- Versus fused-linear, Dadda costs 1.72% more area and 3.07% more total power but cuts delay 39.62%. At 8 lanes, Carry-Save is slightly faster than Dadda (1.13 vs 1.17 ns); at 16/32 lanes Dadda is faster than Carry-Save.
+- These comparisons apply only to the measured RTL, Nangate45 typical library, synthesis settings, and VCD activity. They do not establish silicon performance.
+
+### PR #20 closure
+
+- PR #20 merged successfully into main after exact-head Run #256 success and independent artifact audit.
+- Merge commit: `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`.
+- Main now contains ORCUS Milestone #2 scaling implementation and verified evidence. Ceres was not accessed or modified. NEM remains distinct.
+
+### Milestone #3 — ECP5 FPGA place-and-route started
+
+- Created branch `research/orcus-ecp5-fpga-validation` from merged main `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`.
+- Initial implementation commit: `c6936a61fb103636140c4afec9f1b2f64b884e38`.
+- Opened draft PR #21: https://github.com/bio-ctrl/EGS/pull/21. Exact head `c6936a61fb103636140c4afec9f1b2f64b884e38`; GitHub reported mergeable=true; state open/draft. No CI run was visible in the immediate exact-head Actions query (total_count=0). No FPGA metrics have been measured yet.
+- Added `.github/workflows/fpga-ecp5.yml`, `benchmarks/ecp5_fpga_validation.py`, `tests/test_fpga_validation.py`; extended `orcus/lane_scaling.py` with `FPGA_TARGET_LANES=(4,8,16,32)` and 4-lane width support without changing the Milestone #2 benchmark's `TARGET_LANES=(8,16,32)`.
+- Target selected: Lattice ECP5 `LFE5U-85F-6BG381C`, nextpnr `--85k --package CABGA381 --speed 6`, 100 MHz clock constraint. Ubuntu 24.04 workflow installs Yosys and nextpnr-ecp5.
+- Matrix: 4/8/16/32 lanes × Direct/Fused Baugh-Wooley Dadda; widths 10/11/12/13. Each candidate is formally checked before ECP5 synthesis. Wrapper uses independent nonzero 8-bit per-lane LFSRs and a registered output; top-level clock/output I/O pins are unconstrained (not board-pin constrained). This limitation is emitted in artifact metadata.
+- Yosys `synth_ecp5` generates the ECP5 netlist; nextpnr-ecp5 performs placement/routing and writes JSON reports. Script attempts to extract LUT-comb count, CCU2C/ALU54B carry indicators, flip-flops, and post-route Fmax. These report-field parsers and the actual 4/8/16/32 implementation remain unverified until CI runs.
+- The initial blob-staging helper had a local `ReferenceError: lane is not defined` after creating three unreferenced Git blobs; it did not update a branch or tree. The complete four-file implementation was then successfully staged and committed as `c6936a6`.
+- Immediate next steps: obtain a CI run for PR #21; fix any Python/unit-test, Yosys mapping, nextpnr command, utilization parser, or Fmax parser errors; audit all eight P&R records and raw logs; verify the device/part/tool versions and timing constraints; preserve actual results and failures. Keep PR #21 draft/unmerged until the matrix is complete and reviewed. Do not claim FPGA resource or Fmax values before successful nextpnr P&R. Ceres untouched; NEM distinct.

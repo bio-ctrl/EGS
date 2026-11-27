@@ -745,3 +745,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - No SAT lemma ran to completion; no proof runtime, benchmark stage timing, artifact, or PPA data exists. This is a software/manifest classification defect, not evidence of arithmetic inequivalence.
 - Next: fix manifest serialization so `initial_bits` contains only partial-product and constant-bias sources; compressor sum/carry nodes remain exclusively in compressor records. Strengthen the audit to require the exact expected initial PP/bias ID set. Re-run unit tests in fresh CI and inspect all four SAT lemma verdicts and all three negative tests. Do not start/claim benchmark results until the proof suite passes.
 - PR #19 remains open/unmerged; latest known GitHub metadata still `mergeable=false`. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 78. Typed heap manifest classification fix committed — 2026-11-27T05:23:57.502Z
+
+- Fixed the Run #231 manifest schema defect on PR branch with commit `668122146ed2c546d0f47dc8ff53e3d2ba750d80` (parent `6d11c50eadcf36d56b756578d505d75248791130`). `initial_bits` now serializes only partial-product and constant-bias source nodes; compressor sum/carry outputs remain represented in compressor records. The independent audit now also requires the exact complete expected source-bit ID set for all lanes.
+- This fix addresses the observed `unexpected initial bit kind: compressor_sum` error. It is not yet verified by tests. Run #231 remains failed and historical; no rerun result is yet confirmed. No SAT lemma or benchmark has completed.
+- Next: sync latest main STATUS/ancestry to the branch and inspect the synchronize-triggered CI run for the new head. Confirm that the four SAT lemmas run and the three tamper tests reject the modified designs. If another failure appears, preserve exact logs and fix only the demonstrated issue. No runtime claim until measured.
+- PR #19 remains open/unmerged. Latest mergeability state from before this fix was `false`; recheck after sync. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.

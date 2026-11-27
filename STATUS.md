@@ -1243,3 +1243,58 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Created `research/orcus-int4-lane-scaling` from main commit `d4a183525304ca1fe3a2912625925591d6e6201d` using the dedicated create-branch action.
 - Branch currently contains only the merged ORCUS v0.3 baseline plus STATUS history; no scaling implementation committed yet. Next inspect CI workflow and exact source APIs, derive width-dependent Baugh-Wooley bias mathematically, then implement lane-parametric generators and tests.
+
+
+## 137. Lane-scaling status-log formatting retry — 2026-11-27T05:56:15.805Z
+
+- Attempted to append the source-audit/branch-sync record, but the JavaScript tool payload failed to parse before any GitHub write. No repository state changed. Retry with a simpler literal string and no mathematical escape sequences.
+
+## 138. Lane-scaling branch synchronized and source audit complete — 2026-11-27T05:56:29.227Z
+
+- Synced main 8a3e2c675363c09b9d3fcb82b316504db59a7c52 and its current STATUS blob into research/orcus-int4-lane-scaling via non-force two-parent commit 71fd77fb68aa4b900ed3c948604dd518847f12cd; expected-head update succeeded.
+- Inspected .github/workflows/ci.yml: one ORCUS CI workflow runs unit tests, compileall, fetches Nangate45 Liberty, runs the signed INT4 benchmark with required tools and physical analysis, uploads artifact, and smoke-tests ORCUS.
+- Scaling implementation plan: add separate orcus/lane_scaling.py and benchmarks/int4_lane_scaling.py to preserve the verified four-lane baseline. Target widths are W=11,12,13 for 8,16,32 lanes. Mathematical derivation: the complemented Baugh-Wooley partial-product matrix plus 0x90 equals signed product plus 2^8; therefore its W-bit sign-extended representation uses per-lane bias 2^W-112, specifically 0x790, 0xF90, and 0x1F90 for W=11,12,13. Prove this identity by SAT at each width.
+- Compare direct, multi-stage carry-save, fused linear-column, and fused Dadda-scheduled variants. Retain the linear baseline. Each width requires lane identity SAT, FA/HA invariants, modulo-W CPA lemma, independent graph audit, Yosys equivalence for direct/carry-save, 512 unique deterministic vectors, VCD activity, Nangate45 mapping, OpenSTA timing/power, and stage timings. No scaling implementation committed yet.
+- Ceres untouched; NEM distinct; ORCUS v0.3 is on main via PR #19 merge commit 35207adff3371fcadae68cbaa58181267c361359.
+
+## 139. Parameterized scaling generator drafted — 2026-11-27T06:00:01.194Z
+
+- Created an uncommitted Git blob for new module orcus/lane_scaling.py, blob SHA f40dd622f18301dbc03c1b7fb60dd97780745b41 (23,056 bytes). It implements supported lane targets 8/16/32; accumulator widths 11/12/13; derived per-lane bias 2^W-112; typed weighted heap; linear and Dadda compressor schedules; independent RTL/manifest graph audit; SAT lemmas for lane identity, FA, HA, and modulo-W CPA; Yosys equivalence helper for direct/CSA; and tamper helpers.
+- No branch commit yet and no CI evidence. Next add scaling benchmark pipeline and tests, inspect implementation carefully, then commit to the research branch.
+
+## 140. Scaling benchmark draft tool-payload syntax failure — 2026-11-27T06:01:19.033Z
+
+- Attempted to create benchmarks/int4_lane_scaling.py, but the JavaScript payload failed to parse at the Verilog timescale directive because its backtick terminated the surrounding template literal. No GitHub blob or repository change was created.
+- Retry with the Verilog timescale directive assembled without a literal backtick in the template string; then continue tests and workflow integration.
+
+## 141. Scaling benchmark pipeline drafted — 2026-11-27T06:02:38.189Z
+
+- Created uncommitted benchmark blob benchmarks/int4_lane_scaling.py, SHA 7c3ff788061b2d76794b963650b980c101c9d287 (12,855 bytes). It defines the 12-run matrix: 8/16/32 lanes × Direct / multi-stage carry-save / fused linear / fused Dadda; each run performs formal proof, generic synthesis, Nangate45 mapping, 512 unique xorshift32 vectors with simulation assertions, VCD toggle checks, OpenSTA timing and four-component power, and stage timing capture.
+- Code review caught one packaging issue before commit: script must add repository root to sys.path before importing orcus.lane_scaling when invoked as a script from benchmarks/. Fix this before committing.
+- No source commit or CI run yet. Ceres untouched; NEM distinct.
+
+## 142. Scaling benchmark import-path fix drafted — 2026-11-27T06:02:57.708Z
+
+- Retrieved benchmark draft blob 7c3ff788061b2d76794b963650b980c101c9d287, inserted repository-root sys.path setup before importing orcus, and created corrected blob 3752360638a608849239624bb2f70d3b98441caf (12,928 bytes).
+- Corrected blob remains uncommitted. Next add focused tests for accumulator-width/bias derivation, graph audit at both schedules and all scales, tamper rejection, SAT lemmas, and Yosys direct/CSA equivalence.
+
+## 143. Local arithmetic spot-check tool unavailable — 2026-11-27T06:04:51.534Z
+
+- Attempted an independent Python truth-table spot check of the derived width-dependent Baugh-Wooley bias; the Python execution environment reset before running the script, so no result is claimed.
+- The mathematical derivation remains: signed product = complemented-sign Baugh-Wooley weighted matrix - 112; therefore add 2^W-112 to represent the signed product modulo 2^W. The CI SAT lemma is the required verification gate for each target width.
+
+## 144. Dadda stage-height correction drafted — 2026-11-27T06:05:30.809Z
+
+- Reviewed the Dadda scheduler and corrected a substantive stage-height accounting bug: each stage must count both unconsumed work bits and sum outputs emitted into the next-stage column when enforcing its target height. New generator blob 231fdcb83bb418d606a3e759a8499f5013ebd4e4 includes that correction and retains separate stage buffers so sum outputs are not recursively recompressed in the same stage.
+- This is an uncommitted draft. The Dadda schedule must still pass independent graph audits and CI tests before any delay comparison is reported.
+
+## 145. CI workflow/test blob assembly variable error — 2026-11-27T06:06:05.906Z
+
+- Attempted to create the lane-scaling test file and add the scaling benchmark/artifact steps to .github/workflows/ci.yml. The orchestration script referenced an undefined variable name while assembling the workflow patch, so execution stopped before either blob was created.
+- No branch or source changes occurred. Retry the workflow insertion with the correct variable and then create both blobs.
+
+## 146. Scaling tests and CI integration drafted — 2026-11-27T06:06:40.690Z
+
+- Created uncommitted test blob tests/test_lane_scaling.py, SHA 7a66b82fe04a42b02c66bdc939b1c46e853579a2 (4,421 bytes). It covers exact 8/11, 16/12, 32/13 width/bias contracts; linear/Dadda graph audits; three negative tamper cases at all targets; 512 unique deterministic vectors; all six fused schedule/scale compositional SAT proofs; and direct/carry-save Yosys equivalence at all targets.
+- Created uncommitted CI workflow blob .github/workflows/ci.yml, SHA 661175946b8b69f2324badd21eb544c1b7bd81a2 (3,998 bytes), adding required-tools/physical scaling benchmark execution and artifact upload.
+- Source and tests remain uncommitted. Next assemble these blobs with corrected generator and benchmark into one non-destructive branch commit, sync main STATUS, then run PR CI.

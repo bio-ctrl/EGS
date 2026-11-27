@@ -1484,3 +1484,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Added explicit assertions that manifest initial_bits contains only original partial products/constants and is disjoint from compressor outputs. Existing six positive graph-audit cases now exercise the corrected manifest.
 - Added carry-save proof assertions for compositional proof method, graph-audit status, and required vector-CSA/final-CPA lemmas. Added a negative mutation check to ensure altered CSA RTL is rejected by exact audited-tree comparison. Full CI has not yet run against these changes.
 - No scaling metrics or FPGA evidence available. PR #20 remains unmerged. Ceres untouched; NEM distinct.
+
+
+## 176. Corrected Milestone #2 branch CI Run #250 started — 2026-11-27T06:30:35.162Z
+
+- Re-read main STATUS before polling repository state. STATUS blob at start: ddfed9eaf199ce8d228bf6b82c604c6dc8b5e57c.
+- PR #20 research branch now points to edec4fe677f70ea32110210561465272cfacc2a6 (source fix commit 3632725e9f565d1505a743455a5c2ed5c2920c3f plus regression-test commit edec4fe677f70ea32110210561465272cfacc2a6). The new branch push triggered ORCUS CI Run #250, ID 45952254080, created 2026-11-27T06:30:10Z, exact head edec4fe677f70ea32110210561465272cfacc2a6; currently in_progress.
+- PR #20 remains open and unmerged; current GitHub metadata reports mergeable=false while recalculating/reflecting new head. No merge performed. Run #248 remains a failed historical run and is preserved.
+- Run #250 must verify corrected initial-bit manifest, all six graph audits, all six fused compositional SAT cases, negative tamper tests, and direct/CSA equivalence at 8/16/32. Benchmark/artifact stages only proceed if unit tests pass. No scaling metrics or FPGA results yet. Ceres untouched; NEM distinct.
+- Next: poll Run #250 and exact logs/artifacts; if any failures, capture exact stage and correct non-destructively. Do not merge or begin FPGA claims until all 12 physical configurations have successful artifact evidence.

@@ -904,3 +904,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Merge parents: benchmark import fix `1207088254ff02d24e8bcaf28e68379400153564` first; main `a154f6bf770d9cfaf6b443ef829e589ff247f210` second. Branch update succeeded with expected-head protection.
 - New branch head should trigger PR CI. Run #238 remains failed at benchmark import; its unit tests and compositional proof suite passed. No six-variant artifact exists yet.
 - Next: verify new run for exact head `84635f54bdb885f6825d28c087687916d1072411`; monitor benchmark and inspect artifact. PR #19 remains open/unmerged; Ceres untouched; NEM separate.
+
+
+## 99. Benchmark import fix CI Run #240 started — 2026-11-27T05:31:12.048Z
+
+- Automatic PR Run #240, ID `45946252250`, confirmed for exact head `84635f54bdb885f6825d28c087687916d1072411`; created `2026-11-27T05:30:55Z`; status `in_progress`.
+- PR #19 remains open/unmerged; GitHub metadata still reports `mergeable=false`. STATUS sync and branch ancestry have not made GitHub report true mergeability.
+- Run #238 unit tests and compositional SAT proof test passed; benchmark failed only because direct script could not import `orcus`. Run #240 includes repository-root import-path correction. No new result yet.
+- Next: poll Run #240; verify unit tests, benchmark execution, artifact upload, six variants, 512 unique vectors, VCD annotation, raw OpenSTA data, and measured proof timings. Milestone #1 remains open.

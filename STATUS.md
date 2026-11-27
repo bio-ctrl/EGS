@@ -840,3 +840,59 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - An intermediate branch commit `fa9f8f8db3b28d413176c23026d93054de5103be` was created with an unchanged blob because the first regex replacement did not match; it made no source-content change. The corrected implementation is in `ef85ed7`.
 - Run #235 `45945802919` failed before SAT because the audit parser omitted packed row declarations. Polarity and carry-weight tamper tests passed; output-tamper test was blocked by the same parser gap. No SAT lemma, benchmark, artifact, runtime, or PPA result yet.
 - Next: sync latest main STATUS and ancestry to branch; inspect next CI run. Require all tests and four SAT lemmas to pass before benchmark. PR #19 open/unmerged; last mergeability false. Ceres untouched; NEM distinct; baseline intact.
+
+
+## 90. PR #19 resynchronized after packed-wire parser correction — 2026-11-27T05:28:34.039Z
+
+- Synced latest main STATUS blob from `732b00d62b86fb48e086d14aa912aa2abb0f6e01` and main ancestry into branch using non-force two-parent merge commit `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`.
+- Merge parents: corrected source commit `ef85ed7de100b24d6e1fbd881ac48d2a5b615681` first; main `732b00d62b86fb48e086d14aa912aa2abb0f6e01` second. Branch update succeeded with expected-head protection and `force=false`.
+- New branch head should trigger another PR CI run. Run #235 `45945802919` remains failed on the prior head; no SAT lemma or benchmark result was produced.
+- Next: inspect Actions run listing for exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`; monitor unit tests and proof. PR #19 remains open/unmerged. Ceres untouched; NEM separate; baseline intact.
+
+
+## 91. Packed-wire parser CI Run #238 started — 2026-11-27T05:28:46.416Z
+
+- Actions run listing confirms automatic PR Run #238, ID `45946018320`, exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`, created `2026-11-27T05:28:31Z`, status `in_progress`.
+- This run includes the packed vector declaration parser fix and latest main STATUS ancestry. Run #235 `45945802919` remains failed on previous head. No new test/proof result or benchmark evidence yet.
+- Next: poll Run #238, verify all three tamper tests and four SAT lemmas, then proceed to benchmark only if unit tests pass. PR #19 remains open/unmerged; no merge authorization.
+
+
+## 92. Run #238 dependency stage active — 2026-11-27T05:28:56.566Z
+
+- Run #238 `45946018320`, job `140330785714`, exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f` is `in_progress`. Setup, checkout, and Python setup passed; dependency installation step 4 active. Unit tests, SAT lemmas, and benchmark pending.
+- No new formal result, runtime, artifact, or PPA evidence. Continue polling; preserve all earlier failed runs.
+
+
+## 93. Run #238 second dependency poll — 2026-11-27T05:29:06.717Z
+
+- Run #238 `45946018320`, job `140330785714`, remains `in_progress`; dependency installation step 4 is still active. No unit tests or proof lemmas have started. No new benchmark or artifact evidence.
+
+
+## 94. Run #238 dependency cache restore active — 2026-11-27T05:29:16.015Z
+
+- Run #238 `45946018320`, job `140330785714`: dependency installation completed successfully; cache restore step 5 is active. Unit tests and all later stages remain pending. No proof result or benchmark data.
+
+
+## 95. Run #238 proof tests PASS; benchmark failed — 2026-11-27T05:29:29.059Z
+
+- Run #238 `45946018320`, job `140330785714`, exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`: unit-test step 9 succeeded; Python compilation step 10 succeeded; Liberty fetch step 11 succeeded. Benchmark step 12 failed. Artifact upload and smoke verification were skipped.
+- The three negative tamper tests and compositional proof unit test passed at the unit-test stage; exact SAT lemma verdicts/timings and the benchmark failure cause require log inspection before stating them. Do not infer PPA data from test success.
+- Next: retrieve full Run #238 logs, identify exact benchmark-stage failure. If proof lemmas passed, record their timings; then fix only the demonstrated benchmark integration issue and rerun. No six-variant artifact or PPA result is confirmed yet.
+- PR #19 remains open/unmerged; no merge authorization. Ceres untouched; NEM distinct; baseline intact. Milestone #1 remains open until the full benchmark artifact is validated.
+
+
+## 96. Run #238 compositional SAT/tests PASS; script import failure — 2026-11-27T05:30:03.805Z
+
+- Full Run #238 `45946018320`, job `140330785714`, exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f` logs confirm all 67 unit tests passed, including `test_compositional_sat_proofs_and_heap_audit` and all three negative tamper tests (partial-product polarity, compressor carry weight, output bit). Python `compileall` also passed. The compositional proof unit test completed successfully; its observed test interval was approximately 0.075 s (from log timestamps), which includes audit and all four SAT lemmas. Exact per-lemma timings were not emitted in the unit-test log and remain to be recorded from the benchmark artifact.
+- Benchmark step failed immediately before entering the benchmark: `ModuleNotFoundError: No module named 'orcus'` at `benchmarks/signed_int4_dot_product.py:20`. Running a file directly sets `sys.path[0]` to the `benchmarks` directory, so the repository-root namespace package `orcus` is not importable in that execution mode. This is a Python import-path integration issue, not a proof failure.
+- Artifact upload and smoke verification were skipped. No six-variant synthesis, VCD, Nangate45, OpenSTA, stage timing, or PPA data exists from Run #238.
+- Next: fix script execution import path robustly (add repository root to `sys.path` before importing `orcus.typed_heap`, or relocate the module under benchmarks with proper package/script import handling), rerun CI, capture exact lemma runtimes in artifact, and complete six-variant benchmark. Milestone #1 remains open pending artifact review.
+- PR #19 remains open/unmerged. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 97. Benchmark import-path fix committed — 2026-11-27T05:30:33.904Z
+
+- Fixed direct-script import resolution on PR branch commit `1207088254ff02d24e8bcaf28e68379400153564` (parent `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`). The benchmark script now adds the repository root (derived from `Path(__file__)`) to `sys.path` before importing `orcus.typed_heap`, so both package-based unit tests and direct CI script execution can resolve the module.
+- Run #238 confirmed 67/67 unit tests pass, including all four compositional SAT lemmas and all three negative tamper tests. The compositional test interval from log timestamps was approximately 0.075 s including audit and SAT proofs; exact per-lemma timings were not logged. The benchmark itself failed at import before any benchmark stage ran.
+- No Run #238 artifact, six-variant metrics, stage timings, VCD, or OpenSTA data. Next: sync latest main STATUS to branch, inspect fresh CI, then collect proof timings and benchmark artifact. No milestone closure yet.
+- PR #19 remains open/unmerged; Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

@@ -109,38 +109,80 @@ def module_source(name: str, variant: str) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _run_equivalence(candidate_text: str, reference_text: str, top: str,
+                      yosys: str, timeout_seconds: int = FORMAL_TIMEOUT_SECONDS) -> dict:
+    """Prove all output bits with Yosys' partitioned equivalence flow.
+
+    equiv_make creates a gold/gate equivalence design; equiv_struct matches
+    structurally corresponding cells; equiv_simple discharges the remaining
+    output-bit partitions with SAT; equiv_status -assert fails closed if any
+    partition remains unproven. This checks the complete module output, not a
+    sampled input set or a hand-selected subset of bits.
+    """
+    with tempfile.TemporaryDirectory(prefix="orcus-equiv-") as tmp:
+        root = Path(tmp)
+        candidate = root / "candidate.v"
+        reference = root / "reference.v"
+        candidate.write_text(candidate_text)
+        reference.write_text(reference_text)
+        proof_script = (
+            f"read_verilog {reference} {candidate}; "
+            "proc; "
+            f"equiv_make reference {top} equiv; "
+            "hierarchy -top equiv; "
+            "clean -purge; "
+            "equiv_struct -icells; "
+            "equiv_simple -v; "
+            "equiv_status -assert"
+        )
+        started = time.perf_counter()
+        try:
+            proof = subprocess.run(
+                [yosys, "-p", proof_script], text=True, capture_output=True,
+                timeout=timeout_seconds,
+            )
+        except subprocess.TimeoutExpired as exc:
+            elapsed = time.perf_counter() - started
+            raise TimeoutError(
+                f"FORMAL_EQUIV_TIMEOUT: Yosys partitioned equivalence exceeded "
+                f"{timeout_seconds}s for {top}; elapsed={elapsed:.2f}s. "
+                "Method: equiv_make; equiv_struct -icells; equiv_simple -v; equiv_status -assert."
+            ) from exc
+        elapsed = time.perf_counter() - started
+        if proof.returncode:
+            raise RuntimeError(
+                "Yosys partitioned equivalence failed or found an inequivalent output: "
+                + proof.stdout[-3500:] + proof.stderr[-1500:]
+            )
+        if "Equivalence successfully proven" not in proof.stdout and "Equivalence successfully proven!" not in proof.stdout:
+            # equiv_status -assert is the fail-closed authority; this guard
+            # makes an unexpected Yosys output format visible for review.
+            if "Unproven" in proof.stdout or "unproven" in proof.stdout.lower():
+                raise RuntimeError("Yosys left equivalence partitions unproven: " + proof.stdout[-3500:])
+        return {
+            "formal_equivalence": "formal-pass",
+            "proof_method": (
+                "Yosys equiv_make reference candidate equiv; hierarchy -top equiv; "
+                "clean -purge; equiv_struct -icells; equiv_simple -v; equiv_status -assert"
+            ),
+            "formal_equivalence_seconds": elapsed,
+            "proof_log_tail": proof.stdout[-1800:],
+        }
+
+
 def _run_yosys(candidate_text: str, reference_text: str, top: str,
                yosys: str, liberty: Path | None = None) -> dict:
     with tempfile.TemporaryDirectory(prefix="orcus-int4-") as tmp:
         root = Path(tmp)
         candidate = root / "candidate.v"
-        reference = root / "reference.v"
         mapped = root / "mapped.v"
         candidate.write_text(candidate_text)
-        reference.write_text(reference_text)
-        proof_script = (
-            f"read_verilog {candidate} {reference}; "
-            f"proc; miter -equiv -flatten reference {top} m; "
-            "sat -verify -prove trigger 0 m"
-        )
         stage_timings = {}
-        print(f"[ORCUS] {top}: formal SAT starting (timeout={FORMAL_TIMEOUT_SECONDS}s)", flush=True)
+        print(f"[ORCUS] {top}: partitioned formal equivalence starting (timeout={FORMAL_TIMEOUT_SECONDS}s)", flush=True)
         stage_start = time.perf_counter()
-        try:
-            proof = subprocess.run(
-                [yosys, "-p", proof_script], text=True, capture_output=True,
-                timeout=FORMAL_TIMEOUT_SECONDS,
-            )
-        except subprocess.TimeoutExpired as exc:
-            elapsed = time.perf_counter() - stage_start
-            raise TimeoutError(
-                f"FORMAL_TIMEOUT: Yosys SAT exceeded {FORMAL_TIMEOUT_SECONDS}s for {top}; "
-                f"elapsed={elapsed:.2f}s. Proof method: miter -equiv -flatten + sat -verify -prove trigger 0."
-            ) from exc
-        stage_timings["formal_sat_seconds"] = time.perf_counter() - stage_start
-        print(f"[ORCUS] {top}: formal SAT finished in {stage_timings['formal_sat_seconds']:.2f}s", flush=True)
-        if proof.returncode or "SAT proof finished - no model found: SUCCESS!" not in proof.stdout:
-            raise RuntimeError("Yosys SAT equivalence failed: " + proof.stdout[-2500:] + proof.stderr[-1000:])
+        proof = _run_equivalence(candidate_text, reference_text, top, yosys)
+        stage_timings["formal_equivalence_seconds"] = time.perf_counter() - stage_start
+        print(f"[ORCUS] {top}: partitioned formal equivalence finished in {stage_timings['formal_equivalence_seconds']:.2f}s", flush=True)
 
         generic_script = f"read_verilog {candidate}; hierarchy -top {top}; synth -top {top}; stat"
         print(f"[ORCUS] {top}: generic synthesis starting (timeout={SYNTHESIS_TIMEOUT_SECONDS}s)", flush=True)
@@ -194,8 +236,8 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
             mapping_log = mapping.stdout[-2500:]
 
         return {
-            "formal_equivalence": "formal-pass",
-            "proof_method": "Yosys miter -equiv -flatten; sat -verify -prove trigger 0",
+            "formal_equivalence": proof["formal_equivalence"],
+            "proof_method": proof["proof_method"],
             "stage_timings_seconds": stage_timings,
             "yosys_version": subprocess.run([yosys, "-V"], text=True, capture_output=True).stdout.strip(),
             "generic_cell_count": int(counts[-1]) if counts else None,
@@ -205,7 +247,7 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
             "mapping_library": "Nangate45 typical" if liberty else None,
             "mapping_log_tail": mapping_log,
             "mapped_verilog": mapped_text,
-            "proof_log_tail": proof.stdout[-1200:],
+            "proof_log_tail": proof["proof_log_tail"],
         }
 
 

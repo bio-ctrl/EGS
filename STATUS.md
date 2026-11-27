@@ -1539,3 +1539,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Re-read main STATUS before this poll. STATUS blob: c830b0cbac8596af048809feeabd36ff65c37140.
 - Run #252 (45952532314), exact head c563f66b9094e106ff1b5675c1dd5c695c5e4ad8, job 140351446109 remains in_progress. Setup/checkout/Python/dependency installation passed; step 5 cache pinned CUDD/OpenSTA is active; remaining build, unit-test, benchmark, and artifact steps are pending. No test or measurement result yet.
 - Next poll after cache/build stages. Run #248 and #250 remain failed historical runs; PR #20 stays open/unmerged. Ceres untouched; NEM distinct.
+
+
+## 183. Run #252 unit tests passed; scaling benchmark active — 2026-11-27T06:33:38.790Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: dd28d09e8446e953ae7c8ae9481623dac8d0a9d0.
+- Run #252 (45952532314), exact head c563f66b9094e106ff1b5675c1dd5c695c5e4ad8, job 140351446109 remains in_progress. Step 9 Run unit tests completed SUCCESS; step 10 Python compileall SUCCESS; step 11 Nangate45 Liberty fetch SUCCESS; step 12 existing signed INT4 benchmark SUCCESS; step 13 four-lane evidence upload SUCCESS. Step 14 8/16/32-lane scaling benchmark is currently in_progress; steps 15–16 pending.
+- This verifies the prior 73-test suite and corrected fused graph/bias audit plus compositional carry-save tests passed on this head. No 12-configuration scaling artifact or measurements yet; do not report scaling PPA or Dadda conclusions until step 14/15 completes and artifact is inspected.
+- Run #248/#250 remain failed historical evidence. PR #20 remains open/unmerged. Ceres untouched; NEM distinct.

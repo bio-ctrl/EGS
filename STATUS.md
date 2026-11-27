@@ -2432,3 +2432,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Added `benchmarks/fpga_ecp5_pipeline.py` to `research/orcus-ecp5-dadda-pipeline` in commit `87f2174a58ac5b5b65744898b6e5ba28dc7d159f`.
 - The isolated runner generates each new pipelined top, runs the sequential formal and streaming harness first, then invokes Yosys `synth_ecp5` and nextpnr ECP5 P&R for the existing exact target (`LFE5U-85F-6BG381C`, CABGA381, speed grade 6), 100 MHz by default, with unconstrained external IOs. It parses LUT4, FF, MULT18X18D counts, Fmax, utilization, and detailed timing from the nextpnr report and retains raw logs/reports/configs.
 - This is source added only. No P&R, formal, or simulation has run. The runner and its imports still require test/CI review; no performance or utilization values are available. Next add tests and wire new steps into the experiment-branch workflow without altering the baseline matrix. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 269. Pipeline generator and harness unit tests added — 2026-11-27T23:45:00Z
+
+- Added `tests/test_dadda_pipeline.py` to the experiment branch in commit `fdc8f664ffc82257103cf7029657435331fc2547`.
+- Tests cover all four lane counts, accumulator widths, stage/latency metadata, complete registered heap including pass-through tokens, synchronous reset and valid interface, sequential reference alignment, 512-vector back-to-back testbench generation, and signed reference-vector bounds.
+- These are authored tests, not executed tests. The generator, miter, and testbench still need actual Python/Yosys/Icarus execution through CI. Next inspect test/runner interfaces and modify only the experiment branch workflow to run the new tests and pipeline P&R while retaining the baseline ECP5 job unchanged. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.

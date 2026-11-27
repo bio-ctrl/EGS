@@ -1,5 +1,5 @@
 import unittest
-from benchmarks.signed_int4_dot_product import VARIANTS, module_source
+from benchmarks.signed_int4_dot_product import VARIANTS, module_source, _parse_opensta_power_report
 
 
 class SignedInt4DotProductTests(unittest.TestCase):
@@ -29,6 +29,28 @@ class SignedInt4DotProductTests(unittest.TestCase):
         for variant in VARIANTS:
             source = module_source("dut", variant)
             self.assertIn("output signed [9:0] y", source)
+
+    def test_opensta_parser_preserves_all_power_components_and_vcd_annotation(self):
+        report = """Annotated 259 pin activities.
+Group                    Internal    Switching      Leakage        Total
+                            Power        Power        Power        Power (Watts)
+------------------------------------------------------------------------
+Total                4.788638e-05 4.371745e-05 1.341678e-05 1.050206e-04 100.0%
+"""
+        parsed = _parse_opensta_power_report(report)
+        self.assertAlmostEqual(parsed["power_internal_uw"], 47.88638, places=5)
+        self.assertAlmostEqual(parsed["power_switching_uw"], 43.71745, places=5)
+        self.assertAlmostEqual(parsed["power_leakage_uw"], 13.41678, places=5)
+        self.assertAlmostEqual(parsed["power_total_uw"], 105.0206, places=4)
+        self.assertEqual(parsed["annotated_pin_activities"], 259)
+
+    def test_opensta_parser_rejects_missing_vcd_annotation(self):
+        report = """Group Internal Switching Leakage Total
+Power Power Power Power (Watts)
+Total 1e-6 2e-6 3e-6 6e-6 100.0%
+"""
+        with self.assertRaisesRegex(RuntimeError, "VCD pin activity annotation"):
+            _parse_opensta_power_report(report)
 
     def test_carry_save_reduction_is_present(self):
         source = module_source("dut", "carry_save")

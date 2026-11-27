@@ -110,14 +110,14 @@ def build_streaming_testbench(lanes: int) -> tuple[str, int]:
         lines.append("    @(posedge clk); #1;")
         if idx >= latency:
             exp = vectors[idx - latency][2]
-            lines.append(f"    if (out_valid !== 1'b1 || out_data !== {width}'sd{exp}) $fatal(1, \"stream mismatch at input {idx}, expected transaction {idx-latency}\");")
+            lines.append(f"    if (out_valid !== 1'b1 || out_data !== {_sv_signed(exp, width)}) $fatal(1, \"stream mismatch at input {idx}, expected transaction {idx-latency}\");")
         else:
             lines.append("    if (out_valid !== 1'b0) $fatal(1, \"out_valid asserted before pipeline latency\");")
     for flush in range(latency):
         lines.append("    @(negedge clk); in_valid = 1'b0;")
         lines.append("    @(posedge clk); #1;")
         exp = vectors[len(vectors) - latency + flush][2]
-        lines.append(f"    if (out_valid !== 1'b1 || out_data !== {width}'sd{exp}) $fatal(1, \"flush mismatch {flush}\");")
+        lines.append(f"    if (out_valid !== 1'b1 || out_data !== {_sv_signed(exp, width)}) $fatal(1, \"flush mismatch {flush}\");")
     lines.extend(["    @(negedge clk); in_valid = 0;", "    @(posedge clk); #1;",
                   "    if (out_valid !== 1'b0) $fatal(1, \"out_valid did not drain\");",
                   f"    $display(\"PASS lanes={lanes} vectors={VECTOR_COUNT} latency={latency}\");",

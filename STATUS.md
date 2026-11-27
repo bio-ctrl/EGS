@@ -2501,3 +2501,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Queried pull-request-triggered workflow runs for exact PR head `9a7f426055692f1f2543718060bdeea21eb052e9` immediately after opening Draft PR #22. The GitHub integration returned an empty run list.
 - This does not establish that the workflow failed or that Actions are disabled; it only means no PR-triggered run was visible in this query. Next inspect repository Actions runs API for the same exact head, then re-query PR metadata. Do not claim CI is running until a run ID/head SHA is confirmed.
+
+
+## 279. Repository Actions API confirms no PR #22 run — 2026-11-28T05:38:00Z
+
+- Queried `https://api.github.com/repos/bio-ctrl/EGS/actions/runs?per_page=20` and filtered the returned workflow runs for exact PR head `9a7f426055692f1f2543718060bdeea21eb052e9`. No matching run was present; the latest listed runs were older main/PR #21 runs.
+- CI is therefore **not yet confirmed queued**. The workflow file on the PR branch has the expected `pull_request` event types including `opened` and `synchronize`, but no run was delivered/visible for the PR-open event. Next emit a fresh `synchronize` event with a minimal workflow comment-only update, then check exact-head run status. This is a trigger attempt, not evidence of CI success.

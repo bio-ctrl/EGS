@@ -2166,3 +2166,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before test update. STATUS blob: effe2ab53cc2fb3253ec78ab9d718314c797f6cb.
 - Updated tests/test_fpga_ecp5.py; commit 93f23518a7f8ba2699f58a8c7fd0322b09a442ba; blob 1ef7ef6299eb8a12cce0c3e8f6900c02ff78a47f. Test explicitly checks width mapping 4/8/16/32 -> 10/11/12/13 and confirms unsupported lane count 6 is rejected.
 - Latest source helper change b5b8b3c118282139cfa6eb52afd5bafb1136d271 allows 4 lanes while preserving the ASIC TARGET_LANES tuple. CI should now progress past the prior width guard. No P&R result yet. Ceres untouched; NEM distinct.
+
+
+## 241. FPGA CI reruns #261/#262 started — 2026-11-27T07:04:59.702Z
+
+- Re-read main STATUS before Actions lookup. STATUS blob: 2d045f1b935584bc8555c03a4a87fda6a113f2ce.
+- Source helper fix commit b5b8b3c118282139cfa6eb52afd5bafb1136d271 triggered main push Run #261, ID 45955949888, created 2026-11-27T07:04:21Z, in_progress.
+- FPGA regression test commit 93f23518a7f8ba2699f58a8c7fd0322b09a442ba triggered Run #262, ID 45955978365, created 2026-11-27T07:04:37Z, in_progress. Run #262 includes both the four-lane helper fix and explicit unsupported-lane assertion and is the latest exact source/test head.
+- Run #260 remains failed history, exact failure documented in section 236. Next poll both runs; prioritize #262 for complete FPGA job evidence. No P&R results yet. Ceres untouched; NEM distinct.

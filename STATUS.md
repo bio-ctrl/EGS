@@ -326,3 +326,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #19 remains open and unmerged. Simplified metadata still reports `mergeable=false`, but direct API reported `mergeable=null` / `mergeable_state=unknown` while recalculating; do not treat this as a confirmed merge conflict or a clean merge.
 - Run #216 has no verified completion, job-stage outcome, artifact, proof result, or PPA measurements yet. Next: poll run/jobs; after completion inspect logs and artifact, including the new positive/negative formal unit test. No solver proof pass or fused performance claim is made.
 - Main status was updated on main only; PR branch code and NEM/Ceres boundaries remain unchanged. Milestone #1 remains open; Milestone #2 (8/16/32 lanes) remains blocked pending complete four-lane evidence.
+
+
+## 26. Run #216 early poll and code-path review — 2026-11-27T04:55:00Z
+
+- Run #216 `45942353836` remains `in_progress` on head `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. Job `140319281323` has completed setup, checkout, and Python setup; dependency installation is in progress. Unit tests, formal proof, benchmark, and artifact upload have not started. Artifact list is empty.
+- Reviewed the committed proof helper and its integration into `_run_yosys`: proof result/method/log are carried into each variant result; synthesis and mapping still execute only after formal proof returns. No obvious stale `proof.stdout` references remain in the returned result assembly.
+- This is a source review only, not execution of the new proof. The 60-second positive/negative unit-test timeout and 300-second benchmark proof timeout are still unvalidated.
+- Next: poll Run #216. If unit tests fail, inspect the exact Yosys command/output and correct the proof/test implementation on the PR branch; do not claim equivalence or fused PPA until both the positive and tamper-negative checks pass.
+- PR #19 remains open/unmerged. No new stage timings or six-variant data yet. Milestone #1 remains open; Milestone #2 remains blocked. Ceres untouched; NEM separate.

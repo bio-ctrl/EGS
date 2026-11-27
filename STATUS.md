@@ -541,3 +541,13 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Reviewed ABC's documented `cec` command, which compares the primary-input/primary-output behavior of two networks and uses a hybrid FRAIG/SAT approach by default. Next strategy: export the full direct-reference and fused candidate designs to AIGER with Yosys, then run ABC `cec` on the two AIGs. Preserve exact PI order/names and require an explicit equivalent verdict; treat inequivalent, unknown, or timeout as failure.
 - Add the same one-bit output tamper as a negative CEC control. This is only a proposed next experiment; it has not yet run and no proof claim is made.
 - PR #19 remains open/unmerged; branch head from Run #224 `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 53. Full-design ABC CEC implementation committed — 2026-11-27T05:02:03.145Z
+
+- PR branch commits `336e8a1465272ff3dd71159bdfd87121c1b93291` and `3088d9538f8b741d431a9bad6601848bb2c40b46` replace the timed-out Yosys SAT/compositional fused proof with Berkeley ABC's dedicated `cec` checker on two full-design AIGER exports.
+- For each design, Yosys runs `read_verilog; hierarchy -top; proc; flatten; techmap; opt; aigmap; write_aiger -ascii -symbols`. ABC then runs `cec -T <timeout> reference.aig candidate.aig`. Input and output names/order are kept identical by generating both modules from the same port contract.
+- The proof compares complete primary-input/primary-output behavior for the original 32 input bits and all 10 output bits. An affirmative ABC verdict is required; an inequivalent, undecided, missing verdict, process failure, or timeout is fail-closed.
+- The negative test now flips output bit 0 in the full fused RTL and requires ABC CEC to report `Networks are NOT EQUIVALENT`. Both positive and negative checks are configured with a 120-second timeout in unit tests; benchmark formal timeout remains 300 seconds.
+- This is a new proof strategy under test, not a verified pass. Run #224 remains failed due to the 60.06-second output-only heap SAT timeout; no benchmark artifact or fused PPA data exists. Next: synchronize main STATUS/ancestry to the PR branch and run fresh CI on the ABC CEC implementation.
+- Milestone #1 remains open; Milestone #2 (8/16/32 lanes) blocked. PR #19 remains open/unmerged. Ceres untouched; NEM separate.

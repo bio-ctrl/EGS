@@ -794,3 +794,49 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #233 `45945601986` remains failed on its earlier head; 65/67 tests passed, with the compositional audit and output-tamper test blocked by the same audit-token mismatch. The polarity and carry-weight tamper tests passed. No SAT lemma ran and no benchmark/artifact exists.
 - Next: synchronize latest main STATUS onto the PR branch and inspect the next CI run. Require all four SAT lemmas, full graph audit, and all three tamper tests to pass before benchmarking. No proof runtime or scaling claim until measured.
 - PR #19 remains open/unmerged; last metadata `mergeable=false`. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 84. PR #19 resynchronized after RTL audit fix — 2026-11-27T05:26:19.579Z
+
+- Synced current main STATUS blob from `3bc16f01d189d6fc117eccc94ad1f32edd10cedf` and main ancestry into PR branch using non-force two-parent merge commit `60d551fa4512f3367e8c1d748f2abecd3c6f932e`.
+- Parents: corrected branch commit `ebb0c82601715fcb2a0425231fcbf7948736279f` first; main `3bc16f01d189d6fc117eccc94ad1f32edd10cedf` second. Expected-head-protected branch update succeeded; no PR merge.
+- This branch head should trigger a new PR workflow. Run #233 remains failed on prior head `1b2c502e056009f922d47bcab4c0b21f089c8107`; preserved. No SAT proof result or benchmark evidence yet.
+- Next: check exact-head Actions listing and poll the new run. PR #19 remains open/unmerged. Ceres untouched; NEM distinct; baseline intact.
+
+
+## 85. Corrected RTL audit CI Run #235 started — 2026-11-27T05:26:36.410Z
+
+- Actions run listing confirms automatic PR Run #235, ID `45945802919`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e`, event `pull_request`, created `2026-11-27T05:26:16Z`, status `in_progress`. The commit-specific run lookup was stale/empty; repository Actions listing confirms the run.
+- PR #19 remains open/unmerged; GitHub still reports `mergeable=false`. Do not claim it is mergeable.
+- Run #233 `45945601986` failed due to constant-bias RTL token mismatch in FA expression audit; corrected in branch commit `ebb0c82601715fcb2a0425231fcbf7948736279f`, synchronized in head `60d551fa4512f3367e8c1d748f2abecd3c6f932e`.
+- Next: poll Run #235 and inspect unit tests, all four SAT lemmas, three negative tamper tests, then benchmark only if all pass. No proof runtime or benchmark evidence yet.
+- Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 86. Run #235 setup progress — 2026-11-27T05:26:47.136Z
+
+- Run #235 `45945802919`, job `140330080622`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e` remains `in_progress`. Setup, checkout, and Python setup passed; dependency installation step 4 is active. Unit tests, SAT lemmas, benchmark, and artifact steps remain pending.
+- No new formal or negative-tamper result; no runtime or PPA metrics. Continue polling. PR #19 mergeability remains reported false.
+
+
+## 87. Run #235 unit tests active — 2026-11-27T05:26:57.832Z
+
+- Run #235 `45945802919`, job `140330080622`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e` remains `in_progress`. Dependency installation, cache restore, and OpenSTA verification passed; unit-test step 9 is active. Python compilation, benchmark, artifact upload, and smoke check remain pending.
+- No SAT lemma verdict or tamper-test outcome is confirmed until step 9 completes. No proof runtime or PPA metrics yet.
+
+
+## 88. Run #235 final audit failure — 2026-11-27T05:27:18.867Z
+
+- Run #235 `45945802919`, job `140330080622`, exact head `60d551fa4512f3367e8c1d748f2abecd3c6f932e` failed at unit-test step 9. Setup/dependencies/cache/OpenSTA verification passed; compile, benchmark, artifact, and smoke steps were skipped.
+- Logs show 67 tests: 65 passed, 1 failed, 1 errored. The prior FA constant-token mismatch is fixed; partial-product polarity and compressor carry-weight tamper tests pass. The compositional audit now fails when checking `fused_row0`; output-tamper test also fails early at the same point.
+- Exact cause from source inspection: the independent RTL declaration parser matches scalar `wire name = ...` declarations but not vector declarations such as `wire [9:0] fused_row0 = ...`. Thus the row vector is absent from the parsed declaration map. This is an audit parser coverage bug, not a SAT counterexample. No SAT lemma has run; no proof runtime or benchmark data exists.
+- Next: extend the declaration parser to accept optional packed-width declarations and retain exact RHS checking. Re-run all tests. Keep the output-tamper test expected to reach and reject the altered CPA assignment, not fail earlier.
+- PR #19 remains open/unmerged; last GitHub mergeability state `false`. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 89. Packed-wire RTL audit parser correction committed — 2026-11-27T05:28:10.077Z
+
+- Corrected the Run #235 vector declaration parser on PR branch commit `ef85ed7de100b24d6e1fbd881ac48d2a5b615681` (parent `fa9f8f8db3b28d413176c23026d93054de5103be`). The parser now recognizes both scalar `wire name = ...` and packed vector `wire [N:0] name = ...` declarations, preserving exact RHS matching for final rows.
+- An intermediate branch commit `fa9f8f8db3b28d413176c23026d93054de5103be` was created with an unchanged blob because the first regex replacement did not match; it made no source-content change. The corrected implementation is in `ef85ed7`.
+- Run #235 `45945802919` failed before SAT because the audit parser omitted packed row declarations. Polarity and carry-weight tamper tests passed; output-tamper test was blocked by the same parser gap. No SAT lemma, benchmark, artifact, runtime, or PPA result yet.
+- Next: sync latest main STATUS and ancestry to branch; inspect next CI run. Require all tests and four SAT lemmas to pass before benchmark. PR #19 open/unmerged; last mergeability false. Ceres untouched; NEM distinct; baseline intact.

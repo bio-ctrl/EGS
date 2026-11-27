@@ -947,3 +947,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #240 `45946252250` remains failed before fused variant. Direct and left-deep early metrics recorded in section 103. Compositional proof unit test and all tamper tests passed; benchmark artifact absent.
 - Next: sync current main STATUS to branch and trigger fresh CI. Verify non-structural baseline formal for all first five variants, then fused compositional SAT/audit, then six-variant PPA artifact. No claim of milestone completion yet.
 - PR #19 open/unmerged; Ceres untouched; NEM distinct; baseline intact.
+
+
+## 105. PR #19 resynchronized after baseline proof adjustment — 2026-11-27T05:33:16.547Z
+
+- Synced main STATUS blob from `03cf8e6b5703dfa8b8975b6b61f9ccaf782a859e` and main ancestry into branch with non-force two-parent merge commit `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`.
+- Merge parents: non-structural baseline equivalence change `412efcd85f857e231dd76d78354d827a9a35dcdc` first; main `03cf8e6b5703dfa8b8975b6b61f9ccaf782a859e` second. Branch ref update succeeded with expected-head protection.
+- New branch head should trigger PR CI. Run #240 remains failed on prior head; preserved. No fused benchmark artifact yet.
+- Next: verify new run and validate the non-structural equivalence method for all five baselines and the compositional proof for fused. PR #19 remains open/unmerged.

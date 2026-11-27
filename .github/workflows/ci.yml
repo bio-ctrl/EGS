@@ -74,7 +74,7 @@ jobs:
         run: curl -fsSL https://raw.githubusercontent.com/The-OpenROAD-Project/OpenROAD-flow-scripts/master/flow/platforms/nangate45/lib/NangateOpenCellLibrary_typical.lib -o /tmp/NangateOpenCellLibrary_typical.lib
 
       - name: Run signed INT4 dot-product reduction benchmark
-        run: python benchmarks/signed_int4_dot_product.py --require-tools --require-physical --sta /tmp/opensta-install/bin/sta --liberty /tmp/NangateOpenCellLibrary_typical.lib --output /tmp/orcus-int4-dot-product.json
+        run: python -u benchmarks/signed_int4_dot_product.py --require-tools --require-physical --sta /tmp/opensta-install/bin/sta --liberty /tmp/NangateOpenCellLibrary_typical.lib --output /tmp/orcus-int4-dot-product.json
 
       - name: Upload signed INT4 benchmark evidence
         uses: actions/upload-artifact@v4

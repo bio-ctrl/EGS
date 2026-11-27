@@ -1225,3 +1225,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Confirmed current `orcus/typed_heap.py` is not yet lane-scalable: it hardcodes width 10, per-lane 10-bit bias `0x390`, 10-bit CPA, and the four-lane proof invocation `generate_fused_heap(4)`. Current benchmark `benchmarks/signed_int4_dot_product.py` hardcodes `LANES=4`, output width 10, and direct/carry-save trees with four named lanes. Tests explicitly assert all variants are 10-bit and the fused heap uses 4 lanes.
 - Therefore Milestone #2 requires a separate parameterized implementation across width, proof harness, RTL baselines, vector generator, and report schema—not just passing a larger lane count. Need derive/validate exact W-bit Baugh-Wooley bias and signed extension for W=11/12/13 before coding. No Milestone #2 source changes yet.
 - Main at audit time `1e8cca159413d9f0d26bf9502132397eff4602c6`; STATUS blob `aed8b8c6181e1e0e88e020f08920da6657c62caa`. Ceres untouched; NEM distinct.
+
+
+## 133. Milestone #2 branch creation API limitation — 2026-11-27T05:53:57.032Z
+
+- Attempted to create `research/orcus-int4-lane-scaling` by calling the Git ref update endpoint with a new branch name. GitHub returned HTTP 422 `Reference does not exist`; update_ref only updates existing refs and did not create the branch.
+- No branch was created and no source changes occurred. Next: discover the dedicated create-reference action/schema, then create the branch at the latest main head using that action.

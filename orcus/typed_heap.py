@@ -143,7 +143,7 @@ def audit_fused_heap(lines: list[str], manifest: dict) -> dict:
         raise ValueError("initial bit set is incomplete, duplicated, or contains non-source nodes")
 
     declarations = {}
-    for name, rhs in re.findall(r"(?m)^\s*wire\s+(\w+)\s*=\s*(.*);\s*$", source):
+    for name, rhs in re.findall(r"(?m)^\s*wire(?:\s+\[[^\]]+\])?\s+(\w+)\s*=\s*(.*);\s*$", source):
         if name in declarations:
             raise ValueError(f"duplicate RTL declaration: {name}")
         declarations[name] = rhs.strip()

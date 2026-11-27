@@ -2068,3 +2068,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-fetched benchmarks/fpga_ecp5.py blob 0b12d90d1b3405cc2afc8a1033d15e5ce04afe40. Exact scan: zero remaining two-backslash+n sequences and nine intended single-backslash-n Python string escapes.
 - Latest main head is ad6bd477042fb083cd71afcc7721572850996be6, a STATUS-only commit after source correction commit 8b7d9729a3d8eeb4a1986245fab56d3fe1c59164. No workflow run is associated with the later STATUS-only head; next query workflow runs for the source commit and poll the main-push CI job.
 - The source escaping defect is corrected; no FPGA P&R run/result has been confirmed yet. Ceres untouched; NEM distinct.
+
+
+## 234. Commit-scoped workflow lookup returned no PR runs — 2026-11-27T07:01:55.763Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 55d09afa5ef6f050a781508e9a44aa21e987cb10.
+- Queried workflow runs associated with source correction commit 8b7d9729a3d8eeb4a1986245fab56d3fe1c59164. The commit-workflow wrapper returned an empty list; that wrapper is documented to filter to pull-request-triggered runs, so this does not establish that a main push workflow did not run.
+- Next query the repository-wide Actions runs collection and filter by exact head SHA/event=push. No FPGA CI conclusion or P&R evidence yet. Ceres untouched; NEM distinct.

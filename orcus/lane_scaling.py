@@ -340,7 +340,7 @@ def audit_fused_heap(lines: list[str], manifest: dict) -> dict:
     if "assign y = fused_row0 + fused_row1;" not in source:
         raise ValueError("final modulo-W CPA output connection mismatch")
     bias = sum(1 << item["column"] for item in bits.values() if item["kind"] == "constant")
-    if bias != lanes * baugh_wooley_bias(width) % (1 << width):
+    if bias % (1 << width) != (lanes * baugh_wooley_bias(width)) % (1 << width):
         raise ValueError("bias bits do not equal lanes times the derived per-lane bias")
     expected_truncations = [
         node["id"] for node in manifest["compressors"]

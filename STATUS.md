@@ -1956,3 +1956,12 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Ubuntu 24.04 Noble publishes Yosys 0.33-5build2; `yosys-abc` same version. Pin these apt versions with nextpnr/chipdb in the FPGA job, and log exact runtime version outputs. Source: https://packages.ubuntu.com/noble/amd64/electronics/yosys.
 - nextpnr-ecp5 package supports ECP5; its CLI source confirms 85k device option, CABGA381 package selection and speed grades 6/7/8. Command target tuple remains `--85k --package CABGA381 --speed 6`. Keep the existing Ubuntu 22.04 ASIC CI job unchanged; add a separate Ubuntu 24.04 ECP5 job.
 - No FPGA source/workflow change or P&R run yet. Next inspect Yosys ECP5 synthesis command and current RTL module generator, then implement wrappers, report parser, tests, and isolated CI. Ceres untouched; NEM distinct.
+
+
+## 217. Yosys ECP5 synthesis command and P&R report capabilities verified — 2026-11-27T06:56:04.121Z
+
+- Re-read main STATUS before ECP5 command research. STATUS blob: f3ef66a40bffb2eae90eb51d76123b1c3bcaa9b5.
+- Yosys 0.33 documentation confirms `synth_ecp5 -top <module> -json <file>` is the ECP5-specific synthesis pass; supported options include `-noccu2`, `-nodffe`, `-nobram`, and `-nolutram`. Source: https://yosyshq.readthedocs.io/_/downloads/yosys/en/0.33/pdf/.
+- Upstream nextpnr docs show the ECP5 flow consumes the Yosys JSON netlist; the Ubuntu package includes a separate chipdb package. `nextpnr-ecp5` supports `--report` for timing/utilization JSON and `--detailed-timing-report`; its supported ECP5 primitives include CCU2C carry logic. Sources: https://github.com/YosysHQ/nextpnr and https://github.com/YosysHQ/nextpnr/blob/main/ecp5/docs/primitives.md.
+- Nextpnr ECP5 report supports resource utilization and post-route timing data; report parser must inspect actual report keys from the pinned Ubuntu 24.04 package rather than assuming exact JSON field names. Carry resource accounting should explicitly identify CCU2C; LUT4/comb and flip-flop counts must be separated, not conflated.
+- No source/workflow edit or FPGA run yet. Next inspect module_source implementation and build an identical clocked wrapper around each direct/Dadda combinational core. Ceres untouched; NEM distinct.

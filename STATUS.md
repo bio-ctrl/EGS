@@ -2561,3 +2561,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - The newest returned ORCUS runs are older main-branch runs #261/#262 and PR #21 runs on `research/orcus-ecp5-fpga-validation`; they are not PR #22 validation and must not be substituted. Re-fetched the pipeline branch workflow file: it does include the dedicated pipeline unit-test and pipeline ECP5 formal/streaming/P&R steps, followed by the separate baseline ECP5 job. Workflow file blob SHA: `e5a7e4a950c5fdd4491e7c2bdabbc4851f8d8118`.
 - Despite the user's report that the workflow has now executed, the accessible GitHub Actions API currently exposes no run for PR #22's exact SHA or branch. This remains an observability mismatch; no failure root cause or pipeline measurements can be inferred. Run #262 remains a distinct main-branch combinational baseline only.
 - No repository source or PR state was changed. Next obtain the actual run ID or workflow-run URL from the user / GitHub Actions UI, or re-query the run collection when the run becomes visible. Once identified, fetch the run, jobs, steps, logs, and artifacts; do not attribute any other run to PR #22. Preserve Draft state and all project boundaries.
+
+
+## 288. Exact-head Actions API filter independently confirms no run — 2026-11-27T23:45:34.068Z
+
+- Performed a direct GitHub Actions runs query filtered by `head_sha=b4f1a9ef60d19258e3941e00389649f52ad3e392` with 100 results per page. GitHub returned `total_count=0` and an empty workflow_runs list.
+- This independently confirms the prior branch-filtered and repository-wide findings: no workflow run is currently discoverable for the stated PR #22 head. No run ID, logs, jobs, or artifacts can be audited from the available repository data. This is not evidence of a pipeline test failure; it is evidence that the requested run is not discoverable by its exact SHA.
+- No source, branch, PR, baseline, Ceres, or NEM state changed. Next required input to continue is the actual Actions run URL or numeric run ID, or an exact SHA different from the one specified. Preserve PR #22 as Draft and do not substitute Run #262 or PR #21 runs.

@@ -1,8 +1,45 @@
+import shutil
 import unittest
-from benchmarks.signed_int4_dot_product import VARIANTS, module_source, _parse_opensta_power_report
+
+from benchmarks.signed_int4_dot_product import (
+    VARIANTS,
+    _parse_opensta_power_report,
+    _run_equivalence,
+    module_source,
+)
+
+
+FORMAL_TEST_TIMEOUT_SECONDS = 60
 
 
 class SignedInt4DotProductTests(unittest.TestCase):
+
+    def test_fused_equivalence_proves_full_output_and_rejects_one_bit_tamper(self):
+        yosys = shutil.which("yosys")
+        if not yosys:
+            self.skipTest("Yosys is required for end-to-end formal equivalence test")
+
+        reference = module_source("reference", "direct")
+        candidate = module_source("orcus_fused_partial_product", "fused_partial_product")
+        proof = _run_equivalence(
+            candidate, reference, "orcus_fused_partial_product", yosys,
+            timeout_seconds=FORMAL_TEST_TIMEOUT_SECONDS,
+        )
+        self.assertEqual(proof["formal_equivalence"], "formal-pass")
+        self.assertIn("equiv_make", proof["proof_method"])
+        self.assertIn("equiv_status -assert", proof["proof_method"])
+
+        correct_assignment = "assign y = fused_row0 + fused_row1;"
+        tampered_assignment = "assign y = (fused_row0 + fused_row1) ^ 10'b0000000001;"
+        self.assertIn(correct_assignment, candidate)
+        tampered = candidate.replace(correct_assignment, tampered_assignment, 1)
+        self.assertNotEqual(tampered, candidate)
+        with self.assertRaisesRegex(RuntimeError, "equivalence"):
+            _run_equivalence(
+                tampered, reference, "orcus_fused_partial_product", yosys,
+                timeout_seconds=FORMAL_TEST_TIMEOUT_SECONDS,
+            )
+
     def test_product_level_baselines_share_identical_multiplier_lines(self):
         common = None
         for variant in VARIANTS:

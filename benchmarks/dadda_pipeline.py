@@ -68,6 +68,10 @@ def _signed4(value: int) -> int:
     return value - 16 if value & 8 else value
 
 
+def _sv_signed(value: int, width: int) -> str:
+    return f"-{width}'sd{-value}" if value < 0 else f"{width}'sd{value}"
+
+
 def _vectors(lanes: int, count: int = VECTOR_COUNT) -> list[tuple[list[int], list[int], int]]:
     rng = random.Random(SEED + lanes)
     width = accumulator_width(lanes)
@@ -102,7 +106,7 @@ def build_streaming_testbench(lanes: int) -> tuple[str, int]:
     for idx, (a, b, expected) in enumerate(vectors):
         lines.append("    @(negedge clk); in_valid = 1'b1;")
         for lane in range(lanes):
-            lines.append(f"    a{lane} = 4'sd{_signed4(a[lane])}; b{lane} = 4'sd{_signed4(b[lane])};")
+            lines.append(f"    a{lane} = {_sv_signed(_signed4(a[lane]), 4)}; b{lane} = {_sv_signed(_signed4(b[lane]), 4)};")
         lines.append("    @(posedge clk); #1;")
         if idx >= latency:
             exp = vectors[idx - latency][2]

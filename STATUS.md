@@ -848,3 +848,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Merge parents: corrected source commit `ef85ed7de100b24d6e1fbd881ac48d2a5b615681` first; main `732b00d62b86fb48e086d14aa912aa2abb0f6e01` second. Branch update succeeded with expected-head protection and `force=false`.
 - New branch head should trigger another PR CI run. Run #235 `45945802919` remains failed on the prior head; no SAT lemma or benchmark result was produced.
 - Next: inspect Actions run listing for exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`; monitor unit tests and proof. PR #19 remains open/unmerged. Ceres untouched; NEM separate; baseline intact.
+
+
+## 91. Packed-wire parser CI Run #238 started — 2026-11-27T05:28:46.416Z
+
+- Actions run listing confirms automatic PR Run #238, ID `45946018320`, exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`, created `2026-11-27T05:28:31Z`, status `in_progress`.
+- This run includes the packed vector declaration parser fix and latest main STATUS ancestry. Run #235 `45945802919` remains failed on previous head. No new test/proof result or benchmark evidence yet.
+- Next: poll Run #238, verify all three tamper tests and four SAT lemmas, then proceed to benchmark only if unit tests pass. PR #19 remains open/unmerged; no merge authorization.

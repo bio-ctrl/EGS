@@ -1594,3 +1594,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Re-read main STATUS before this diagnostic. STATUS blob: 359a833f536dbb94eb0e2ba01462f6b79eb1355e.
 - Run #254 (45952823219), exact head 0052c1895ec04524a9babf4ffe695955fdce99ce, job 140352372364 remains in_progress. Step 9 unit tests SUCCESS; step 10 compileall SUCCESS; step 11 Liberty fetch SUCCESS; step 12 four-lane benchmark SUCCESS; step 13 four-lane evidence upload SUCCESS. Step 14 8/16/32 scaling benchmark is in_progress; steps 15–16 pending.
 - This head passed the full unit suite including the corrected modulo bias audit and benchmark top-name regression. No scaling artifact or 12-row measurement evidence yet. Continue polling. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 190. Run #254 scaling benchmark still active — 2026-11-27T06:37:00.852Z
+
+- Re-read main STATUS before this poll. STATUS blob: 34dbe7af9bbe122e2cc6bd59c248f1a1035fac3b.
+- Run #254 remains in_progress at step 14 8/16/32-lane scaling benchmark. All prior steps 1–13 succeeded, including unit tests, compileall, Liberty fetch, four-lane benchmark, and upload. Scaling artifact is not yet listed; the only current artifact is four-lane orcus-signed-int4-dot-product ID 15177069315, digest sha256:c6630d36c5578844cc35068a6862014d7c0a47cb548e2634cd51b1954cee862c.
+- No scaling data has been published. Await step 14 completion and scaling artifact upload; PR #20 remains open/unmerged. Ceres untouched; NEM distinct.

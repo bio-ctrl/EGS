@@ -2,7 +2,7 @@
 
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-27 04:22:27 UTC  
+**Last updated:** 2026-11-27 04:23:50 UTC  
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -73,9 +73,9 @@ These are results for this specific benchmark and flow. They do not establish a 
 
 **PR:** [#19 — Experiment: fused four-lane signed INT4 partial-product compressor](https://github.com/bio-ctrl/EGS/pull/19)  
 **Branch:** `research/orcus-fused-int4-mac`  
-**Current head:** `cc244ed257aa8739b68ba8ae7b3d2cfdeb1fa1de` (short SHA: `cc244ed`)  
+**Current head:** `8a00dcc3d2b1706c43c9c8cc48684c2f36099219` (short SHA: `8a00dcc`)  
 **PR state:** open, ready for review, unmerged  
-**Last checked:** 2026-11-27 04:22:27 UTC  
+**Last checked:** 2026-11-27 04:23:50 UTC  
 **Run #203:** ID `45893609205`, head `561ac0725e34f47413445c582f8b64d2188adfd3`; conclusion `cancelled`; no artifact was uploaded.  
 **Fresh PR run:** none observed on current head `cc244ed` at the last check. Do not mistake the main-branch run #207 for PR #19 validation.
 
@@ -101,7 +101,8 @@ Latest branch head `cc244ed` includes:
 - A fail-closed check for exactly 512 unique deterministic xorshift32 vectors.
 - Unit tests for power-component extraction and rejection of missing VCD annotation.
 - Unbuffered per-variant progress logs.
-- Per-stage timeouts: Yosys SAT 300 s; generic synthesis 120 s; Nangate45 mapping 120 s; Icarus simulation 60 s; OpenSTA 120 s.
+- Per-stage timeouts: Yosys SAT 300 s; generic synthesis 120 s; Nangate45 mapping 120 s; Icarus compilation and simulation 60 s each; OpenSTA 120 s.
+- Named timeout errors for formal SAT, generic synthesis, Liberty mapping, Icarus compilation, Icarus simulation, and OpenSTA.
 - Separate elapsed-time fields for formal SAT, generic synthesis, Liberty mapping, simulation, OpenSTA, and total per-variant runtime.
 - Explicit formal method remains Yosys `miter -equiv -flatten` plus `sat -verify -prove trigger 0`. A timeout is surfaced as a named stage timeout; no alternate proof method has been substituted.
 
@@ -109,9 +110,9 @@ Latest branch head `cc244ed` includes:
 
 The original `.github/workflows/ci.yml` listened to `pull_request` for branches targeting `main`, with no explicit event-type list or `workflow_dispatch`. The PR branch workflow was updated to include `opened`, `synchronize`, `reopened`, and `ready_for_review`, plus `workflow_dispatch` and a 90-minute job timeout. The same trigger/timeout/unbuffered-logging changes were committed to `main` in commit `1205f16f8f74c86f82f718ae8c3fe4f848ff8c64`.
 
-PR #19 was marked ready for review, then closed and reopened to emit a `reopened` event. The latest Actions query still showed no new `pull_request` run for the current head, even after the base-branch trigger fix and close/reopen event. The main-branch push triggered Run #207 (ID `45939477100`) at 2026-11-27 04:21:37 UTC; it completed `success` at 04:22:23 UTC. Dependency setup, cached OpenSTA verification, unit tests, Python compilation, Liberty retrieval, benchmark, artifact upload, and benchmark-target verification all passed. Run #207 tests `main`, not PR #19, and cannot validate the fused candidate. The subsequent STATUS update triggered main-branch Run #208 (ID `45939552147`) at 04:22:23 UTC; it was `in_progress` at 04:22:27 UTC. Run #208 is also a main push, not a PR #19 run.
+PR #19 was marked ready for review, then closed and reopened to emit a `reopened` event. The latest Actions query still showed no new `pull_request` run for the current head, even after the base-branch trigger fix and close/reopen event. Main-branch runs #207 (ID `45939477100`), #208 (ID `45939552147`), #209 (ID `45939583480`), and #210 (ID `45939612718`) all completed `success`. Run #207 validated the updated main workflow trigger/timeout and unbuffered command. Runs #208 and #209 validated the STATUS-only commits; Run #210 validated the workflow change that adds `paths-ignore: STATUS.md`. All these runs tested `main`, not PR #19, and cannot validate the fused candidate.
 
-The available GitHub integration exposes read operations and rerun operations for existing jobs, but no workflow-dispatch action. Do not claim a manual dispatch occurred. The exact reason the PR event did not create a run remains unconfirmed; do not assert a token limitation or disabled Actions without evidence. Next, inspect Run #207 completion, then use repository Actions UI or an authorized workflow-dispatch mechanism to dispatch `ORCUS CI` against `research/orcus-fused-int4-mac` / head `cc244ed`. If the workflow event is still not triggered, inspect repository Actions settings and event delivery before changing RTL or proof logic.
+The available GitHub integration exposes read operations and rerun operations for existing jobs, but no workflow-dispatch action. Do not claim a manual dispatch occurred. The exact reason the PR event did not create a run remains unconfirmed; do not assert a token limitation or disabled Actions without evidence. Main runs #207–#210 all passed; the last, #210, completed at 2026-11-27 04:23:50 UTC. Next, use repository Actions UI or another authorized workflow-dispatch mechanism to dispatch `ORCUS CI` against `research/orcus-fused-int4-mac` / head `8a00dcc`. If the workflow event is still not triggered, inspect repository Actions settings and event delivery before changing RTL or proof logic.
 
 ### Required PR #19 closure gates
 

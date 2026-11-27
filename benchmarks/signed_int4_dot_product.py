@@ -256,6 +256,39 @@ def simulate_activity(candidate_text: str, top: str, iverilog: str, vvp: str) ->
         }, vcd)
 
 
+def _parse_opensta_power_report(report: str) -> dict:
+    """Parse the total OpenSTA power row and explicit VCD annotation count.
+
+    report_power's table is in Watts even when report_units displays a smaller
+    power unit. Convert each component to microWatts for the benchmark schema.
+    """
+    power_match = re.search(
+        r"(?m)^Total\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+[-+0-9.eE]+%?\\s*$",
+        report,
+    )
+    if not power_match or "(Watts)" not in report:
+        raise RuntimeError("OpenSTA report_power total row or Watts unit missing")
+    internal_w, switching_w, leakage_w, total_w = (float(value) for value in power_match.groups())
+    annotation = re.search(r"(?m)^Annotated\\s+(\\d+)\\s+pin activities\\.", report)
+    if not annotation or int(annotation.group(1)) <= 0:
+        raise RuntimeError("OpenSTA did not confirm VCD pin activity annotation")
+    scale = 1_000_000.0
+    return {
+        "power_internal_uw": internal_w * scale,
+        "power_switching_uw": switching_w * scale,
+        "power_leakage_uw": leakage_w * scale,
+        "power_total_uw": total_w * scale,
+        "power_source_unit": "W from OpenSTA report_power table; structured fields converted to µW",
+        "annotated_pin_activities": int(annotation.group(1)),
+        "raw_power_components_w": {
+            "internal": internal_w,
+            "switching": switching_w,
+            "leakage": leakage_w,
+            "total": total_w,
+        },
+    }
+
+
 def run_sta(mapped_verilog: str, top: str, liberty: Path, sta: str, vcd_text: str) -> dict:
     with tempfile.TemporaryDirectory(prefix="orcus-sta-") as tmp:
         root = Path(tmp)
@@ -285,33 +318,13 @@ def run_sta(mapped_verilog: str, top: str, liberty: Path, sta: str, vcd_text: st
         timing = re.findall(r"(?im)^\s*([-+0-9.eE]+)\s+data arrival time\b", result.stdout)
         if not timing:
             raise RuntimeError("OpenSTA did not report a numeric constrained data-arrival time; report tail:\n" + result.stdout[-7000:])
-        # OpenSTA's report_power table labels its numeric columns in Watts,
-        # independent of the report_units display scale. Preserve the raw report
-        # and publish explicit microWatt fields for the STATUS.md comparison.
-        power_match = re.search(
-            r"(?m)^Total\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+[-+0-9.eE]+%?\\s*$",
-            result.stdout,
-        )
-        if not power_match or "(Watts)" not in result.stdout:
-            raise RuntimeError("OpenSTA report_power total row or Watts unit missing; report tail:\\n" + result.stdout[-7000:])
-        power_internal_w, power_switching_w, power_leakage_w, power_total_w = (
-            float(value) for value in power_match.groups()
-        )
-        annotation = re.search(r"(?m)^Annotated\\s+(\\d+)\\s+pin activities\\.", result.stdout)
-        if not annotation or int(annotation.group(1)) <= 0:
-            raise RuntimeError("OpenSTA did not confirm VCD pin activity annotation; report tail:\\n" + result.stdout[-7000:])
-        watts_to_uw = 1_000_000.0
+        power = _parse_opensta_power_report(result.stdout)
         return {
             "status": "completed",
             "critical_path_delay": float(timing[0]),
             "critical_path_delay_unit": "ns (OpenSTA report_units)",
-            "power_internal_uw": power_internal_w * watts_to_uw,
-            "power_switching_uw": power_switching_w * watts_to_uw,
-            "power_leakage_uw": power_leakage_w * watts_to_uw,
-            "power_total_uw": power_total_w * watts_to_uw,
-            "power_source_unit": "W from OpenSTA report_power table; structured fields converted to µW",
+            **power,
             "power_method": "OpenSTA Liberty power models with RTL VCD input activity; pre-layout, no parasitics",
-            "annotated_pin_activities": int(annotation.group(1)),
             "sta_version": subprocess.run([sta, "-version"], text=True, capture_output=True).stdout.strip(),
             "raw_report": result.stdout[-7000:],
         }

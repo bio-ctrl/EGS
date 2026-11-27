@@ -566,3 +566,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - After branch synchronization to head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`, `fetch_commit_workflow_runs` returned no PR run at the time of this check.
 - Direct PR API still reports mergeability `unknown` while recalculating; base `009dd556ec22ba73d75cb3952fdab175a06c6b03`, head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`.
 - No ABC CEC proof result or CI run ID is confirmed yet. Next: inspect supported Actions run listing for the exact head; if no run exists, diagnose why synchronize did not trigger. Do not claim CI started.
+
+
+## 56. ABC CEC CI Run #227 discovered — 2026-11-27T05:02:28.824Z
+
+- The Actions run listing confirms automatic PR Run #227, ID `45943382079`, event `pull_request`, head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`, created `2026-11-27T05:02:16Z`; it is `in_progress`.
+- The earlier commit-specific run lookup returned empty before the Actions listing updated. This was a lookup timing delay; the workflow has in fact triggered.
+- Next: poll Run #227's job steps; the key gate is the full-design ABC CEC positive proof and one-bit negative test. No result or PPA metrics yet.

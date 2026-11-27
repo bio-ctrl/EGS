@@ -1217,3 +1217,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - After PR #19 merge, attempted to fetch the presumed workflow path `.github/workflows/orcus-signed-int4-dot-product.yml`; GitHub returned 404. No repository mutation occurred. Do not assume that workflow filename exists.
 - Retry by listing the merged commit tree and inspect actual workflow paths before reading source files. Current known merge commit `35207adff3371fcadae68cbaa58181267c361359`; latest main status commit is `858247089e72e4c34ff273e81ed0f475303255d9`.
+
+
+## 132. Milestone #2 source audit — parameterization gaps confirmed — 2026-11-27T05:53:37.296Z
+
+- Re-read latest main STATUS and inspected merged ORCUS v0.3 tree. Actual workflow is `.github/workflows/ci.yml`; no separate signed-INT4 workflow exists.
+- Confirmed current `orcus/typed_heap.py` is not yet lane-scalable: it hardcodes width 10, per-lane 10-bit bias `0x390`, 10-bit CPA, and the four-lane proof invocation `generate_fused_heap(4)`. Current benchmark `benchmarks/signed_int4_dot_product.py` hardcodes `LANES=4`, output width 10, and direct/carry-save trees with four named lanes. Tests explicitly assert all variants are 10-bit and the fused heap uses 4 lanes.
+- Therefore Milestone #2 requires a separate parameterized implementation across width, proof harness, RTL baselines, vector generator, and report schema—not just passing a larger lane count. Need derive/validate exact W-bit Baugh-Wooley bias and signed extension for W=11/12/13 before coding. No Milestone #2 source changes yet.
+- Main at audit time `1e8cca159413d9f0d26bf9502132397eff4602c6`; STATUS blob `aed8b8c6181e1e0e88e020f08920da6657c62caa`. Ceres untouched; NEM distinct.

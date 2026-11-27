@@ -391,7 +391,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #19 remains open/unmerged; branch head at the failed run is `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.
 
 
-## 34. Compositional proof decomposition implemented — 2026-11-27T05:01:00Z
+## 34. Compositional proof decomposition implemented — 2026-11-27T04:56:20Z
 
 - After Run #216 showed that output-bit partitioning still timed out at 60.06s, the PR branch was updated with a compositional proof design:
   1. A standalone 4x4 signed Baugh-Wooley lane module (8-bit output) is formally checked against signed multiplication.
@@ -405,7 +405,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.
 
 
-## 35. PR proof branch synchronized for next CI — 2026-11-27T05:02:00Z
+## 35. PR proof branch synchronized for next CI — 2026-11-27T04:56:42Z
 
 - Synchronized latest main ancestry and STATUS into `research/orcus-fused-int4-mac` with non-force two-parent merge commit `e646fb171fffcba9483c98108f168f7da851cf3a`.
 - Parents: prior PR branch head `408324aed545acc65a25a0ee6a6640a150c3b3d0` and main head `d98c691836252141230c66a2ebb1b2df823798da`. Merge tree `2f40a87a9779fda6247aad947a1dcffa47ce3966` includes main's current STATUS blob and preserves the PR branch proof code/tests.
@@ -413,7 +413,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Next: verify a fresh automatic PR CI run for this exact head; monitor unit tests first. Do not claim Run #216's failed proof is repaired until the new positive/negative tests pass.
 
 
-## 36. New compositional-proof CI Run #220 started — 2026-11-27T05:03:00Z
+## 36. New compositional-proof CI Run #220 started — 2026-11-27T04:56:54Z
 
 - Fresh automatic PR run confirmed for compositional proof branch head `e646fb171fffcba9483c98108f168f7da851cf3a`: Run #220, ID `45942838109`, event `pull_request`, status `in_progress`, created `2026-11-27T04:56:39Z`.
 - PR #19 remains open/unmerged. Direct API reports mergeability `null` / state `unknown` during recalculation; do not infer clean/conflicting state.
@@ -421,25 +421,25 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - No proof pass, fused PPA result, or Milestone #1 closure yet. Milestone #2 (8/16/32 lanes) remains blocked. Ceres untouched; NEM separate.
 
 
-## 37. Run #220 early progress — 2026-11-27T05:04:00Z
+## 37. Run #220 early progress — 2026-11-27T04:57:04Z
 
 - Run #220 `45942838109`, exact branch head `e646fb171fffcba9483c98108f168f7da851cf3a`, remains `in_progress`. Job `140320786399` has setup/checkout/Python setup completed; apt dependency installation is active. Formal tests and benchmark have not started; no artifact.
 - Next: continue polling until the unit-test stage completes; inspect the proof log and negative tamper result before interpreting any benchmark. No proof or PPA result yet.
 
 
-## 38. Run #220 setup poll — 2026-11-27T05:04:30Z
+## 38. Run #220 setup poll — 2026-11-27T04:57:13Z
 
 - Run #220 remains in progress; dependency installation step 4 is still active. Formal tests and benchmark remain pending. No artifacts or metrics.
 - No code or workflow changes in this poll. Continue monitoring exact job state; do not infer a proof outcome from setup duration.
 
 
-## 39. Run #220 failed at unit tests — 2026-11-27T05:05:00Z
+## 39. Run #220 failed at unit tests — 2026-11-27T04:57:22Z
 
 - Run #220 `45942838109` has failed at step 9 (`Run unit tests`) after setup and cached OpenSTA verification succeeded. Benchmark and artifact steps were skipped. Job `140320786399`.
 - Exact test failure is not yet inspected; fetch completed job logs next. No proof pass, benchmark run, or artifact exists from this run.
 
 
-## 40. Run #220 heap-lemma failure diagnosis — 2026-11-27T05:06:00Z
+## 40. Run #220 heap-lemma failure diagnosis — 2026-11-27T04:57:43Z
 
 - Retrieved completed Run #220 job logs. The new compositional test ran 64 tests in 2.863s; 63 passed and the fused compositional test errored during the symbolic heap lemma.
 - Important positive result: the standalone 4x4 signed Baugh-Wooley lane lemma completed successfully; the test advanced into `_run_equivalence` for `orcus_heap_gate`. Thus the lane-level multiplier identity did prove under the partitioned Yosys flow.
@@ -449,10 +449,105 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #19 remains open/unmerged. Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.
 
 
-## 41. Heap proof matching refinement — 2026-11-27T05:07:00Z
+## 41. Heap proof matching refinement — 2026-11-27T04:58:21Z
 
 - PR branch head advanced through `2555c279c270dd1eba9e163dcb5bb41aec98dc08` and `92cc4ea77d066d5576e747ece5b36ef96308c128` to disable `equiv_struct -icells` for the symbolic heap lemma and the negative tamper proof. The lane multiplier lemma retains structural matching because it passed in Run #220.
 - Reason: Run #220's heap proof produced 37 unproven equivalence cells after `equiv_struct` made unsuitable internal matches between the arithmetic sum and compressor network. The heap should be compared at its complete 10-bit output only; `equiv_simple -v; equiv_status -assert` is now used there.
 - Commit `0fd9465315675ce7042486d01a789c127b3138c0` clarifies the distinct proof sequence in the recorded proof-method string.
 - This is a diagnostic refinement only. No CI has yet tested this output-only heap proof. Run #220 remains failed; no benchmark artifact or fused PPA data.
 - Next: sync latest main STATUS/ancestry to the PR branch with a non-force merge commit, trigger a fresh run, and inspect the heap proof. Do not assert success until the negative tamper is rejected.
+
+
+## 42. Heap proof refinement synchronized to PR branch — 2026-11-27T04:58:42Z
+
+- Advanced `research/orcus-fused-int4-mac` to non-force two-parent merge commit `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`.
+- Parents: previous PR head `0fd9465315675ce7042486d01a789c127b3138c0` and main head `e54958cbcce4e94ec453383bcfcf64df82a41c7d`. Merge tree `3f6f65e6f61ab29ea2b02f54822d16fc8e1aa967` includes current main STATUS blob and preserves the output-only heap proof change and negative test.
+- Branch ref update succeeded with `force=false` and expected-head protection. This is a main-to-PR-branch sync, not a PR merge.
+- Next: confirm new automatic PR CI run for head `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`; then inspect whether output-only heap equivalence proves and the tampered output is rejected.
+
+
+## 43. PR #19 CI Run #224 started — 2026-11-27T04:58:52Z
+
+- Automatic PR Run #224 confirmed: ID `45943017177`, branch head `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`, event `pull_request`, currently `in_progress`.
+- PR #19 remains open/unmerged; direct GitHub API reports mergeability `unknown` during recalculation. Base SHA `e54958cbcce4e94ec453383bcfcf64df82a41c7d`.
+- Next: monitor Run #224 unit tests and benchmark. Required evidence: lane lemma pass, output-only symbolic heap lemma pass, negative one-bit tamper rejection, then all six variants' formal proof, 512 unique vectors, VCD pin activity, and all four power components.
+- No new proof or PPA result yet; Milestone #1 open and Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 44. Run #224 setup progress — 2026-11-27T04:59:01Z
+
+- Run #224 `45943017177` remains `in_progress` on exact head `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`. Job `140321357589`: setup, checkout, and Python setup passed; apt dependency installation is active. Unit tests and benchmark have not started; no artifact.
+- Next: poll the unit-test stage and inspect logs once available. No proof pass or PPA result yet.
+
+
+## 45. Run #224 cache progress — 2026-11-27T04:59:10Z
+
+- Run #224 remains `in_progress`; apt dependencies succeeded and step 5 (pinned CUDD/OpenSTA cache restore) is active. Unit tests and benchmark remain pending; no artifact.
+- No new proof outcome or metrics. Continue monitoring; inspect the formal stage only after it starts/completes.
+
+
+## 46. Run #224 unit tests started — 2026-11-27T04:59:18Z
+
+- Run #224 setup and cached OpenSTA verification passed; unit-test step 9 is now in progress. Benchmark, artifact, and smoke steps remain pending.
+- The new proof sequence under test is: signed 4x4 Baugh-Wooley lane lemma with structural matching; 10-bit symbolic heap lemma with structural matching disabled; one-bit output tamper must fail the same output-only heap proof.
+- No test result is available yet. Next: wait for step 9 completion and inspect logs before treating the proof as successful.
+
+
+## 47. Run #224 unit-test poll — 2026-11-27T04:59:27Z
+
+- Run #224 remains in progress at unit-test step 9. All setup/cache steps passed; benchmark and artifact steps remain pending.
+- No unit-test log or subprocess-level proof stage is available from the step summary. The symbolic heap proof may still be running within its 60-second test timeout. No pass/failure inference yet.
+- Next: poll for step transition and retrieve logs after completion. No code changes in this poll.
+
+
+## 48. Run #224 continued formal test poll — 2026-11-27T04:59:36Z
+
+- Run #224 is still `in_progress` at step 9. No test result or artifact is published.
+- The configured 60-second per-proof timeout has not yet been confirmed as reached from the available step summary. Do not treat elapsed wall time or an unchanged step as a formal timeout without the job log.
+- Next: retrieve completed job logs once step 9 exits; if the output-only heap proof times out, record the exact elapsed time and consider a more strongly decomposed arithmetic proof rather than increasing the timeout blindly.
+
+
+## 49. Run #224 latest state — 2026-11-27T04:59:53Z
+
+- Latest observed state: Run #224 `45943017177` remains `in_progress` at unit-test step 9. Steps 1–8 succeeded or were skipped from cache. Steps 10–14 remain pending; artifact list empty.
+- The exact previous unit-test attempt Run #220 failed because `equiv_struct -icells` left 37 heap equivalence cells unproven. The current Run #224 tests the refined output-only heap proof and one-bit tamper rejection. Its result is not yet available.
+- No new proof PASS, negative-test rejection, benchmark artifact, or fused PPA values exist. Keep PR #19 open/unmerged. Milestone #1 remains open; Milestone #2 (8/16/32 lanes) blocked until full four-lane proof and six-variant evidence are complete.
+- Next: inspect completed Run #224 logs; if unit tests pass, inspect benchmark output/artifact for all six variants, 512 unique xorshift32 vectors, nonzero VCD annotation, and all four OpenSTA power components. If unit tests fail, preserve exact failure and refine the proof; do not claim a pass.
+- Timestamp correction: section timestamps 34–48 were corrected to the actual UTC commit creation times of their corresponding STATUS commits. Earlier displayed 05:xx labels were estimates and were not actual event timestamps.
+- Current STATUS update is on main. Ceres untouched; NEM separate; ORCUS v0.2 remains intact.
+
+
+## 50. Run #224 completed with unit-test failure — 2026-11-27T05:00:49.992Z
+
+- Run #224 / ID `45943017177` completed with conclusion `failure`. Job `140321357589` failed at step 9 (`Run unit tests`). Setup and cached OpenSTA verification succeeded; compile, benchmark, artifact upload, and smoke steps were skipped.
+- No artifact is available. Exact unit-test failure has not yet been inspected; next retrieve the completed job logs and identify whether output-only heap equivalence timed out or returned unproven partitions.
+- No formal PASS, negative tamper rejection, fused PPA metrics, or six-variant table can be claimed from Run #224. Milestone #1 remains open; Milestone #2 blocked. PR #19 remains open/unmerged.
+
+
+## 51. Run #224 exact heap-proof timeout — 2026-11-27T05:01:26.329Z
+
+- Retrieved completed job logs for Run #224 `45943017177`, job `140321357589`. The suite ran 64 tests; the fused compositional equivalence test errored and the remaining 63 tests passed.
+- The 4x4 Baugh-Wooley lane lemma again completed successfully. The output-only symbolic heap lemma then timed out after `60.06s` with command:
+  `read_verilog reference.v candidate.v; proc; equiv_make reference orcus_heap_gate equiv; hierarchy -top equiv; clean -purge; equiv_simple -v; equiv_status -assert`.
+- Exact exception: `FORMAL_EQUIV_TIMEOUT: Yosys partitioned equivalence exceeded 60s for orcus_heap_gate; elapsed=60.06s`. Disabling `equiv_struct` removed the false internal matching problem but did not make the full 64-input heap SAT proof tractable.
+- Benchmark and artifact steps were skipped; no fused metrics or complete six-variant table. Negative tamper test was not reached.
+- Next proof strategy to evaluate: ABC's dedicated combinational equivalence checker (`cec`) on flattened AIGs, or a rigorously compositional compressor-stage proof using local full-adder lemmas. Do not simply increase timeouts or claim equivalence. Preserve both failed Yosys attempts and their exact evidence.
+- PR #19 remains open/unmerged; latest branch head at Run #224 is `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 52. ABC CEC proof strategy researched — 2026-11-27T05:01:38.776Z
+
+- After Run #224, both full-output Yosys equivalence and output-only heap equivalence have timed out; the lane-only 4x4 lemma passes. No PPA benchmark has run on this branch.
+- Reviewed ABC's documented `cec` command, which compares the primary-input/primary-output behavior of two networks and uses a hybrid FRAIG/SAT approach by default. Next strategy: export the full direct-reference and fused candidate designs to AIGER with Yosys, then run ABC `cec` on the two AIGs. Preserve exact PI order/names and require an explicit equivalent verdict; treat inequivalent, unknown, or timeout as failure.
+- Add the same one-bit output tamper as a negative CEC control. This is only a proposed next experiment; it has not yet run and no proof claim is made.
+- PR #19 remains open/unmerged; branch head from Run #224 `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 53. Full-design ABC CEC implementation committed — 2026-11-27T05:02:03.145Z
+
+- PR branch commits `336e8a1465272ff3dd71159bdfd87121c1b93291` and `3088d9538f8b741d431a9bad6601848bb2c40b46` replace the timed-out Yosys SAT/compositional fused proof with Berkeley ABC's dedicated `cec` checker on two full-design AIGER exports.
+- For each design, Yosys runs `read_verilog; hierarchy -top; proc; flatten; techmap; opt; aigmap; write_aiger -ascii -symbols`. ABC then runs `cec -T <timeout> reference.aig candidate.aig`. Input and output names/order are kept identical by generating both modules from the same port contract.
+- The proof compares complete primary-input/primary-output behavior for the original 32 input bits and all 10 output bits. An affirmative ABC verdict is required; an inequivalent, undecided, missing verdict, process failure, or timeout is fail-closed.
+- The negative test now flips output bit 0 in the full fused RTL and requires ABC CEC to report `Networks are NOT EQUIVALENT`. Both positive and negative checks are configured with a 120-second timeout in unit tests; benchmark formal timeout remains 300 seconds.
+- This is a new proof strategy under test, not a verified pass. Run #224 remains failed due to the 60.06-second output-only heap SAT timeout; no benchmark artifact or fused PPA data exists. Next: synchronize main STATUS/ancestry to the PR branch and run fresh CI on the ABC CEC implementation.
+- Milestone #1 remains open; Milestone #2 (8/16/32 lanes) blocked. PR #19 remains open/unmerged. Ceres untouched; NEM separate.

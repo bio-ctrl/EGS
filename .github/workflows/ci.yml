@@ -100,3 +100,40 @@ jobs:
 
       - name: Verify benchmark targets
         run: python -m orcus benchmark --max-gates 7 --output /tmp/orcus-ci-smoke.jsonl
+
+  fpga-ecp5:
+    name: ORCUS FPGA ECP5 place-and-route
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned Yosys and nextpnr ECP5 toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yosys=0.33-5build2 nextpnr-ecp5=0.6-3build5 nextpnr-ecp5-chipdb=0.6-3build5
+          yosys -V
+          nextpnr-ecp5 --version
+
+      - name: Test FPGA wrapper and report parser
+        run: python -m unittest discover -s tests -p 'test_fpga_ecp5.py' -v
+
+      - name: Run 4/8/16/32-lane ECP5 synthesis and place-and-route
+        run: |
+          python -u benchmarks/fpga_ecp5.py --require-tools --freq 100 --seed 1 \
+            --outdir /tmp/orcus-fpga-ecp5/runs \
+            --output /tmp/orcus-fpga-ecp5/results.json
+
+      - name: Upload ECP5 FPGA implementation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orcus-fpga-ecp5-pnr
+          path: /tmp/orcus-fpga-ecp5
+          if-no-files-found: warn

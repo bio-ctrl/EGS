@@ -2075,3 +2075,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before this diagnostic. STATUS blob: 55d09afa5ef6f050a781508e9a44aa21e987cb10.
 - Queried workflow runs associated with source correction commit 8b7d9729a3d8eeb4a1986245fab56d3fe1c59164. The commit-workflow wrapper returned an empty list; that wrapper is documented to filter to pull-request-triggered runs, so this does not establish that a main push workflow did not run.
 - Next query the repository-wide Actions runs collection and filter by exact head SHA/event=push. No FPGA CI conclusion or P&R evidence yet. Ceres untouched; NEM distinct.
+
+
+## 235. FPGA source-fix push CI Run #260 failed — 2026-11-27T07:02:14.987Z
+
+- Re-read main STATUS before workflow lookup. STATUS blob: eec5acb9699589bfc6895efdf49615ded0dd73cb.
+- Repository-wide Actions run listing found main push Run #260, ID 45955602117, exact source-correction head 8b7d9729a3d8eeb4a1986245fab56d3fe1c59164, created 2026-11-27T07:01:11Z, completed with conclusion FAILURE. The PR-only commit-workflow wrapper returned empty because this was a push event.
+- The run must be diagnosed by its exact job/step logs before making further source changes. The new FPGA job may be the failure source, but this is not yet confirmed. No P&R result claimed. Ceres untouched; NEM distinct.

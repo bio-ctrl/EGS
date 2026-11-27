@@ -1699,3 +1699,12 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Current main ref at diagnostic: d100b35ed109dfa20c4f53ed7e4c77e77b545422; its tree: dee1449e346d27cd3e62306245774f1d0fc62c28.
 - PR #20 research branch ref: 0052c1895ec04524a9babf4ffe695955fdce99ce; its tree: 6bf888886ff20f5d24c18ae50367fd21cfb93fb9.
 - Current main STATUS blob at this diagnostic: 906dd484ce190c334f48428c5106269b684ea473. PR #20 remains unmerged; previous PR metadata reported mergeable=false and stale base 6cd44f34f36b0945680c279a87a4d8737daf33aa. Next action is a non-force two-parent ancestry sync that retains branch files while replacing STATUS.md with the main blob, then rerun CI on the new exact head.
+
+
+## 196. PR #20 branch ancestry and STATUS synchronized to main — 2026-11-27T06:43:55.170Z
+
+- Re-read main STATUS before this update. STATUS blob incorporated into the branch sync: 38f0a431625bfc20004b6e3300c6444b3473ed9a.
+- Main commit used as second parent: 05604d1a36b354a7127739281be58bdb75a64378. Prior PR branch head: 0052c1895ec04524a9babf4ffe695955fdce99ce.
+- Created non-force two-parent ancestry sync commit 35f45253dec3b0476d6c4f8977c9508b9df6005b with branch head as first parent and main as second parent; tree based on PR branch with STATUS.md replaced by main's exact blob. Updated research/orcus-int4-lane-scaling ref using force=false and expected_sha; GitHub returned success.
+- PR #20 now includes the audited scaling implementation and the main ancestry/STATUS state as of main 05604d1. The sync commit should trigger a fresh pull_request synchronize CI run. This record is on main and advances main beyond the branch's second parent by a STATUS-only commit; the branch has no subsequent STATUS edit, so the latest main STATUS remains the authoritative merge-side version.
+- Next verify exact new branch head and CI run; once CI success and PR mergeability are confirmed, merge PR #20 under the user's explicit conditional authorization. Do not start FPGA work until merge verified. Ceres untouched; NEM distinct.

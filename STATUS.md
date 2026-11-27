@@ -2000,3 +2000,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - nextpnr ECP5 packer reports logic LUTs and carry LUTs separately before packing; each CCU2C contributes two carry LUT stages. Yosys mapped JSON can count explicit LUT4, CCU2C and TRELLIS_FF cells; CCU2C count ×2 gives carry stages. Keep this distinct from post-pack slice/BEL utilization. Source: https://github.com/YosysHQ/nextpnr/blob/main/ecp5/pack.cc.
 - Use the Yosys JSON netlist cell map for exact pre-P&R LUT4, CCU2C, TRELLIS_FF, PFUMX, L6MUX21, MULT18X18D and TRELLIS_IO counts; use nextpnr post-route JSON for BEL utilization and achieved clock Fmax. Do not label a BEL count as LUT4s unless the cell type explicitly is LUT4.
 - No FPGA files changed. Next inspect the shared proof helper and then implement the wrapper generator, resource/report parser, tests, and a dedicated Ubuntu 24.04 job. Ceres untouched; NEM distinct.
+
+
+## 222. Four-lane Dadda formal path confirmed for FPGA matrix — 2026-11-27T06:57:56.139Z
+
+- Re-read main STATUS before proof-helper inspection. STATUS blob: 3af165bc8ccf3ac9a68ebfba8a4cb51da49a5091.
+- Inspected run_compositional_proofs in orcus/lane_scaling.py. It computes accumulator_width(lanes), generates the selected fused heap, audits the emitted RTL/manifest, checks candidate source contains the exact generated heap lines, then runs Yosys SAT for signed Baugh-Wooley lane identity, FA, HA and modulo-W CPA. It has no TARGET_LANES-only restriction, so it can formally verify the 4-lane/10-bit Dadda core as well as 8/16/32.
+- FPGA benchmark will run this proof for each Dadda lane count 4/8/16/32 before synthesis/P&R, using the exact core embedded in the clocked wrapper. Direct rows remain the baseline and will use the same wrapper, clock, target frequency and seed.
+- No FPGA code or P&R yet. Next create isolated benchmark/test files and append a separate Ubuntu 24.04 FPGA job without modifying existing ASIC benchmark steps. Ceres untouched; NEM distinct.

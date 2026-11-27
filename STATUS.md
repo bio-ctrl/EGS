@@ -1794,3 +1794,10 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Re-read main STATUS before this poll. STATUS blob: 7b2584d858bcb30bc227d35f428c7ba3a2ee925f.
 - Run #256 (45954312238), exact head 498ad66514f9de7dcc5cc775eb8ddcaf4fd4fb99, remains in_progress at step 14 scaling benchmark. Steps 1–13 succeeded, including unit tests, compileall, Liberty fetch, four-lane benchmark and upload. Steps 15–16 pending.
 - Four-lane artifact ID 15177987185 uploaded; scaling artifact not yet available. PR raw mergeability recalculated to null/unknown while checks run; normalized wrapper reports false. Do not merge while step 14 is active. Ceres untouched; NEM distinct.
+
+
+## 208. Run #256 scaling benchmark still running — 2026-11-27T06:50:47.733Z
+
+- Re-read main STATUS before this poll. STATUS blob: dbafe0cd47aae7b8c9d281e63ac30a1d937c3336.
+- Run #256 remains in_progress at step 14. All steps 1–13 remain successful; scaling artifact absent until step 15. No live failure/timeout reported. PR #20 raw mergeability remains null/unknown; no merge attempted.
+- Continue polling exact-head Run #256. Ceres untouched; NEM distinct.

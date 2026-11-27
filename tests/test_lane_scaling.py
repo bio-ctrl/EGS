@@ -35,6 +35,15 @@ class LaneScalingTests(unittest.TestCase):
                     self.assertEqual(audit["status"], "pass")
                     self.assertEqual(audit["lanes"], lanes)
                     self.assertEqual(audit["width"], accumulator_width(lanes))
+                    observed_bias = sum(
+                        1 << bit["column"] for bit in manifest["initial_bits"]
+                        if bit["kind"] == "constant"
+                    )
+                    width = accumulator_width(lanes)
+                    self.assertEqual(
+                        observed_bias % (1 << width),
+                        (lanes * baugh_wooley_bias(width)) % (1 << width),
+                    )
                     self.assertGreater(audit["full_adders"], 0)
                     self.assertGreater(audit["compressors"], 0)
                     self.assertEqual(manifest["schedule"], schedule)

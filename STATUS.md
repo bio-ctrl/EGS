@@ -1318,3 +1318,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Synced main cfda9ee95121292132322a86f6529aebb2633281 and current STATUS blob into research/orcus-int4-lane-scaling via non-force two-parent commit f6144e9e5e10bab4d2bb5b2c9b0df232764571b8. Expected-head update succeeded.
 - Verified branch contains the 25,539-byte parameterized generator, 12,928-byte scaling benchmark with repository-root import path, six-test suite, and CI scaling benchmark/artifact steps.
 - Next create the Milestone #2 pull request from research/orcus-int4-lane-scaling into main. CI has not run on this branch yet. No measured 8/16/32-lane results exist.
+
+## 150. Milestone #2 PR creation payload syntax failure — 2026-11-27T06:09:10.223Z
+
+- Attempted to create the lane-scaling PR. The JavaScript payload failed to parse because the body string included malformed backtick concatenation. No PR was created and no repository state changed.
+- Retry with a plain quoted PR body and verify the resulting PR number/head.

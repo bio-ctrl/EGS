@@ -1127,3 +1127,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Merge parents: verified FA+HA implementation source `df08d3a0259817204a7d7ca348d06a65f5edef2e` first; main `c0e153e2cb7e24c9ca90344528711287e8b5164c` second. Expected-head-protected update succeeded.
 - The synced branch now contains the Run #244 final artifact audit and full six-variant comparison in STATUS. This STATUS-only merge may trigger another PR workflow; Run #244 remains the verified implementation/benchmark run for the pre-sync source tree.
 - Next: recheck PR #19 mergeability and latest branch head. Do not merge without explicit authorization. Milestone #1 technical evidence complete; Milestone #2 planning may proceed, with scaling proof runtimes measured rather than assumed.
+
+
+## 119. Final PR #19 mergeability and CI confirmation — 2026-11-27T05:43:33.068Z
+
+- Raw GitHub PR API for PR #19 reports `mergeable=true`, `mergeable_state=clean`, base `c0e153e2cb7e24c9ca90344528711287e8b5164c`, head `50afab04361308c74254d5466e0d6c0b1638ffae`. The simplified PR metadata wrapper had returned stale `false`; raw API is authoritative and shows clean/mergeable. PR remains open and unmerged.
+- STATUS/ancestry sync commit `50afab04361308c74254d5466e0d6c0b1638ffae` triggered Run #245, ID `45947359445`, exact head `50afab04361308c74254d5466e0d6c0b1638ffae`; Run #245 completed success. All 14 workflow steps including unit tests, compileall, benchmark, artifact upload, and smoke verification passed.
+- Run #244 artifact remains the fully audited measurement source for the FA+HA graph. Run #245 is the post-sync CI confirmation. No PR merge was performed; explicit user authorization is still required.
+- Milestone #1 four-lane proof and benchmark evidence complete. Milestone #2 may proceed as a separate scaling research milestone: 8 lanes/11-bit accumulator, 16 lanes/12-bit, 32 lanes/13-bit. Revalidate formal lemmas and graph invariants at each width; benchmark actual runtimes rather than assume they stay sub-second. Compare direct, multi-stage carry-save, and fused Baugh-Wooley.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

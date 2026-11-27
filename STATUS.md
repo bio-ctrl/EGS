@@ -2082,3 +2082,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before workflow lookup. STATUS blob: eec5acb9699589bfc6895efdf49615ded0dd73cb.
 - Repository-wide Actions run listing found main push Run #260, ID 45955602117, exact source-correction head 8b7d9729a3d8eeb4a1986245fab56d3fe1c59164, created 2026-11-27T07:01:11Z, completed with conclusion FAILURE. The PR-only commit-workflow wrapper returned empty because this was a push event.
 - The run must be diagnosed by its exact job/step logs before making further source changes. The new FPGA job may be the failure source, but this is not yet confirmed. No P&R result claimed. Ceres untouched; NEM distinct.
+
+
+## 236. Run #260 FPGA CI failure diagnosed — 4-lane width guard — 2026-11-27T07:02:53.887Z
+
+- Re-read main STATUS before job-log diagnosis. STATUS blob: 32a2118598ab0bce00a2871720971694c490bef9.
+- Main push Run #260 (45955602117), source head 8b7d9729a3d8eeb4a1986245fab56d3fe1c59164, failed both jobs. FPGA job 140361234602 installed pinned Yosys 0.33 (git sha1 2584903a060) and nextpnr-ecp5 0.6-3build5 successfully, then failed wrapper tests at step 5. P&R step 6 was skipped. Existing ASIC job unit tests also failed because it runs the shared full suite.
+- Exact error in tests/test_fpga_ecp5.py lines 15 and 19: accumulator_width(4) raises ValueError because orcus/lane_scaling.py restricts lane counts to TARGET_LANES=(8,16,32). The FPGA matrix needs 4 lanes/10-bit accumulator; the general helper currently blocks this additional use. Full suite: 79 tests, errors=2; all other tests passed. No FPGA artifact or P&R measurements were generated.
+- Fix: extend accumulator_width to accept 4 as an additional supported width-contract input while leaving TARGET_LANES=(8,16,32) unchanged for the Milestone #2 ASIC benchmark. Add a regression assertion for 4→10 and preserve invalid-count rejection. Then rerun CI. This is a parameter-validation issue, not a synthesis or routing failure. Ceres untouched; NEM distinct.

@@ -2575,3 +2575,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Inspected jobs, step summaries, and artifact metadata for Run #262 (ID `45955978365`, head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`). Its successful ECP5 job runs the existing combinational `benchmarks/fpga_ecp5.py` step and uploads `orcus-fpga-ecp5-pnr` (artifact ID `15179161047`, 1,297,789 bytes). The job has no pipeline unit-test, sequential SAT, streaming, or pipelined P&R steps.
 - Run #262 therefore remains the immutable combinational reference only; it cannot satisfy PR #22 validation. The baseline artifact is available for a separate metrics audit if needed. This run's ECP5 job and the separate general test job both completed successfully.
 - No pipeline result can be extracted from this artifact. No repository source or PR state changed. Next: obtain the actual PR #22 run ID/URL, then inspect its own jobs and dedicated `orcus-fpga-ecp5-pipelined-dadda` artifact. Do not substitute the baseline artifact or change the Draft PR state.
+
+
+## 290. Run #262 baseline logs and artifact downloaded for comparison — 2026-11-27T23:46:06.797Z
+
+- Fetched the completed ECP5 job log for Run #262 job `140362432705` and downloaded its baseline artifact `orcus-fpga-ecp5-pnr` (artifact ID `15179161047`) as `run262-ecp5-baseline.zip` in the working environment.
+- The job log contains raw nextpnr JSON timing-path details, resource counts, and utilization data. A representative tail fragment shows LUT4=2400, TRELLIS_FF=269, MULT18X18D=0 for one configuration, but the log includes multiple lane configurations and this fragment is not assigned to a lane here. No lane-level table is published from this partial extraction.
+- The detailed path JSON includes per-element `type` fields (logic/routing) and delays, but a complete lane-by-lane decomposition still requires structured parsing of each report/artifact. No pipeline comparison is possible without PR #22's own run.
+- This diagnostic only read/downloaded the immutable Run #262 evidence; no repository source, baseline, PR, Ceres, or NEM state changed. Next parse the baseline artifact/log by lane and preserve raw source data. Do not treat this baseline as pipeline evidence.

@@ -54,9 +54,9 @@ jobs:
           git clone --filter=blob:none --no-checkout https://github.com/parallaxsw/OpenSTA.git /tmp/opensta-src
           git -C /tmp/opensta-src fetch --depth 1 origin 28d7a0b5123d59cbff8c1def4e3830c840fe5d50
           git -C /tmp/opensta-src checkout --detach 28d7a0b5123d59cbff8c1def4e3830c840fe5d50
-          cmake -S /tmp/opensta-src -B /tmp/opensta-build \
-            -DCUDD_DIR=/tmp/cudd-install \
-            -DCMAKE_INSTALL_PREFIX=/tmp/opensta-install \
+          cmake -S /tmp/opensta-src -B /tmp/opensta-build \\
+            -DCUDD_DIR=/tmp/cudd-install \\
+            -DCMAKE_INSTALL_PREFIX=/tmp/opensta-install \\
             -DCMAKE_BUILD_TYPE=Release
           cmake --build /tmp/opensta-build --parallel 2
           cmake --install /tmp/opensta-build
@@ -88,3 +88,5 @@ jobs:
 
       - name: Verify benchmark targets
         run: python -m orcus benchmark --max-gates 7 --output /tmp/orcus-ci-smoke.jsonl
+
+# CI re-trigger marker: no workflow behavior changed; this commit requests a fresh PR synchronize event.

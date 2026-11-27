@@ -2539,3 +2539,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Queried the GitHub Actions runs API filtered to branch `research/orcus-ecp5-dadda-pipeline` with `per_page=100`. GitHub returned `total_count=0` and no runs.
 - Combined with the exact-head query and empty commit statuses, this confirms no workflow run is visible for PR #22 or its branch. The PR remains draft. No test or P&R evidence exists. Next continue static review and report the manual Actions UI requirement unless an authorized trigger operation becomes available; do not change PR out of draft without authorization.
+
+
+## 285. Actions settings endpoint unavailable through connector — 2026-11-28T05:43:00Z
+
+- Attempted a read-only GET of the repository Actions permissions endpoint to diagnose why PR #22 has no workflow run. The GitHub fetch integration rejected this endpoint as not allow-listed (HTTP 400); no repository or PR state changed.
+- No workflow-dispatch or Actions-settings read/write operation is exposed by the available integration. The current evidence remains: PR #22 open/draft, exact branch has zero Actions runs, and the exact head has no commit statuses. A human with repository Actions access may need to inspect the Actions tab/settings and manually run the workflow.

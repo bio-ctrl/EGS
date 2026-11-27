@@ -411,3 +411,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Parents: prior PR branch head `408324aed545acc65a25a0ee6a6640a150c3b3d0` and main head `d98c691836252141230c66a2ebb1b2df823798da`. Merge tree `2f40a87a9779fda6247aad947a1dcffa47ce3966` includes main's current STATUS blob and preserves the PR branch proof code/tests.
 - Branch ref advanced with `force=false` and expected-head check. No PR merge. New branch head: `e646fb171fffcba9483c98108f168f7da851cf3a`.
 - Next: verify a fresh automatic PR CI run for this exact head; monitor unit tests first. Do not claim Run #216's failed proof is repaired until the new positive/negative tests pass.
+
+
+## 36. New compositional-proof CI Run #220 started — 2026-11-27T05:03:00Z
+
+- Fresh automatic PR run confirmed for compositional proof branch head `e646fb171fffcba9483c98108f168f7da851cf3a`: Run #220, ID `45942838109`, event `pull_request`, status `in_progress`, created `2026-11-27T04:56:39Z`.
+- PR #19 remains open/unmerged. Direct API reports mergeability `null` / state `unknown` during recalculation; do not infer clean/conflicting state.
+- Next: inspect Run #220 job step progress and completed logs. The expected gate is the positive lane lemma, positive symbolic heap lemma, and negative one-bit tamper rejection. Benchmark only runs if the unit-test suite passes.
+- No proof pass, fused PPA result, or Milestone #1 closure yet. Milestone #2 (8/16/32 lanes) remains blocked. Ceres untouched; NEM separate.

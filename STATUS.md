@@ -2400,3 +2400,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Inspected the newly committed `orcus/dadda_pipeline.py` after addition. Found a manifest-construction issue: stage-boundary snapshots were not being stored cleanly because compressor and boundary records shared one list.
 - Corrected the branch file in commit `847814af55c8c797d8f9e86989477e2d7b2bc379`: compressor records and boundary records are now separate, and each boundary records its complete input heap, output heap, registered heap, target height, and register count. This keeps unchanged/pass-through tokens explicit in the manifest.
 - This is a source correction only. The generator has not been executed; latency values, Verilog syntax, formal behavior, and resource/timing outcomes remain unverified. Next add unit-level generator/manifest checks and a dedicated sequential formal + streaming runner. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.
+
+
+## 264. Sequential formal and streaming validation harness added — 2026-11-27T23:35:00Z
+
+- Added `benchmarks/dadda_pipeline.py` to `research/orcus-ecp5-dadda-pipeline` in commit `3eb96dadfabeb6bd4d17dd0cb92e745cb306f50e`.
+- The harness generates a sequential reference miter for each lane count, compares DUT `out_valid` and valid-qualified `out_data` against a delayed direct-arithmetic reference, and invokes Yosys bounded sequential SAT at depth `2*L+4`. It also generates a back-to-back deterministic 512-vector Icarus streaming test with latency checks and flush checks. The seed is fixed at `0x0C0FFEE` with per-lane deterministic streams.
+- This harness has not yet been run. Its generated Verilog and signed-literal formatting require review before CI is wired. No formal PASS or streaming PASS is claimed. Next inspect/fix testbench source generation, then run via GitHub Actions after CI integration. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.

@@ -522,3 +522,14 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #224 / ID `45943017177` completed with conclusion `failure`. Job `140321357589` failed at step 9 (`Run unit tests`). Setup and cached OpenSTA verification succeeded; compile, benchmark, artifact upload, and smoke steps were skipped.
 - No artifact is available. Exact unit-test failure has not yet been inspected; next retrieve the completed job logs and identify whether output-only heap equivalence timed out or returned unproven partitions.
 - No formal PASS, negative tamper rejection, fused PPA metrics, or six-variant table can be claimed from Run #224. Milestone #1 remains open; Milestone #2 blocked. PR #19 remains open/unmerged.
+
+
+## 51. Run #224 exact heap-proof timeout — 2026-11-27T05:01:26.329Z
+
+- Retrieved completed job logs for Run #224 `45943017177`, job `140321357589`. The suite ran 64 tests; the fused compositional equivalence test errored and the remaining 63 tests passed.
+- The 4x4 Baugh-Wooley lane lemma again completed successfully. The output-only symbolic heap lemma then timed out after `60.06s` with command:
+  `read_verilog reference.v candidate.v; proc; equiv_make reference orcus_heap_gate equiv; hierarchy -top equiv; clean -purge; equiv_simple -v; equiv_status -assert`.
+- Exact exception: `FORMAL_EQUIV_TIMEOUT: Yosys partitioned equivalence exceeded 60s for orcus_heap_gate; elapsed=60.06s`. Disabling `equiv_struct` removed the false internal matching problem but did not make the full 64-input heap SAT proof tractable.
+- Benchmark and artifact steps were skipped; no fused metrics or complete six-variant table. Negative tamper test was not reached.
+- Next proof strategy to evaluate: ABC's dedicated combinational equivalence checker (`cec`) on flattened AIGs, or a rigorously compositional compressor-stage proof using local full-adder lemmas. Do not simply increase timeouts or claim equivalence. Preserve both failed Yosys attempts and their exact evidence.
+- PR #19 remains open/unmerged; latest branch head at Run #224 is `6f9c13eb45bb812eee523a1ea53cc02a01651bd9`. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM separate.

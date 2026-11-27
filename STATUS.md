@@ -1272,3 +1272,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Created uncommitted benchmark blob benchmarks/int4_lane_scaling.py, SHA 7c3ff788061b2d76794b963650b980c101c9d287 (12,855 bytes). It defines the 12-run matrix: 8/16/32 lanes × Direct / multi-stage carry-save / fused linear / fused Dadda; each run performs formal proof, generic synthesis, Nangate45 mapping, 512 unique xorshift32 vectors with simulation assertions, VCD toggle checks, OpenSTA timing and four-component power, and stage timing capture.
 - Code review caught one packaging issue before commit: script must add repository root to sys.path before importing orcus.lane_scaling when invoked as a script from benchmarks/. Fix this before committing.
 - No source commit or CI run yet. Ceres untouched; NEM distinct.
+
+## 142. Scaling benchmark import-path fix drafted — 2026-11-27T06:02:57.708Z
+
+- Retrieved benchmark draft blob 7c3ff788061b2d76794b963650b980c101c9d287, inserted repository-root sys.path setup before importing orcus, and created corrected blob 3752360638a608849239624bb2f70d3b98441caf (12,928 bytes).
+- Corrected blob remains uncommitted. Next add focused tests for accumulator-width/bias derivation, graph audit at both schedules and all scales, tamper rejection, SAT lemmas, and Yosys direct/CSA equivalence.

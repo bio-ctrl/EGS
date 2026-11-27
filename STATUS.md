@@ -736,3 +736,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #19 metadata still reports `mergeable=false` after the ancestry sync. It remains open/unmerged. Do not represent STATUS sync as proof that mergeability is true.
 - No SAT result, tamper-test result, proof runtime, benchmark stage timing, artifact, or PPA data is available at this poll.
 - Next: continue polling Run #231 and inspect the unit-test logs as soon as step 9 completes. Ceres untouched; NEM distinct; baseline intact.
+
+
+## 77. Run #231 unit-test failure — 2026-11-27T05:23:26.832Z
+
+- Run #231 `45945384577`, job `140328775094`, exact branch head `6d11c50eadcf36d56b756578d505d75248791130` failed at unit-test step 9. Dependency/cache/OpenSTA verification passed. Python compilation, Nangate45 fetch, benchmark, artifact upload, and smoke verification were skipped.
+- Full logs show 67 tests: 64 passed, 2 failed, 1 errored. The compositional audit exposed a manifest schema bug: the generator placed compressor-output records in `initial_bits` as well as recording them as compressor nodes. The auditor correctly rejected the unexpected `compressor_sum` kind before running SAT lemmas. Consequently the carry-weight and output-tamper tests also failed early for that same schema issue; the partial-product polarity tamper test passed.
+- No SAT lemma ran to completion; no proof runtime, benchmark stage timing, artifact, or PPA data exists. This is a software/manifest classification defect, not evidence of arithmetic inequivalence.
+- Next: fix manifest serialization so `initial_bits` contains only partial-product and constant-bias sources; compressor sum/carry nodes remain exclusively in compressor records. Strengthen the audit to require the exact expected initial PP/bias ID set. Re-run unit tests in fresh CI and inspect all four SAT lemma verdicts and all three negative tests. Do not start/claim benchmark results until the proof suite passes.
+- PR #19 remains open/unmerged; latest known GitHub metadata still `mergeable=false`. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.

@@ -785,3 +785,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - No SAT lemma completed; the failure occurs in graph/RTL audit before SAT invocation. No proof runtime, benchmark artifact, stage timing, or PPA data exists.
 - Next: inspect the exact emitted FA declaration and manifest operand order around `fa_24`; reconcile the auditor's parsed RTL expressions with the generator's emitted expression representation. Keep audit fail-closed. Then rerun all tests. Do not relax the check or skip the failing node.
 - PR #19 remains open/unmerged; latest mergeability remains `false`. Run #231 and #233 failures are preserved. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 83. RTL audit tokenization fix committed — 2026-11-27T05:25:57.046Z
+
+- Corrected the second Run #233 audit defect on PR branch commit `ebb0c82601715fcb2a0425231fcbf7948736279f` (parent `1b2c502e056009f922d47bcab4c0b21f089c8107`). The auditor now maps typed constant-bias source IDs to the literal `1'b1` when comparing emitted FA sum/carry expressions and final-row wiring; signal-backed bits retain their declared wire names.
+- This directly addresses `full-adder sum equation mismatch: fa_24`, where the generator emitted constant input expressions but the auditor compared typed manifest IDs as if they were RTL identifiers. It also fixes the latent undefined `rtl_expr` reference in final-row checking.
+- Run #233 `45945601986` remains failed on its earlier head; 65/67 tests passed, with the compositional audit and output-tamper test blocked by the same audit-token mismatch. The polarity and carry-weight tamper tests passed. No SAT lemma ran and no benchmark/artifact exists.
+- Next: synchronize latest main STATUS onto the PR branch and inspect the next CI run. Require all four SAT lemmas, full graph audit, and all three tamper tests to pass before benchmarking. No proof runtime or scaling claim until measured.
+- PR #19 remains open/unmerged; last metadata `mergeable=false`. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact. Milestone #1 open; Milestone #2 blocked.

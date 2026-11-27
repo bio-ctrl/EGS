@@ -879,3 +879,12 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - The three negative tamper tests and compositional proof unit test passed at the unit-test stage; exact SAT lemma verdicts/timings and the benchmark failure cause require log inspection before stating them. Do not infer PPA data from test success.
 - Next: retrieve full Run #238 logs, identify exact benchmark-stage failure. If proof lemmas passed, record their timings; then fix only the demonstrated benchmark integration issue and rerun. No six-variant artifact or PPA result is confirmed yet.
 - PR #19 remains open/unmerged; no merge authorization. Ceres untouched; NEM distinct; baseline intact. Milestone #1 remains open until the full benchmark artifact is validated.
+
+
+## 96. Run #238 compositional SAT/tests PASS; script import failure — 2026-11-27T05:30:03.805Z
+
+- Full Run #238 `45946018320`, job `140330785714`, exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f` logs confirm all 67 unit tests passed, including `test_compositional_sat_proofs_and_heap_audit` and all three negative tamper tests (partial-product polarity, compressor carry weight, output bit). Python `compileall` also passed. The compositional proof unit test completed successfully; its observed test interval was approximately 0.075 s (from log timestamps), which includes audit and all four SAT lemmas. Exact per-lemma timings were not emitted in the unit-test log and remain to be recorded from the benchmark artifact.
+- Benchmark step failed immediately before entering the benchmark: `ModuleNotFoundError: No module named 'orcus'` at `benchmarks/signed_int4_dot_product.py:20`. Running a file directly sets `sys.path[0]` to the `benchmarks` directory, so the repository-root namespace package `orcus` is not importable in that execution mode. This is a Python import-path integration issue, not a proof failure.
+- Artifact upload and smoke verification were skipped. No six-variant synthesis, VCD, Nangate45, OpenSTA, stage timing, or PPA data exists from Run #238.
+- Next: fix script execution import path robustly (add repository root to `sys.path` before importing `orcus.typed_heap`, or relocate the module under benchmarks with proper package/script import handling), rerun CI, capture exact lemma runtimes in artifact, and complete six-variant benchmark. Milestone #1 remains open pending artifact review.
+- PR #19 remains open/unmerged. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

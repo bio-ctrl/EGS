@@ -263,13 +263,13 @@ def _parse_opensta_power_report(report: str) -> dict:
     power unit. Convert each component to microWatts for the benchmark schema.
     """
     power_match = re.search(
-        r"(?m)^Total\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+([-+0-9.eE]+)\\s+[-+0-9.eE]+%?\\s*$",
+        r"(?m)^Total\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+[-+0-9.eE]+%?\s*$",
         report,
     )
     if not power_match or "(Watts)" not in report:
         raise RuntimeError("OpenSTA report_power total row or Watts unit missing")
     internal_w, switching_w, leakage_w, total_w = (float(value) for value in power_match.groups())
-    annotation = re.search(r"(?m)^Annotated\\s+(\\d+)\\s+pin activities\\.", report)
+    annotation = re.search(r"(?m)^Annotated\s+(\d+)\s+pin activities\.", report)
     if not annotation or int(annotation.group(1)) <= 0:
         raise RuntimeError("OpenSTA did not confirm VCD pin activity annotation")
     scale = 1_000_000.0

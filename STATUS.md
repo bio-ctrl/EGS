@@ -389,3 +389,17 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Benchmark step 12 and artifact upload were skipped. No new fused metrics or six-variant table exist. This confirms that simply replacing the monolithic miter with output-bit partitioning is insufficient.
 - Next engineering step: decompose the proof compositionally. Independently prove the 4x4 signed Baugh-Wooley product identity (8-bit result) for one lane; then prove the shared 10-bit compressor heap against the sum of symbolic weighted partial-product inputs (no multipliers in that second proof). The composition of those lemmas must imply the complete 10-bit four-lane result. The negative tamper test must target the heap-level proof and be rejected. Keep the original failed attempts recorded.
 - PR #19 remains open/unmerged; branch head at the failed run is `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`. Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.
+
+
+## 34. Compositional proof decomposition implemented — 2026-11-27T05:01:00Z
+
+- After Run #216 showed that output-bit partitioning still timed out at 60.06s, the PR branch was updated with a compositional proof design:
+  1. A standalone 4x4 signed Baugh-Wooley lane module (8-bit output) is formally checked against signed multiplication.
+  2. A separate 10-bit heap module takes all 64 partial-product bits as unconstrained symbolic inputs. Its compressor network is formally checked against the arithmetic sum of those weighted inputs plus four `10'h390` lane corrections. This second lemma contains no multipliers.
+  3. The two lemmas compose: each lane's Baugh-Wooley expansion equals its signed product, and the shared heap equals the sum of all lane expansions, covering the original 32 operand bits and complete 10-bit result.
+- The heap proof generator reuses the exact `_fused_partial_product_lines(external_inputs=True)` compressor-generation function used by the fused RTL, preventing a separately hand-coded compressor from drifting from the implementation.
+- The negative control now inverts only output bit 0 in the heap implementation and requires the heap equivalence proof to reject it.
+- Python-side arithmetic cross-check enumerated all 256 pairs of 4-bit operands and confirmed the Baugh-Wooley 8-bit correction constant `8'h90` matches signed multiplication. This is a secondary local arithmetic check; formal equivalence remains the primary proof gate.
+- PR branch code commits: `031ca7fd378c2650cf5c4acb3add4db0eefc4abd` (lane/heap proof generators), `cb7494267f20566b55821538874ff337b072d2e4` (route fused candidate through compositional proof), `408324aed545acc65a25a0ee6a6640a150c3b3d0` (positive proof + one-bit negative test).
+- These changes have not yet run in CI. The prior Run #216 remains failed at unit tests; no proof pass or PPA data is claimed. Next: synchronize the latest main STATUS and ancestry to the branch, trigger a new PR CI run, inspect both positive lemmas and the negative tamper result, then benchmark only if all formal tests pass.
+- Milestone #1 remains open; Milestone #2 blocked. Ceres untouched; NEM separate.

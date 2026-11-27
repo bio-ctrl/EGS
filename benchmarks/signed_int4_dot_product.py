@@ -285,7 +285,11 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
         stage_timings = {}
         print(f"[ORCUS] {top}: partitioned formal equivalence starting (timeout={FORMAL_TIMEOUT_SECONDS}s)", flush=True)
         stage_start = time.perf_counter()
-        proof = _run_equivalence(candidate_text, reference_text, top, yosys)
+        proof = (
+            _run_fused_compositional_equivalence(yosys)
+            if top == "orcus_fused_partial_product"
+            else _run_equivalence(candidate_text, reference_text, top, yosys)
+        )
         stage_timings["formal_equivalence_seconds"] = time.perf_counter() - stage_start
         print(f"[ORCUS] {top}: partitioned formal equivalence finished in {stage_timings['formal_equivalence_seconds']:.2f}s", flush=True)
 

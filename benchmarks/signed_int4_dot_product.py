@@ -14,9 +14,11 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from orcus.typed_heap import generate_fused_heap, run_compositional_proofs
 
 LANES = 4

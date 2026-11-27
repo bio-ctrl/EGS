@@ -1292,3 +1292,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Attempted to create the lane-scaling test file and add the scaling benchmark/artifact steps to .github/workflows/ci.yml. The orchestration script referenced an undefined variable name while assembling the workflow patch, so execution stopped before either blob was created.
 - No branch or source changes occurred. Retry the workflow insertion with the correct variable and then create both blobs.
+
+## 146. Scaling tests and CI integration drafted — 2026-11-27T06:06:40.690Z
+
+- Created uncommitted test blob tests/test_lane_scaling.py, SHA 7a66b82fe04a42b02c66bdc939b1c46e853579a2 (4,421 bytes). It covers exact 8/11, 16/12, 32/13 width/bias contracts; linear/Dadda graph audits; three negative tamper cases at all targets; 512 unique deterministic vectors; all six fused schedule/scale compositional SAT proofs; and direct/carry-save Yosys equivalence at all targets.
+- Created uncommitted CI workflow blob .github/workflows/ci.yml, SHA 661175946b8b69f2324badd21eb544c1b7bd81a2 (3,998 bytes), adding required-tools/physical scaling benchmark execution and artifact upload.
+- Source and tests remain uncommitted. Next assemble these blobs with corrected generator and benchmark into one non-destructive branch commit, sync main STATUS, then run PR CI.

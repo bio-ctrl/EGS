@@ -753,3 +753,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - This fix addresses the observed `unexpected initial bit kind: compressor_sum` error. It is not yet verified by tests. Run #231 remains failed and historical; no rerun result is yet confirmed. No SAT lemma or benchmark has completed.
 - Next: sync latest main STATUS/ancestry to the branch and inspect the synchronize-triggered CI run for the new head. Confirm that the four SAT lemmas run and the three tamper tests reject the modified designs. If another failure appears, preserve exact logs and fix only the demonstrated issue. No runtime claim until measured.
 - PR #19 remains open/unmerged. Latest mergeability state from before this fix was `false`; recheck after sync. Ceres untouched; NEM distinct; baseline intact. Milestone #1 open; Milestone #2 blocked.
+
+
+## 79. PR #19 branch resynchronized after Run #231 fix — 2026-11-27T05:24:21.802Z
+
+- Synced latest `main` STATUS blob from `dac135dea73743d306c8c37d5720e3abe10265f5` and main ancestry `dac135dea73743d306c8c37d5720e3abe10265f5` into PR branch using non-force two-parent merge commit `1b2c502e056009f922d47bcab4c0b21f089c8107`.
+- Merge parents: branch fix commit `668122146ed2c546d0f47dc8ff53e3d2ba750d80` first, main `dac135dea73743d306c8c37d5720e3abe10265f5` second. Branch ref update succeeded with expected-head protection and `force=false`.
+- This new branch head should trigger PR CI. Run #231 `45945384577` remains failed on prior head `6d11c50eadcf36d56b756578d505d75248791130`; it is preserved as history. No proof pass or benchmark result is claimed.
+- Next: inspect PR metadata and Actions listing for exact head `1b2c502e056009f922d47bcab4c0b21f089c8107`; monitor tests and proof logs. Ceres untouched; NEM separate; ORCUS v0.2 baseline intact.

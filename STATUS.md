@@ -929,3 +929,13 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #240 `45946252250`, job `140331518211`, exact head `84635f54bdb885f6825d28c087687916d1072411`: setup/dependencies/cache/OpenSTA verification passed; all unit tests passed; Python compileall passed; Nangate45 Liberty fetch passed. Benchmark step 12 is now `in_progress`; artifact upload and smoke verification pending.
 - This is the first run to reach the benchmark after the typed heap proof unit test passed and the script import-path fix landed. No benchmark metrics/artifact are available until the stage completes.
+
+
+## 103. Run #240 baseline equivalence failure — 2026-11-27T05:32:14.624Z
+
+- Run #240 `45946252250`, job `140331518211`, exact head `84635f54bdb885f6825d28c087687916d1072411` failed during benchmark step 12, before the fused variant was reached. Unit tests (67/67), compileall, and Liberty retrieval passed.
+- Benchmark progression: direct variant passed formal, generic synthesis, mapping, 512/512 unique vectors, VCD/OpenSTA (area 574.56, delay 0.95 ns, total power 105.0206 µW; 259 annotated pins); left-deep variant passed the same stages (area 574.56, delay 0.95 ns, total power 105.0206 µW; 259 annotated pins). The run then failed formal verification for `balanced_01_23`.
+- Exact Yosys failure: `equiv_status -assert` reported 28 unproven equivalence cells after `equiv_struct -icells` structurally matched inappropriate internal nodes (log examples matched gold adder output bits to `p0_gold[7]`). This is an internal partition/cutpoint matching failure in the baseline variant, not a fused Baugh-Wooley counterexample. No fused benchmark or artifact was produced; no artifact upload.
+- The compositional proof test did pass in the unit suite. Its log interval was approximately 0.0756 s (from timestamps 05:29:12.4003378Z to 05:29:12.4759235Z), including four Yosys SAT lemmas and graph audit. This is a unit-test wall interval, not a per-lemma runtime breakdown. The three tamper tests all passed.
+- Next: inspect the baseline equivalence flow and remove/avoid unsafe structural matching for the product-level variants (e.g. test `equiv_simple` without `equiv_struct` or use a sound full-output miter); preserve fail-closed behavior. Then rerun CI. Do not change the fused proof or declare benchmark complete based on the two early variants.
+- PR #19 remains open/unmerged; GitHub last reported `mergeable=false`. Milestone #1 open; Milestone #2 blocked. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

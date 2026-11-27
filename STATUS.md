@@ -918,3 +918,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #240 `45946252250`, job `140331518211`, exact head `84635f54bdb885f6825d28c087687916d1072411` is `in_progress`. Setup, checkout, Python setup passed; dependency installation step 4 active. Unit tests and benchmark pending.
 - No new proof runtime, artifact, or PPA evidence. Continue monitoring.
+
+
+## 101. Run #240 dependency install poll — 2026-11-27T05:31:33.699Z
+
+- Run #240 `45946252250`, job `140331518211`, remains `in_progress`; dependency installation step 4 is still active. Unit tests and benchmark have not started. No new evidence.

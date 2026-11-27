@@ -116,7 +116,7 @@ def generate_fused_heap(lanes: int = 4, external_inputs: bool = False):
         "width": width,
         "arithmetic": "modulo-2^10",
         "lane_baugh_wooley_bias": "0x390 per lane",
-        "initial_bits": list(bits.values()),
+        "initial_bits": [item for item in bits.values() if item["kind"] in ("partial_product", "constant")],
         "compressors": compressors,
         "final_rows": rows,
         "truncated_top_carries": [
@@ -137,6 +137,10 @@ def audit_fused_heap(lines: list[str], manifest: dict) -> dict:
     bits = {item["id"]: item for item in manifest["initial_bits"]}
     if len(bits) != len(manifest["initial_bits"]):
         raise ValueError("duplicate initial bit IDs")
+    expected_ids = {f"pp_{lane}_{i}_{j}" for lane in range(manifest["lanes"]) for i in range(4) for j in range(4)}
+    expected_ids |= {f"bias_{lane}_{bit}" for lane in range(manifest["lanes"]) for bit in (4, 7, 8, 9)}
+    if set(bits) != expected_ids:
+        raise ValueError("initial bit set is incomplete, duplicated, or contains non-source nodes")
 
     declarations = {}
     for name, rhs in re.findall(r"(?m)^\s*wire\s+(\w+)\s*=\s*(.*);\s*$", source):

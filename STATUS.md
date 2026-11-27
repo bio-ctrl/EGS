@@ -2289,3 +2289,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Run #262 (45955978365) completed SUCCESS on latest source/test head 93f23518a7f8ba2699f58a8c7fd0322b09a442ba. FPGA job 140362432705 passed toolchain install, wrapper/parser tests, all 8 synthesis/P&R builds, and artifact upload. ASIC job 140362432997 passed unit tests, compileall, four-lane benchmark, 8/16/32 scaling benchmark, artifact uploads and smoke verification.
 - Exact latest-head FPGA artifact ID 15179161047, size 1,297,789 bytes, SHA-256 f2d79403cbeb5a1c11e8e98a2e031e6e74cec274ef4aa35a2c60ce9744c95829. The artifact has not yet been downloaded/inspected; Run #261 artifact results are provisional until exact latest-head confirmation.
 - Next download and audit Run #262 FPGA artifact, confirm all eight rows and raw report consistency, then record Milestone #3 initial baseline results. No source fixes pending from Run #262. Ceres untouched; NEM distinct.
+
+
+## 251. Run #262 exact-head FPGA artifact downloaded — 2026-11-27T07:09:13.217Z
+
+- Re-read main STATUS before this update. STATUS blob: 95f5541eeb77e033993f6dbc973ef06e7120491f.
+- Downloaded Run #262 FPGA artifact 15179161047 to /mnt/data/orcus-fpga-ecp5-run-262.zip. GitHub SHA-256: f2d79403cbeb5a1c11e8e98a2e031e6e74cec274ef4aa35a2c60ce9744c95829. Artifact inspection is pending.
+- Next compare exact latest source/test head outputs against Run #261: verify eight rows, Dadda proof status, Yosys LUT4/CCU2C/FF/DSP counts, post-route Fmax, raw report agreement, stage times, and archive digest. Ceres untouched; NEM distinct.

@@ -2280,3 +2280,12 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Dadda trades LUT4s for fewer carry cells and avoids hard DSP multipliers: at 32 lanes it uses 2400 LUT4 / 7 CCU2C / 14 carry stages / 269 FF / 0 MULT18X18D, versus Direct 936 LUT4 / 12 CCU2C / 24 carry stages / 269 FF / 32 MULT18X18D. Fmax rises from 43.4972 to 55.8223 MHz (+28.33%). This is a meaningful DSP-free alternative, not a universal area win; Direct is much more LUT-efficient because it infers ECP5 hard multipliers.
 - Run uses a clocked input-register/core/output-register wrapper with --freq 100, seed 1 and unconstrained external IOs (--lpf-allow-unconstrained). This is architecture-level P&R, not a board-pin-constrained build, bitstream pack, or physical-board test. No ecppack bitstream was produced. Tool versions: Yosys 0.33 git 2584903a060; nextpnr-ecp5 0.6-3build5.
 - Run #262 latest source/test head remains active; its artifact must be audited too before Milestone #3 is treated as fully CI-verified. Next inspect exact-head Run #262, then decide whether to lower clock target, pipeline, or test alternate scheduling only after preserving this 100 MHz baseline. Ceres untouched; NEM distinct.
+
+
+## 250. FPGA Milestone #3 CI Run #262 completed successfully — 2026-11-27T07:08:53.076Z
+
+- Re-read main STATUS before polling. STATUS blob: 37e566f4c595b6ae428d3e5deb1e7c4d5ae97939.
+- Run #261 (45955949888) is now fully completed SUCCESS on helper-fix head b5b8b3c118282139cfa6eb52afd5bafb1136d271: both FPGA P&R and ASIC benchmark jobs passed; FPGA artifact 15178134912 was audited in sections 246–249.
+- Run #262 (45955978365) completed SUCCESS on latest source/test head 93f23518a7f8ba2699f58a8c7fd0322b09a442ba. FPGA job 140362432705 passed toolchain install, wrapper/parser tests, all 8 synthesis/P&R builds, and artifact upload. ASIC job 140362432997 passed unit tests, compileall, four-lane benchmark, 8/16/32 scaling benchmark, artifact uploads and smoke verification.
+- Exact latest-head FPGA artifact ID 15179161047, size 1,297,789 bytes, SHA-256 f2d79403cbeb5a1c11e8e98a2e031e6e74cec274ef4aa35a2c60ce9744c95829. The artifact has not yet been downloaded/inspected; Run #261 artifact results are provisional until exact latest-head confirmation.
+- Next download and audit Run #262 FPGA artifact, confirm all eight rows and raw report consistency, then record Milestone #3 initial baseline results. No source fixes pending from Run #262. Ceres untouched; NEM distinct.

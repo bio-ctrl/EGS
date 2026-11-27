@@ -356,3 +356,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Attempted to retrieve job `140319281323` logs while Run #216 is still executing. GitHub returned `BlobNotFound` (404) at `2026-11-27T04:52:32.2531857Z`. As in Run #211, this indicates the log bundle is not yet available through the endpoint; it is not a test failure.
 - Run #216 remains last observed `in_progress` at unit-test step 9. No test output, formal result, artifact, or benchmark metrics are yet available.
 - Next: poll step 9 and fetch logs again only after job/run completion. Do not change proof code based on this unavailable log response.
+
+
+## 30. Run #216 continued poll — 2026-11-27T04:58:00Z
+
+- Latest run/job/artifact poll: Run #216 `45942353836` remains `in_progress`; job `140319281323` remains at unit-test step 9. The API's run `updated_at` has not advanced from `04:51:32Z`; artifact list is still empty.
+- No test outcome can be established while the step remains active and its log bundle is unavailable. The positive proof may be consuming its 60-second cap or the unit test process may be stalled; this is not yet distinguishable from step status alone.
+- No proof pass, negative-test rejection, benchmark completion, or fused PPA numbers are verified. Next: wait for the job to transition, then inspect the completed logs and any artifact. Preserve the current proof implementation until the exact result is known.

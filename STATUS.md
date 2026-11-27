@@ -888,3 +888,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Artifact upload and smoke verification were skipped. No six-variant synthesis, VCD, Nangate45, OpenSTA, stage timing, or PPA data exists from Run #238.
 - Next: fix script execution import path robustly (add repository root to `sys.path` before importing `orcus.typed_heap`, or relocate the module under benchmarks with proper package/script import handling), rerun CI, capture exact lemma runtimes in artifact, and complete six-variant benchmark. Milestone #1 remains open pending artifact review.
 - PR #19 remains open/unmerged. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 97. Benchmark import-path fix committed — 2026-11-27T05:30:33.904Z
+
+- Fixed direct-script import resolution on PR branch commit `1207088254ff02d24e8bcaf28e68379400153564` (parent `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`). The benchmark script now adds the repository root (derived from `Path(__file__)`) to `sys.path` before importing `orcus.typed_heap`, so both package-based unit tests and direct CI script execution can resolve the module.
+- Run #238 confirmed 67/67 unit tests pass, including all four compositional SAT lemmas and all three negative tamper tests. The compositional test interval from log timestamps was approximately 0.075 s including audit and SAT proofs; exact per-lemma timings were not logged. The benchmark itself failed at import before any benchmark stage ran.
+- No Run #238 artifact, six-variant metrics, stage timings, VCD, or OpenSTA data. Next: sync latest main STATUS to branch, inspect fresh CI, then collect proof timings and benchmark artifact. No milestone closure yet.
+- PR #19 remains open/unmerged; Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

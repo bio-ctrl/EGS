@@ -54,9 +54,11 @@ def run_one(lanes: int, outdir: Path, yosys: str, nextpnr: str,
     config = outdir / "routed.config"
     synth_log, route_log = outdir / "yosys-synth.log", outdir / "nextpnr.log"
     rtl.write_text(design.source)
-
-    formal = run_formal(lanes, yosys, timeout=min(timeout, 180))
-    streaming = run_streaming(lanes, iverilog, vvp, timeout=min(timeout, 60))
+    manifest_path = outdir / "pipeline-manifest.json"
+    manifest_path.write_text(json.dumps(design.manifest, indent=2, sort_keys=True) + "\n")
+    validation_dir = outdir / "validation"
+    formal = run_formal(lanes, yosys, timeout=min(timeout, 180), log_dir=validation_dir)
+    streaming = run_streaming(lanes, iverilog, vvp, timeout=min(timeout, 60), log_dir=validation_dir)
 
     top = f"orcus_dadda_pipelined_{lanes}"
     script = f'read_verilog "{rtl}"; synth_ecp5 -top {top} -json "{netlist}"; stat'
@@ -94,9 +96,9 @@ def run_one(lanes: int, outdir: Path, yosys: str, nextpnr: str,
             "nextpnr_place_and_route": route_seconds,
         },
         "files": {
-            "rtl": rtl.name, "yosys_netlist": netlist.name,
+            "rtl": rtl.name, "pipeline_manifest": manifest_path.name, "yosys_netlist": netlist.name,
             "yosys_log": synth_log.name, "nextpnr_report": report_path.name,
-            "nextpnr_log": route_log.name, "routed_config": config.name,
+            "nextpnr_log": route_log.name, "routed_config": config.name, "validation_dir": validation_dir.name,
         },
     }
 

@@ -871,3 +871,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 94. Run #238 dependency cache restore active — 2026-11-27T05:29:16.015Z
 
 - Run #238 `45946018320`, job `140330785714`: dependency installation completed successfully; cache restore step 5 is active. Unit tests and all later stages remain pending. No proof result or benchmark data.
+
+
+## 95. Run #238 proof tests PASS; benchmark failed — 2026-11-27T05:29:29.059Z
+
+- Run #238 `45946018320`, job `140330785714`, exact head `0b24e86bedfab9c63a72d1d724562b1e0fa3237f`: unit-test step 9 succeeded; Python compilation step 10 succeeded; Liberty fetch step 11 succeeded. Benchmark step 12 failed. Artifact upload and smoke verification were skipped.
+- The three negative tamper tests and compositional proof unit test passed at the unit-test stage; exact SAT lemma verdicts/timings and the benchmark failure cause require log inspection before stating them. Do not infer PPA data from test success.
+- Next: retrieve full Run #238 logs, identify exact benchmark-stage failure. If proof lemmas passed, record their timings; then fix only the demonstrated benchmark integration issue and rerun. No six-variant artifact or PPA result is confirmed yet.
+- PR #19 remains open/unmerged; no merge authorization. Ceres untouched; NEM distinct; baseline intact. Milestone #1 remains open until the full benchmark artifact is validated.

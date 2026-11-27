@@ -370,3 +370,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run `45942353836` remains in progress. Job `140319281323` remains at step 9 (unit tests); steps 10–14 have not started. Artifact list remains empty.
 - This repeated poll provides no new test output. The proof test may still be within its configured 60-second timeout, but the job API does not expose subprocess-level progress. Do not call it a pass or a timeout without the log/conclusion.
 - Next: wait for the job state transition; after completion retrieve logs and artifact. No code changes in this poll.
+
+
+## 32. Run #216 completed — unit-test failure — 2026-11-27T04:59:00Z
+
+- Run #216 / ID `45942353836` completed with conclusion `failure`; job `140319281323` failed at step 9, `Run unit tests`. Steps 1–8 succeeded or were cache-skipped. Steps 10–14 were skipped, so no benchmark ran and no artifact was uploaded.
+- Direct pull-request API still reports mergeability as `unknown` while recalculating; PR #19 remains open/unmerged. Head remains `b25d9ba616e4e2b5e87ddda2bffeba4e8547ea9d`.
+- Exact unit-test failure is not yet known; next retrieve completed job logs and identify whether the positive proof timed out, the Yosys command was unsupported, or the negative test behavior was wrong. Do not alter proof code until logs are inspected.
+- No six-variant results, fused PPA, or formal proof pass are available. Milestone #1 remains open; Milestone #2 blocked.

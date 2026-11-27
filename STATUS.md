@@ -2025,3 +2025,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before source review. STATUS blob: e4e7889a7e34f50b0f1ec2bab1e805e272808b3c.
 - Inspected committed FPGA script and tests. Found an authoring/escaping defect in benchmarks/fpga_ecp5.py: several Python source string literals contain two backslashes before n, so runtime code would write literal backslash-n sequences instead of newline separators in generated Verilog, logs and JSON files. This was caught before any FPGA workflow run; no P&R result is claimed.
 - The workflow and test design otherwise target Ubuntu 24.04 with pinned Yosys/nextpnr packages; the 8-build matrix and Dadda proof calls are present. Next replace each double-backslash-n source escape with a single Python newline escape, inspect the corrected file, then run tests and CI. Main source commit 58503cc62a1a2cdfe51e8cce523e3d22f94f0368 remains intact in history. Ceres untouched; NEM distinct.
+
+
+## 226. FPGA escape replacement count check corrected — 2026-11-27T06:59:59.574Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 6d0d06973fe4651583b8f7ea260f1000981ddd31.
+- Attempted a guarded source replacement expecting eight double-backslash-n sequences; actual committed file contains nine. The guard stopped before update_file, so no source or branch mutation occurred. This is a tooling guard-count mismatch, not a repository failure.
+- Next re-inspect all nine occurrences and replace them without assuming a count; then verify exact corrected source. No FPGA workflow run or P&R data yet. Ceres untouched; NEM distinct.

@@ -2046,3 +2046,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before this diagnostic. STATUS blob: fb3ccfba72240a4a9d000be05f6de75076516475.
 - A second guarded replacement attempt stopped because the JavaScript regex was over-escaped and matched zero occurrences. The guard prevented any source update; repository state is unchanged. The eight exact source locations were already identified in section 227.
 - Use character-code construction for the replacement token (two literal backslashes plus n to one backslash plus n), avoiding regex/JavaScript escape ambiguity. Then verify by reading back exact source lines. Ceres untouched; NEM distinct.
+
+
+## 231. FPGA escape replacement guard relaxed — 2026-11-27T07:00:55.434Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 5ed57cf6d840b08ae22373c828079bf51966a1fb.
+- The character-code replacement guard found nine double-backslash-n sequences, not eight, and stopped before update_file. This is another count mismatch only; no repository mutation occurred. The source excerpt enumerated eight visible line entries, indicating one additional occurrence was outside that filtered output.
+- Next replace every occurrence of the exact two-backslash+n token without an expected-count assertion, then fetch and inspect all remaining backslash-n sequences. Ceres untouched; NEM distinct.

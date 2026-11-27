@@ -1392,3 +1392,7 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 165. Run #248 unit-test stage approaching first proof timeout bound — 2026-11-27T06:15:01.939Z
 
 - The unit-test step has remained in_progress for approximately five minutes, but GitHub has not returned a failure or timeout. The Yosys equivalence helper has a per-invocation 300-second bound; this is only a configured limit, not an observed timeout. Continue polling for the actual conclusion.
+
+## 166. Run #248 logs unavailable during active test step — 2026-11-27T06:15:23.094Z
+
+- Third attempt to retrieve job logs during the active unit-test step returned 404 BlobNotFound. No failure diagnosis is available. Job step 9 still reports in_progress.

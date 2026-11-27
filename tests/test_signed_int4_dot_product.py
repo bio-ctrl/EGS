@@ -37,6 +37,7 @@ class SignedInt4DotProductTests(unittest.TestCase):
             _run_equivalence(
                 tampered, reference, "orcus_heap_gate", yosys,
                 timeout_seconds=FORMAL_TEST_TIMEOUT_SECONDS,
+                use_structural=False,
             )
 
 

@@ -2338,3 +2338,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - This gives a technically grounded timing-closure direction: create a separate staged/pipelined Dadda implementation that inserts register boundaries between selected compressor-reduction stages while preserving the current combinational implementation and Run #262 artifact as immutable baseline. Keep one-result-per-cycle throughput as the design target, but explicitly measure added latency and register cost.
 - Formal validation must cover both arithmetic equivalence and pipeline latency/transaction alignment; a combinational heap proof alone is insufficient to claim the sequential pipeline is verified. Run exact-head ECP5 P&R on the same device, seed, and 100 MHz target, audit raw reports, and compare against the unchanged baseline. No source or branch was modified in this inspection.
 - Next: establish a dedicated experiment branch from current main and implement the first pipelined Dadda candidate as a separate architecture/benchmark path. Do not modify the existing baseline generator or workflow in place. Ceres untouched; NEM separate.
+
+
+## 256. Dedicated ECP5 Dadda pipeline experiment branch created — 2026-11-27T23:22:00Z
+
+- Re-read latest main STATUS before recording branch creation. STATUS blob: `faf1f3d847f354b24e32e95f9ee96d5d0b4c5e87`.
+- Created new branch `research/orcus-ecp5-dadda-pipeline` from main commit `d45e9c00d39828dd45d06d4597238667eabdfdae` (the main head containing the prior Milestone #3 handoff and timing-closure inspection).
+- This is a clean, separate experiment branch. The audited 100 MHz baseline implementation on main is unchanged. PR #21 remains untouched, open, draft, and unmerged. No RTL or benchmark source has been changed yet.
+- Next: implement a separate pipelined Dadda candidate and verification path on this branch; prove arithmetic and transaction latency, then run same-target ECP5 P&R and compare with the immutable Run #262 baseline. Preserve all results and failures. Ceres untouched; NEM separate.

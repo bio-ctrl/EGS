@@ -728,3 +728,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - The branch includes typed heap generator, manifest, compositional SAT harness, and polarity/carry-weight/output tamper tests, but no test or proof result is confirmed yet. Do not report a runtime or formal pass until the job logs establish it.
 - Next: poll Run #231. If unit tests pass, inspect all four SAT lemma outputs and tamper rejections; then allow six-variant benchmark to run and inspect artifact/raw reports. If failure occurs, retrieve exact logs and record diagnosis. Milestone #1 remains open; Milestone #2 blocked.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline unchanged.
+
+
+## 76. Run #231 dependency/cache progress — 2026-11-27T05:22:42.406Z
+
+- Run #231 `45945384577`, job `140328775094`, exact head `6d11c50eadcf36d56b756578d505d75248791130` remains `in_progress`. Dependency installation completed successfully; cache restore step 5 is active. Steps 6–14, including unit tests and the compositional proof suite, have not yet completed.
+- PR #19 metadata still reports `mergeable=false` after the ancestry sync. It remains open/unmerged. Do not represent STATUS sync as proof that mergeability is true.
+- No SAT result, tamper-test result, proof runtime, benchmark stage timing, artifact, or PPA data is available at this poll.
+- Next: continue polling Run #231 and inspect the unit-test logs as soon as step 9 completes. Ceres untouched; NEM distinct; baseline intact.

@@ -2039,3 +2039,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-read main STATUS before source inspection. STATUS blob: 976fbbcd6f5d06179e6149420861734dd58e4f8a.
 - Re-fetched benchmarks/fpga_ecp5.py blob 136529c82648202c8dcd00b890e890946d6fd068 and enumerated the exact source lines containing double-backslash-n: 58, 113, 116, 119, 233, 238, 240, 268 (eight locations). The prior guard counted nine because its JavaScript search literal was over-escaped; no source mutation occurred.
 - Next replace these exact source sequences and verify the fetched file has no double-backslash-n literals. Ceres untouched; NEM distinct.
+
+
+## 229. FPGA escape guard expression corrected — 2026-11-27T07:00:36.721Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: fb3ccfba72240a4a9d000be05f6de75076516475.
+- A second guarded replacement attempt stopped because the JavaScript regex was over-escaped and matched zero occurrences. The guard prevented any source update; repository state is unchanged. The eight exact source locations were already identified in section 227.
+- Use character-code construction for the replacement token (two literal backslashes plus n to one backslash plus n), avoiding regex/JavaScript escape ambiguity. Then verify by reading back exact source lines. Ceres untouched; NEM distinct.

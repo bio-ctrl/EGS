@@ -129,53 +129,81 @@ def _fused_heap_reference_source() -> str:
     return "\n".join(lines) + "\n"
 
 
-def _run_fused_compositional_equivalence(yosys: str,
-                                         timeout_seconds: int = FORMAL_TIMEOUT_SECONDS,
-                                         tamper_heap: bool = False) -> dict:
-    """Prove the product identity and heap reduction separately, then compose.
+def _run_abc_cec(candidate_text: str, reference_text: str, top: str,
+                   yosys: str, abc: str,
+                   timeout_seconds: int = FORMAL_TIMEOUT_SECONDS) -> dict:
+    """Run full PI/PO combinational equivalence with Berkeley ABC CEC."""
+    with tempfile.TemporaryDirectory(prefix="orcus-abc-cec-") as tmp:
+        root = Path(tmp)
+        candidate = root / "candidate.v"
+        reference = root / "reference.v"
+        candidate_aig = root / "candidate.aig"
+        reference_aig = root / "reference.aig"
+        candidate.write_text(candidate_text)
+        reference.write_text(reference_text)
 
-    Lemma 1 proves a signed 4x4 Baugh-Wooley product equals multiplication for
-    every operand pair. Lemma 2 proves the generated 10-bit compressor heap
-    equals the arithmetic sum of its 64 symbolic PP inputs plus four 0x390
-    corrections. Together these cover all 32 original operand bits and y[9:0].
-    """
-    lane = _run_equivalence(
-        _baugh_wooley_lane_source("orcus_bw_lane"),
-        _baugh_wooley_lane_reference(),
-        "orcus_bw_lane",
-        yosys,
-        timeout_seconds,
-    )
-    heap = _run_equivalence(
-        _fused_heap_gate_source("orcus_heap_gate", tamper=tamper_heap),
-        _fused_heap_reference_source(),
-        "orcus_heap_gate",
-        yosys,
-        timeout_seconds,
-        use_structural=False,
-    )
-    return {
-        "formal_equivalence": "formal-pass",
-        "proof_method": (
-            "Compositional Yosys proof: (1) equiv_make/equiv_struct/equiv_simple/"
-            "equiv_status -assert for 4x4 signed Baugh-Wooley product vs signed multiply; "
-            "(2) output-only equiv_simple/equiv_status -assert for the 10-bit compressor "
-            "heap vs arithmetic sum of all 64 symbolic partial-product bits plus four "
-            "0x390 corrections (no equiv_struct matching on the heap); composition covers all 32 "
-            "operand bits and all 10 output bits."
-        ),
-        "formal_equivalence_seconds": (
-            lane["formal_equivalence_seconds"] + heap["formal_equivalence_seconds"]
-        ),
-        "proof_log_tail": (
-            "LANE LEMMA:\\n" + lane["proof_log_tail"] +
-            "\\nHEAP LEMMA:\\n" + heap["proof_log_tail"]
-        ),
-        "proof_substages_seconds": {
-            "single_lane_baugh_wooley": lane["formal_equivalence_seconds"],
-            "symbolic_10_bit_heap": heap["formal_equivalence_seconds"],
-        },
-    }
+        def export_aig(source: Path, module: str, output: Path) -> str:
+            script = (
+                f"read_verilog {source}; hierarchy -top {module}; "
+                "proc; flatten; techmap; opt; aigmap; "
+                f"write_aiger -ascii -symbols {output}"
+            )
+            try:
+                result = subprocess.run(
+                    [yosys, "-p", script], text=True, capture_output=True,
+                    timeout=min(timeout_seconds, 60),
+                )
+            except subprocess.TimeoutExpired as exc:
+                raise TimeoutError(
+                    f"AIG_EXPORT_TIMEOUT: Yosys AIGER export exceeded "
+                    f"{min(timeout_seconds, 60)}s for {module}."
+                ) from exc
+            if result.returncode or not output.is_file():
+                raise RuntimeError(
+                    f"Yosys AIGER export failed for {module}: "
+                    + result.stdout[-2500:] + result.stderr[-1200:]
+                )
+            return result.stdout[-1000:]
+
+        started = time.perf_counter()
+        ref_log = export_aig(reference, "reference", reference_aig)
+        gate_log = export_aig(candidate, top, candidate_aig)
+        command = f'cec -T {timeout_seconds} "{reference_aig}" "{candidate_aig}"'
+        try:
+            result = subprocess.run(
+                [abc, "-c", command], text=True, capture_output=True,
+                timeout=timeout_seconds + 10,
+            )
+        except subprocess.TimeoutExpired as exc:
+            elapsed = time.perf_counter() - started
+            raise TimeoutError(
+                f"ABC_CEC_TIMEOUT: ABC cec exceeded {timeout_seconds}s for {top}; "
+                f"elapsed={elapsed:.2f}s."
+            ) from exc
+        elapsed = time.perf_counter() - started
+        output = result.stdout + result.stderr
+        if "Networks are equivalent" in output:
+            status = "formal-pass"
+        elif "Networks are NOT EQUIVALENT" in output or "Disproved" in output:
+            raise RuntimeError("ABC CEC: Networks are NOT EQUIVALENT. " + output[-3500:])
+        elif result.returncode:
+            raise RuntimeError("ABC CEC exited unsuccessfully: " + output[-3500:])
+        else:
+            raise RuntimeError("ABC CEC returned no affirmative equivalence verdict: " + output[-3500:])
+        return {
+            "formal_equivalence": status,
+            "proof_method": (
+                "Yosys proc/flatten/techmap/opt/aigmap/write_aiger -ascii -symbols; "
+                "Berkeley ABC cec on complete reference/candidate AIGER networks; "
+                "all primary inputs and all 10 primary outputs compared."
+            ),
+            "formal_equivalence_seconds": elapsed,
+            "proof_log_tail": (
+                "REFERENCE AIG EXPORT:\\n" + ref_log +
+                "\\nCANDIDATE AIG EXPORT:\\n" + gate_log +
+                "\\nABC CEC:\\n" + output[-3000:]
+            ),
+        }
 
 
 def module_source(name: str, variant: str) -> str:
@@ -290,11 +318,13 @@ def _run_yosys(candidate_text: str, reference_text: str, top: str,
         stage_timings = {}
         print(f"[ORCUS] {top}: partitioned formal equivalence starting (timeout={FORMAL_TIMEOUT_SECONDS}s)", flush=True)
         stage_start = time.perf_counter()
-        proof = (
-            _run_fused_compositional_equivalence(yosys)
-            if top == "orcus_fused_partial_product"
-            else _run_equivalence(candidate_text, reference_text, top, yosys)
-        )
+        if top == "orcus_fused_partial_product":
+            abc = shutil.which("yosys-abc") or shutil.which("abc")
+            if not abc:
+                raise RuntimeError("ABC CEC executable not found (expected yosys-abc or abc)")
+            proof = _run_abc_cec(candidate_text, reference_text, top, yosys, abc)
+        else:
+            proof = _run_equivalence(candidate_text, reference_text, top, yosys)
         stage_timings["formal_equivalence_seconds"] = time.perf_counter() - stage_start
         print(f"[ORCUS] {top}: partitioned formal equivalence finished in {stage_timings['formal_equivalence_seconds']:.2f}s", flush=True)
 

@@ -579,3 +579,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #227 `45943382079` remains `in_progress` on ABC CEC branch head `d8f0c6cc54d81d9bdacad15822eabead8ea9e905`. Job `140322472966`: setup, checkout, and Python setup passed; dependency installation is active. Unit tests and benchmark remain pending; no artifact.
 - Next: poll through unit tests, inspect the ABC CEC verdict and negative tamper test, then benchmark only if both pass.
+
+
+## 58. Run #227 cache restore progress — 2026-11-27T05:02:43.270Z
+
+- Run #227 `45943382079` remains `in_progress`. Dependency installation completed successfully; cache restore step 5 is active. Formal unit tests, benchmark, and artifact upload remain pending.
+- No proof verdict or PPA data exists at this poll. Continue monitoring exact step transitions.

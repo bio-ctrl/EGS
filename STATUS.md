@@ -1028,3 +1028,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #19 remains open and unmerged. Latest prior GitHub metadata still reported `mergeable=false`; recheck after syncing current STATUS/ancestry. Do not merge without explicit user authorization.
 - Milestone #2 remains gated on reviewing/closing Milestone #1. Next scaling: 8 lanes / 11-bit, 16 lanes / 12-bit, 32 lanes / 13-bit; compare direct, multi-stage carry-save, and fused Baugh-Wooley with compositional proof, 512 unique vectors, nonzero VCD annotation, raw OpenSTA and per-stage timing.
 - Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 111. Half-adder graph enhancement attempt — no branch mutation — 2026-11-27T05:37:50.211Z
+
+- After auditing Run #242, identified a remaining spec nuance: the fused heap manifest currently contains 62 full-adder nodes and zero instantiated half-adder nodes, although the half-adder primitive SAT lemma passes. Planned to instantiate one explicit low-column HA node to fully exercise both typed node kinds.
+- The GitHub write orchestration returned a remote protocol disconnect before a branch update was confirmed. Re-read the PR branch ref and `orcus/typed_heap.py`: branch remains `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`; no HA source changes landed. No new CI run was triggered. Run #242 artifact and metrics remain valid for that exact source head.
+- Next: retry the HA-node patch in smaller, independently confirmed operations, then rerun tests and benchmark if implemented. Do not describe the current graph as containing HA nodes. PR #19 remains open/unmerged; Ceres untouched; NEM distinct.

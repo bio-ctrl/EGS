@@ -967,3 +967,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 107. Run #242 setup progress — 2026-11-27T05:33:42.713Z
 
 - Run #242 `45946483363`, job `140332240921`, exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3` remains `in_progress`. Setup, checkout, Python setup passed; dependency installation step 4 active. No unit-test or benchmark result yet.
+
+
+## 108. Run #242 benchmark active — 2026-11-27T05:33:56.613Z
+
+- Run #242 `45946483363`, job `140332240921`, exact head `af312625e5ec34b01dc2df227ec3dc6261ff6ef3`: setup/dependencies/cache/OpenSTA verification passed; unit tests passed; Python compileall passed; Liberty fetch passed. Benchmark step 12 is active. Artifact upload and smoke check pending.
+- No new metrics/artifact yet. The changed non-structural baseline proof path has passed the unit suite; the six-variant benchmark is the next evidence gate.

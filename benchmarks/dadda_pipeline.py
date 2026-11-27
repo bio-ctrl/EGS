@@ -136,8 +136,17 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
         script = (f"read_verilog {verilog}; prep -top {top}; flatten; "
                   f"sat -seq {depth} -verify -prove bad 0 -set-init-zero")
         started = time.perf_counter()
-        proc = subprocess.run([yosys, "-p", script], text=True, capture_output=True,
-                              timeout=timeout)
+        try:
+            proc = subprocess.run([yosys, "-p", script], text=True, capture_output=True,
+                                  timeout=timeout)
+        except subprocess.TimeoutExpired as exc:
+            stdout = exc.stdout.decode("utf-8", "replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+            stderr = exc.stderr.decode("utf-8", "replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+            if log_dir is not None:
+                log_dir.mkdir(parents=True, exist_ok=True)
+                (log_dir / f"{lanes}-lane-miter.v").write_text(source)
+                (log_dir / "yosys-formal-timeout.log").write_text(stdout + "\\n" + stderr)
+            raise TimeoutError(f"sequential SAT timeout for {lanes} lanes after {timeout}s") from exc
         elapsed = time.perf_counter() - started
         log_text = proc.stdout + "\n" + proc.stderr
         log.write_text(log_text)
@@ -161,15 +170,23 @@ def run_streaming(lanes: int, iverilog: str, vvp: str, timeout: int = 60, log_di
         tb.write_text(source)
         compile_run = subprocess.run([iverilog, "-g2012", "-s", "tb", "-o", str(image), str(tb)],
                                      text=True, capture_output=True, timeout=timeout)
-        if compile_run.returncode:
-            raise RuntimeError(f"iverilog compile failed for {lanes} lanes: {compile_run.stderr[-4000:]}")
-        sim = subprocess.run([vvp, str(image)], text=True, capture_output=True, timeout=timeout)
-        compile_text = compile_run.stdout + "\n" + compile_run.stderr
-        sim_text = sim.stdout + "\n" + sim.stderr
+        compile_text = compile_run.stdout + "\\n" + compile_run.stderr
         if log_dir is not None:
             log_dir.mkdir(parents=True, exist_ok=True)
             (log_dir / f"{lanes}-lane-stream-testbench.v").write_text(source)
             (log_dir / f"{lanes}-lane-iverilog.log").write_text(compile_text)
+        if compile_run.returncode:
+            raise RuntimeError(f"iverilog compile failed for {lanes} lanes: {compile_run.stderr[-4000:]}")
+        try:
+            sim = subprocess.run([vvp, str(image)], text=True, capture_output=True, timeout=timeout)
+        except subprocess.TimeoutExpired as exc:
+            stdout = exc.stdout.decode("utf-8", "replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+            stderr = exc.stderr.decode("utf-8", "replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+            if log_dir is not None:
+                (log_dir / f"{lanes}-lane-vvp-timeout.log").write_text(stdout + "\\n" + stderr)
+            raise TimeoutError(f"streaming simulation timeout for {lanes} lanes after {timeout}s") from exc
+        sim_text = sim.stdout + "\n" + sim.stderr
+        if log_dir is not None:
             (log_dir / f"{lanes}-lane-vvp.log").write_text(sim_text)
         if sim.returncode or "PASS" not in sim.stdout:
             raise RuntimeError(f"streaming simulation failed for {lanes} lanes: {sim.stdout[-4000:]} {sim.stderr[-2000:]}")

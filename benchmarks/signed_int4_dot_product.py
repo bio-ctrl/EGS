@@ -152,6 +152,7 @@ def _run_fused_compositional_equivalence(yosys: str,
         "orcus_heap_gate",
         yosys,
         timeout_seconds,
+        use_structural=False,
     )
     return {
         "formal_equivalence": "formal-pass",
@@ -215,7 +216,8 @@ def module_source(name: str, variant: str) -> str:
 
 
 def _run_equivalence(candidate_text: str, reference_text: str, top: str,
-                      yosys: str, timeout_seconds: int = FORMAL_TIMEOUT_SECONDS) -> dict:
+                      yosys: str, timeout_seconds: int = FORMAL_TIMEOUT_SECONDS,
+                      use_structural: bool = True) -> dict:
     """Prove all output bits with Yosys' partitioned equivalence flow.
 
     equiv_make creates a gold/gate equivalence design; equiv_struct matches
@@ -230,15 +232,16 @@ def _run_equivalence(candidate_text: str, reference_text: str, top: str,
         reference = root / "reference.v"
         candidate.write_text(candidate_text)
         reference.write_text(reference_text)
+        structural_step = "equiv_struct -icells; " if use_structural else ""
         proof_script = (
             f"read_verilog {reference} {candidate}; "
             "proc; "
             f"equiv_make reference {top} equiv; "
             "hierarchy -top equiv; "
             "clean -purge; "
-            "equiv_struct -icells; "
-            "equiv_simple -v; "
-            "equiv_status -assert"
+            + structural_step
+            + "equiv_simple -v; "
+            + "equiv_status -assert"
         )
         started = time.perf_counter()
         try:
@@ -251,7 +254,7 @@ def _run_equivalence(candidate_text: str, reference_text: str, top: str,
             raise TimeoutError(
                 f"FORMAL_EQUIV_TIMEOUT: Yosys partitioned equivalence exceeded "
                 f"{timeout_seconds}s for {top}; elapsed={elapsed:.2f}s. "
-                "Method: equiv_make; equiv_struct -icells; equiv_simple -v; equiv_status -assert."
+                f"Method: equiv_make; {'equiv_struct -icells; ' if use_structural else ''}equiv_simple -v; equiv_status -assert."
             ) from exc
         elapsed = time.perf_counter() - started
         if proof.returncode:
@@ -268,7 +271,8 @@ def _run_equivalence(candidate_text: str, reference_text: str, top: str,
             "formal_equivalence": "formal-pass",
             "proof_method": (
                 "Yosys equiv_make reference candidate equiv; hierarchy -top equiv; "
-                "clean -purge; equiv_struct -icells; equiv_simple -v; equiv_status -assert"
+                "clean -purge; " + ("equiv_struct -icells; " if use_structural else "") +
+                "equiv_simple -v; equiv_status -assert"
             ),
             "formal_equivalence_seconds": elapsed,
             "proof_log_tail": proof.stdout[-1800:],

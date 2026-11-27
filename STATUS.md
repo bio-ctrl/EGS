@@ -1383,3 +1383,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 ## 163. Run #248 test suite has not advanced past step 9 — 2026-11-27T06:14:15.964Z
 
 - Run #248 job 140343567995 remains active; unit test step 9 is still in_progress and all later steps remain pending. No live logs available, no pass/fail count, and no scaling artifact yet. This is a status observation, not a declared timeout.
+
+## 164. Dadda implementation inspected during Run #248 — 2026-11-27T06:14:41.014Z
+
+- Re-read the committed Dadda stage loop on the PR branch. It uses separate next-stage sum buffers and same-stage carry buffers; the loop accounts for both current work and emitted sums against each target height. This matches the isolated recurrence spot-check in section 158. No code change made.
+- Run #248 remains in_progress at unit test step 9. Live logs are not currently retrievable. If this step eventually fails, inspect the completed job log and address the exact failing test rather than speculate.

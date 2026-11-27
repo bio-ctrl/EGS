@@ -1493,3 +1493,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #20 remains open and unmerged; current GitHub metadata reports mergeable=false while recalculating/reflecting new head. No merge performed. Run #248 remains a failed historical run and is preserved.
 - Run #250 must verify corrected initial-bit manifest, all six graph audits, all six fused compositional SAT cases, negative tamper tests, and direct/CSA equivalence at 8/16/32. Benchmark/artifact stages only proceed if unit tests pass. No scaling metrics or FPGA results yet. Ceres untouched; NEM distinct.
 - Next: poll Run #250 and exact logs/artifacts; if any failures, capture exact stage and correct non-destructively. Do not merge or begin FPGA claims until all 12 physical configurations have successful artifact evidence.
+
+
+## 177. Run #250 unit-test stage active — 2026-11-27T06:31:00.837Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 2c1f112e48db7c3c2f6d134cea82374809482e4f.
+- Run #250 (45952254080), exact head edec4fe677f70ea32110210561465272cfacc2a6, job 140350583073 remains in_progress. Setup/dependency/OpenSTA verification steps 1–8 succeeded or were skipped from cache. Step 9 Run unit tests is in_progress. Steps 10–16 (compileall, Liberty fetch, both benchmarks, artifacts, verification) remain pending. Artifact list is empty while run is active.
+- No unit-test result, proof runtime, test count, physical benchmark result, or artifact has been observed. Continue polling; do not infer success from the source fix alone. Run #248 remains failed history. PR #20 remains open/unmerged. Ceres untouched; NEM distinct.

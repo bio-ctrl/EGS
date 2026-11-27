@@ -1072,3 +1072,50 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Run #244 `45947084195`, job `140334145107`, exact head `70949ed253e849453aaa0542d6f102a0130b81de` completed success. Unit tests, compileall, Liberty fetch, benchmark, artifact upload, and smoke verification all passed.
 - This is the first end-to-end CI for the typed graph with an actual HA node. Artifact ID, proof timings, six-variant table, vector/VCD and raw OpenSTA checks are pending inspection.
 - Next: fetch artifact and complete job logs; verify HA node count and all proof/measurement evidence. Do not close Milestone #1 before that audit.
+
+
+## 117. Run #244 final artifact audit — typed FA+HA graph verified — 2026-11-27T05:41:41.603Z
+
+- Run #244 ID `45947084195`, job `140334145107`, exact source head `70949ed253e849453aaa0542d6f102a0130b81de` completed success. Unit tests, compileall, benchmark, artifact upload, and smoke verification all passed.
+- Artifact `orcus-signed-int4-dot-product`, ID `15175157667`, size 11,862 bytes, SHA-256 `fe7c1d91565bf32efb765deda7362ed839563dbdc84cc7101dba8c692ec952ae`. Downloaded ZIP `orcus-run244.zip`; parsed `orcus-int4-dot-product.json`; inspected all six raw OpenSTA reports.
+- All six variants: formal `formal-pass`; 512 vectors / 512 unique vectors; nonzero VCD bit toggles; OpenSTA status completed; raw report Total row present; raw report annotation count matches structured count; raw Watts components agree with µW fields.
+
+### Run #244 six-variant comparison
+
+| Variant | Proof method & result | Generic cells | Nangate45 area | OpenSTA delay (ns) | Internal (µW) | Switching (µW) | Leakage (µW) | Total (µW) |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| Direct | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 522 | 574.56 | 0.95 | 47.88638 | 43.71745 | 13.41678 | 105.02060 |
+| Left-deep | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 522 | 574.56 | 0.95 | 47.88638 | 43.71745 | 13.41678 | 105.02060 |
+| Balanced 01/23 | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 522 | 575.89 | 1.00 | 47.84778 | 43.61467 | 13.42982 | 104.89230 |
+| Balanced 02/13 | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 522 | 574.56 | 1.00 | 47.83237 | 43.72201 | 13.40231 | 104.95670 |
+| Two-stage carry-save | Yosys `equiv_make/equiv_simple/equiv_status -assert` PASS | 441 | 460.712 | 0.89 | 39.53044 | 34.28274 | 10.79658 | 84.60975 |
+| Fused Baugh-Wooley | Four Yosys SAT lemmas + independent typed heap audit PASS | 394 | 413.896 | 1.13 | 34.83456 | 29.71045 | 9.696306 | 74.24132 |
+
+- Fused Baugh-Wooley vs two-stage carry-save: generic cells -10.66%; area -10.16%; delay **26.97% slower** (1.13 vs 0.89 ns); internal power -11.88%; switching -13.34%; leakage -10.19%; total power -12.25%. It wins area and estimated power, loses critical-path delay. This is a workload-specific trade-off, not an across-the-board win.
+- All area/delay/power results are pre-layout Nangate45 research-library estimates without routed parasitics; not silicon PPA or FPGA measurements.
+
+### Compositional proof and typed heap details
+
+- Fused formal stage: 0.068571907 s total. SAT lemmas: exact 10-bit signed Baugh-Wooley lane identity 0.039270713 s PASS; full-adder weighted-sum invariant 0.010122810 s PASS; half-adder weighted-sum invariant 0.008943286 s PASS; final 10-bit modulo CPA equivalence 0.008460941 s PASS. Independent graph audit 0.000673071 s PASS.
+- Manifest: `orcus-typed-bit-heap-v1`; 4 lanes; 80 initial bits (64 partial products + 16 per-lane bias bits); 62 full-adder nodes + 1 half-adder node; 63 total compressor nodes; 2 final rows; 3 top-column carries explicitly truncated modulo 2^10. The HA is instantiated at column 0 and its carry routes to column 1. The 10-bit per-lane bias is `0x390` (8-bit correction `0x90` plus sign-extension contribution at bits 8 and 9).
+- Negative tamper tests all passed: flipped Baugh-Wooley partial-product polarity rejected; misrouted compressor carry column rejected; flipped final output bit rejected. Unit suite 67/67 passed; compileall passed.
+
+### Run #244 stage timings (seconds)
+
+| Variant | Formal | Generic synth | Nangate45 map | Simulation | OpenSTA | Total |
+|---|---:|---:|---:|---:|---:|---:|
+| Direct | 0.032438 | 0.217430 | 0.494439 | 0.052277 | 0.233670 | 1.034568 |
+| Left-deep | 0.031868 | 0.210467 | 0.496385 | 0.058431 | 0.195916 | 0.996746 |
+| Balanced 01/23 | 0.033843 | 0.211095 | 0.492675 | 0.053144 | 0.197908 | 0.992389 |
+| Balanced 02/13 | 0.074006 | 0.211755 | 0.471458 | 0.053551 | 0.197061 | 1.011561 |
+| Carry-save | 0.049131 | 0.207786 | 0.438861 | 0.057318 | 0.194496 | 0.951315 |
+| Fused Baugh-Wooley | 0.068572 | 0.372322 | 0.607777 | 0.102236 | 0.197589 | 1.352221 |
+
+- VCD toggle totals / annotated pins: direct 39,190 / 259; left-deep 44,381 / 259; balanced 01/23 44,347 / 259; balanced 02/13 44,230 / 259; carry-save 48,552 / 268; fused 62,096 / 284. All are 512/512 unique xorshift32 vectors.
+
+### Milestone status
+
+- The eight requested implementation elements are now implemented and verified for the four-lane design: typed weighted heap including FA and HA nodes; RTL + machine-readable manifest; lane identity SAT; FA/HA SAT; modulo CPA SAT; independent weight/fanout/dangling/top-truncation audit; three negative tamper tests; branch STATUS sync and CI trigger.
+- Milestone #1 technical evidence is complete for Run #244. PR #19 remains open/unmerged pending review and explicit merge authorization. Latest GitHub metadata before the next sync still reported `mergeable=false`; recheck after syncing the latest main STATUS/ancestry.
+- Milestone #2 can now be planned/started after PR #19 review: 8 lanes/11-bit accumulator, 16 lanes/12-bit, 32 lanes/13-bit; compare direct, multi-stage carry-save, and fused Baugh-Wooley with formal proofs, deterministic 512 unique vectors, VCD annotation, raw OpenSTA, and stage timings. Do not assume sub-second proof at larger widths; measure it.
+- Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.

@@ -1708,3 +1708,11 @@ Seconds, per architecture and lane count: formal runtime is the benchmark's over
 - Created non-force two-parent ancestry sync commit 35f45253dec3b0476d6c4f8977c9508b9df6005b with branch head as first parent and main as second parent; tree based on PR branch with STATUS.md replaced by main's exact blob. Updated research/orcus-int4-lane-scaling ref using force=false and expected_sha; GitHub returned success.
 - PR #20 now includes the audited scaling implementation and the main ancestry/STATUS state as of main 05604d1. The sync commit should trigger a fresh pull_request synchronize CI run. This record is on main and advances main beyond the branch's second parent by a STATUS-only commit; the branch has no subsequent STATUS edit, so the latest main STATUS remains the authoritative merge-side version.
 - Next verify exact new branch head and CI run; once CI success and PR mergeability are confirmed, merge PR #20 under the user's explicit conditional authorization. Do not start FPGA work until merge verified. Ceres untouched; NEM distinct.
+
+
+## 197. Post-sync Run #255 active — 2026-11-27T06:44:24.158Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: e4974d556d39c2fc47bee3d793394e3ed52d1733.
+- Verified PR #20 branch head is the non-force ancestry sync commit 35f45253dec3b0476d6c4f8977c9508b9df6005b. The new synchronize event triggered ORCUS CI Run #255, ID 45953708374, created 2026-11-27T06:43:41Z, status in_progress, exact head 35f45253dec3b0476d6c4f8977c9508b9df6005b.
+- PR #20 remains open/unmerged. Its base now points to main 05604d1a36b354a7127739281be58bdb75a64378, the second parent of the sync commit. GitHub metadata currently reports mergeable=false while recalculation; do not merge until refreshed and CI #255 succeeds.
+- Run #254 artifact audit remains complete and successful. No FPGA implementation has started. Next poll Run #255 and PR metadata; Ceres untouched; NEM distinct.

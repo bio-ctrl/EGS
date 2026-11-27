@@ -2393,3 +2393,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Added new file `orcus/dadda_pipeline.py` on `research/orcus-ecp5-dadda-pipeline` in commit `d1727c23c3a8614a798862cf5f3362d512a15937`. The legacy `orcus/lane_scaling.py` generator and baseline RTL were not modified.
 - The new generator independently reconstructs the Dadda schedule, registers every live heap bit at each reduction-level boundary (including pass-through bits), then computes/captures the final modulo-width CPA result. It emits a distinct top name `orcus_dadda_pipelined_<lanes>`, synchronous active-high reset, `in_valid`/`out_valid` pipeline, `LATENCY` metadata, and a stage/heap manifest.
 - This is source added, not yet executed or validated. No lane-specific latency is being published as verified until generator execution and emitted RTL inspection establish the exact values. No formal proof, simulation, Yosys synthesis, or nextpnr P&R has run. The current file requires code review/refinement before tests are wired. Next: inspect the committed generator and correct any source-generation issues before proceeding. Ceres untouched; NEM separate; PR #21 untouched; Run #262 immutable.
+
+
+## 263. Pipeline generator manifest correction — 2026-11-27T23:33:00Z
+
+- Inspected the newly committed `orcus/dadda_pipeline.py` after addition. Found a manifest-construction issue: stage-boundary snapshots were not being stored cleanly because compressor and boundary records shared one list.
+- Corrected the branch file in commit `847814af55c8c797d8f9e86989477e2d7b2bc379`: compressor records and boundary records are now separate, and each boundary records its complete input heap, output heap, registered heap, target height, and register count. This keeps unchanged/pass-through tokens explicit in the manifest.
+- This is a source correction only. The generator has not been executed; latency values, Verilog syntax, formal behavior, and resource/timing outcomes remain unverified. Next add unit-level generator/manifest checks and a dedicated sequential formal + streaming runner. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.

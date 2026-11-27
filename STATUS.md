@@ -2453,3 +2453,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Re-fetched all five new/modified pipeline files on the experiment branch and checked that the stale generator accumulator was removed, the sequential miter/512-vector source is present, the P&R runner exists, and CI references the new pipeline flow while retaining the baseline command.
 - Identified an evidence-retention gap before opening a PR: the formal and streaming harness currently write logs only inside temporary directories, then delete them; the P&R artifact would therefore lack persistent sequential proof and simulator logs. The pipeline manifest is also not currently persisted as a standalone JSON artifact. These are being fixed before the draft PR.
 - This was a read-only review. No tests/formal/simulation/P&R were run. No latency or Fmax values are yet verified. Next persist raw miter/testbench/solver/compiler/simulator logs and full heap manifests in the P&R artifact, then open a Draft PR. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.
+
+
+## 272. Raw pipeline validation evidence retention fixed — 2026-11-27T23:51:00Z
+
+- Updated `benchmarks/dadda_pipeline.py` in pipeline branch commit `2805b72742627f1377fd105f8ad3d713a3ab2ece`: formal harness can persist generated miter Verilog and full Yosys SAT log; streaming harness can persist generated testbench, Icarus compile log, and simulator log.
+- Updated `benchmarks/fpga_ecp5_pipeline.py` in commit `4db5857d56bfc7aaad7d4d4abe99a8b66e91fac2`: each lane row now saves `pipeline-manifest.json` and passes a persistent `validation/` directory to the formal and streaming harnesses. This closes the identified artifact-retention gap for successful runs.
+- Neither change has been executed. Failure-path persistence for a command that raises before the normal post-run copy still needs attention; next add fail-safe log persistence and verify imports/source before PR. No formal, simulation, synthesis, or P&R results exist yet. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.

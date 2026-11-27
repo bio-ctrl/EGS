@@ -2583,3 +2583,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - The job log contains raw nextpnr JSON timing-path details, resource counts, and utilization data. A representative tail fragment shows LUT4=2400, TRELLIS_FF=269, MULT18X18D=0 for one configuration, but the log includes multiple lane configurations and this fragment is not assigned to a lane here. No lane-level table is published from this partial extraction.
 - The detailed path JSON includes per-element `type` fields (logic/routing) and delays, but a complete lane-by-lane decomposition still requires structured parsing of each report/artifact. No pipeline comparison is possible without PR #22's own run.
 - This diagnostic only read/downloaded the immutable Run #262 evidence; no repository source, baseline, PR, Ceres, or NEM state changed. Next parse the baseline artifact/log by lane and preserve raw source data. Do not treat this baseline as pipeline evidence.
+
+
+## 291. Run #262 baseline artifact inventory verified — 2026-11-27T23:46:17.937Z
+
+- Inspected the downloaded immutable Run #262 artifact ZIP inventory. It contains `results.json` plus, for each of 4/8/16/32 lanes and both Direct and Fused Dadda, generated RTL, Yosys synthesis JSON/log, nextpnr report JSON/log, and routed configuration. All eight configuration directories are present.
+- This confirms the baseline artifact has the raw files needed for a structured per-lane comparison. The artifact inventory alone does not establish any new pipeline result. Next parse `results.json` and each nextpnr report to extract Fmax, logic/routing critical-path delay, LUT4, TRELLIS_FF, and MULT18X18D per configuration. Preserve exact labels and do not infer missing metrics.
+- No repository source, baseline, PR, Ceres, or NEM state changed.

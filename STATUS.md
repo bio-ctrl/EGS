@@ -1237,3 +1237,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Discovered the repository connector's dedicated `create_branch` action. It requires `repository_full_name`, `branch_name`, and exactly one of `sha` or `base_ref`. The prior `update_ref` failure was expected because the branch did not exist.
 - No branch or source changes yet. Next create `research/orcus-int4-lane-scaling` from latest main SHA, then inspect `.github/workflows/ci.yml` and parameterize the generator and benchmark.
+
+
+## 135. Milestone #2 branch created — 2026-11-27T05:54:33.152Z
+
+- Created `research/orcus-int4-lane-scaling` from main commit `d4a183525304ca1fe3a2912625925591d6e6201d` using the dedicated create-branch action.
+- Branch currently contains only the merged ORCUS v0.3 baseline plus STATUS history; no scaling implementation committed yet. Next inspect CI workflow and exact source APIs, derive width-dependent Baugh-Wooley bias mathematically, then implement lane-parametric generators and tests.

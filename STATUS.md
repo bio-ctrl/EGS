@@ -1587,3 +1587,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Re-read main STATUS before this poll. STATUS blob: 4144b800a6c451d5111d3f40dbf1ef824a990de7.
 - Run #254 (45952823219), exact head 0052c1895ec04524a9babf4ffe695955fdce99ce, job 140352372364 is in_progress at step 9 Run unit tests. Steps 1–5 and 8 passed; cached CUDD/OpenSTA build steps 6–7 skipped. Compileall, four-lane benchmark, scaling benchmark, artifact uploads and target verification pending. No result/artifact yet.
 - Next inspect unit-test outcome and then scaling benchmark; no merge or FPGA milestone until all 12 configurations have audited evidence. PR #20 open/unmerged; Ceres untouched; NEM distinct.
+
+
+## 189. Run #254 unit tests passed; scaling benchmark active — 2026-11-27T06:36:35.911Z
+
+- Re-read main STATUS before this diagnostic. STATUS blob: 359a833f536dbb94eb0e2ba01462f6b79eb1355e.
+- Run #254 (45952823219), exact head 0052c1895ec04524a9babf4ffe695955fdce99ce, job 140352372364 remains in_progress. Step 9 unit tests SUCCESS; step 10 compileall SUCCESS; step 11 Liberty fetch SUCCESS; step 12 four-lane benchmark SUCCESS; step 13 four-lane evidence upload SUCCESS. Step 14 8/16/32 scaling benchmark is in_progress; steps 15–16 pending.
+- This head passed the full unit suite including the corrected modulo bias audit and benchmark top-name regression. No scaling artifact or 12-row measurement evidence yet. Continue polling. PR #20 remains open/unmerged; Ceres untouched; NEM distinct.

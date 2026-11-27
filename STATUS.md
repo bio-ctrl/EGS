@@ -1282,3 +1282,8 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Attempted an independent Python truth-table spot check of the derived width-dependent Baugh-Wooley bias; the Python execution environment reset before running the script, so no result is claimed.
 - The mathematical derivation remains: signed product = complemented-sign Baugh-Wooley weighted matrix - 112; therefore add 2^W-112 to represent the signed product modulo 2^W. The CI SAT lemma is the required verification gate for each target width.
+
+## 144. Dadda stage-height correction drafted — 2026-11-27T06:05:30.809Z
+
+- Reviewed the Dadda scheduler and corrected a substantive stage-height accounting bug: each stage must count both unconsumed work bits and sum outputs emitted into the next-stage column when enforcing its target height. New generator blob 231fdcb83bb418d606a3e759a8499f5013ebd4e4 includes that correction and retains separate stage buffers so sum outputs are not recursively recompressed in the same stage.
+- This is an uncommitted draft. The Dadda schedule must still pass independent graph audits and CI tests before any delay comparison is reported.

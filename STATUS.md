@@ -484,3 +484,10 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Run #224 remains `in_progress`; apt dependencies succeeded and step 5 (pinned CUDD/OpenSTA cache restore) is active. Unit tests and benchmark remain pending; no artifact.
 - No new proof outcome or metrics. Continue monitoring; inspect the formal stage only after it starts/completes.
+
+
+## 46. Run #224 unit tests started — 2026-11-27T05:10:30Z
+
+- Run #224 setup and cached OpenSTA verification passed; unit-test step 9 is now in progress. Benchmark, artifact, and smoke steps remain pending.
+- The new proof sequence under test is: signed 4x4 Baugh-Wooley lane lemma with structural matching; 10-bit symbolic heap lemma with structural matching disabled; one-bit output tamper must fail the same output-only heap proof.
+- No test result is available yet. Next: wait for step 9 completion and inspect logs before treating the proof as successful.

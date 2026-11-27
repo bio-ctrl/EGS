@@ -16,12 +16,13 @@ import time
 
 
 TARGET_LANES = (8, 16, 32)
+FPGA_TARGET_LANES = (4, 8, 16, 32)
 SCHEDULES = ("linear", "dadda")
 
 
 def accumulator_width(lanes: int) -> int:
-    if lanes not in TARGET_LANES:
-        raise ValueError(f"supported scaling targets are {TARGET_LANES}, got {lanes}")
+    if lanes not in FPGA_TARGET_LANES:
+        raise ValueError(f"supported lane counts are {FPGA_TARGET_LANES}, got {lanes}")
     return 8 + math.ceil(math.log2(lanes))
 
 

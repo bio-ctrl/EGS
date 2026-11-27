@@ -2419,3 +2419,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Patched the remaining two generated expected-output comparisons in `benchmarks/dadda_pipeline.py` on the experiment branch, commit `d8cdb63af97641ce5e7a0bfe508cbd3a77250c96`. Both the streaming-loop and flush checks now format negative signed expected values through `_sv_signed(exp, width)`; lane inputs use the same formatter.
 - Static source inspection confirms two expected-output call sites now use the formatter. No Verilog generation, compilation, simulation, or formal proof was run. Next review the complete pipeline generator and benchmark source for additional generation issues, then add the ECP5 P&R script and CI steps. Ceres untouched; NEM separate; PR #21 untouched; baseline Run #262 unchanged.
+
+
+## 267. Pipeline generator stale accumulator fix — 2026-11-27T23:41:00Z
+
+- Re-inspected the committed generator and found a stale `stage_records.append(...)` block left behind after separating compressor and boundary manifests. That block referenced an undefined list and would have raised at generator execution.
+- Removed the stale block in pipeline branch commit `de4413dbebe61698f5addae62d9d5eb55372c16f`. This is a source-level correction based on inspection; generator execution remains unperformed. Next inspect the complete generator and benchmark source for further defects, then implement the isolated ECP5 pipeline P&R runner. No CI results exist yet. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.

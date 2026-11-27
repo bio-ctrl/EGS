@@ -1178,3 +1178,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - Non-force ancestry/STATUS sync commit `934e94addbda390ab56571eeca565d75dbd0fcc6` triggered PR Run #246, ID `45948158005`, exact head `934e94addbda390ab56571eeca565d75dbd0fcc6`; created `2026-11-27T05:50:17Z`; status `in_progress`.
 - PR #19 is open/unmerged. Raw API currently reports `mergeable=null`, `mergeable_state=unknown` while GitHub recalculates; base `696f169d437a0997892e8cadc084ce439426fb85`, head as above.
 - Wait for exact-head CI and mergeability calculation before merging PR #19. No Milestone #2 branch yet.
+
+
+## 126. PR #19 Run #246 dependency build active — 2026-11-27T05:51:01.910Z
+
+- Run #246 `45948158005`, job `140337533817`, exact head `934e94addbda390ab56571eeca565d75dbd0fcc6`: checkout and Python setup passed; dependency installation/build stage is active. Unit tests, compileall, Liberty fetch, benchmark, artifact upload, and smoke verification remain pending.
+- No merge yet. Continue monitoring exact-head CI and then recheck raw PR mergeability. PR #19 remains open/unmerged.

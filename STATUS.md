@@ -1043,3 +1043,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - This preserves the weighted sum exactly and leaves modulo top-column truncation unchanged. The half-adder primitive SAT lemma already passed in Run #242; however, this graph change has not yet been tested or benchmarked. Run #242 artifact applies to the prior source head and must not be represented as measurements for this changed graph.
 - Next: sync latest main STATUS/ancestry to branch, run CI, verify the HA graph node and all tamper tests, then audit the new six-variant artifact. If all proof/benchmark gates pass, update the final comparison using the new source head. Prior Run #242 remains a valid historical result for its own head.
 - PR #19 remains open/unmerged. Ceres untouched; NEM distinct; ORCUS v0.2 baseline intact.
+
+
+## 113. PR #19 resynchronized after explicit HA node — 2026-11-27T05:39:21.659Z
+
+- Synced latest main STATUS blob and ancestry from `81ff20e9123cf4d48ea2746f5885172e1e832632` into PR branch using non-force two-parent merge commit `70949ed253e849453aaa0542d6f102a0130b81de`.
+- Merge parents: HA-node source commit `df08d3a0259817204a7d7ca348d06a65f5edef2e` first, main `81ff20e9123cf4d48ea2746f5885172e1e832632` second. Expected-head-protected update succeeded.
+- This new branch head should trigger CI for the explicit FA+HA graph. Run #242 remains the historical six-variant result for its previous source head; new HA-graph results are pending.
+- Next: inspect Actions listing for exact head `70949ed253e849453aaa0542d6f102a0130b81de`; verify SAT lemmas, graph audit, three tamper tests, and fresh benchmark. PR #19 remains open/unmerged.

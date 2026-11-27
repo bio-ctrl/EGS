@@ -912,3 +912,9 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 - PR #19 remains open/unmerged; GitHub metadata still reports `mergeable=false`. STATUS sync and branch ancestry have not made GitHub report true mergeability.
 - Run #238 unit tests and compositional SAT proof test passed; benchmark failed only because direct script could not import `orcus`. Run #240 includes repository-root import-path correction. No new result yet.
 - Next: poll Run #240; verify unit tests, benchmark execution, artifact upload, six variants, 512 unique vectors, VCD annotation, raw OpenSTA data, and measured proof timings. Milestone #1 remains open.
+
+
+## 100. Run #240 setup progress — 2026-11-27T05:31:23.556Z
+
+- Run #240 `45946252250`, job `140331518211`, exact head `84635f54bdb885f6825d28c087687916d1072411` is `in_progress`. Setup, checkout, Python setup passed; dependency installation step 4 active. Unit tests and benchmark pending.
+- No new proof runtime, artifact, or PPA evidence. Continue monitoring.

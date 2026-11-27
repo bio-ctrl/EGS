@@ -1323,3 +1323,11 @@ Work in this order, with each milestone backed by committed source, tests, CI, a
 
 - Attempted to create the lane-scaling PR. The JavaScript payload failed to parse because the body string included malformed backtick concatenation. No PR was created and no repository state changed.
 - Retry with a plain quoted PR body and verify the resulting PR number/head.
+
+## 151. Milestone #2 PR #20 opened — CI pending — 2026-11-27T06:09:34.644Z
+
+- Opened PR #20: https://github.com/bio-ctrl/EGS/pull/20
+- Title: ORCUS Milestone 2: 8/16/32-lane INT4 architecture scaling.
+- Head branch research/orcus-int4-lane-scaling at f6144e9e5e10bab4d2bb5b2c9b0df232764571b8; base main at 6cd44f34f36b0945680c279a87a4d8737daf33aa.
+- PR #20 is open. Initial GitHub metadata reports mergeable=false; this may reflect recalculation or base/branch status divergence. CI Run ID not yet retrieved. No scaling results or proof timings yet.
+- Next: inspect raw PR metadata and exact-head workflow runs, monitor tests and benchmark, then fix failures and audit artifact. Do not merge PR #20 without separate explicit authorization.

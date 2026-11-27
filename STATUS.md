@@ -2425,3 +2425,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Re-inspected the committed generator and found a stale `stage_records.append(...)` block left behind after separating compressor and boundary manifests. That block referenced an undefined list and would have raised at generator execution.
 - Removed the stale block in pipeline branch commit `de4413dbebe61698f5addae62d9d5eb55372c16f`. This is a source-level correction based on inspection; generator execution remains unperformed. Next inspect the complete generator and benchmark source for further defects, then implement the isolated ECP5 pipeline P&R runner. No CI results exist yet. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.
+
+
+## 268. Separate pipeline ECP5 P&R runner added — 2026-11-27T23:43:00Z
+
+- Added `benchmarks/fpga_ecp5_pipeline.py` to `research/orcus-ecp5-dadda-pipeline` in commit `87f2174a58ac5b5b65744898b6e5ba28dc7d159f`.
+- The isolated runner generates each new pipelined top, runs the sequential formal and streaming harness first, then invokes Yosys `synth_ecp5` and nextpnr ECP5 P&R for the existing exact target (`LFE5U-85F-6BG381C`, CABGA381, speed grade 6), 100 MHz by default, with unconstrained external IOs. It parses LUT4, FF, MULT18X18D counts, Fmax, utilization, and detailed timing from the nextpnr report and retains raw logs/reports/configs.
+- This is source added only. No P&R, formal, or simulation has run. The runner and its imports still require test/CI review; no performance or utilization values are available. Next add tests and wire new steps into the experiment-branch workflow without altering the baseline matrix. Ceres untouched; NEM separate; PR #21 untouched; Run #262 baseline unchanged.

@@ -159,9 +159,16 @@ def build_stage_miter(lanes: int, stage_index: int) -> str:
 
 
 def build_control_miter(lanes: int) -> tuple[str, int]:
-    """Instantiate the real pipeline but compare only its valid/reset cone."""
+    """Compare post-edge DUT valid against a reference including out_valid.
+
+    The DUT contains LATENCY reduction-stage valid registers plus the
+    separately registered out_valid boundary.  The reference therefore needs
+    LATENCY + 1 bits for a post-edge comparison, while transaction latency
+    remains LATENCY rising-edge intervals from input sampling to output.
+    """
     design = generate_dadda_pipelined(lanes)
     latency = design.latency
+    reference_depth = latency + 1
     ports = ["input wire clk", "input wire reset", "input wire in_valid", "output wire bad"]
     lines = [f"module orcus_pipeline_control_miter_{lanes}({', '.join(ports)});",
              "  wire dut_valid;",
@@ -173,16 +180,15 @@ def build_control_miter(lanes: int) -> tuple[str, int]:
         lines.append(f"  wire signed [3:0] b{lane} = 4'sd0;")
         dut_ports.extend((f".a{lane}(a{lane})", f".b{lane}(b{lane})"))
     lines.append(f"  orcus_dadda_pipelined_{lanes} dut ({', '.join(dut_ports)});")
-    lines.append(f"  reg [{latency - 1}:0] ref_valid_pipe;")
-    lines.append("  integer k;")
+    lines.append(f"  reg [{reference_depth - 1}:0] ref_valid_pipe;")
     lines.append("  always @(posedge clk) begin")
     lines.append("    if (reset) ref_valid_pipe <= 0;")
     lines.append("    else begin")
     lines.append("      ref_valid_pipe[0] <= in_valid;")
-    for index in range(1, latency):
+    for index in range(1, reference_depth):
         lines.append(f"      ref_valid_pipe[{index}] <= ref_valid_pipe[{index - 1}];")
     lines.extend(["    end", "  end"])
-    lines.append(f"  assign bad = (dut_valid != ref_valid_pipe[{latency - 1}]);")
+    lines.append(f"  assign bad = (dut_valid != ref_valid_pipe[{reference_depth - 1}]);")
     lines.append("endmodule")
     return design.source + "\n" + "\n".join(lines) + "\n", latency
 

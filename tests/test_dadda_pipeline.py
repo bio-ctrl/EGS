@@ -78,15 +78,41 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
                     else:
                         self.assertNotIn("final_cpa", source)
 
-    def test_sequential_control_miter_checks_only_valid_reset_alignment(self):
+    def test_sequential_control_miter_checks_registered_output_boundary(self):
         for lanes in LANES:
             source, latency = build_control_miter(lanes)
-            self.assertIn(f"ref_valid_pipe[{latency - 1}]", source)
-            self.assertIn("dut_valid != ref_valid_pipe", source)
+            reference_depth = latency + 1
+            self.assertIn(f"reg [{reference_depth - 1}:0] ref_valid_pipe;", source)
+            self.assertIn(f"ref_valid_pipe[{reference_depth - 1}] <= ref_valid_pipe[{reference_depth - 2}];", source)
+            self.assertIn(f"assign bad = (dut_valid != ref_valid_pipe[{reference_depth - 1}]);", source)
             self.assertIn(f"orcus_dadda_pipelined_{lanes} dut", source)
             self.assertIn("if (reset) ref_valid_pipe <= 0", source)
             self.assertNotIn("ref_data_pipe", source)
             self.assertEqual(build_sequential_miter(lanes), (source, latency))
+
+    def test_dut_valid_depth_reference_depth_manifest_and_stream_latency_agree(self):
+        for lanes in LANES:
+            with self.subTest(lanes=lanes):
+                design = generate_dadda_pipelined(lanes)
+                latency = design.latency
+                manifest_latency = design.manifest["latency_cycles"]
+                control_source, control_latency = build_control_miter(lanes)
+                stream_source, stream_latency = build_streaming_testbench(lanes)
+
+                # L reduction-stage valid bits plus the separately registered
+                # out_valid boundary form L+1 registered elements.  The input
+                # sample reaches out_valid after L rising-edge intervals.
+                self.assertEqual(manifest_latency, latency)
+                self.assertEqual(control_latency, latency)
+                self.assertEqual(stream_latency, latency)
+                self.assertIn(f"reg [{latency - 1}:0] valid_pipe;", design.source)
+                self.assertIn(f"out_valid <= valid_pipe[{latency - 1}];", design.source)
+                self.assertEqual(latency + 1, (latency + 1))  # explicit boundary accounting
+                self.assertIn(f"reg [{latency}:0] ref_valid_pipe;", control_source)
+                self.assertIn(f"ref_valid_pipe[{latency}]", control_source)
+                self.assertIn(f"if (idx >= {latency})", stream_source)
+                self.assertIn(f"vectors[idx - {latency}][2]", stream_source)
+                self.assertIn(f"vectors[len(vectors) - {latency} + flush][2]", stream_source)
 
     def test_streaming_testbench_has_512_back_to_back_vectors(self):
         for lanes in LANES:

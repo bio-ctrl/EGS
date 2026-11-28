@@ -10,19 +10,19 @@
 > - "Big dreams push past what other people view as possible, often because 'unrealistic' just means a goal hasn't been done yet by the people around you. You have to dream unrealistic because life is not realistic"
 > - "Get what I want and when I want it"
 
-> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0009 / Issue #31 has implemented a partitioned formal strategy on `research/orcus-ecp5-dadda-pipeline`, current head `d36ff48f7557a987b283472c89c01852af3b8bd2`, as a follow-up to EGS-0008 / Issue #30. Only `benchmarks/dadda_pipeline.py` and `tests/test_dadda_pipeline.py` differ from Run #265's starting head `de04727b73afab319bc9b3f96a9c8b314d891133`; `orcus/dadda_pipeline.py` and the pipelined RTL generator are unchanged. Stage proofs now use independent per-column compressor-conservation SAT miters plus exact ownership/weight accounting for primary input bits, intra-stage carry bits, sum outputs, and pass-through bits; the MSB is checked modulo (2^W). Final CPA equivalence remains a separate SAT miter, followed by the existing sequential valid/reset induction. Regression tests cover all lane widths and stages plus dropped, duplicated, and misweighted bits. The final branch tree was read back and compared against the starting head; exactly the two intended files are modified. No unit tests, compileall, Yosys proofs, streaming tests, or P&R were executed in this session. Exact-head Actions lookup for `c14bf43...` returned no runs. Branch is ready for the next manual ORCUS CI trigger, but not yet validated. Issue #31 is open. PR #22 remains Draft/unmerged; PR #21 untouched; Run #262/main baseline preserved; Ceres untouched; NEM isolated. Milestone #3 remains OPEN/BLOCKED; do not begin Milestone #4 until all formal, streaming, latency, and 4/8/16/32-lane ECP5 gates pass. No silicon or board-level claims.
+> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0013 / Issue #35 has audited [ORCUS CI Run #267](https://github.com/bio-ctrl/EGS/actions/runs/46114719350), run ID `46114719350`, at exact branch head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`. Both requested artifact ZIPs were downloaded and their SHA-256 hashes independently matched GitHub. All 4/8/16/32-lane atomic FA/HA SAT lemmas, Baugh–Wooley base proofs, compressor-token stage graph/wiring accounting, final CPA, sequential valid/reset induction, 512-vector streaming/flush/reset-leakage simulations, and ECP5 synthesis/P&R passed. Execution-verified latencies are 6/8/10/11 cycles; post-route Fmax is 335.9086/313.2832/313.6763/324.1491 MHz against 100 MHz. All widths use fewer LUT4s than Run #262 and zero MULT18X18D; pipeline FFs increase due to stage registers. **Milestone #3 technical gates are COMPLETE; Milestone #4 is unlocked.** PR #22 is Ready for review, open and unmerged; GitHub currently reports `mergeable=false` / `mergeable_state=dirty` and branch history diverges from current main, so reconcile the base/conflict condition and rerun CI on the merge candidate before merge. PR #21 untouched; Run #262 immutable; Ceres untouched; NEM isolated. No silicon or board-level claims. Milestone #4 v1 is specified in EGS-0013: signed INT4 N-lane Dadda dot-product core, two synchronous true-dual-port A/B scratchpads of 16,384 bits each, K-row full-precision accumulation with 20-bit result, and explicit DP16KD/formal/streaming/P&R gates. Exact next action: start M4.1 on a dedicated branch from validated head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`, implement the golden reference model, interface contract, width/depth assertions, and tests before adding memory RTL.
 
 ---
 
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-28T05:56:32Z
+**Last updated:** 2026-11-28T06:11:30Z
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
 ---
 
-> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0012 / Issue #34 follows EGS-0011 / Issue #33. The requested atomic FA/HA compositional proof architecture and regressions have been committed to `research/orcus-ecp5-dadda-pipeline`, latest head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`, with changes limited to `benchmarks/dadda_pipeline.py` and `tests/test_dadda_pipeline.py`. Formal flow now proves reusable 1-bit FA and HA weighted-conservation lemmas with Yosys SAT, then composes them over the exact generated stage compressor-token graph. It audits emitted Verilog sum/carry equations against scheduled pins, exact input ownership and column weights, pass-through/output accounting, stage register assignments, and modulo-2^W MSB carry truncation. Existing initial Baugh–Wooley proofs, final CPA proof, and sequential valid/reset induction remain separate. Added regression coverage includes FA/HA miter construction, all-stage/all-width emitted-netlist wiring checks, miswired FA/HA pins, dropped/duplicated output and register tokens, misweighted carries, and the exact 32-lane Stage 0 Column 4 structure. The exact-head PR workflow-run lookup for `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a` returned no runs; unit tests, compileall, Yosys atomic SAT, 32-lane streaming, and ECP5 P&R have NOT yet been executed against this head. The branch is prepared for the final Milestone #3 ORCUS CI trigger, but neither sub-second proof runtime nor CI success is established. PR #22 remains Draft/unmerged; PR #21 untouched; main and Run #262 preserved; `orcus/dadda_pipeline.py` and the validated pipelined RTL generator untouched; Ceres untouched; NEM isolated. Milestone #3 remains OPEN/BLOCKED until exact-head Run #267 passes all gates. No silicon or board-level claims.
+> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0013 / Issue #35 has audited [ORCUS CI Run #267](https://github.com/bio-ctrl/EGS/actions/runs/46114719350), run ID `46114719350`, at exact branch head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`. Both requested artifact ZIPs were downloaded and their SHA-256 hashes independently matched GitHub. All 4/8/16/32-lane atomic FA/HA SAT lemmas, Baugh–Wooley base proofs, compressor-token stage graph/wiring accounting, final CPA, sequential valid/reset induction, 512-vector streaming/flush/reset-leakage simulations, and ECP5 synthesis/P&R passed. Execution-verified latencies are 6/8/10/11 cycles; post-route Fmax is 335.9086/313.2832/313.6763/324.1491 MHz against 100 MHz. All widths use fewer LUT4s than Run #262 and zero MULT18X18D; pipeline FFs increase due to stage registers. **Milestone #3 technical gates are COMPLETE; Milestone #4 is unlocked.** PR #22 is Ready for review, open and unmerged; GitHub currently reports `mergeable=false` / `mergeable_state=dirty` and branch history diverges from current main, so reconcile the base/conflict condition and rerun CI on the merge candidate before merge. PR #21 untouched; Run #262 immutable; Ceres untouched; NEM isolated. No silicon or board-level claims. Milestone #4 v1 is specified in EGS-0013: signed INT4 N-lane Dadda dot-product core, two synchronous true-dual-port A/B scratchpads of 16,384 bits each, K-row full-precision accumulation with 20-bit result, and explicit DP16KD/formal/streaming/P&R gates. Exact next action: start M4.1 on a dedicated branch from validated head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`, implement the golden reference model, interface contract, width/depth assertions, and tests before adding memory RTL.
 
 ## 1. Mission and operating philosophy
 
@@ -3329,4 +3329,95 @@ EGS-0010's prior STATUS entry recorded the initial artifact-access blocker. EGS-
 - **Boundaries:** PR #22 remains Draft/unmerged; PR #21 untouched; main and Run #262 immutable; Ceres untouched; NEM isolated; no silicon or board-level claims.
 - **Status:** implementation committed; validation pending; Milestone #3 remains OPEN/BLOCKED.
 - **Next action:** trigger ORCUS CI against the exact final branch head, then audit atomic FA/HA SAT runtimes, all stage graph proofs, 32-lane final CPA and sequential induction, 512-vector streaming/flush/reset, observed latency, and 4/8/16/32 ECP5 P&R artifacts. Do not begin Milestone #4 until all gates pass.
+
+---
+
+## EGS-0013 — ORCUS CI Run #267 audit; Milestone #3 complete; Milestone #4 specified — 2026-11-28
+
+- **Execution issue:** [EGS-0013 / Issue #35](https://github.com/bio-ctrl/EGS/issues/35), following EGS-0012 / Issue #34.
+- **Run:** [ORCUS CI #267](https://github.com/bio-ctrl/EGS/actions/runs/46114719350), ID `46114719350`, completed `success` in 2m06s (06:01:47Z–06:03:53Z).
+- **Exact source:** branch `research/orcus-ecp5-dadda-pipeline`, head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`. Run's head SHA exactly matches the validated EGS-0012 commit.
+- **Jobs:** `test` job `140885841251` passed; `ORCUS FPGA ECP5 place-and-route` job `140885841427` passed.
+- **Artifacts:** pipelined Dadda artifact ID `15251480221`, 1,864,608 bytes, SHA-256 `c4b8e56595ceca3b592aecafa74d4644237d2344f1dbf8cd139f02287bc8d0c0`; ECP5 P&R artifact ID `15251063434`, 1,297,755 bytes, SHA-256 `79dfd7cf85be05d3d8114f2e2eaa14437a2881b3b67975b04c1e3a731cd41476`. Both downloaded ZIPs were independently hashed and matched GitHub's published digests.
+- **Target/toolchain:** Lattice ECP5 `LFE5U-85F-6BG381C`, `CABGA381`, speed grade 6, 100 MHz; Yosys 0.33 (`2584903a060`); nextpnr-ecp5 0.6-3build5. External IOs unconstrained.
+
+### Run #267 formal / graph / streaming evidence
+
+| Lanes | FA SAT s | HA SAT s | Baugh–Wooley proofs / aggregate s | Stage count / columns composed | Compressor instances audited | Registered bits audited | Final CPA s | Control induction s / depth | 512-vector streaming | Observed L |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|
+| 4 | 0.012345 | 0.010684 | 4/4 / 0.160972 | 6 / 60 | 66 | 288 | 0.026831 | 0.267871 / 14 | PASS | 6 |
+| 8 | 0.012813 | 0.010819 | 8/8 / 0.322165 | 8 / 88 | 150 | 690 | 0.029982 | 0.711454 / 18 | PASS | 8 |
+| 16 | 0.011905 | 0.010254 | 16/16 / 0.673759 | 10 / 120 | 329 | 1,595 | 0.034317 | 1.850986 / 22 | PASS | 10 |
+| 32 | 0.011729 | 0.010215 | 32/32 / 1.444233 | 11 / 143 | 702 | 2,874 | 0.036849 | 5.043375 / 24 | PASS | 11 |
+
+- All atomic FA and HA logs end with Yosys `SAT proof finished - no model found: SUCCESS!`.
+- All initial Baugh–Wooley lane proofs passed. All stage graph composition records and exact emitted-Verilog compressor/register wiring checks passed. Stage composition is a structural ownership/weight audit, not an additional SAT job; no independent wall-clock time is emitted for that Python audit.
+- Sum of reported FA/HA + initial Baugh–Wooley + final CPA + sequential-induction solver runtimes: 0.478704s / 1.087233s / 2.581223s / 6.546401s for 4/8/16/32 lanes. This sum excludes uninstrumented structural-audit time. Atomic FA/HA lemmas individually complete in approximately 10–13 ms each.
+- Every width's simulation log explicitly reports `PASS lanes=N vectors=512 latency=L`. Each testbench includes back-to-back traffic, flush, reset, and stale-transaction/reset-leakage checks.
+- CI tests: 94 tests passed in 8.446s; compileall succeeded. FPGA wrapper/report-parser tests: 5/5 in 0.016s. Pipelined Dadda generator/sequential harness tests: 15/15 in 1.914s.
+
+### Run #267 ECP5 results and Run #262 comparison
+
+Run #262 is the immutable **combinational** Fused Dadda baseline; Run #267 is the validated **pipelined** Dadda design. Compare Fmax as architecture-level evidence, not as a like-for-like combinational timing comparison.
+
+| Lanes | Run #262 Fmax MHz | Run #267 Fmax MHz | 100 MHz target | Run #262 logic / routing / clk-to-Q ns | Run #267 logic / routing / clk-to-Q ns | Run #262 LUT4 / FF / MULT18X18D | Run #267 LUT4 / FF / MULT18X18D | Run #267 L |
+|---:|---:|---:|---|---:|---:|---:|---:|---:|
+| 4 | 106.2586 | 335.9086 | PASS | 3.496 / 5.390 / 0.525 | 1.134 / 1.318 / 0.525 | 260 / 42 / 0 | 186 / 259 / 0 | 6 |
+| 8 | 84.0195 | 313.2832 | PASS | 4.489 / 6.888 / 0.525 | 1.174 / 1.493 / 0.525 | 579 / 75 / 0 | 393 / 568 / 0 | 8 |
+| 16 | 73.0994 | 313.6763 | PASS | 4.987 / 8.168 / 0.525 | 1.174 / 1.489 / 0.525 | 1,252 / 140 / 0 | 799 / 1,193 / 0 | 10 |
+| 32 | 55.8223 | 324.1491 | PASS | 5.931 / 11.458 / 0.525 | 1.245 / 1.315 / 0.525 | 2,400 / 269 / 0 | 1,655 / 2,012 / 0 | 11 |
+
+- Run #267 Yosys synthesis / nextpnr P&R elapsed times: 4 lanes 1.071405s / 0.817732s; 8 lanes 2.217624s / 1.210140s; 16 lanes 5.679282s / 1.735106s; 32 lanes 14.197711s / 4.722756s.
+- All four Run #267 nextpnr reports set `timing_met=true`. All four exceed 100 MHz. All four use fewer LUT4s than Run #262 and zero `MULT18X18D`; FF counts rise because the pipelined design registers intermediate heaps. No silicon or board-level claims; external IOs are unconstrained.
+
+### Milestone #3 verdict and PR #22 disposition
+
+- **Milestone #3 technical acceptance criteria: COMPLETE.** All four lane widths passed base arithmetic, atomic FA/HA, all-stage graph/wiring and bit-accounting, final CPA, sequential control/reset induction, 512-vector streaming/flush/reset-leakage, synthesis, and ECP5 P&R.
+- **PR #22:** [ORCUS: Pipelined Dadda ECP5 timing-closure experiment (Run #267 validated)](https://github.com/bio-ctrl/EGS/pull/22) was converted from Draft to Ready for review and its description updated with the Run #267 audit. It remains open and unmerged.
+- **Merge blocker:** GitHub reports `mergeable=false` / `mergeable_state=dirty`; comparison with current `main` reports diverged history. Reconcile the branch/base conflict and run CI on the merge candidate before merge. No merge was performed or authorized.
+- PR #21 untouched; Run #262 and main baseline preserved; Ceres untouched; NEM isolated.
+
+### Milestone #4 — ORCUS MAC + Local-Memory Inference Tile v1 specification
+
+**Compute contract**
+- Reuse the validated pipelined Dadda signed-INT4 dot-product core unchanged. Parameterize lane count `N ∈ {4,8,16,32}`; each row contains N signed INT4 A values and N signed INT4 B values, with one row dot-product per core input transaction.
+- Dot-product width `W_DOT = 8 + ceil(log2(N))`: 10, 11, 12, 13 bits for 4/8/16/32 lanes, matching Run #267 manifests.
+- Preserve core latency `L={6,8,10,11}` and one input row per cycle.
+
+**Local-memory architecture**
+- Two independent synchronous true-dual-port scratchpads: A and B. Each word is packed `N × INT4`; one host/load write port and one compute read port; registered synchronous read only.
+- Each operand memory has exactly 16,384 logical bits (2 KiB): N=4: 16-bit × 1,024 words; N=8: 32-bit × 512; N=16: 64-bit × 256; N=32: 128-bit × 128. Total A+B logical capacity 32,768 bits (4 KiB), or 4,096 INT4 values per operand.
+- Infer ECP5 `DP16KD` block RAM, not flip-flop arrays or LUT-only storage. Expected minimum packing per operand: 1/1/2/4 DP16KD for N=4/8/16/32 (2/2/4/8 total for A+B), subject to actual Yosys mapping. This is a target, not an achieved result.
+- Host writes only while compute is idle in v1; prohibit same-address read/write collisions. Memory contents are not reset; controller and valid state are reset.
+
+**MAC accumulation and control**
+- Accumulate K consecutive row dot-products; `K_MAX=memory_depth`. Use full-precision `W_ACC = W_DOT + ceil(log2(K_MAX)) = 20` bits for all four configurations. No truncation or saturation in v1.
+- Load interface: `wr_addr`, `a_we`, `b_we`, `a_wdata[N*4-1:0]`, `b_wdata[N*4-1:0]`.
+- Compute interface: `start`, `base_addr`, `k_length`, `busy`, `done`, `result_valid`, signed 20-bit `result_data`.
+- Controller issues one synchronous A/B memory read per cycle for K rows; pipeline `first`/`last` tags with valid through BRAM read and Dadda core. V1 has one accumulation context; no interleaved contexts or DMA.
+- Target request-to-result latency is `L+2` cycles: one synchronous BRAM read cycle, existing L-cycle core, one accumulator result-register cycle. This is a design target to be cycle-verified, not measured evidence. Core accepts one row/cycle; one K-row result is emitted per K input rows.
+- Synchronous active-high reset clears controller, valid/tag pipelines, accumulator and result-valid; memory contents are retained/unspecified. Reset must prevent stale reads or partial sums becoming valid outputs.
+
+**Milestone #4 acceptance gates**
+1. Signed-INT4 golden-model equivalence across all lane counts and K boundary cases.
+2. SAT for dot-product and full-precision accumulator arithmetic, including signed extrema.
+3. Sequential induction for first/last/valid/reset alignment.
+4. 512+ back-to-back memory-fed simulations, flush, reset-leakage, and address-bound checks.
+5. Synthesis evidence for exact memory dimensions and DP16KD inference; reject accidental FF/LUT memory mapping.
+6. ECP5 synthesis/P&R on the same device and 100 MHz target for all lane counts.
+7. Report LUT4/FF/DP16KD/MULT18X18D, Fmax, and timing-path breakdown against Run #267. No silicon or board-level claims.
+
+**Execution sequence**
+- M4.1: write the interface contract, signed golden reference model, parameter/width/depth assertions, and tests.
+- M4.2: implement A/B BRAM scratchpads and prove DP16KD inference.
+- M4.3: implement K-loop address controller and first/last tagging.
+- M4.4: add 20-bit full-precision accumulator and formal/streaming gates.
+- M4.5: run all-width ECP5 synthesis/P&R and audit resource/timing deltas.
+- Begin with 32 lanes as the stress configuration, then validate 4/8/16.
+
+### EGS-0013 status and next action
+
+- **Status:** Run #267 audited; artifacts hash-verified; Milestone #3 technically complete; Milestone #4 architecture specified; PR #22 ready for review but not mergeable until base-history conflict is resolved.
+- **Next exact action:** create a dedicated Milestone #4 branch from validated head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`; implement M4.1 golden model, interface contract, width/depth assertions, and regression tests before adding memory RTL. Keep the Run #267 pipelined Dadda core immutable.
+- Do not merge PR #22 automatically. Do not alter PR #21, Run #262, Ceres, or NEM.
 

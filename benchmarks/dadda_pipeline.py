@@ -88,7 +88,8 @@ def build_stage_miter(lanes: int, stage_index: int) -> str:
     lines.append(f"  wire [{design.width - 1}:0] weighted_input = {in_expr};")
     lines.append(f"  wire [{design.width - 1}:0] weighted_output = {out_expr};")
     if stage_index == design.latency - 1:
-        row0, row1 = design.manifest["final_rows"]
+        row0 = [column[0] if column else "1'b0" for column in output_heap]
+        row1 = [column[1] if len(column) > 1 else "1'b0" for column in output_heap]
         row0_expr = "{"+", ".join(reversed(row0))+"}"
         row1_expr = "{"+", ".join(reversed(row1))+"}"
         lines.append(f"  wire [{design.width - 1}:0] final_row0 = {row0_expr};")

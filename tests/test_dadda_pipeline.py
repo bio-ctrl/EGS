@@ -3,7 +3,7 @@ import unittest
 from benchmarks.dadda_pipeline import (
     LANES, VECTOR_COUNT, build_control_miter, build_initial_heap_miter,
     build_stage_partition, build_stage_column_miter, build_final_cpa_miter,
-    validate_stage_bit_partition, build_sequential_miter, build_stage_partition,
+    validate_stage_bit_partition, build_sequential_miter,
     build_streaming_testbench, _vectors, build_atomic_compressor_miter,
     validate_stage_netlist_wiring,
 )

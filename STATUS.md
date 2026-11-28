@@ -2663,3 +2663,16 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - EGS-0002 records objective, starting main commit `146d6b189c2d601f5fc1b5c4c76923a6f4bb44e3`, branch and exact experiment SHA, Run #263 ID/URL, job outcomes, formal timeout command and solver scale, artifact ID/digest/inventory, unrun streaming/P&R checks, absent execution-verified latency/metrics, boundaries, and next action.
 - EGS-0002 status is **Blocked**. No pipeline correctness or timing-closure claim is made. PR #22 remains Draft; PR #21 and Run #262 remain untouched; Ceres and NEM remain isolated.
 - Next action: develop a tractable compositional/inductive sequential-equivalence proof, then rerun the pipeline in exact-head CI. Do not advance to P&R conclusions until proof and streaming/reset checks execute successfully.
+
+
+## EGS-0003 — Compositional formal verification redesign started
+
+- Date: 2026-11-27
+- Objective: replace Run #263's monolithic sequential multiplier SAT proof with per-stage weighted-heap combinational equivalence and a small sequential valid/reset control proof, retaining streaming simulation and ECP5 P&R gates.
+- Project/repository: ORCUS / bio-ctrl/EGS.
+- Branch and starting commit: `research/orcus-ecp5-dadda-pipeline` at `b4f1a9ef60d19258e3941e00389649f52ad3e392`.
+- Main starting state: STATUS blob `f81cae5a5557e8ac0b79a3fa700a2255ad3684df`; latest main commit recorded by prior ledger entry `79de79032ded5f7a755446ae7686de8e6434d84d`.
+- Sequential ID reconciliation: EGS-0001 is Issue #23; EGS-0002 is Issue #24; repository issue search found no EGS-0003. EGS-0003 is allocated for this execution.
+- Inspected branch files: `benchmarks/dadda_pipeline.py`, `benchmarks/fpga_ecp5_pipeline.py`, `orcus/dadda_pipeline.py`, `tests/test_dadda_pipeline.py`, and `.github/workflows/ci.yml`. The existing runner already calls `run_formal` before the 512-vector streaming test and ECP5 synthesis/P&R for each lane count. Therefore the proof harness can be replaced without changing the ECP5 runner or workflow ordering.
+- Planned proof composition: independently instantiate each Dadda stage from manifest compressor records, expose arbitrary input heap bits, compute weighted input/output sums modulo accumulator width, and prove equality with combinational SAT; for the final stage additionally prove the CPA sum equals the final two-row heap. Separately instantiate the real pipeline RTL in a valid-only miter, prune unobservable datapath logic, and check reset/valid shift alignment with bounded sequential SAT on the small control cone. Existing Icarus 512-vector back-to-back/reset test remains mandatory.
+- No branch edits or technical validation have yet occurred. Status: in progress. Next: implement the compositional harness and update source-level tests on the experiment branch, preserving PR #22 as Draft. Main, Run #262, PR #21, Ceres and NEM remain untouched.

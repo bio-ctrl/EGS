@@ -3,8 +3,9 @@ import unittest
 from benchmarks.dadda_pipeline import (
     LANES, VECTOR_COUNT, build_control_miter, build_initial_heap_miter,
     build_stage_partition, build_stage_column_miter, build_final_cpa_miter,
-    validate_stage_bit_partition, build_sequential_miter,
-    build_streaming_testbench, _vectors,
+    validate_stage_bit_partition, build_sequential_miter, build_stage_partition,
+    build_streaming_testbench, _vectors, build_atomic_compressor_miter,
+    validate_stage_netlist_wiring,
 )
 from orcus.dadda_pipeline import generate_dadda_pipelined
 from orcus.lane_scaling import accumulator_width
@@ -112,6 +113,62 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
         duplicated_input[0]["inputs"][1]=duplicated_input[0]["inputs"][0]
         with self.assertRaisesRegex(ValueError,"consumed more than once"):
             validate_stage_bit_partition(inputs,outputs,duplicated_input,width)
+
+    def test_atomic_fa_ha_conservation_miters_are_exact_and_distinct(self):
+        for kind, inputs in (("full_adder", ("a", "b", "cin")),
+                             ("half_adder", ("a", "b"))):
+            top, source = build_atomic_compressor_miter(kind)
+            self.assertIn(f"module {top}(", source)
+            self.assertIn("wire [2:0] lhs", source)
+            self.assertIn("wire [2:0] rhs", source)
+            self.assertIn("assign bad = (lhs != rhs)", source)
+            for pin in inputs:
+                self.assertIn(f"input wire {pin}", source)
+        with self.assertRaisesRegex(ValueError, "unsupported compressor kind"):
+            build_atomic_compressor_miter("unknown")
+
+    def test_emitted_stage_netlist_matches_every_compressor_pin(self):
+        design = generate_dadda_pipelined(32)
+        for stage in range(design.latency):
+            records = [r for r in design.manifest["compressors"] if r["stage"] == stage]
+            audit = validate_stage_netlist_wiring(design.source, records, stage)
+            self.assertEqual(audit["status"], "PASS")
+            self.assertEqual(audit["compressors_checked"], len(records))
+
+    def test_netlist_audit_rejects_miswired_fa_and_ha_pins(self):
+        design = generate_dadda_pipelined(4)
+        records = [r for r in design.manifest["compressors"] if r["stage"] == 0]
+        fa = next(r for r in records if r["kind"] == "full_adder")
+        x, y, z = fa["inputs"]
+        bad_source = design.source.replace(
+            f"wire {fa['sum']} = {x} ^ {y} ^ {z};",
+            f"wire {fa['sum']} = {x} ^ {x} ^ {z};", 1)
+        with self.assertRaisesRegex(ValueError, "sum pin/netlist mismatch"):
+            validate_stage_netlist_wiring(bad_source, records, 0)
+        ha = next(r for r in records if r["kind"] == "half_adder")
+        x, y = ha["inputs"]
+        bad_source = design.source.replace(
+            f"wire {ha['carry']} = {x} & {y};",
+            f"wire {ha['carry']} = {x} & {x};", 1)
+        with self.assertRaisesRegex(ValueError, "carry pin/netlist mismatch"):
+            validate_stage_netlist_wiring(bad_source, records, 0)
+
+    def test_32_lane_stage0_column4_uses_atomic_composition_not_column_miter(self):
+        design = generate_dadda_pipelined(32)
+        records = [r for r in design.manifest["compressors"]
+                   if r["stage"] == 0 and r["column"] == 4]
+        self.assertTrue(records)
+        self.assertTrue(all(r["kind"] in ("full_adder", "half_adder") for r in records))
+        part = build_stage_partition(32, 0)
+        column = part["columns"][4]
+        self.assertEqual(column["compressors"], records)
+        audit = validate_stage_netlist_wiring(design.source,
+            [r for r in design.manifest["compressors"] if r["stage"] == 0], 0)
+        self.assertEqual(audit["compressors_checked"],
+                         sum(r["stage"] == 0 for r in design.manifest["compressors"]))
+        top, fa = build_atomic_compressor_miter("full_adder")
+        self.assertIn("orcus_atomic_fa_conservation", top)
+        self.assertNotIn("orcus_dadda_stage_column_miter_32_0_4", fa)
 
     def test_final_cpa_is_proved_as_a_separate_miter_for_all_widths(self):
         for lanes in LANES:

@@ -26,42 +26,118 @@ def _ports(lanes: int) -> tuple[list[str], list[str]]:
     return decls, conns
 
 
-def build_sequential_miter(lanes: int) -> tuple[str, int]:
+def _weighted_sum(heap: list[list[str]], width: int, prefix: str) -> tuple[list[str], str]:
+    terms = []
+    declarations = []
+    for column, tokens in enumerate(heap):
+        for index, token in enumerate(tokens):
+            term = f"{prefix}_term_{column}_{index}"
+            declarations.append(
+                f"  wire [{width - 1}:0] {term} = "
+                f"{{{{{width - 1}{{1'b0}}}}, {token}}} << {column};"
+            )
+            terms.append(term)
+    expression = " + ".join(terms) if terms else f"{width}'b0"
+    return declarations, expression
+
+
+def build_stage_miter(lanes: int, stage_index: int) -> str:
+    """Build a standalone combinational weighted-heap equivalence miter.
+
+    Inputs are arbitrary heap bits. Compressor equations are reconstructed
+    from the generator manifest, so each stage is proved independently of
+    all earlier pipeline logic and register boundaries.
+    """
     design = generate_dadda_pipelined(lanes)
-    width, latency = design.width, design.latency
-    decls, conns = _ports(lanes)
-    ref = module_source(f"orcus_pipeline_reference_{lanes}", lanes, "direct")
-    top_ports = ["input wire clk", "input wire reset", "input wire in_valid"] + decls + ["output wire bad"]
-    dut_conns = [".clk(clk)", ".reset(reset)", ".in_valid(in_valid)",
-                 ".out_valid(dut_valid)", ".out_data(dut_data)"] + conns
-    ref_conns = conns + [".y(ref_data)"]
-    lines = [ref, design.source, f"module orcus_pipeline_miter_{lanes}({', '.join(top_ports)});",
-             f"  wire signed [{width - 1}:0] ref_data;",
-             f"  wire signed [{width - 1}:0] dut_data;",
-             "  wire dut_valid;"]
-    lines.append(f"  orcus_dadda_pipelined_{lanes} dut ({', '.join(dut_conns)});")
-    lines.append(f"  orcus_pipeline_reference_{lanes} ref ({', '.join(ref_conns)});")
-    lines.append(f"  reg [{width - 1}:0] ref_data_pipe [0:{latency}];")
-    lines.append(f"  reg [{latency}:0] ref_valid_pipe;")
+    boundaries = design.manifest["stage_boundaries"]
+    if stage_index < 0 or stage_index >= len(boundaries):
+        raise ValueError(f"invalid stage {stage_index} for {lanes} lanes")
+    boundary = boundaries[stage_index]
+    input_heap = boundary["input_heap"]
+    output_heap = boundary["output_heap"]
+    input_tokens = list(dict.fromkeys(token for col in input_heap for token in col))
+    declarations = [f"input wire {token}" for token in input_tokens]
+    lines = [
+        f"module orcus_dadda_stage_miter_{lanes}_{stage_index}(",
+        ", ".join(declarations + ["output wire bad"]),
+        ");",
+    ]
+    compressor_records = [
+        record for record in design.manifest["compressors"]
+        if record["stage"] == stage_index
+    ]
+    for record in compressor_records:
+        x = record["inputs"][0]
+        y = record["inputs"][1]
+        if record["kind"] == "full_adder":
+            z = record["inputs"][2]
+            lines.append(f"  wire {record['sum']} = {x} ^ {y} ^ {z};")
+            if record["carry"] is not None:
+                lines.append(
+                    f"  wire {record['carry']} = ({x} & {y}) | ({x} & {z}) | ({y} & {z});"
+                )
+        else:
+            lines.append(f"  wire {record['sum']} = {x} ^ {y};")
+            if record["carry"] is not None:
+                lines.append(f"  wire {record['carry']} = {x} & {y};")
+
+    in_decls, in_expr = _weighted_sum(input_heap, design.width, "in")
+    out_decls, out_expr = _weighted_sum(output_heap, design.width, "out")
+    lines.extend(in_decls)
+    lines.extend(out_decls)
+    lines.append(f"  wire [{design.width - 1}:0] weighted_input = {in_expr};")
+    lines.append(f"  wire [{design.width - 1}:0] weighted_output = {out_expr};")
+    if stage_index == design.latency - 1:
+        row0, row1 = design.manifest["final_rows"]
+        row0_expr = "{"+", ".join(reversed(row0))+"}"
+        row1_expr = "{"+", ".join(reversed(row1))+"}"
+        lines.append(f"  wire [{design.width - 1}:0] final_row0 = {row0_expr};")
+        lines.append(f"  wire [{design.width - 1}:0] final_row1 = {row1_expr};")
+        lines.append(
+            f"  wire [{design.width - 1}:0] final_cpa = final_row0 + final_row1;"
+        )
+        lines.append(
+            "  assign bad = (weighted_input != weighted_output) || "
+            "(final_cpa != weighted_output);"
+        )
+    else:
+        lines.append("  assign bad = (weighted_input != weighted_output);")
+    lines.append("endmodule")
+    return "\n".join(lines) + "\n"
+
+
+def build_control_miter(lanes: int) -> tuple[str, int]:
+    """Instantiate the real pipeline but compare only its valid/reset cone."""
+    design = generate_dadda_pipelined(lanes)
+    latency = design.latency
+    ports = ["input wire clk", "input wire reset", "input wire in_valid", "output wire bad"]
+    lines = [f"module orcus_pipeline_control_miter_{lanes}({', '.join(ports)});",
+             "  wire dut_valid;",
+             f"  wire signed [{design.width - 1}:0] dut_data;"]
+    dut_ports = [".clk(clk)", ".reset(reset)", ".in_valid(in_valid)",
+                 ".out_valid(dut_valid)", ".out_data(dut_data)"]
+    for lane in range(lanes):
+        lines.append(f"  wire signed [3:0] a{lane} = 4'sd0;")
+        lines.append(f"  wire signed [3:0] b{lane} = 4'sd0;")
+        dut_ports.extend((f".a{lane}(a{lane})", f".b{lane}(b{lane})"))
+    lines.append(f"  orcus_dadda_pipelined_{lanes} dut ({', '.join(dut_ports)});")
+    lines.append(f"  reg [{latency - 1}:0] ref_valid_pipe;")
     lines.append("  integer k;")
     lines.append("  always @(posedge clk) begin")
-    lines.append("    if (reset) begin")
-    lines.append(f"      ref_valid_pipe <= {{{latency + 1}{{1'b0}}}};")
-    lines.append(f"      for (k = 0; k <= {latency}; k = k + 1) ref_data_pipe[k] <= {{{width}{{1'b0}}}};")
-    lines.append("    end else begin")
-    lines.append("      ref_data_pipe[0] <= ref_data;")
+    lines.append("    if (reset) ref_valid_pipe <= 0;")
+    lines.append("    else begin")
     lines.append("      ref_valid_pipe[0] <= in_valid;")
-    lines.append(f"      for (k = 1; k <= {latency}; k = k + 1) begin")
-    lines.append("        ref_data_pipe[k] <= ref_data_pipe[k-1];")
-    lines.append("        ref_valid_pipe[k] <= ref_valid_pipe[k-1];")
-    lines.append("      end")
-    lines.append("    end")
-    lines.append("  end")
-    lines.append(f"  assign bad = (dut_valid != ref_valid_pipe[{latency}]) ||")
-    lines.append(f"               (dut_valid && (dut_data != ref_data_pipe[{latency}]));")
+    for index in range(1, latency):
+        lines.append(f"      ref_valid_pipe[{index}] <= ref_valid_pipe[{index - 1}];")
+    lines.extend(["    end", "  end"])
+    lines.append(f"  assign bad = (dut_valid != ref_valid_pipe[{latency - 1}]);")
     lines.append("endmodule")
-    return "\n".join(lines) + "\n", latency
+    return design.source + "\n" + "\n".join(lines) + "\n", latency
 
+
+def build_sequential_miter(lanes: int) -> tuple[str, int]:
+    """Compatibility alias: return the control-only sequential miter."""
+    return build_control_miter(lanes)
 
 def _signed4(value: int) -> int:
     value &= 15

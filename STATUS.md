@@ -2740,3 +2740,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - `run_formal` now runs an independent base-case SAT proof for every lane, then every Dadda stage proof, then the control-only sequential induction. This keeps the arithmetic base-case proofs small and preserves per-lane counterexamples.
 - Experiment branch commit: `1ac548ed04577f125f15379c6675c84212a78b66`.
 - No execution tests have run; this is an implementation refinement. Next update tests for per-lane base-case miters and perform the final static review.
+
+
+## EGS-0003 action 6 — per-lane initial proof tests committed
+
+- Updated `tests/test_dadda_pipeline.py` on the experiment branch; commit: `455df39f53fdd89f993228c533adfadbef74c9c1`.
+- Source-level tests now cover each lane's initial Baugh–Wooley miter for every supported lane count (4/8/16/32), in addition to every stage's weighted-heap miter and the sequential control miter.
+- These are test definitions, not executed test results. Next perform a final read-only audit of the latest branch files, exact head, PR state, workflow order, and any Actions run triggered by the branch update.

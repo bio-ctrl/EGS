@@ -10,13 +10,13 @@
 > - "Big dreams push past what other people view as possible, often because 'unrealistic' just means a goal hasn't been done yet by the people around you. You have to dream unrealistic because life is not realistic"
 > - "Get what I want and when I want it"
 
-> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0009 / Issue #31 has implemented a partitioned formal strategy on `research/orcus-ecp5-dadda-pipeline`, current head `c14bf43deb16c27ffaf050899bc00f761997d164`, as a follow-up to EGS-0008 / Issue #30. Only `benchmarks/dadda_pipeline.py` and `tests/test_dadda_pipeline.py` differ from Run #265's starting head `de04727b73afab319bc9b3f96a9c8b314d891133`; `orcus/dadda_pipeline.py` and the pipelined RTL generator are unchanged. Stage proofs now use independent per-column compressor-conservation SAT miters plus exact ownership/weight accounting for primary input bits, intra-stage carry bits, sum outputs, and pass-through bits; the MSB is checked modulo (2^W). Final CPA equivalence remains a separate SAT miter, followed by the existing sequential valid/reset induction. Regression tests cover all lane widths and stages plus dropped, duplicated, and misweighted bits. The final branch tree was read back and compared against the starting head; exactly the two intended files are modified. No unit tests, compileall, Yosys proofs, streaming tests, or P&R were executed in this session. Exact-head Actions lookup for `c14bf43...` returned no runs. Branch is ready for the next manual ORCUS CI trigger, but not yet validated. Issue #31 is open. PR #22 remains Draft/unmerged; PR #21 untouched; Run #262/main baseline preserved; Ceres untouched; NEM isolated. Milestone #3 remains OPEN/BLOCKED; do not begin Milestone #4 until all formal, streaming, latency, and 4/8/16/32-lane ECP5 gates pass. No silicon or board-level claims.
+> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0009 / Issue #31 has implemented a partitioned formal strategy on `research/orcus-ecp5-dadda-pipeline`, current head `d36ff48f7557a987b283472c89c01852af3b8bd2`, as a follow-up to EGS-0008 / Issue #30. Only `benchmarks/dadda_pipeline.py` and `tests/test_dadda_pipeline.py` differ from Run #265's starting head `de04727b73afab319bc9b3f96a9c8b314d891133`; `orcus/dadda_pipeline.py` and the pipelined RTL generator are unchanged. Stage proofs now use independent per-column compressor-conservation SAT miters plus exact ownership/weight accounting for primary input bits, intra-stage carry bits, sum outputs, and pass-through bits; the MSB is checked modulo (2^W). Final CPA equivalence remains a separate SAT miter, followed by the existing sequential valid/reset induction. Regression tests cover all lane widths and stages plus dropped, duplicated, and misweighted bits. The final branch tree was read back and compared against the starting head; exactly the two intended files are modified. No unit tests, compileall, Yosys proofs, streaming tests, or P&R were executed in this session. Exact-head Actions lookup for `c14bf43...` returned no runs. Branch is ready for the next manual ORCUS CI trigger, but not yet validated. Issue #31 is open. PR #22 remains Draft/unmerged; PR #21 untouched; Run #262/main baseline preserved; Ceres untouched; NEM isolated. Milestone #3 remains OPEN/BLOCKED; do not begin Milestone #4 until all formal, streaming, latency, and 4/8/16/32-lane ECP5 gates pass. No silicon or board-level claims.
 
 ---
 
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-28T05:32:50.162Z
+**Last updated:** 2026-11-28T05:33:41.281Z
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -3111,7 +3111,7 @@ The 4-lane pipeline result exceeds the 100 MHz target in the reported clock doma
 - **Repository:** `bio-ctrl/EGS`
 - **Branch:** `research/orcus-ecp5-dadda-pipeline`
 - **Starting commit:** `de04727b73afab319bc9b3f96a9c8b314d891133` (Run #265 exact head)
-- **Final branch head:** `c14bf43deb16c27ffaf050899bc00f761997d164`
+- **Final branch head:** `d36ff48f7557a987b283472c89c01852af3b8bd2`
 - **PR:** #22 remains open, Draft, and unmerged.
 
 ### Objective
@@ -3126,8 +3126,8 @@ Replace the monolithic whole-stage weighted-heap SAT miter that timed out at 8-l
    - Every generated carry token is accounted for exactly once: consumed in the next column or passed through into the output heap. Carry weight must be exactly column (c+1).
    - Every compressor sum output is assigned to its originating column and must appear exactly once in the output heap.
    - Rejects unknown, dropped, duplicated, aliased, or misweighted tokens. The top-column carry is explicitly truncated modulo (2^W).
-   - Added independent column SAT miters. For each nonempty compressor column, the miter proves the local conservation identity: the sum of consumed input bits equals the sum of compressor sum outputs plus twice the outgoing carry bits. The MSB uses parity equivalence modulo two.
-   - Kept final carry-propagate-adder equivalence as a separate SAT miter; the existing sequential valid/reset induction remains a separate proof.
+   - Added independent column SAT miters. Each nonempty column proves the local conservation identity for its compressor inputs, sum outputs, and outgoing carries. Carries entering a column from the preceding column are independent bit inputs to that column's proof. The MSB uses parity equivalence modulo two.
+   - Kept final carry-propagate-adder equivalence as a separate SAT miter; the existing sequential valid/reset induction remains separate.
    - Updated `run_formal` to record per-column proof timings and stage-level accounting, then execute final CPA and control proofs.
 
 2. `tests/test_dadda_pipeline.py`
@@ -3137,18 +3137,18 @@ Replace the monolithic whole-stage weighted-heap SAT miter that timed out at 8-l
 
 ### Verification and evidence status
 
-- Final branch head verified from GitHub: `c14bf43deb16c27ffaf050899bc00f761997d164`.
+- Final branch head verified from GitHub: `d36ff48f7557a987b283472c89c01852af3b8bd2`.
 - GitHub compare from starting head `de04727...` confirms exactly two modified files: `benchmarks/dadda_pipeline.py` and `tests/test_dadda_pipeline.py`.
 - `orcus/dadda_pipeline.py` is unchanged; no pipelined RTL was edited.
-- The branch tree was independently read back after commit and restored to include the complete original repository tree. Final compare confirms no unrelated files remain changed.
+- The final branch tree was read back and contains the full original repository tree. No unrelated files remain changed.
 - Unit tests and Python compilation were **not run** in this session.
 - Yosys column SAT, final CPA SAT, sequential induction, Icarus streaming, latency verification, synthesis, and nextpnr P&R were **not run** in this session.
-- Exact-head GitHub Actions query for `c14bf43...` returned zero runs. No manual workflow dispatch was performed; the connected GitHub actions available in this session do not expose a workflow-dispatch operation.
+- Exact-head GitHub Actions query for `d36ff48f7557a987b283472c89c01852af3b8bd2` returned 0 runs. No manual workflow dispatch was performed; the connected GitHub actions available in this session do not expose a workflow-dispatch operation.
 - Status: **implementation committed; awaiting manual exact-head ORCUS CI validation**. No proof pass, timing, or hardware metric is claimed.
 
 ### Exact next action
 
-Manually trigger ORCUS CI for PR #22 / branch `research/orcus-ecp5-dadda-pipeline` at exact head `c14bf43deb16c27ffaf050899bc00f761997d164`. First inspect the unit-test and compileall gates. Then audit each width's per-column SAT logs and accounting, separate final CPA proof, sequential control/reset induction, 512-vector streaming/flush/reset leakage, execution-verified latency, and ECP5 Yosys/nextpnr reports. If a column proof fails or times out, preserve its exact log and counterexample/timeout state; do not relabel it as a pass. Keep Milestone #3 open until every required gate passes for all four widths.
+Manually trigger ORCUS CI for PR #22 / branch `research/orcus-ecp5-dadda-pipeline` at exact head `d36ff48f7557a987b283472c89c01852af3b8bd2`. First inspect the unit-test and compileall gates. Then audit each width's per-column SAT logs and accounting, separate final CPA proof, sequential control/reset induction, 512-vector streaming/flush/reset leakage, execution-verified latency, and ECP5 Yosys/nextpnr reports. If a column proof fails or times out, preserve its exact log and counterexample/timeout state; do not relabel it as a pass. Keep Milestone #3 open until every required gate passes for all four widths.
 
 ### Preservation constraints
 

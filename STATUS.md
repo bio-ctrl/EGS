@@ -2717,3 +2717,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Found a proof-composition gap: stage 0's independent miter treats its input heap bits as arbitrary Boolean inputs. Stage invariants alone would prove compressor preservation but would not prove that the actual partial products plus per-lane correction constants equal the signed INT4 dot product.
 - Add an explicit initial-heap arithmetic miter proving the generated signed partial-product/correction heap equals the direct signed lane-product sum modulo accumulator width, before all per-stage compressor proofs. This is required for the composition to establish the intended arithmetic result.
 - This finding is from read-only source inspection; no code change or proof result is claimed yet. Next implement and test the base-case miter and include it in `run_formal`.
+
+
+## EGS-0003 action 4 — initial Baugh–Wooley arithmetic base-case miter added
+
+- Updated `benchmarks/dadda_pipeline.py` on the experiment branch; commit: `24f8a7ee550a7eecfbad1b65fe81eb1af08592ec`.
+- Added `build_initial_heap_miter`: actual generated complemented 4×4 partial-product bits and each lane's correction-constant bits are weighted and compared modulo accumulator width against the direct sum of signed 4-bit lane products.
+- `run_formal` now executes this initial arithmetic identity proof before the per-stage compressor proofs and final CPA proof. This closes the previously identified base-case gap in the compositional proof chain.
+- The initial miter and all stage/control proof commands remain unexecuted; no formal PASS is claimed. Next add source-level coverage for the initial arithmetic miter, then inspect generated-source consistency and the final branch diff.

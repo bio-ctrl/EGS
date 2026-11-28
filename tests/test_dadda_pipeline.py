@@ -153,6 +153,21 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "carry pin/netlist mismatch"):
             validate_stage_netlist_wiring(bad_source, records, 0)
 
+    def test_netlist_audit_rejects_dropped_or_duplicated_register_tokens(self):
+        design = generate_dadda_pipelined(4)
+        records = [r for r in design.manifest["compressors"] if r["stage"] == 0]
+        output_heap = design.manifest["stage_boundaries"][0]["output_heap"]
+        token = next(token for column in output_heap for token in column)
+        qname = f"st0_q_{token}"
+        register_line = f"      {qname} <= {token};"
+        dropped = design.source.replace(register_line + "\\n", "", 1)
+        with self.assertRaisesRegex(ValueError, "register/pass-through wiring mismatch"):
+            validate_stage_netlist_wiring(dropped, records, 0, output_heap)
+        duplicated = design.source.replace(register_line,
+            register_line + "\\n" + register_line, 1)
+        with self.assertRaisesRegex(ValueError, "register/pass-through wiring mismatch"):
+            validate_stage_netlist_wiring(duplicated, records, 0, output_heap)
+
     def test_32_lane_stage0_column4_uses_atomic_composition_not_column_miter(self):
         design = generate_dadda_pipelined(32)
         records = [r for r in design.manifest["compressors"]

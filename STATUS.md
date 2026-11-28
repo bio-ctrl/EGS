@@ -10,13 +10,13 @@
 > - "Big dreams push past what other people view as possible, often because 'unrealistic' just means a goal hasn't been done yet by the people around you. You have to dream unrealistic because life is not realistic"
 > - "Get what I want and when I want it"
 
-> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0013 / Issue #35 has audited [ORCUS CI Run #267](https://github.com/bio-ctrl/EGS/actions/runs/46114719350), run ID `46114719350`, at exact branch head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`. Both requested artifact ZIPs were downloaded and their SHA-256 hashes independently matched GitHub. All 4/8/16/32-lane atomic FA/HA SAT lemmas, Baugh–Wooley base proofs, compressor-token stage graph/wiring accounting, final CPA, sequential valid/reset induction, 512-vector streaming/flush/reset-leakage simulations, and ECP5 synthesis/P&R passed. Execution-verified latencies are 6/8/10/11 cycles; post-route Fmax is 335.9086/313.2832/313.6763/324.1491 MHz against 100 MHz. All widths use fewer LUT4s than Run #262 and zero MULT18X18D; pipeline FFs increase due to stage registers. **Milestone #3 technical gates are COMPLETE; Milestone #4 is unlocked.** PR #22 is Ready for review, open and unmerged; GitHub currently reports `mergeable=false` / `mergeable_state=dirty` and branch history diverges from current main, so reconcile the base/conflict condition and rerun CI on the merge candidate before merge. PR #21 untouched; Run #262 immutable; Ceres untouched; NEM isolated. No silicon or board-level claims. Milestone #4 v1 is specified in EGS-0013: signed INT4 N-lane Dadda dot-product core, two synchronous true-dual-port A/B scratchpads of 16,384 bits each, K-row full-precision accumulation with 20-bit result, and explicit DP16KD/formal/streaming/P&R gates. Exact next action: start M4.1 on a dedicated branch from validated head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`, implement the golden reference model, interface contract, width/depth assertions, and tests before adding memory RTL.
+> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0014 / Issue #undefined closes this session after the verified Run #267 audit. Milestone #3 technical gates are complete for 4/8/16/32 lanes at exact validated head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`; recorded ECP5 post-route Fmax is 335.9086 / 313.2832 / 313.6763 / 324.1491 MHz (4/8/16/32 lanes), with formal and 512-vector streaming/flush/reset-leakage gates passing. PR #22 remains Ready for review, open and unmerged; its `STATUS.md` merge conflict / `mergeable_state=dirty` condition is unresolved. **Exact next-session sequence:** (1) reconcile PR #22's `STATUS.md` merge conflict/base-history condition, verify Ready-for-review state, and rerun CI on the merge candidate; do not merge without explicit human approval; (2) create `research/orcus-inference-tile` from validated commit `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`; (3) execute Milestone #4 / M4.1 starting with 32 lanes: signed-INT4 golden reference model, interface contract, parameter/width/depth assertions, and regression tests, before adding memory RTL. Keep Run #267 Dadda core immutable. PR #21 untouched; Run #262 and Run #267 preserved; Ceres untouched; NEM isolated. ECP5 results are FPGA implementation evidence only; external IOs are unconstrained. No silicon or board-level claims.
 
 ---
 
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-28T06:11:30Z
+**Last updated:** 2026-11-28T06:17:00Z
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -3421,3 +3421,18 @@ Run #262 is the immutable **combinational** Fused Dadda baseline; Run #267 is th
 - **Next exact action:** create a dedicated Milestone #4 branch from validated head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`; implement M4.1 golden model, interface contract, width/depth assertions, and regression tests before adding memory RTL. Keep the Run #267 pipelined Dadda core immutable.
 - Do not merge PR #22 automatically. Do not alter PR #21, Run #262, Ceres, or NEM.
 
+
+
+---
+
+## EGS-0014 — Session handoff; Milestone #3 closed; Milestone #4 / M4.1 queued — 2026-11-28
+
+- **Execution issue:** [EGS-0014 / Issue #undefined](undefined).
+- **Objective:** clean end-of-session handoff; preserve verified Run #267 evidence and make the next session's first actions unambiguous.
+- **Milestone #3 evidence:** [ORCUS CI Run #267](https://github.com/bio-ctrl/EGS/actions/runs/46114719350), exact head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`. All 4/8/16/32 lane configurations passed the recorded formal checks, 512-vector streaming/flush/reset-leakage simulations, and ECP5 synthesis/P&R gates.
+- **Post-route Fmax:** 335.9086 / 313.2832 / 313.6763 / 324.1491 MHz for 4/8/16/32 lanes respectively, against 100 MHz. Execution-verified Dadda core latencies: 6 / 8 / 10 / 11 cycles.
+- **Measurement boundary:** ECP5 FPGA implementation evidence only; target LFE5U-85F-6BG381C, CABGA381, speed grade 6; external IOs unconstrained. No silicon or board-level claims.
+- **PR #22:** remains Ready for review, open and unmerged. The `STATUS.md` merge conflict / `mergeable_state=dirty` condition is unresolved. Reconcile the conflict/base-history condition and rerun CI on the merge candidate; human approval is required before any merge.
+- **Preservation:** PR #21 untouched; Run #262 and Run #267 preserved; Ceres untouched; NEM isolated.
+- **Exact next action — sequence:** (1) reconcile PR #22's `STATUS.md` conflict and verify it remains Ready for review, then rerun CI on the merge candidate; do not merge; (2) create `research/orcus-inference-tile` from validated commit `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`; (3) execute Milestone #4 / M4.1 starting with 32 lanes: implement the signed-INT4 golden reference model, interface contract, parameter/width/depth assertions, and regression tests before adding memory RTL. Keep the validated Run #267 Dadda core immutable.
+- **Status:** Milestone #3 complete; Milestone #4 unlocked; M4.1 not yet started. This is a handoff record, not a claim that M4.1 work has been executed.

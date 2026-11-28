@@ -70,7 +70,8 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
                     boundary=design.manifest["stage_boundaries"][stage]
                     self.assertEqual(part["input_bit_count"],sum(map(len,boundary["input_heap"])))
                     self.assertEqual(part["output_bit_count"],sum(map(len,boundary["output_heap"])))
-                    self.assertEqual(part["consumed_input_bit_count"]+part["pass_through_bit_count"],part["input_bit_count"])
+                    self.assertEqual(part["consumed_input_bit_count"]+
+                                     part["primary_pass_through_bit_count"],part["input_bit_count"])
                     self.assertEqual(part["output_bit_count"],part["pass_through_bit_count"]+
                         sum(1+int(r["carry"] is not None) for r in design.manifest["compressors"] if r["stage"]==stage))
                     for col in part["columns"]:

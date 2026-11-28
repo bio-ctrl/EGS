@@ -93,9 +93,10 @@ def build_initial_heap_miter(lanes: int, lane_index: int = 0) -> str:
 
 
 
+
 def validate_stage_bit_partition(input_heap: list[list[str]], output_heap: list[list[str]],
                                  compressors: list[dict], width: int) -> dict:
-    """Validate exact input/output bit ownership and compressor column weights."""
+    """Validate ownership of primary inputs, intra-stage carries, and outputs."""
     if width <= 0 or len(input_heap) != width or len(output_heap) != width:
         raise ValueError("heap column count must equal positive accumulator width")
     def locate(heap, label):
@@ -106,8 +107,8 @@ def validate_stage_bit_partition(input_heap: list[list[str]], output_heap: list[
                     raise ValueError(f"{label} bit {token} appears more than once")
                 found[token] = col
         return found
-    inputs, outputs = locate(input_heap, "input"), locate(output_heap, "output")
-    consumed, sums, carries = {}, {}, {}
+    primary = locate(input_heap, "input")
+    sums, carries, consumed = {}, {}, {}
     by_col = [[] for _ in range(width)]
     for rec in compressors:
         col, kind, ins = rec.get("column"), rec.get("kind"), rec.get("inputs")
@@ -116,16 +117,8 @@ def validate_stage_bit_partition(input_heap: list[list[str]], output_heap: list[
         arity = 3 if kind == "full_adder" else 2 if kind == "half_adder" else None
         if arity is None or not isinstance(ins, list) or len(ins) != arity:
             raise ValueError(f"invalid compressor kind/arity: {rec!r}")
-        for token in ins:
-            if token not in inputs:
-                raise ValueError(f"compressor consumes unknown input bit {token}")
-            if inputs[token] != col:
-                raise ValueError(f"misweighted input bit {token}: expected column {col}, found {inputs[token]}")
-            if token in consumed:
-                raise ValueError(f"input bit {token} consumed more than once")
-            consumed[token] = rec.get("id", "unnamed")
         st = rec.get("sum")
-        if not isinstance(st, str) or not st or st in sums or st in carries or st in inputs:
+        if not isinstance(st, str) or not st or st in sums or st in carries or st in primary:
             raise ValueError(f"duplicate or aliased compressor sum output {st}")
         sums[st] = col
         ct, cc = rec.get("carry"), rec.get("carry_column")
@@ -137,30 +130,51 @@ def validate_stage_bit_partition(input_heap: list[list[str]], output_heap: list[
                 raise ValueError(f"compressor in column {col} is missing its carry output")
             if cc != col + 1:
                 raise ValueError(f"misweighted carry {ct}: expected column {col + 1}, found {cc}")
-            if ct in sums or ct in carries or ct in inputs:
+            if ct in sums or ct in carries or ct in primary:
                 raise ValueError(f"duplicate or aliased compressor carry output {ct}")
             carries[ct] = cc
         by_col[col].append(rec)
+    for rec in compressors:
+        col = rec["column"]
+        for token in rec["inputs"]:
+            if token in primary:
+                expected_col, source_kind = primary[token], "primary input"
+            elif token in carries:
+                expected_col, source_kind = carries[token], "intra-stage carry"
+            else:
+                raise ValueError(f"compressor consumes unknown stage bit {token}")
+            if expected_col != col:
+                raise ValueError(f"misweighted {source_kind} bit {token}: expected column {col}, found {expected_col}")
+            if token in consumed:
+                raise ValueError(f"stage bit {token} consumed more than once")
+            consumed[token] = rec.get("id", "unnamed")
+    primary_pass = [token for token in primary if token not in consumed]
+    carry_pass = [token for token in carries if token not in consumed]
     passthrough = [[] for _ in range(width)]
-    for token, col in inputs.items():
-        if token not in consumed:
-            passthrough[col].append(token)
+    for token in primary_pass:
+        passthrough[primary[token]].append(token)
+    for token in carry_pass:
+        passthrough[carries[token]].append(token)
     for col in range(width):
-        expected = passthrough[col]
-        expected += [token for token, weight in sums.items() if weight == col]
-        expected += [token for token, weight in carries.items() if weight == col]
+        expected = passthrough[col] + [token for token, weight in sums.items() if weight == col]
         actual = output_heap[col]
         if len(actual) != len(set(actual)):
             raise ValueError(f"duplicate output bit in column {col}")
         if set(actual) != set(expected) or len(actual) != len(expected):
             missing, extra = sorted(set(expected)-set(actual)), sorted(set(actual)-set(expected))
             raise ValueError(f"output partition mismatch in column {col}: missing={missing}, unexpected={extra}")
-    if len(consumed) + sum(map(len, passthrough)) != len(inputs):
-        raise ValueError("input bit accounting is incomplete")
-    if sum(map(len, output_heap)) != len(sums)+len(carries)+sum(map(len, passthrough)):
+    consumed_primary = sum(token in primary for token in consumed)
+    consumed_carries = sum(token in carries for token in consumed)
+    if consumed_primary + len(primary_pass) != len(primary):
+        raise ValueError("primary input bit accounting is incomplete")
+    if consumed_carries + len(carry_pass) != len(carries):
+        raise ValueError("intra-stage carry accounting is incomplete")
+    if sum(map(len, output_heap)) != len(sums) + sum(map(len, passthrough)):
         raise ValueError("output bit accounting is incomplete")
     return {"columns":[{"column":c,"compressors":by_col[c],"pass_through":passthrough[c]} for c in range(width)],
-            "input_bit_count":len(inputs),"consumed_input_bit_count":len(consumed),
+            "input_bit_count":len(primary),"consumed_input_bit_count":consumed_primary,
+            "primary_pass_through_bit_count":len(primary_pass),
+            "generated_carry_bit_count":len(carries),"consumed_carry_bit_count":consumed_carries,
             "pass_through_bit_count":sum(map(len,passthrough)),
             "output_bit_count":sum(map(len,output_heap)),"compressor_count":len(compressors)}
 

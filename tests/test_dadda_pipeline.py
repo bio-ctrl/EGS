@@ -108,8 +108,8 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"misweighted carry"):
             validate_stage_bit_partition(inputs,outputs,misweighted,width)
         duplicated_input=[dict(r) for r in compressors]
-        duplicated_input[1]["inputs"]=list(duplicated_input[1]["inputs"])
-        duplicated_input[1]["inputs"][0]=duplicated_input[0]["inputs"][0]
+        duplicated_input[0]["inputs"]=list(duplicated_input[0]["inputs"])
+        duplicated_input[0]["inputs"][1]=duplicated_input[0]["inputs"][0]
         with self.assertRaisesRegex(ValueError,"consumed more than once"):
             validate_stage_bit_partition(inputs,outputs,duplicated_input,width)
 

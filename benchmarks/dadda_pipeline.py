@@ -451,8 +451,9 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
                 "status":"PASS", "stage":stage_index, "target_height":design.stage_targets[stage_index],
                 "method":"independent per-column compressor conservation SAT plus exact bit accounting",
                 "bit_accounting":{k:partition[k] for k in (
-                    "input_bit_count","consumed_input_bit_count","pass_through_bit_count",
-                    "output_bit_count","compressor_count")},
+                    "input_bit_count","consumed_input_bit_count","primary_pass_through_bit_count",
+                    "generated_carry_bit_count","consumed_carry_bit_count",
+                    "pass_through_bit_count","output_bit_count","compressor_count")},
                 "columns_proven":len(column_results), "column_proofs":column_results,
                 "final_cpa_included":False,
             })

@@ -2747,3 +2747,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Updated `tests/test_dadda_pipeline.py` on the experiment branch; commit: `455df39f53fdd89f993228c533adfadbef74c9c1`.
 - Source-level tests now cover each lane's initial Baugh–Wooley miter for every supported lane count (4/8/16/32), in addition to every stage's weighted-heap miter and the sequential control miter.
 - These are test definitions, not executed test results. Next perform a final read-only audit of the latest branch files, exact head, PR state, workflow order, and any Actions run triggered by the branch update.
+
+
+## EGS-0003 static-review refinement — explicit signed operand extension
+
+- Updated the per-lane initial arithmetic miter to explicitly sign-extend each 4-bit operand to 8 bits before multiplication, then sign-extend the 8-bit product to accumulator width. Experiment branch commit: `30b51df975a6848f6a0b909c22cfd2223f8a4829`.
+- This avoids relying on implicit Verilog expression sizing for the reference 4×4 signed product. No Yosys or simulator execution has occurred; this is a static robustness change.

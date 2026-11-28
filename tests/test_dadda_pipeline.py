@@ -54,10 +54,9 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
                     )
                     self.assertIn("initial_heap_sum", source)
                     self.assertIn("extended_product", source)
-                    self.assertIn(
-                        f"$signed(a{lane_index}) * $signed(b{lane_index})",
-                        source,
-                    )
+                    self.assertIn("wire signed [7:0] signed_a", source)
+                    self.assertIn("wire signed [7:0] signed_b", source)
+                    self.assertIn("signed_product = signed_a * signed_b", source)
                     self.assertIn("assign bad = (initial_heap_sum != extended_product)", source)
                     self.assertIn(f"bias_{lane_index}_", source)
 

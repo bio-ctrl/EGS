@@ -2903,3 +2903,43 @@ The same repository then recorded a biotechnology and computational-biology expl
 - Not established: exact-head compositional formal PASS; 512-vector streaming/flush/reset-leakage PASS for the redesigned pipeline; execution-verified pipeline latency; pipeline P&R metrics; 8/16/32-lane 100 MHz timing closure; a fabricated chip or silicon measurement; a commercial ORCUS product; customer traction; secured investment; NVIDIA/AMD parity.
 - Preserve Run #262 and main as the baseline. Keep PR #22 Draft pending exact-head validation/review. Keep PR #21 untouched. Keep Ceres untouched. Keep NEM isolated. Do not mix the historical Xylenic or ELSTELLA/PROJECT ORIGIN phases into active EGS/ORCUS work unless the founder explicitly changes scope.
 
+
+
+## EGS-0005 — Run #264 exact-head audit; sequential control reference alignment defect — 2026-11-27 / 2026-11-28 UTC
+
+- Execution ledger: **EGS-0005 / Issue #27** — https://github.com/bio-ctrl/EGS/issues/27 . Issue search found no existing EGS-0005 record; Issue #27 is the next sequential execution record after EGS-0004 / Issue #26.
+- Objective: Audit exact-head ORCUS CI Run #264 and its pipelined Dadda artifact; determine formal, simulation, latency and ECP5 evidence; diagnose the failing gate.
+- Exact run: ORCUS CI #264, run ID `46108410125`, URL https://github.com/bio-ctrl/EGS/actions/runs/46108410125 . Branch `research/orcus-ecp5-dadda-pipeline`; workflow `head_sha=ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`; completed failure; elapsed 2m10s. Exact SHA and branch independently reconciled through Actions metadata.
+- PR #22 remains open, Draft and unmerged; PR head matches the exact run SHA.
+- Artifact `orcus-fpga-ecp5-pipelined-dadda`: ID `15247784604`, 76,138 bytes, SHA-256 `7edf6824f4f79f7c1f356bf0cfd45534e93b0b1e132ea531cd6dbe22d41e3800`. Downloaded ZIP and independently recomputed digest; match confirmed.
+
+### CI job outcomes
+- `test` job passed. FPGA wrapper/parser tests passed 5/5; Dadda generator/sequential-harness source tests passed 7/7.
+- FPGA job: pinned Yosys 0.33 / nextpnr-ecp5 0.6-3build5 installation passed; wrapper/parser and Dadda source tests passed; pipeline formal/streaming/synthesis/P&R runner failed at its first 4-lane configuration during sequential control formal; evidence upload succeeded; ordinary ECP5 matrix step was skipped.
+
+### Artifact inventory and proof results
+- ZIP contains exactly 25 files, all under the 4-lane run: generated RTL, pipeline manifest, four per-lane initial arithmetic miter source/log pairs, six stage miter source/log pairs, control miter source/log, and `results.json`. No 8/16/32-lane artifact directories or logs exist.
+- All four per-lane Baugh–Wooley initial heap arithmetic SAT proofs passed. Yosys CPU times: lane 0 0.03s; lane 1 0.04s; lane 2 0.03s; lane 3 0.03s.
+- All six Dadda weighted-heap stage SAT proofs passed; final stage includes final CPA check. Yosys CPU times: stage 0 3.94s; stage 1 13.47s; stage 2 2.07s; stage 3 0.30s; stage 4 0.10s; stage 5 + CPA 0.07s.
+- Sequential valid/reset temporal induction failed at the base-case check. Yosys produced a model with `bad=1` at trace step 7 while `in_valid=1` and `reset=0`; the base-case SAT instance had 2,059 variables and 5,288 clauses, with 17 cells imported per time step. No control/reset proof PASS is established.
+
+### Diagnosed root cause — formal reference-model off-by-one
+- Exact generated miter and RTL were inspected. DUT has six registered Dadda reduction stages and a separately registered `out_valid <= valid_pipe[5]`. The control miter independently creates a six-bit `ref_valid_pipe` and compares post-edge `dut_valid` against post-edge `ref_valid_pipe[5]`.
+- That reference does not model the registered output-valid boundary and is one edge ahead of the DUT output in the post-edge comparison. The counterexample is consistent with a reference-miter alignment defect, not an arithmetic datapath counterexample. This is a source/log diagnosis, not a passed formal proof or proof of complete DUT correctness.
+- Exact next fix: correct the reference model to include the registered output-valid boundary (e.g. an L+1-stage reference shift for post-edge comparison), add a regression test for the prior off-by-one, run focused tests, then dispatch CI on the new exact branch SHA. Preserve and explicitly confirm the existing latency convention against data/valid alignment.
+
+### Streaming, latency and ECP5
+- 4-lane manifest: accumulator width 10; six stages; stage targets [13, 9, 6, 4, 3, 2]; latency metadata 6 cycles. This is schedule-derived only; no execution-verified latency exists.
+- Runner stops on failed formal before Icarus streaming. No 512-vector back-to-back, flush, reset-leakage, or measured latency result exists for any width.
+- No Yosys ECP5 synthesis or nextpnr run occurred. No pipeline Fmax, logic/routing delay, LUT4, FF, MULT18X18D, netlist, timing report or routed configuration exists for any width. The ordinary ECP5 job step was skipped.
+- `results.json`: `status=failed`, `matrix=[]`, error identifies `control-valid-reset-induction formal failed for 4 lanes`. Target is LFE5U-85F-6BG381C / CABGA381 / speed grade 6 / 100 MHz, external IO unconstrained. The tool inventory reports `iverilog: invalid option -- '-'` because the version probe used an unsupported option; this did not cause Run #264 failure because streaming was never reached.
+
+### Comparison with immutable Run #262
+- Run #262 Fused Dadda combinational baseline Fmax: 4 lanes 106.26 MHz; 8 lanes 84.02 MHz; 16 lanes 73.10 MHz; 32 lanes 55.82 MHz.
+- Run #264 has no pipeline P&R metrics. Pipeline Fmax/resource/delay for all four widths are **not run / unavailable**, not zero and not timing failures. No valid pipeline-vs-baseline timing comparison can be made.
+
+### Current state superseding EGS-0004 handoff
+- Exact-head run identity is now resolved by Run #264; the previous EGS-0004 blocker (no exact-head run) is superseded.
+- EGS-0005 status: **BLOCKED** on the control miter reference-alignment defect and a required exact-head rerun. Milestone #3 is not closed; do not advance to Milestone #4.
+- Preserve main and Run #262; PR #22 stays Draft; PR #21 untouched; Ceres untouched; NEM isolated. No silicon, board-level or pipeline timing-closure claims.
+- Next action: fix the reference alignment and regression test on `research/orcus-ecp5-dadda-pipeline`, run tests, commit, trigger ORCUS CI on the resulting exact SHA, then audit all base/stage/control proofs, 512-vector streaming/flush/reset-leakage and execution-verified latency for 4/8/16/32 lanes, followed by ECP5 synthesis/P&R. Only proceed to Milestone #4 after evidence and review pass.

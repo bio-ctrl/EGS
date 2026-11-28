@@ -2676,3 +2676,12 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Inspected branch files: `benchmarks/dadda_pipeline.py`, `benchmarks/fpga_ecp5_pipeline.py`, `orcus/dadda_pipeline.py`, `tests/test_dadda_pipeline.py`, and `.github/workflows/ci.yml`. The existing runner already calls `run_formal` before the 512-vector streaming test and ECP5 synthesis/P&R for each lane count. Therefore the proof harness can be replaced without changing the ECP5 runner or workflow ordering.
 - Planned proof composition: independently instantiate each Dadda stage from manifest compressor records, expose arbitrary input heap bits, compute weighted input/output sums modulo accumulator width, and prove equality with combinational SAT; for the final stage additionally prove the CPA sum equals the final two-row heap. Separately instantiate the real pipeline RTL in a valid-only miter, prune unobservable datapath logic, and check reset/valid shift alignment with bounded sequential SAT on the small control cone. Existing Icarus 512-vector back-to-back/reset test remains mandatory.
 - No branch edits or technical validation have yet occurred. Status: in progress. Next: implement the compositional harness and update source-level tests on the experiment branch, preserving PR #22 as Draft. Main, Run #262, PR #21, Ceres and NEM remain untouched.
+
+
+## EGS-0003 action 1 — compositional stage/control miter builders committed
+
+- Updated `benchmarks/dadda_pipeline.py` on `research/orcus-ecp5-dadda-pipeline`; branch commit: `c20c0a233f3bca058be5a3c1e6d414c236b34b6b`.
+- Added standalone per-stage combinational miter generation from the Dadda manifest. Each miter exposes arbitrary input-heap bits, reconstructs the stage's full/half-adder equations, and compares weighted input/output sums modulo accumulator width. The final stage also compares the final CPA against the weighted two-row heap.
+- Added a sequential control-only miter that instantiates the actual pipeline RTL and compares its output-valid signal to an independent L-stage reference shift register. Data outputs are unobserved so the subsequent synthesis/optimization can prune the multiplier datapath from this proof cone.
+- Retained `build_sequential_miter` as a compatibility alias to the new control-only miter.
+- This is an implementation commit only; no formal command or test has run yet. Next update `run_formal` to execute all per-stage combinational proofs plus the small control proof, and persist each log/miter. Main STATUS update commit: `bc5d1579d66bd7693c511d331e8cbaa436072a47`.

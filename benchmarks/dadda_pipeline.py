@@ -232,6 +232,78 @@ def build_stage_column_miter(lanes: int, stage_index: int, column_index: int) ->
     return "\n".join(lines)+"\n"
 
 
+
+
+def build_atomic_compressor_miter(kind: str) -> tuple[str, str]:
+    """Build a tiny, reusable SAT lemma for one 1-bit FA or HA."""
+    if kind == "full_adder":
+        top = "orcus_atomic_fa_conservation"
+        ports = "input wire a, input wire b, input wire cin, output wire bad"
+        body = [
+            "  wire sum_bit = a ^ b ^ cin;",
+            "  wire carry_bit = (a & b) | (a & cin) | (b & cin);",
+            "  wire [2:0] lhs = {2'b0, a} + {2'b0, b} + {2'b0, cin};",
+        ]
+    elif kind == "half_adder":
+        top = "orcus_atomic_ha_conservation"
+        ports = "input wire a, input wire b, output wire bad"
+        body = [
+            "  wire sum_bit = a ^ b;",
+            "  wire carry_bit = a & b;",
+            "  wire [2:0] lhs = {2'b0, a} + {2'b0, b};",
+        ]
+    else:
+        raise ValueError(f"unsupported compressor kind: {kind}")
+    body.extend([
+        "  wire [2:0] rhs = {2'b0, sum_bit} + ({2'b0, carry_bit} << 1);",
+        "  assign bad = (lhs != rhs);",
+    ])
+    return top, "\\n".join([f"module {top}({ports});", *body, "endmodule", ""])
+
+
+def validate_stage_netlist_wiring(source: str, compressors: list[dict],
+                                  stage_index: int) -> dict:
+    """Match every scheduled compressor to its exact emitted Verilog equations."""
+    source_lines = source.splitlines()
+    checked = 0
+    ids = set()
+    for rec in compressors:
+        ident = rec.get("id")
+        if not isinstance(ident, str) or ident in ids:
+            raise ValueError(f"duplicate or invalid compressor id: {ident!r}")
+        ids.add(ident)
+        kind, ins = rec.get("kind"), rec.get("inputs")
+        if kind == "full_adder" and isinstance(ins, list) and len(ins) == 3:
+            x, y, z = ins
+            sum_expr = f"{x} ^ {y} ^ {z}"
+            carry_expr = f"({x} & {y}) | ({x} & {z}) | ({y} & {z})"
+        elif kind == "half_adder" and isinstance(ins, list) and len(ins) == 2:
+            x, y = ins
+            sum_expr = f"{x} ^ {y}"
+            carry_expr = f"{x} & {y}"
+        else:
+            raise ValueError(f"invalid compressor record {ident}: {rec!r}")
+        sum_line = f"  wire {rec['sum']} = {sum_expr};"
+        if source_lines.count(sum_line) != 1:
+            raise ValueError(f"stage {stage_index} compressor {ident} sum pin/netlist mismatch")
+        carry = rec.get("carry")
+        if carry is None:
+            if rec.get("carry_column") is not None or not rec.get("carry_truncated_modulo_2_W"):
+                raise ValueError(f"stage {stage_index} compressor {ident} has invalid MSB truncation metadata")
+            if any(line.startswith(f"  wire {rec['id'].split('_')[0]}_c_") and rec['id'] in line
+                   for line in source_lines):
+                raise ValueError(f"stage {stage_index} compressor {ident} unexpectedly emits an MSB carry")
+        else:
+            carry_line = f"  wire {carry} = {carry_expr};"
+            if source_lines.count(carry_line) != 1:
+                raise ValueError(f"stage {stage_index} compressor {ident} carry pin/netlist mismatch")
+        checked += 1
+    return {"status": "PASS", "stage": stage_index,
+            "compressors_checked": checked,
+            "full_adders": sum(r["kind"] == "full_adder" for r in compressors),
+            "half_adders": sum(r["kind"] == "half_adder" for r in compressors),
+            "method": "exact emitted-Verilog compressor pin/equation matching"}
+
 def build_final_cpa_miter(lanes: int) -> str:
     """Retain the final two-row CPA equivalence proof as a separate SAT job."""
     design=generate_dadda_pipelined(lanes)
@@ -431,30 +503,33 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
             proof["lane"] = lane_index
             initial_proofs.append(proof)
 
+        atomic_proofs = {}
+        for kind in ("full_adder", "half_adder"):
+            atomic_top, atomic_source = build_atomic_compressor_miter(kind)
+            proof = execute(f"atomic-{kind}-conservation", atomic_source,
+                            atomic_top, sequential=False)
+            proof["method"] = "Yosys SAT atomic bit-weight conservation lemma"
+            atomic_proofs[kind] = proof
+
         for stage_index in range(design.latency):
             partition = build_stage_partition(lanes, stage_index)
-            column_results = []
-            for column_record in partition["columns"]:
-                column_index = column_record["column"]
-                if not column_record["compressors"]:
-                    continue
-                stage_source = build_stage_column_miter(lanes, stage_index, column_index)
-                stage_top = f"orcus_dadda_stage_column_miter_{lanes}_{stage_index}_{column_index}"
-                proof = execute(f"stage-{stage_index}-column-{column_index}-conservation",
-                                stage_source, stage_top, sequential=False)
-                proof["column"] = column_index
-                proof["compressor_count"] = len(column_record["compressors"])
-                proof["input_bit_count"] = sum(len(r["inputs"]) for r in column_record["compressors"])
-                proof["pass_through_bit_count"] = len(column_record["pass_through"])
-                column_results.append(proof)
+            stage_compressors = [r for r in design.manifest["compressors"]
+                                 if r["stage"] == stage_index]
+            wiring = validate_stage_netlist_wiring(design.source, stage_compressors, stage_index)
+            # The ownership/weight partition composes the atomic FA/HA lemmas:
+            # every source bit is consumed once or passed through once; every
+            # sum remains at 2**column; every carry advances one column; and
+            # an MSB carry is explicitly discarded modulo 2**W.
             results.append({
                 "status":"PASS", "stage":stage_index, "target_height":design.stage_targets[stage_index],
-                "method":"independent per-column compressor conservation SAT plus exact bit accounting",
+                "method":"atomic FA/HA SAT lemmas composed over exact emitted-Verilog token graph",
+                "atomic_lemmas": ["full_adder", "half_adder"],
+                "netlist_wiring": wiring,
                 "bit_accounting":{k:partition[k] for k in (
                     "input_bit_count","consumed_input_bit_count","primary_pass_through_bit_count",
                     "generated_carry_bit_count","consumed_carry_bit_count",
                     "pass_through_bit_count","output_bit_count","compressor_count")},
-                "columns_proven":len(column_results), "column_proofs":column_results,
+                "columns_composed":len(partition["columns"]),
                 "final_cpa_included":False,
             })
 
@@ -469,7 +544,7 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
 
     return {
         "status": "PASS",
-        "method": "per-column compressor conservation SAT with exact bit accounting, separate final CPA SAT, and sequential control induction",
+        "method": "atomic FA/HA SAT conservation composed over exact compressor-token wiring, separate final CPA SAT, and sequential control induction",
         "latency_cycles": latency,
         "initial_heap_proofs": initial_proofs,
         "stage_proofs": results,

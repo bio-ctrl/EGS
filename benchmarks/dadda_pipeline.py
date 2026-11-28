@@ -563,6 +563,7 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
         "method": "atomic FA/HA SAT conservation composed over exact compressor-token wiring, separate final CPA SAT, and sequential control induction",
         "latency_cycles": latency,
         "initial_heap_proofs": initial_proofs,
+        "atomic_compressor_proofs": atomic_proofs,
         "stage_proofs": results,
         "final_cpa_proof": final_cpa,
         "control_proof": control,

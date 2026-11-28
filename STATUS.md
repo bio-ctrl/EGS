@@ -1,16 +1,16 @@
 # EGS — Engineering Status
 
-> **PERMANENT SESSION-START AND HANDOFF RULE:** At the start of EVERY new ChatGPT session, and immediately whenever the founder says **"let's start today"**, first fetch and read the latest `STATUS.md` from the `main` branch of `bio-ctrl/EGS`. Do not rely on chat history, remembered summaries, stale copies, or a user-supplied prior SHA. Treat this file as the authoritative engineering handoff. Resume from the exact active milestone and next action recorded below (currently **Milestone #3 — PR #21, ECP5 FPGA place-and-route validation**). Obey all repository, project-boundary, evidence, and safety rules in this file. Never fabricate measurements or claim unverified work. Preserve all failure and timeout history. **After EVERY repository action, experiment, diagnostic, failure, timeout, or milestone, update and commit this `STATUS.md` directly on `main` before proceeding. This rule is permanent across sessions.** Do not modify unrelated project files when the requested task is a STATUS-only update.
+> **PERMANENT SESSION-START AND HANDOFF RULE:** At the start of every EGS/ORCUS/Lugh session, fetch and read the latest `STATUS.md` from `main` before repository action. Do not rely on chat history or stale summaries. Record meaningful EGS-related decisions, work, diagnostics, failures, blockers, evidence status, and the exact next action in this file after each relevant session/action. Preserve history; never fabricate measurements or claim unverified work.
 
-> **NON-NEGOTIABLE PROJECT BOUNDARIES:** Work only within EGS/ORCUS when authorized. NEM is a separate sister company/venture: no mixed code, roadmaps, or assumptions. Ceres is a separate project and must NEVER be touched, inspected, modified, merged, renamed, or mixed into EGS/ORCUS. Do not force-push, delete history, or merge a PR without explicit authorization and verified gates.
+> **NON-NEGOTIABLE PROJECT BOUNDARIES:** EGS and ORCUS are the active advanced-computing initiative. NEM is a separate sister venture: no mixed code, roadmaps, or assumptions. Ceres is a separate project and must NEVER be touched, inspected, modified, merged, renamed, or mixed into EGS/ORCUS. Historical Xylenic and ELSTELLA/PROJECT ORIGIN work is retained as repository history, not silently treated as active EGS/ORCUS product scope. Do not force-push, delete history, or merge a PR without explicit authorization and verified gates.
 
-> **MISSION:** EGS is the parent semiconductor and advanced-computing company, aspiring to compete alongside Nvidia and AMD over the long term. Build exceptional computing architectures first, then expand toward the infrastructure needed to support them. This is a strategic ambition, not a claim of present capability. Engineering evidence must lead every technical, commercial, or performance claim.
+> **MISSION:** EGS is the parent-company initiative focused on advanced computing and semiconductors, with a long-term ambition to compete in the broad industry occupied by NVIDIA and AMD. ORCUS is its computational-architecture discovery and research platform. This is an ambition, not a claim of present capability, commercial traction, or silicon advantage. Engineering evidence must lead every technical, commercial, or performance claim.
 
 > **FOUNDER MOTTOS:**
 > - "Big dreams push past what other people view as possible, often because 'unrealistic' just means a goal hasn't been done yet by the people around you. You have to dream unrealistic because life is not realistic"
 > - "Get what I want and when I want it"
 
-> **CURRENT AUTHORITATIVE HANDOFF:** Milestone #2 is closed on main at merge commit `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`. Active work remains **Milestone #3 — ECP5 FPGA validation and timing closure**. Main's ECP5 implementation and exact-head Run #262 (ID `45955978365`, source/test head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`) completed successfully; the eight-configuration artifact was independently audited in section 252. Fused Dadda improves Fmax over Direct at 4/8/16/32 lanes, but only 4-lane Dadda meets the 100 MHz target. The 8/16/32-lane designs remain below target. This is architecture-level ECP5 P&R with unconstrained external IOs, not board-pin-constrained hardware validation. PR #21 remains open, draft, unmerged, and `mergeable=false`; it is still at head `c6936a61fb103636140c4afec9f1b2f64b884e38` with stale base SHA `4030edbcc34d4986d0a34337864f3938ba0d8cda`. Its diff adds a second ECP5 workflow/benchmark implementation overlapping work already on main, so do not blindly sync, duplicate, mark ready, or merge it. Next: inspect the exact current main versions of the overlapping files and compare them against PR #21, decide whether the PR can be safely reconciled or should be closed as superseded (do not close without explicit authorization), then establish a preserved baseline and pursue timing closure for 8/16/32 lanes with formal proof and exact-head P&R artifacts. Keep the current 100 MHz matrix immutable. Merge only with explicit authorization and verified gates.
+> **CURRENT AUTHORITATIVE HANDOFF (2026-11-27):** Milestone #2 is closed on main at `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`. Run #262 (ID `45955978365`, head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`) is the immutable combinational ECP5 baseline: only 4-lane Fused Dadda meets 100 MHz; 8/16/32-lane configurations remain below target. The later pipeline experiment is PR #22, Draft and unmerged, at requested head `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`. EGS-0004 / Issue #26 is BLOCKED because no Actions run with that exact `head_sha` has been identified. Run #263 belongs to older head `b4f1a9ef60d19258e3941e00389649f52ad3e392` and timed out in 4-lane sequential SAT before streaming or P&R; it does not validate the redesigned proof. No pipeline timing closure, execution-verified latency, or pipeline P&R result is established. PR #21 remains untouched; Ceres remains untouched; NEM remains separate. Exact next action: trigger ORCUS CI on `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4` or supply its run URL/ID, then audit exact-head jobs/logs/artifacts against Issue #26 acceptance criteria.
 
 ---
 
@@ -2830,3 +2830,76 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Read the latest `main` version and checked the current ledger contents. It already contains the detailed ORCUS history through EGS-0003, including the Run #262 immutable combinational baseline, Run #263 timeout and artifact audit, EGS-0002 / Issue #24, EGS-0003 proof-redesign implementation and exact branch head, plus EGS-0004 / Issue #26 exact-run reconciliation and blocked status.
 - The immediately preceding commit `b209cceaefbdac6f28b4e57266113b8779bf0502` added the standing rule; it did not rewrite or re-import the entire historical record because those project milestones were already present in `STATUS.md`.
 - This check confirms the current known EGS/ORCUS milestones and decisions are represented in the ledger. It does not claim that unrelated conversations or unrecorded work outside the repository history have been reconstructed. Continue appending meaningful EGS-related chat outcomes under the standing protocol.
+
+
+## Historical project chronology — repository inception through 2026-11-27
+
+This section is a consolidated origin-to-current map, reconstructed from the repository's recorded issue/PR history, commit history, current project documents, and retained conversation context. It complements (does not replace) the detailed chronological engineering handoffs and experiment logs below. The GitHub repository was created on 2026-09-12. Earlier Xylenic and ELSTELLA/PROJECT ORIGIN work appears in the same repository history; it is preserved as historical lineage and must not be misrepresented as the current EGS/ORCUS product.
+
+### A. Initial repository and Xylenic phase — 2026-09-12 to 2026-10-15
+
+- Repository inception: `bio-ctrl/EGS` was created on 2026-09-12. Its earliest recorded work concerned Xylenic, an enterprise AI automation / user-sovereignty concept.
+- Issue #1: rebuilt the Xylenic landing page into a premium waitlist experience, including Netlify Forms capture, form validation/fallback behavior, and the initial visual identity.
+- Issue #2: added email validation, interactive product-demo panels, FAQ accordion, animations, and a CTA. The live visual result was not verified in that recorded session.
+- Issue #3: restored the intended Xylenic visual theme and aligned the displayed early-access metric; retained a server-side latency telemetry endpoint that the page did not yet call.
+- These entries document early founder experimentation and product/brand work. They do not establish Xylenic as the current EGS company or establish customer traction.
+
+### B. ELSTELLA / PROJECT ORIGIN biotechnology exploration — 2026-11-24
+
+The same repository then recorded a biotechnology and computational-biology exploration phase:
+
+- Issue #4: ORIGIN ATLAS research-engine and workspace foundations — Europe PMC metadata retrieval, unverified abstract-candidate extraction, evidence-grounded AI synthesis scaffolding, optional Supabase same-account sync, tests and CI. Live integrations were not yet validated.
+- Issue #5: CARDIA validation and therapeutic-landscape package; literature mapping and metadata checks were explicitly not biological validation.
+- Issues #6–7: CARDIA/NEXUS research thesis and feasibility/novelty audit. The audit found substantial prior work and narrowed the hypothesis; no raw expression-matrix analysis or causal/therapeutic validation was claimed.
+- Issues #8–9: VYREON adopted as a provisional internal codename for the CARDIA-01 concept, followed by a falsifiable research-gate plan. It remained a concept, not a drug candidate.
+- Issues #10–11: ELSTELLA strategy shifted from a single-disease approach to a staged three-division biotechnology strategy: Cellular & Mitochondrial Health first; Muscle & Physical Health second; Brain & Cognitive Health third. PROJECT MITOS became the first literature-led assessment priority; GENESIS, CARDIA and VYREON were retained as distinct historical/foundational tracks.
+- All of this remained research planning/infrastructure. No validated therapeutic target, molecule, efficacy, safety, clinical benefit, patent, or funding was established. Experimental/translational work was not undertaken.
+- This biotechnology phase is retained as historical repository lineage. It is not the active EGS/ORCUS mission and must not be blended into the semiconductor roadmap without a new explicit decision.
+
+### C. ORCUS computational-architecture research begins — 2026-11-25
+
+- ORCUS became the active computational-architecture research direction. Its README expansion is **Optimized Representation & Computational Understanding System**.
+- Initial research objective: build a transparent, reproducible Boolean-circuit search baseline before introducing more ambitious architecture-discovery methods.
+- v0.1 implemented packed truth tables, a primitive Boolean gate library, deterministic expression-tree enumeration, circuit IR, structural common-subexpression sharing, multi-output DAG representation, exhaustive functional checks, Verilog emission, benchmark records, tests and CI.
+- The documented initial search scope was small three-input Boolean functions. Metrics such as gate count, logic depth, fanout and output-toggle proxy were explicitly structural; they were not physical area, delay or power.
+- Issue #12 established a multi-output structural-sharing baseline. Issue #13 expanded to bounded joint multi-output architecture search, adder generators, typed bit-vector/dataflow IR, associative topology search, bit-heap compressor networks and reproducible comparisons.
+- The experiments did not establish broad superiority: the five-case joint-search experiment improved structural DAG gate count in 2/5 cases, tied in 3/5, and tied generic-cell count in all five. The bounded associative-topology experiment tied the generic-cell baseline in all 15 candidates. The multi-operand compressor experiment did show selected small generic-cell reductions, but only within its stated workload and evidence class.
+- Issue #14 documented an evidence-based competitive-gap analysis versus NVIDIA and AMD; it was a gap analysis, not evidence of parity.
+- Issues #15–16 specified ORCUS Search v2: provenance, stable candidate identity for a declared graph subset, deterministic budgets, partial-result preservation, explicit verification classes, evidence-aware metrics and reproducible reporting. The spec intentionally excluded claims of unrestricted/global optimal search or physical advantage.
+
+### D. ORCUS engineering baseline and signed INT4 MAC research — 2026-11-26
+
+- PR #17 assembled a clean technical ORCUS baseline from the research work; PR #18 superseded it and merged the validated ORCUS baseline.
+- ORCUS v0.2 established a reproducible four-lane signed INT4 dot-product benchmark comparing direct arithmetic and reduction architectures, with formal equivalence, deterministic 512-vector simulation, VCD activity, Nangate45 mapping and OpenSTA analysis.
+- PR #19 / ORCUS v0.3 introduced a fused Baugh–Wooley partial-product architecture: signed 4×4 products were expanded into complemented partial products and combined in a shared bit heap before final carry-propagate addition.
+- The compositional proof work was iteratively corrected and audited. The verified v0.3 result recorded four compositional SAT lemmas and independent graph audit; fused implementation area estimate 413.896 (27.96% below Direct), total power estimate 74.24132 µW (29.31% below Direct), and delay 1.13 ns versus Direct. These are Nangate45 pre-layout estimates, not routed or silicon measurements.
+- Milestone #1 closed when PR #19 merged at `35207adff3371fcadae68cbaa58181267c361359`. The earlier monolithic ABC CEC timeout was treated as a proof-method timeout, not inequivalence; compositional proof later passed.
+
+### E. Scaling and FPGA validation — 2026-11-27
+
+- Milestone #2 / PR #20 scaled signed INT4 dot-product candidates to 8/16/32 lanes and compared Direct, Carry-Save, Fused Linear and Fused Dadda. Run #256 completed successfully on exact head and its artifact was audited. All 12 configurations passed the recorded formal/simulation/graph-audit gates; Nangate45 metrics remain pre-layout estimates.
+- Milestone #2 merged at `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`.
+- Milestone #3 / PR #21 introduced ECP5 FPGA place-and-route validation. The main-branch Run #262 artifact was independently audited for 4/8/16/32 lanes × Direct/Fused Dadda on LFE5U-85F-6BG381C, CABGA381, speed grade 6, 100 MHz target. Only 4-lane Fused Dadda met 100 MHz. All reported results are FPGA architecture-level P&R with unconstrained external IOs, not board-level validation or silicon.
+- PR #21 remains open/Draft and untouched under the standing preservation rule; do not assume it should be merged or closed.
+- A separate pipelined Dadda experiment was developed on `research/orcus-ecp5-dadda-pipeline`, PR #22. It registers Dadda reduction levels and output, with schedule-derived latency metadata for 4/8/16/32 lanes. Those latency values remain metadata until execution-verified.
+- Run #263 on older pipeline head `b4f1a9ef60d19258e3941e00389649f52ad3e392` failed because 4-lane sequential Yosys SAT timed out after 180 seconds. It failed before streaming simulation and P&R. This was a timeout, not a counterexample.
+- EGS-0003 / Issue #25 then redesigned the proof composition: per-lane Baugh–Wooley base-case proofs, per-stage weighted-heap invariants, final CPA check, and a valid/reset-only temporal-induction proof, retaining streaming and P&R as later gates. The implementation is committed at `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`, but source-level tests and actual Yosys/Icarus/P&R execution for that exact head remain unverified.
+- EGS-0004 / Issue #26 is therefore blocked pending an Actions run whose own head SHA exactly matches `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`. No timing-closure claim is permitted until the exact run and artifacts pass audit.
+
+### F. EGS company identity, Lugh and operating model
+
+- EGS is the intended parent-company initiative focused on advanced computing and semiconductors; ORCUS is its research platform/product direction, not the company itself.
+- The founder's current naming note: the underlying initials are EGE; the selected EGS spelling uses the “S” associated with the founder's nickname. EGS is still a contemplated/provisional company name, not a finalized legal identity. NEM is a separate possible sister-company/product concept and must remain isolated.
+- The long-term ambition is to build major computing architectures and eventually the broader infrastructure required to compete in the NVIDIA/AMD industry landscape. This is an aspiration, not a present capability or competitive-position claim.
+- Lugh was established as the EGS engineering/execution assistant. EGS-0001 / Issue #23 records its bootstrap, private ChatGPT plugin and operating specification: support ORCUS research, engineering execution, reproducible experiments, technical validation, documentation and funding readiness. The initial Lugh plugin/skill exists; autonomous repository operations and automatic ChatGPT-session creation are not assumed unless separately implemented and verified.
+- EGS-0001, EGS-0002, EGS-0003 and EGS-0004 are the sequential execution records in Issues #23–26. Each is a work-session ledger, not a declaration that every milestone is complete.
+- Founder-stated funding objective: seek $10 million by 2026-11-30. This is a target only; it does not mean funding is committed, that the company is currently investment-ready, or that investor access/partnership is secured.
+
+### G. Current project state and evidence boundary
+
+- Active technical focus: ORCUS Milestone #3 pipeline proof, streaming/reset validation and ECP5 timing closure.
+- Last validated hardware-architecture evidence: immutable Run #262 combinational ECP5 matrix; only 4-lane Fused Dadda reaches the 100 MHz target.
+- Current pipeline experiment: PR #22 Draft; EGS-0004 / Issue #26 blocked on exact-head Actions identity and evidence audit.
+- Not established: exact-head compositional formal PASS; 512-vector streaming/flush/reset-leakage PASS for the redesigned pipeline; execution-verified pipeline latency; pipeline P&R metrics; 8/16/32-lane 100 MHz timing closure; a fabricated chip or silicon measurement; a commercial ORCUS product; customer traction; secured investment; NVIDIA/AMD parity.
+- Preserve Run #262 and main as the baseline. Keep PR #22 Draft pending exact-head validation/review. Keep PR #21 untouched. Keep Ceres untouched. Keep NEM isolated. Do not mix the historical Xylenic or ELSTELLA/PROJECT ORIGIN phases into active EGS/ORCUS work unless the founder explicitly changes scope.
+

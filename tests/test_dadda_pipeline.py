@@ -45,14 +45,22 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
 
     def test_initial_baugh_wooley_heap_matches_signed_mac(self):
         for lanes in LANES:
-            with self.subTest(lanes=lanes):
-                source = build_initial_heap_miter(lanes)
-                self.assertIn(f"module orcus_dadda_initial_heap_miter_{lanes}", source)
-                self.assertIn("initial_heap_sum", source)
-                self.assertIn("direct_signed_sum", source)
-                self.assertIn("$signed(a0) * $signed(b0)", source)
-                self.assertIn("assign bad = (initial_heap_sum != direct_signed_sum)", source)
-                self.assertIn("bias_0_", source)
+            for lane_index in range(lanes):
+                with self.subTest(lanes=lanes, lane=lane_index):
+                    source = build_initial_heap_miter(lanes, lane_index)
+                    self.assertIn(
+                        f"module orcus_dadda_initial_heap_miter_{lanes}_{lane_index}",
+                        source,
+                    )
+                    self.assertIn("initial_heap_sum", source)
+                    self.assertIn("extended_product", source)
+                    self.assertIn(
+                        f"$signed(a{lane_index}) * $signed(b{lane_index})",
+                        source,
+                    )
+                    self.assertIn("assign bad = (initial_heap_sum != extended_product)", source)
+                    self.assertIn(f"bias_{lane_index}_", source)
+
 
     def test_each_stage_has_independent_weighted_heap_sat_miter(self):
         for lanes in LANES:

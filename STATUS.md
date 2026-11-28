@@ -2702,3 +2702,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Replaced the old full datapath sequential-miter source assertions with coverage for every stage's independent weighted-heap SAT miter, compressor equations, final-stage CPA comparison, and valid/reset-only control miter. Kept the 512-vector streaming-testbench structural checks.
 - These are source-level unit tests only; they have not yet executed. The implementation must still be exercised by the next ORCUS CI run, including verifying that Yosys accepts the `-tempinduct` control proof syntax and that dead datapath logic is actually pruned.
 - Next: inspect exact branch diff and branch head, reconcile PR #22 remains Draft, then create EGS-0003 issue and update main STATUS with the exact new head. Do not call the branch ready for CI until static review is complete; actual proof readiness remains subject to CI.
+
+
+## EGS-0003 review correction — final-stage CPA miter row source fixed
+
+- Static review of the generated final-stage miter found that the CPA row expression initially referenced the generator's post-register `final_rows` names, while the standalone stage miter exposes the pre-register `output_heap` tokens. Those identifiers would have been undefined in the miter.
+- Corrected `benchmarks/dadda_pipeline.py` on the experiment branch in commit `fef6717cc37c043351fa4d2d30bd9ad1df5bad10`: final CPA row0/row1 are now constructed directly from the final stage's `output_heap`, preserving the same weighted bits and avoiding undefined register aliases.
+- This is a static source correction, not a Yosys proof result. Next inspect the final diff and verify generated names/command structure; then create EGS-0003 issue and update main STATUS with the final branch head and readiness limitations.

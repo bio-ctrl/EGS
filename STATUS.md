@@ -2813,3 +2813,12 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - EGS-0004 status: **Blocked** pending an Actions run whose own head SHA exactly matches `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4` and whose branch is `research/orcus-ecp5-dadda-pipeline`. Issue #26 records acceptance criteria and the exact next action.
 - Constraints preserved: Run #262/main baseline immutable; PR #22 stays Draft; PR #21 untouched; Ceres untouched; NEM isolated; zero silicon claims.
 - Next: obtain the exact Actions run URL/ID or trigger ORCUS CI on the exact requested head, then audit jobs, logs and dedicated artifacts. If any lane misses 100 MHz, target the measured critical path; do not advance to Milestone #4 until validation and review pass.
+
+
+## Lugh standing operating rule — STATUS.md updates for every EGS conversation — 2026-11-27
+
+- User instruction: update `STATUS.md` on `main` after every EGS/ORCUS/Lugh-related chat, even when the user does not explicitly request a status update.
+- At the start of every EGS-related chat that may lead to repository work, read the latest `STATUS.md` on `main` before taking repository action.
+- At the end of each EGS-related chat, record meaningful decisions, work completed, diagnostics, failures/timeouts, blockers, evidence status, and the exact next action; commit the update to `main` and report the commit SHA. Do not claim an update unless the commit succeeds.
+- Keep the ledger focused: unrelated personal, academic, or general conversations do not belong in the EGS engineering `STATUS.md`.
+- Preserve existing hard boundaries: no force-push or unauthorized merge; PR #22 remains Draft pending validation/review; PR #21, Run #262, Ceres, and NEM boundaries remain as previously specified.

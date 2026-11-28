@@ -2802,3 +2802,14 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Attempted a read-only GitHub API fetch of the branch ref for `research/orcus-ecp5-dadda-pipeline`; the GitHub connector rejected the URL as an invalid repository path (HTTP 400). No branch state was changed and no branch-head conclusion is drawn from this failed request.
 - Actions inventory and exact-head run reconciliation remain outstanding. Continue with a supported branch/commit endpoint or the user-supplied exact Actions URL.
+
+
+## EGS-0004 — ORCUS compositional pipeline CI audit opened; blocked on exact-run identity — 2026-11-27
+
+- GitHub execution ledger: **EGS-0004 / Issue #26** — https://github.com/bio-ctrl/EGS/issues/26 . No existing EGS-0004 issue was found; Issue #26 is the next available execution record after EGS-0003 / Issue #25.
+- Requested experiment head: `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4` on `research/orcus-ecp5-dadda-pipeline`; PR #22 remains open, Draft, and unmerged.
+- The user-supplied Actions URL was a placeholder. GitHub Actions API branch listing returned only Run #263 (ID `46085084604`), whose recorded workflow `head_sha` is `b4f1a9ef60d19258e3941e00389649f52ad3e392`, not the requested SHA. The run's PR association points at PR #22's newer head, but this does not alter the run's own SHA. Do not attribute Run #263's results to the requested head.
+- Therefore no exact-head compositional base/stage/CPA/control proof outcomes or solver durations, 512-vector streaming/flush/reset-leakage results, execution-verified latency, or pipeline ECP5 P&R metrics have been verified for the requested SHA. No pipeline-vs-Run-#262 metric comparison or timing-closure claim is valid yet.
+- EGS-0004 status: **Blocked** pending an Actions run whose own head SHA exactly matches `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4` and whose branch is `research/orcus-ecp5-dadda-pipeline`. Issue #26 records acceptance criteria and the exact next action.
+- Constraints preserved: Run #262/main baseline immutable; PR #22 stays Draft; PR #21 untouched; Ceres untouched; NEM isolated; zero silicon claims.
+- Next: obtain the exact Actions run URL/ID or trigger ORCUS CI on the exact requested head, then audit jobs, logs and dedicated artifacts. If any lane misses 100 MHz, target the measured critical path; do not advance to Milestone #4 until validation and review pass.

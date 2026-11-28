@@ -2822,3 +2822,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - At the end of each EGS-related chat, record meaningful decisions, work completed, diagnostics, failures/timeouts, blockers, evidence status, and the exact next action; commit the update to `main` and report the commit SHA. Do not claim an update unless the commit succeeds.
 - Keep the ledger focused: unrelated personal, academic, or general conversations do not belong in the EGS engineering `STATUS.md`.
 - Preserve existing hard boundaries: no force-push or unauthorized merge; PR #22 remains Draft pending validation/review; PR #21, Run #262, Ceres, and NEM boundaries remain as previously specified.
+
+
+## Lugh ledger completeness check — historical project record confirmed — 2026-11-27
+
+- User asked whether `STATUS.md` had been updated with everything completed up to this point.
+- Read the latest `main` version and checked the current ledger contents. It already contains the detailed ORCUS history through EGS-0003, including the Run #262 immutable combinational baseline, Run #263 timeout and artifact audit, EGS-0002 / Issue #24, EGS-0003 proof-redesign implementation and exact branch head, plus EGS-0004 / Issue #26 exact-run reconciliation and blocked status.
+- The immediately preceding commit `b209cceaefbdac6f28b4e57266113b8779bf0502` added the standing rule; it did not rewrite or re-import the entire historical record because those project milestones were already present in `STATUS.md`.
+- This check confirms the current known EGS/ORCUS milestones and decisions are represented in the ledger. It does not claim that unrelated conversations or unrecorded work outside the repository history have been reconstructed. Continue appending meaningful EGS-related chat outcomes under the standing protocol.

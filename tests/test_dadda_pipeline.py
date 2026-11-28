@@ -107,7 +107,9 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
                 self.assertEqual(stream_latency, latency)
                 self.assertIn(f"reg [{latency - 1}:0] valid_pipe;", design.source)
                 self.assertIn(f"out_valid <= valid_pipe[{latency - 1}];", design.source)
-                self.assertEqual(latency + 1, (latency + 1))  # explicit boundary accounting
+                dut_valid_depth = latency + int("output reg out_valid" in design.source)
+                reference_depth = latency + 1
+                self.assertEqual(dut_valid_depth, reference_depth)
                 self.assertIn(f"reg [{latency}:0] ref_valid_pipe;", control_source)
                 self.assertIn(f"ref_valid_pipe[{latency}]", control_source)
                 self.assertIn(f"if (idx >= {latency})", stream_source)

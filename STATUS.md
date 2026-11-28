@@ -3226,3 +3226,86 @@ No pipeline-vs-baseline comparison can yet be completed. All Run #266 pipeline m
 - No silicon or board-level claims.
 - Do not reinterpret a timeout as inequivalence or an exit code as a proof failure without its actual log.
 - Preserve all negative results, missing evidence, and tool failures.
+
+
+---
+
+## EGS-0011 — ORCUS CI Run #266 verified audit — 2026-11-28
+
+- **Execution issue:** [EGS-0011 / Issue #33](https://github.com/bio-ctrl/EGS/issues/33).
+- **Run:** [ORCUS CI #266](https://github.com/bio-ctrl/EGS/actions/runs/46112797591), numeric ID `46112797591`.
+- **Exact branch/head:** `research/orcus-ecp5-dadda-pipeline` @ `d36ff48f7557a987b283472c89c01852af3b8bd2`.
+- **Jobs:** failed ECP5 job ID `140879858977`; passed general test job ID `140879859194`.
+- **Artifact:** [orcus-fpga-ecp5-pipelined-dadda](https://github.com/bio-ctrl/EGS/actions/runs/46112797591/artifacts/15250192965), artifact ID `15250192965`, 1,825,389 bytes / 565 files.
+- **Artifact integrity:** downloaded ZIP SHA-256 independently calculated as `f07ab31d226bf907e91584deec36f726ef6e3c81957342a57d7c50e8a0602bd2`, matching GitHub's artifact digest exactly.
+- **PR:** #22 remains Draft/unmerged. PR #21 untouched. Main and Run #262 preserved. Ceres untouched; NEM isolated.
+
+### Exact root cause of exit code 1
+
+The ECP5 job failed in step 7, `Run 4/8/16/32-lane pipelined Dadda formal, streaming, synthesis, and place-and-route`. It stopped during 32-lane formal validation at `stage-0-column-4-conservation`.
+
+- Yosys command: `read_verilog .../stage-0-column-4-conservation.v; prep -top orcus_dadda_stage_column_miter_32_0_4; flatten; opt_clean -purge; sat -verify -prove bad 0`.
+- SAT instance: 10,463 variables and 28,829 clauses.
+- Timeout: 180 seconds.
+- Python raised `subprocess.TimeoutExpired`, wrapped as `TimeoutError: stage-0-column-4-conservation formal timeout for 32 lanes after 180s`; process exited code 1.
+- This is a SAT solver scalability timeout, not an inequivalence counterexample and not an ECP5 timing failure.
+- Step 8 uploaded the evidence artifact successfully. Step 9, the separate 4/8/16/32 ECP5 synthesis/P&R stage, was skipped after the formal failure; the subsequent P&R artifact upload found no files.
+
+### CI tests
+
+- FPGA wrapper/report-parser tests: 5/5 passed.
+- Pipelined Dadda generator/sequential harness tests: 10/10 passed.
+- General test job: 89 tests passed in 6.805 seconds.
+- `python -m compileall -q orcus tests examples benchmarks` executed successfully; general test job concluded success.
+
+### Formal and streaming evidence
+
+| Width | Initial Baugh–Wooley SAT | Per-column conservation SAT | Final CPA | Control/reset induction | 512-vector streaming, flush, reset-leakage | Observed latency L |
+|---:|---:|---:|---|---|---|---:|
+| 4 | 4/4 PASS | 41/41 PASS; stage column counts 2, 4, 6, 9, 10, 10 | PASS, 0.0322 s | PASS, 0.3401 s, induction depth 14 | PASS | 6 |
+| 8 | 8/8 PASS | 64/64 PASS; stage counts 2, 4, 6, 8, 11, 11, 11, 11 | PASS, 0.0357 s | PASS, 0.8631 s, induction depth 18 | PASS | 8 |
+| 16 | 16/16 PASS | 92/92 PASS; stage counts 2, 4, 6, 8, 12, 12, 12, 12, 12, 12 | PASS, 0.0413 s | PASS, 2.3337 s, induction depth 22 | PASS | 10 |
+| 32 | 32/32 PASS | Stage 0 columns 2 and 3 PASS; column 4 TIMEOUT at 180 s | Not reached | Not reached | Not reached | Not execution-verified; manifest declares 11 |
+
+Initial proof aggregate runtimes: 4 lanes 0.1991 s; 8 lanes 0.3937 s; 16 lanes 0.8255 s. Per-column proof aggregate runtimes: 4 lanes 0.6702 s; 8 lanes 1.6203 s; 16 lanes 40.2389 s. For 32 lanes, initial per-lane arithmetic proofs all passed; only two stage-0 column proofs completed before the stage-0 column-4 timeout.
+
+Simulation logs report exactly `PASS lanes=4 vectors=512 latency=6`, `PASS lanes=8 vectors=512 latency=8`, and `PASS lanes=16 vectors=512 latency=10`. Testbench source for each completed width includes flush checks, reset clearing of valid, and stale-transaction leakage checks after reset. No 32-lane simulation was reached.
+
+### ECP5 synthesis and post-route results
+
+Target: Lattice `LFE5U-85F-6BG381C`, package `CABGA381`, speed grade 6, 100 MHz target, external IO unconstrained. Tools: Yosys 0.33 (`2584903a060`); nextpnr-ecp5 0.6-3build5.
+
+| Lanes | Fmax MHz | 100 MHz target | Critical-path logic ns | Critical-path routing ns | Clock-to-Q ns | LUT4 | FF | MULT18X18D |
+|---:|---:|---|---:|---:|---:|---:|---:|---:|
+| 4 | 335.9086 | PASS | 1.134 | 1.318 | 0.525 | 186 | 259 | 0 |
+| 8 | 313.2832 | PASS | 1.174 | 1.493 | 0.525 | 393 | 568 | 0 |
+| 16 | 313.6763 | PASS | 1.174 | 1.489 | 0.525 | 799 | 1,193 | 0 |
+| 32 | Not run | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured |
+
+Logic/routing/clock-to-Q values are sums by segment type from the first detailed post-route critical path in each nextpnr report; totals are approximately 2.977 ns, 3.192 ns, and 3.188 ns. Pipeline synthesis, nextpnr report, routed config, and logs exist for 4/8/16 only. The 32-lane artifact directory has design RTL, manifest, and partial validation logs but no synth/P&R outputs. These results are not board-level timing because external IOs are unconstrained.
+
+### Run #262 comparison — immutable combinational Fused Dadda baseline
+
+| Lanes | Run #262 Fmax MHz | Run #262 logic/routing ns | Run #266 observed L | Run #266 pipeline Fmax MHz | Run #266 pipeline logic/routing ns | Run #266 LUT4 / FF / MULT18X18D |
+|---:|---:|---:|---:|---:|---:|---:|
+| 4 | 106.26 | 3.496 / 5.390 | 6 | 335.9086 | 1.134 / 1.318 | 186 / 259 / 0 |
+| 8 | 84.02 | 4.489 / 6.888 | 8 | 313.2832 | 1.174 / 1.493 | 393 / 568 / 0 |
+| 16 | 73.10 | 4.987 / 8.168 | 10 | 313.6763 | 1.174 / 1.489 | 799 / 1,193 / 0 |
+| 32 | 55.82 | 5.931 / 11.458 | Not verified (manifest 11) | Not run | Not measured | Not measured |
+
+Run #262 is combinational and Run #266 is pipelined; retain the design distinction when interpreting this comparison. Do not claim silicon, board-level, or product-level performance.
+
+### Exact next engineering action
+
+Reduce the 32-lane stage-0 column-4 SAT cone while preserving exact compressor-token/bit accounting. Preferred route: prove reusable full-adder/half-adder local conservation lemmas and compose them through the token graph, or partition the column into bounded subproofs with explicit intermediate carry/sum token accounting. Keep final CPA and sequential induction separate. Add a regression for the exact 32-lane stage-0 column-4 case recording variables, clauses, and runtime. Re-run unit tests, compileall, and exact-head ORCUS CI; then audit all 32-lane gates and all widths. Do not simply raise the timeout or relabel timeout as pass.
+
+### Milestone and evidence status
+
+- 4/8/16 lanes: formal, streaming, and ECP5 100 MHz target gates passed in Run #266.
+- 32 lanes: arithmetic base proofs passed; per-column SAT timed out at stage 0 column 4; later gates not reached.
+- **Milestone #3 remains OPEN/BLOCKED. Do not begin Milestone #4 (MAC + local-memory inference tile).**
+- No silicon or board-level claims. Preserve failures and unavailable evidence.
+
+### Historical note
+
+EGS-0010's prior STATUS entry recorded the initial artifact-access blocker. EGS-0011 resolves that access blocker and supersedes its provisional Run #266 evidence table with the verified audit above; the EGS-0010 record remains as execution history.

@@ -2685,3 +2685,12 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Added a sequential control-only miter that instantiates the actual pipeline RTL and compares its output-valid signal to an independent L-stage reference shift register. Data outputs are unobserved so the subsequent synthesis/optimization can prune the multiplier datapath from this proof cone.
 - Retained `build_sequential_miter` as a compatibility alias to the new control-only miter.
 - This is an implementation commit only; no formal command or test has run yet. Next update `run_formal` to execute all per-stage combinational proofs plus the small control proof, and persist each log/miter. Main STATUS update commit: `bc5d1579d66bd7693c511d331e8cbaa436072a47`.
+
+
+## EGS-0003 action 2 — compositional formal runner committed
+
+- Updated `benchmarks/dadda_pipeline.py` on the experiment branch; commit: `fb46208220c39acbfefc8da06722b2a1d9ecb023`.
+- Replaced the monolithic sequential full-multiplier SAT run with one combinational SAT miter per Dadda stage. Each stage compares modulo-width weighted input and output heaps; the final stage also checks the CPA against its final two-row heap.
+- Added a separate sequential valid/reset temporal-induction proof. It instantiates the real DUT but only observes `out_valid`; `opt_clean -purge` is applied after flattening so unobservable multiplier datapath logic should be removed from the SAT cone. The induction depth is `2*L+2`.
+- Every stage and control proof writes its generated Verilog and raw Yosys log to the persistent per-configuration validation artifact directory. The ECP5 runner imports this `run_formal` function, so its existing order remains formal → 512-vector streaming/reset simulation → ECP5 synthesis/P&R for each lane count.
+- No Yosys formal execution or test has yet been run on this code. This commit is not evidence of proof success. Next update source-level tests to cover stage miter structure, weighted-sum comparisons, final CPA check and control-only miter; then trigger CI for actual execution evidence.

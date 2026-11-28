@@ -2655,3 +2655,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - No 8/16/32-lane RTL/manifests/logs are in the artifact. No streaming testbench or Icarus execution log is present. This matches control flow: formal timed out before streaming and before ECP5 synthesis/P&R. Therefore no pipeline Fmax, logic/routing path delay, LUT4, FF, or MULT18X18D results exist for any lane count in Run #263.
 - The solver log establishes a resource-heavy bounded SAT instance at 4 lanes; it does not establish functional inequivalence. Next record the blocked execution as EGS-0002 and update the durable ledger/STATUS. Then the next engineering task is to redesign the sequential proof strategy (e.g. compositional stage/transaction lemmas or a smaller inductive equivalence proof) before rerunning streaming and P&R. Do not merely raise the timeout without analyzing proof complexity.
 - No source, PR, baseline, Ceres, or NEM state changed. PR #22 remains Draft; Run #262 remains the immutable combinational comparison baseline.
+
+
+## 298. EGS-0002 execution ledger issue created — 2026-11-27T21:34:00-06:00
+
+- Created durable execution record **EGS-0002 — ORCUS pipelined Dadda CI audit**, GitHub Issue #24: https://github.com/bio-ctrl/EGS/issues/24 .
+- EGS-0002 records objective, starting main commit `146d6b189c2d601f5fc1b5c4c76923a6f4bb44e3`, branch and exact experiment SHA, Run #263 ID/URL, job outcomes, formal timeout command and solver scale, artifact ID/digest/inventory, unrun streaming/P&R checks, absent execution-verified latency/metrics, boundaries, and next action.
+- EGS-0002 status is **Blocked**. No pipeline correctness or timing-closure claim is made. PR #22 remains Draft; PR #21 and Run #262 remain untouched; Ceres and NEM remain isolated.
+- Next action: develop a tractable compositional/inductive sequential-equivalence proof, then rerun the pipeline in exact-head CI. Do not advance to P&R conclusions until proof and streaming/reset checks execute successfully.

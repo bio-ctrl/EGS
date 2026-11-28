@@ -160,11 +160,11 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
         token = next(token for column in output_heap for token in column)
         qname = f"st0_q_{token}"
         register_line = f"      {qname} <= {token};"
-        dropped = design.source.replace(register_line + "\\n", "", 1)
+        dropped = design.source.replace(register_line + "\n", "", 1)
         with self.assertRaisesRegex(ValueError, "register/pass-through wiring mismatch"):
             validate_stage_netlist_wiring(dropped, records, 0, output_heap)
         duplicated = design.source.replace(register_line,
-            register_line + "\\n" + register_line, 1)
+            register_line + "\n" + register_line, 1)
         with self.assertRaisesRegex(ValueError, "register/pass-through wiring mismatch"):
             validate_stage_netlist_wiring(duplicated, records, 0, output_heap)
 

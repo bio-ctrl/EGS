@@ -16,11 +16,13 @@
 
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-28T05:33:41.281Z
+**Last updated:** 2026-11-28T05:56:32Z
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
 ---
+
+> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0012 / Issue #34 follows EGS-0011 / Issue #33. The requested atomic FA/HA compositional proof architecture and regressions have been committed to `research/orcus-ecp5-dadda-pipeline`, latest head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`, with changes limited to `benchmarks/dadda_pipeline.py` and `tests/test_dadda_pipeline.py`. Formal flow now proves reusable 1-bit FA and HA weighted-conservation lemmas with Yosys SAT, then composes them over the exact generated stage compressor-token graph. It audits emitted Verilog sum/carry equations against scheduled pins, exact input ownership and column weights, pass-through/output accounting, stage register assignments, and modulo-2^W MSB carry truncation. Existing initial Baugh–Wooley proofs, final CPA proof, and sequential valid/reset induction remain separate. Added regression coverage includes FA/HA miter construction, all-stage/all-width emitted-netlist wiring checks, miswired FA/HA pins, dropped/duplicated output and register tokens, misweighted carries, and the exact 32-lane Stage 0 Column 4 structure. The exact-head PR workflow-run lookup for `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a` returned no runs; unit tests, compileall, Yosys atomic SAT, 32-lane streaming, and ECP5 P&R have NOT yet been executed against this head. The branch is prepared for the final Milestone #3 ORCUS CI trigger, but neither sub-second proof runtime nor CI success is established. PR #22 remains Draft/unmerged; PR #21 untouched; main and Run #262 preserved; `orcus/dadda_pipeline.py` and the validated pipelined RTL generator untouched; Ceres untouched; NEM isolated. Milestone #3 remains OPEN/BLOCKED until exact-head Run #267 passes all gates. No silicon or board-level claims.
 
 ## 1. Mission and operating philosophy
 
@@ -3309,3 +3311,22 @@ Reduce the 32-lane stage-0 column-4 SAT cone while preserving exact compressor-t
 ### Historical note
 
 EGS-0010's prior STATUS entry recorded the initial artifact-access blocker. EGS-0011 resolves that access blocker and supersedes its provisional Run #266 evidence table with the verified audit above; the EGS-0010 record remains as execution history.
+
+---
+
+## EGS-0012 — Atomic FA/HA compositional proof implementation — 2026-11-28
+
+- **Execution issue:** [EGS-0012 / Issue #34](https://github.com/bio-ctrl/EGS/issues/34), follow-up to [EGS-0011 / Issue #33](https://github.com/bio-ctrl/EGS/issues/33).
+- **Repository / branch:** `bio-ctrl/EGS`, `research/orcus-ecp5-dadda-pipeline`.
+- **Starting head:** `d36ff48f7557a987b283472c89c01852af3b8bd2`.
+- **Final branch head:** `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a` ([commit](https://github.com/bio-ctrl/EGS/commit/1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a)).
+- **Files changed:** only `benchmarks/dadda_pipeline.py` and `tests/test_dadda_pipeline.py`. `orcus/dadda_pipeline.py` was not modified.
+- **Execution commits:** `d35ddb6a51f1f4b9a6ed76e922d884b3335d7649`, `4bad2629a0743dd6d98545cf6a6dbe6a4fffa81b`, `55a6c741381d254d4222bc6b3c5c99a01912e981`, `f2273825284d0b5558bd6968ed4d45a2f175de09`, `06eac6bae723e02e1a732cfae1d0cbf1a859d6f0`, `66e85616a04736e999357ea19cd559d5ac6e8308`, `e977f06513baf3fc88eaaae4f20228ceeba2aa2c`, `ceb4845e0821058fec023de001e32efe79d8713d`, `84dbc7bfa3e33d3b04bb938dda9f316c4a8b6e45`, `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`.
+- **Implementation:** added atomic 1-bit FA and HA conservation miter generators; `run_formal` executes each as a separate Yosys SAT lemma and returns their proof records. Replaced multi-compressor per-column SAT calls in the formal run with stage-level composition using the atomic lemmas plus exact token ownership/weight accounting. Added emitted-Verilog equation matching for every FA/HA sum and carry, exact stage register assignment checks for all output/pass-through tokens, and explicit MSB modulo-`2^W` truncation checks. Initial Baugh–Wooley lane proofs, final CPA equivalence, and sequential control/reset induction remain separate and unchanged.
+- **Regression coverage:** atomic FA/HA miter structure; all stages across all widths; miswired FA/HA pins; dropped/duplicated output bits; dropped/duplicated register tokens; misweighted carry columns; dedicated 32-lane Stage 0 Column 4 graph structure.
+- **Validation:** files were fetched back from the final branch head. Exact-head PR workflow-run lookup returned an empty list. No unit tests, compileall, Yosys SAT, streaming, or ECP5 P&R have been run against the new head in this execution. No sub-second runtime claim is made.
+- **Ready state:** branch is prepared for the final Milestone #3 ORCUS CI trigger. This is readiness to trigger, not a validation pass. Run #267 must target exact head `1c65a44fbfe099a0f383494dbbdfe06f5e9bf60a`.
+- **Boundaries:** PR #22 remains Draft/unmerged; PR #21 untouched; main and Run #262 immutable; Ceres untouched; NEM isolated; no silicon or board-level claims.
+- **Status:** implementation committed; validation pending; Milestone #3 remains OPEN/BLOCKED.
+- **Next action:** trigger ORCUS CI against the exact final branch head, then audit atomic FA/HA SAT runtimes, all stage graph proofs, 32-lane final CPA and sequential induction, 512-vector streaming/flush/reset, observed latency, and 4/8/16/32 ECP5 P&R artifacts. Do not begin Milestone #4 until all gates pass.
+

@@ -73,9 +73,12 @@ def build_initial_heap_miter(lanes: int, lane_index: int = 0) -> str:
             lines.append(f"  wire {bias} = 1'b1;")
 
     lines.append(
-        f"  wire signed [7:0] signed_product = "
-        f"$signed(a{lane_index}) * $signed(b{lane_index});"
+        f"  wire signed [7:0] signed_a = {{{{4{{a{lane_index}[3]}}}}, a{lane_index}}};"
     )
+    lines.append(
+        f"  wire signed [7:0] signed_b = {{{{4{{b{lane_index}[3]}}}}, b{lane_index}}};"
+    )
+    lines.append("  wire signed [7:0] signed_product = signed_a * signed_b;")
     lines.append(
         f"  wire signed [{width - 1}:0] extended_product = "
         f"{{{{{width - 8}{{signed_product[7]}}}}, signed_product}};"

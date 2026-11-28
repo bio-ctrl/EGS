@@ -3158,3 +3158,71 @@ Manually trigger ORCUS CI for PR #22 / branch `research/orcus-ecp5-dadda-pipelin
 - Ceres remains untouched.
 - NEM remains isolated.
 - No silicon or board-level claims.
+
+
+---
+
+## EGS-0010 — ORCUS CI Run #266 audit intake and evidence-access blocker — 2026-11-28
+
+- **Execution issue:** [EGS-0010 / Issue #32](https://github.com/bio-ctrl/EGS/issues/32).
+- **Objective:** Audit ORCUS CI Run #266 at exact EGS-0009 head, determine all 4/8/16/32-lane formal, streaming, latency and ECP5 P&R outcomes, identify the exact exit-code-1 cause, and decide whether Milestone #3 can close.
+- **Repository:** `bio-ctrl/EGS`.
+- **Branch/head supplied:** `research/orcus-ecp5-dadda-pipeline` / `d36ff48f7557a987b283472c89c01852af3b8bd2`.
+- **PR constraint:** PR #22 remains Draft/unmerged; PR #21 untouched. Main and Run #262 are preserved. Ceres untouched; NEM isolated.
+
+### Run #266 intake — user-supplied, not independently verified
+
+- Workflow: ORCUS CI #266; reported duration 4m 55s.
+- `test` job reported passed.
+- `ORCUS FPGA ECP5 place-and-route` reported exited with code 1 after uploading its artifact.
+- Artifact name: `orcus-fpga-ecp5-pipelined-dadda`; reported size 1.74 MB.
+- Supplied SHA-256: `f07ab31d226bf907e91584deec36f726ef6e3c81957342a57d7c50e8a0602bd2`.
+- These facts are recorded as user-provided intake only; no log, job metadata, artifact manifest, or digest has yet been independently checked.
+
+### Access and audit results this session
+
+- Re-read the latest `STATUS.md` from `main` before repository actions; its pre-update blob SHA was `4476fb230c7796bf5554c8f7b3545fbc26f439af`.
+- Searched repository issues for `EGS-0010`; no existing issue was found. Created [Issue #32](https://github.com/bio-ctrl/EGS/issues/32) as the EGS-0010 execution record.
+- Queried commit-associated workflow runs for exact head `d36ff48f7557a987b283472c89c01852af3b8bd2`; the connected lookup returned an empty list. Its documented behavior filters to pull-request-triggered runs, so this does not disprove the user's reported workflow_dispatch run.
+- The available GitHub integration exposes fetch-by-job-ID and download-by-artifact-ID operations, but no workflow-run listing/get operation for discovering the numeric run ID and artifact ID of this dispatch run.
+- The user supplied the workflow run number (#266), but not its numeric Actions run ID/URL, job IDs, or artifact ID. Without those identifiers the raw job logs and ZIP cannot be fetched through the available integration.
+- Therefore: no independently audited proof timings, pass/fail outcomes, streaming results, observed latency, Yosys/nextpnr reports, resource counts, Fmax, or exact failure root cause are available from this session. Do not infer the root cause from exit code 1 or artifact upload success.
+
+### Formal and implementation evidence matrix — Run #266
+
+| Required gate | 4 lanes | 8 lanes | 16 lanes | 32 lanes |
+|---|---|---|---|---|
+| Initial Baugh–Wooley arithmetic base proofs | Not independently audited | Not independently audited | Not independently audited | Not independently audited |
+| Per-column compressor-conservation and bit accounting | Not independently audited | Not independently audited | Not independently audited | Not independently audited |
+| Final CPA equivalence | Not independently audited | Not independently audited | Not independently audited | Not independently audited |
+| Sequential control/reset induction | Not independently audited | Not independently audited | Not independently audited | Not independently audited |
+| 512-vector streaming / flush / reset leakage | Not independently audited | Not independently audited | Not independently audited | Not independently audited |
+| Execution-verified latency L | Not available | Not available | Not available | Not available |
+| ECP5 Yosys synthesis / nextpnr P&R | Not independently audited | Not independently audited | Not independently audited | Not independently audited |
+
+### Run #262 immutable baseline — retained unchanged
+
+Target: LFE5U-85F-6BG381C / CABGA381 / speed grade 6 / 100 MHz. Run #262 is the combinational Fused Dadda baseline, not a pipelined implementation.
+
+| Lanes | Baseline Fmax MHz | Logic delay ns | Routing delay ns | LUT4 | FF | MULT18X18D |
+|---:|---:|---:|---:|---:|---:|---:|
+| 4 | 106.26 | 3.496 | 5.390 | 260 | 42 | 0 |
+| 8 | 84.02 | 4.489 | 6.888 | 579 | 75 | 0 |
+| 16 | 73.10 | 4.987 | 8.168 | 1,252 | 140 | 0 |
+| 32 | 55.82 | 5.931 | 11.458 | 2,400 | 269 | 0 |
+
+No pipeline-vs-baseline comparison can yet be completed. All Run #266 pipeline metrics remain not independently audited; target pass/fail is undetermined, not presumed fail or pass.
+
+### Exact next action and gate decision
+
+1. Obtain the Run #266 GitHub Actions URL or numeric run ID and the artifact ID (or a connector-usable artifact file reference).
+2. Fetch both job records, step summaries, raw logs, and the named artifact. Independently calculate the downloaded ZIP SHA-256 and compare it with the supplied digest.
+3. Audit every width's initial arithmetic proofs, all per-column proofs and accounting, separate final CPA proof, sequential reset/control induction, 512-vector streaming/flush/reset-leakage simulation, execution-observed latency, and every Yosys/nextpnr report. Extract exact command exit codes, solver runtimes, exception text, and the failure step to diagnose exit code 1.
+4. Populate pipeline-vs-Run-#262 comparison only with raw artifact values; preserve the baseline and label unavailable fields as not measured.
+5. **Milestone #3 remains OPEN/BLOCKED. Do not begin Milestone #4 (MAC + local-memory inference tile).** Keep PR #22 Draft/unmerged until exact-head evidence and review gates pass.
+
+### Evidence boundaries
+
+- No silicon or board-level claims.
+- Do not reinterpret a timeout as inequivalence or an exit code as a proof failure without its actual log.
+- Preserve all negative results, missing evidence, and tool failures.

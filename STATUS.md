@@ -2753,3 +2753,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 
 - Updated the per-lane initial arithmetic miter to explicitly sign-extend each 4-bit operand to 8 bits before multiplication, then sign-extend the 8-bit product to accumulator width. Experiment branch commit: `30b51df975a6848f6a0b909c22cfd2223f8a4829`.
 - This avoids relying on implicit Verilog expression sizing for the reference 4×4 signed product. No Yosys or simulator execution has occurred; this is a static robustness change.
+
+
+## EGS-0003 action 7 — signed-extension source test aligned
+
+- Updated `tests/test_dadda_pipeline.py` on the experiment branch; commit: `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`.
+- Adjusted the base-case miter source test to assert explicit signed operand extension and the 8-bit signed product expression introduced in the prior static-review correction.
+- Test definitions remain unexecuted. Next final reconciliation: fetch current PR/branch head, verify the workflow order and no unexpected Actions run, then create EGS-0003 Issue and record the final state on main.

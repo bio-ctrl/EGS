@@ -2709,3 +2709,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Static review of the generated final-stage miter found that the CPA row expression initially referenced the generator's post-register `final_rows` names, while the standalone stage miter exposes the pre-register `output_heap` tokens. Those identifiers would have been undefined in the miter.
 - Corrected `benchmarks/dadda_pipeline.py` on the experiment branch in commit `fef6717cc37c043351fa4d2d30bd9ad1df5bad10`: final CPA row0/row1 are now constructed directly from the final stage's `output_heap`, preserving the same weighted bits and avoiding undefined register aliases.
 - This is a static source correction, not a Yosys proof result. Next inspect the final diff and verify generated names/command structure; then create EGS-0003 issue and update main STATUS with the final branch head and readiness limitations.
+
+
+## EGS-0003 review finding — initial arithmetic heap proof required
+
+- During static review of `orcus/lane_scaling.py`, confirmed the Baugh–Wooley generator forms each lane's raw complemented partial-product matrix and adds the modulo-`2^W` correction constant `2^W - 112` per lane.
+- Found a proof-composition gap: stage 0's independent miter treats its input heap bits as arbitrary Boolean inputs. Stage invariants alone would prove compressor preservation but would not prove that the actual partial products plus per-lane correction constants equal the signed INT4 dot product.
+- Add an explicit initial-heap arithmetic miter proving the generated signed partial-product/correction heap equals the direct signed lane-product sum modulo accumulator width, before all per-stage compressor proofs. This is required for the composition to establish the intended arithmetic result.
+- This finding is from read-only source inspection; no code change or proof result is claimed yet. Next implement and test the base-case miter and include it in `run_formal`.

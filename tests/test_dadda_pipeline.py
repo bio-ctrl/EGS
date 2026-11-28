@@ -1,7 +1,8 @@
 import unittest
 
 from benchmarks.dadda_pipeline import (
-    LANES, VECTOR_COUNT, build_control_miter, build_stage_miter,
+    LANES, VECTOR_COUNT, build_control_miter, build_initial_heap_miter,
+    build_stage_miter,
     build_sequential_miter, build_streaming_testbench,
     _vectors,
 )
@@ -41,6 +42,17 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
             self.assertIn(f"localparam integer LATENCY = {design.latency};", design.source)
             self.assertIn(f"out_valid <= valid_pipe[{design.latency - 1}];", design.source)
             self.assertIn("one input transaction per cycle", design.manifest["throughput"])
+
+    def test_initial_baugh_wooley_heap_matches_signed_mac(self):
+        for lanes in LANES:
+            with self.subTest(lanes=lanes):
+                source = build_initial_heap_miter(lanes)
+                self.assertIn(f"module orcus_dadda_initial_heap_miter_{lanes}", source)
+                self.assertIn("initial_heap_sum", source)
+                self.assertIn("direct_signed_sum", source)
+                self.assertIn("$signed(a0) * $signed(b0)", source)
+                self.assertIn("assign bad = (initial_heap_sum != direct_signed_sum)", source)
+                self.assertIn("bias_0_", source)
 
     def test_each_stage_has_independent_weighted_heap_sat_miter(self):
         for lanes in LANES:

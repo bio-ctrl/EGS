@@ -2636,3 +2636,12 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Dedicated pipeline artifact exists: `orcus-fpga-ecp5-pipelined-dadda`, artifact ID `15238624029`, 27,468 bytes, SHA-256 `114013c6a9d90ec11c9b2e3008542325d2a9f3618bb6984c9932d7c71688aa1d`. It is associated with the exact run/head. Other general benchmark artifacts are not pipeline P&R evidence.
 - No root cause or per-lane formal/simulation/P&R result is yet asserted; next fetch the failed job log and download/inspect the dedicated artifact.
 - No source or PR state changed. Run #262 remains the immutable baseline; PR #22 remains Draft; Ceres and NEM untouched.
+
+
+## 296. Run #263 failure root cause identified from exact job log — 2026-11-27T21:32:00-06:00
+
+- Retrieved full log for failed ECP5 job `140792667093`. Toolchain installation succeeded (Yosys 0.33; nextpnr-ecp5 0.6-3build5). Both ECP5 wrapper/parser tests and all five pipelined Dadda source/harness unit tests passed; the general CI job also passed.
+- The combined pipeline runner failed at its **first configuration, 4 lanes**, during sequential Yosys SAT. Exact command: `yosys -p 'read_verilog .../miter.v; prep -top orcus_pipeline_miter_4; flatten; sat -seq 16 -verify -prove bad 0 -set-init-zero'`. Python `subprocess.run` raised `TimeoutExpired` after the configured 180-second formal timeout; runner raised `TimeoutError: sequential SAT timeout for 4 lanes after 180s`; process exited 1.
+- This is a solver timeout, not a counterexample and not proof of inequivalence. Because `run_one()` invokes `run_formal()` before `run_streaming()`, Yosys ECP5 synthesis, or nextpnr, none of those later steps ran for 4 lanes or any higher lane count. No 512-vector simulation, reset-leakage result, execution-verified latency, or pipeline P&R metrics exist in this run.
+- Artifact upload succeeded, but the pipeline artifact is only 27,468 bytes and the baseline ECP5 job was skipped. Next inspect the downloaded ZIP inventory and contents to establish precisely which partial logs/source files were retained; do not infer absent test results.
+- No source, PR, baseline, Ceres, or NEM state changed. PR #22 remains Draft; Run #262 remains immutable and separate.

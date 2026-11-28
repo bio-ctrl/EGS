@@ -10,13 +10,13 @@
 > - "Big dreams push past what other people view as possible, often because 'unrealistic' just means a goal hasn't been done yet by the people around you. You have to dream unrealistic because life is not realistic"
 > - "Get what I want and when I want it"
 
-> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** Milestone #2 remains closed on main at `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`. Run #262 (ID `45955978365`, head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`) remains the immutable combinational ECP5 baseline; only 4-lane Fused Dadda met 100 MHz. Milestone #3 remains OPEN. PR #22 is Draft and unmerged; EGS-0005 / Issue #27 audited Run #264 and diagnosed the sequential control miter's missing registered-output reference boundary. EGS-0006 / Issue #28 committed the correction on `research/orcus-ecp5-dadda-pipeline` at `de04727b73afab319bc9b3f96a9c8b314d891133`: the post-edge control reference now has L+1 bits to model L valid_pipe stages plus registered out_valid, while manifest and streaming input-to-output latency remain L for 4/8/16/32 lanes. Cross-width regression coverage was added. Python tests have not been executed in this session and no new CI run has been triggered; the fix is source-committed but not yet validated by execution. Exact next action: run focused and full tests, trigger ORCUS CI on the exact EGS-0006 SHA, and audit all proofs, 512-vector streaming/flush/reset leakage, observed latency, and ECP5 P&R. Do not close Milestone #3 or begin Milestone #4 until the required evidence passes. PR #21 remains untouched; Run #262 remains untouched; Ceres remains untouched; NEM remains isolated.
+> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** Milestone #2 remains closed on main at `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`. Run #262 (ID `45955978365`, head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`) remains the immutable combinational ECP5 baseline; only 4-lane Fused Dadda met 100 MHz. Milestone #3 remains OPEN and BLOCKED pending exact-head pipeline CI evidence. PR #22 is Draft and unmerged at EGS-0006 head `de04727b73afab319bc9b3f96a9c8b314d891133`. EGS-0007 / Issue #29 was created after checking for an existing EGS-0007 record. The user supplied `PASTE_GITHUB_ACTIONS_URL_HERE`, which is a placeholder, not a run URL. GitHub Actions lookup for the exact SHA returned zero runs; the branch's latest run listing contained only Run #264 (head `ee8c0a0...`) and Run #263 (head `b4f1a9e...`), neither matching EGS-0006. Therefore no logs or artifacts for the required head were available and no formal, streaming, execution-latency, or pipeline P&R results can be reported. Run #262 baseline numbers are retained below; pipeline metrics remain not measured. Exact next action: obtain the actual Actions URL/run ID and verify head SHA `de04727b73afab319bc9b3f96a9c8b314d891133`; if no such run exists, dispatch ORCUS CI at that exact head and audit all logs/artifacts. Do not close Milestone #3 or begin Milestone #4 until all required evidence passes. PR #21 remains untouched; Run #262 and main baseline are preserved; Ceres remains untouched; NEM remains isolated.
 
 ---
 
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-28T05:15:00Z
+**Last updated:** 2026-11-28T05:13:30Z
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -2967,3 +2967,53 @@ The same repository then recorded a biotechnology and computational-biology expl
 
 ### Exact next action
 Run `python -m unittest tests.test_dadda_pipeline`, then the full repository test suite. Trigger ORCUS CI against exact head `de04727b73afab319bc9b3f96a9c8b314d891133`; audit the 4/8/16/32-lane base/stage/control proofs, 512-vector streaming/flush/reset-leakage, observed latency and ECP5 synthesis/P&R. Keep Milestone #3 open and do not begin Milestone #4 until all evidence and review gates pass.
+
+
+## EGS-0007 — ORCUS exact-head CI audit and Milestone #3 evidence gate — 2026-11-28
+
+- Execution ledger: **EGS-0007 / Issue #29** — https://github.com/bio-ctrl/EGS/issues/29 .
+- Objective: Audit compositional formal proofs, streaming/reset behavior, execution-verified latency and ECP5 P&R for 4/8/16/32 lanes on the EGS-0006 implementation.
+- Required repository/branch/head: `bio-ctrl/EGS`, `research/orcus-ecp5-dadda-pipeline`, `de04727b73afab319bc9b3f96a9c8b314d891133`.
+- PR #22 was independently checked: open, Draft, unmerged; its head equals the required EGS-0006 SHA.
+- Existing EGS-0007 issue search returned no prior record; Issue #29 was created.
+
+### Exact-head run discovery and audit limitation
+- The user message supplied the literal placeholder `PASTE_GITHUB_ACTIONS_URL_HERE`, not an Actions URL or run ID.
+- GitHub Actions query for `head_sha=de04727b73afab319bc9b3f96a9c8b314d891133` returned `total_count=0`.
+- The branch's latest 100 workflow-run query returned only Run #264 (ID `46108410125`, head `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`, failure) and Run #263 (ID `46085084604`, head `b4f1a9ef60d19258e3941e00389649f52ad3e392`, failure). Neither is an EGS-0006 exact-head run.
+- Consequently no matching run ID, logs, job summaries, or uploaded artifacts were available to fetch. Do not substitute Run #264 or #263 for the required head.
+
+### Formal, simulation and latency evidence status for EGS-0006 head
+| Required check | 4 lanes | 8 lanes | 16 lanes | 32 lanes |
+|---|---|---|---|---|
+| Per-lane Baugh–Wooley arithmetic base proofs | Not auditable | Not auditable | Not auditable | Not auditable |
+| Stage weighted-heap / final CPA proofs | Not auditable | Not auditable | Not auditable | Not auditable |
+| Sequential control/reset temporal induction | Not auditable | Not auditable | Not auditable | Not auditable |
+| 512-vector streaming / flush / reset-leakage | Not auditable | Not auditable | Not auditable | Not auditable |
+| Execution-verified latency L | Not available | Not available | Not available | Not available |
+
+- No solver timings, simulation timings, or pass/fail outcomes can be attributed to the EGS-0006 head without its exact run logs/artifacts.
+- EGS-0006 source correction models L+1 reference registers for post-edge control comparison (L valid_pipe stages plus registered out_valid); manifest/streaming transaction latency convention remains L. This source change alone is not proof or simulation evidence.
+
+### ECP5 P&R comparison — immutable Run #262 vs pipeline head
+Target: LFE5U-85F-6BG381C / CABGA381 / speed grade 6 / 100 MHz. Run #262 values are the Fused Dadda combinational baseline. Pipeline metrics below are unavailable because no exact-head run/artifact was located.
+
+| Lanes | Run #262 Fmax MHz | Baseline logic ns | Baseline routing ns | Baseline LUT4 | Baseline FF | Baseline MULT18X18D | Pipeline latency L | Pipeline Fmax / 100 MHz | Pipeline logic / routing ns | Pipeline LUT4 / FF / MULT18X18D |
+|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|
+| 4 | 106.26 | 3.496 | 5.390 | 260 | 42 | 0 | Not available | Not measured | Not measured | Not measured |
+| 8 | 84.02 | 4.489 | 6.888 | 579 | 75 | 0 | Not available | Not measured | Not measured | Not measured |
+| 16 | 73.10 | 4.987 | 8.168 | 1,252 | 140 | 0 | Not available | Not measured | Not measured | Not measured |
+| 32 | 55.82 | 5.931 | 11.458 | 2,400 | 269 | 0 | Not available | Not measured | Not measured | Not measured |
+
+- Pipeline 100 MHz target pass/fail is **not determined**, not a fail and not a pass. Missing P&R metrics are not zero.
+- Run #262 remains the immutable baseline; no Run #262 artifact or data was modified.
+
+### Exact next action
+Obtain the actual GitHub Actions URL or numeric run ID for the user's claimed completed dispatch. Verify that run's `head_sha` equals `de04727b73afab319bc9b3f96a9c8b314d891133`, then fetch all job logs and artifacts and audit per-lane base/stage/control proofs, 512-vector back-to-back streaming/flush/reset-leakage, observed latency, and ECP5 synthesis/nextpnr P&R. If no run exists for that exact SHA, dispatch ORCUS CI against that exact branch head and audit the new run. Keep Milestone #3 open; do not begin Milestone #4 until all evidence and review gates pass.
+
+### Preserved constraints
+- PR #22 remains Draft and unmerged.
+- PR #21 remains untouched.
+- Main and Run #262 remain preserved.
+- Ceres remains untouched; NEM remains isolated.
+- No silicon, board-level, or timing-closure claims.

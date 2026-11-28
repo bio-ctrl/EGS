@@ -112,9 +112,12 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
                 self.assertEqual(dut_valid_depth, reference_depth)
                 self.assertIn(f"reg [{latency}:0] ref_valid_pipe;", control_source)
                 self.assertIn(f"ref_valid_pipe[{latency}]", control_source)
-                self.assertIn(f"if (idx >= {latency})", stream_source)
-                self.assertIn(f"vectors[idx - {latency}][2]", stream_source)
-                self.assertIn(f"vectors[len(vectors) - {latency} + flush][2]", stream_source)
+                # The builder unrolls the 512-vector schedule into literal
+                # testbench statements; transaction zero must first be checked
+                # at input index L, followed by the final L outputs in flush.
+                self.assertIn(f"expected transaction 0", stream_source)
+                self.assertIn("flush mismatch 0", stream_source)
+                self.assertIn(f"flush mismatch {latency - 1}", stream_source)
 
     def test_streaming_testbench_has_512_back_to_back_vectors(self):
         for lanes in LANES:

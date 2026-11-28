@@ -41,6 +41,50 @@ def _weighted_sum(heap: list[list[str]], width: int, prefix: str) -> tuple[list[
     return declarations, expression
 
 
+def build_initial_heap_miter(lanes: int) -> str:
+    """Prove the actual Baugh-Wooley partial-product heap equals signed MAC."""
+    design = generate_dadda_pipelined(lanes)
+    width = design.width
+    initial_heap = design.manifest["stage_boundaries"][0]["input_heap"]
+    initial_tokens = {token for column in initial_heap for token in column}
+    ports = []
+    lines = []
+    for lane in range(lanes):
+        ports.extend((f"input wire signed [3:0] a{lane}",
+                      f"input wire signed [3:0] b{lane}"))
+    ports.append("output wire bad")
+    lines.append(f"module orcus_dadda_initial_heap_miter_{lanes}({', '.join(ports)});")
+
+    for lane in range(lanes):
+        for i in range(4):
+            for j in range(4):
+                name = f"pp_{lane}_{i}_{j}"
+                product = f"(a{lane}[{i}] & b{lane}[{j}])"
+                inverted = (i == 3) != (j == 3)
+                lines.append(f"  wire {name} = " + (f"~{product};" if inverted else f"{product};"))
+        for bit in range(width):
+            bias = f"bias_{lane}_{bit}"
+            if bias in initial_tokens:
+                lines.append(f"  wire {bias} = 1'b1;")
+        lines.append(
+            f"  wire signed [7:0] signed_product_{lane} = "
+            f"$signed(a{lane}) * $signed(b{lane});"
+        )
+        lines.append(
+            f"  wire signed [{width - 1}:0] extended_product_{lane} = "
+            f"{{{{{width - 8}{{signed_product_{lane}[7]}}}}, signed_product_{lane}}};"
+        )
+
+    heap_decls, heap_expr = _weighted_sum(initial_heap, width, "initial")
+    lines.extend(heap_decls)
+    lines.append(f"  wire [{width - 1}:0] initial_heap_sum = {heap_expr};")
+    direct_expr = " + ".join(f"extended_product_{lane}" for lane in range(lanes))
+    lines.append(f"  wire [{width - 1}:0] direct_signed_sum = {direct_expr};")
+    lines.append("  assign bad = (initial_heap_sum != direct_signed_sum);")
+    lines.append("endmodule")
+    return "\n".join(lines) + "\n"
+
+
 def build_stage_miter(lanes: int, stage_index: int) -> str:
     """Build a standalone combinational weighted-heap equivalence miter.
 
@@ -271,6 +315,11 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
                 result["method"] = "Yosys combinational SAT weighted-heap equivalence"
             return result
 
+        initial_source = build_initial_heap_miter(lanes)
+        initial_top = f"orcus_dadda_initial_heap_miter_{lanes}"
+        initial_proof = execute("initial-baugh-wooley-heap-equivalence",
+                                initial_source, initial_top, sequential=False)
+
         for stage_index in range(design.latency):
             stage_source = build_stage_miter(lanes, stage_index)
             stage_top = f"orcus_dadda_stage_miter_{lanes}_{stage_index}"
@@ -290,6 +339,7 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
         "status": "PASS",
         "method": "compositional stage SAT plus sequential control induction",
         "latency_cycles": latency,
+        "initial_heap_proof": initial_proof,
         "stage_proofs": results,
         "control_proof": control,
     }

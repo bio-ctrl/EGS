@@ -131,7 +131,7 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
         design = generate_dadda_pipelined(32)
         for stage in range(design.latency):
             records = [r for r in design.manifest["compressors"] if r["stage"] == stage]
-            audit = validate_stage_netlist_wiring(design.source, records, stage)
+            audit = validate_stage_netlist_wiring(design.source, records, stage, design.manifest["stage_boundaries"][stage]["output_heap"])
             self.assertEqual(audit["status"], "PASS")
             self.assertEqual(audit["compressors_checked"], len(records))
 
@@ -144,7 +144,7 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
             f"wire {fa['sum']} = {x} ^ {y} ^ {z};",
             f"wire {fa['sum']} = {x} ^ {x} ^ {z};", 1)
         with self.assertRaisesRegex(ValueError, "sum pin/netlist mismatch"):
-            validate_stage_netlist_wiring(bad_source, records, 0)
+            validate_stage_netlist_wiring(bad_source, records, 0, design.manifest["stage_boundaries"][0]["output_heap"])
         ha = next(r for r in records if r["kind"] == "half_adder")
         x, y = ha["inputs"]
         bad_source = design.source.replace(
@@ -163,7 +163,8 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
         column = part["columns"][4]
         self.assertEqual(column["compressors"], records)
         audit = validate_stage_netlist_wiring(design.source,
-            [r for r in design.manifest["compressors"] if r["stage"] == 0], 0)
+            [r for r in design.manifest["compressors"] if r["stage"] == 0], 0,
+            design.manifest["stage_boundaries"][0]["output_heap"])
         self.assertEqual(audit["compressors_checked"],
                          sum(r["stage"] == 0 for r in design.manifest["compressors"]))
         top, fa = build_atomic_compressor_miter("full_adder")

@@ -10,13 +10,13 @@
 > - "Big dreams push past what other people view as possible, often because 'unrealistic' just means a goal hasn't been done yet by the people around you. You have to dream unrealistic because life is not realistic"
 > - "Get what I want and when I want it"
 
-> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** Milestone #2 remains closed on main at `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`. Run #262 (ID `45955978365`, head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`) remains the immutable combinational ECP5 baseline; only 4-lane Fused Dadda met 100 MHz. Milestone #3 remains OPEN and BLOCKED pending exact-head pipeline CI evidence. PR #22 is Draft and unmerged at EGS-0006 head `de04727b73afab319bc9b3f96a9c8b314d891133`. EGS-0007 / Issue #29 was created after checking for an existing EGS-0007 record. The user supplied `PASTE_GITHUB_ACTIONS_URL_HERE`, which is a placeholder, not a run URL. GitHub Actions lookup for the exact SHA returned zero runs; the branch's latest run listing contained only Run #264 (head `ee8c0a0...`) and Run #263 (head `b4f1a9e...`), neither matching EGS-0006. Therefore no logs or artifacts for the required head were available and no formal, streaming, execution-latency, or pipeline P&R results can be reported. Run #262 baseline numbers are retained below; pipeline metrics remain not measured. Exact next action: obtain the actual Actions URL/run ID and verify head SHA `de04727b73afab319bc9b3f96a9c8b314d891133`; if no such run exists, dispatch ORCUS CI at that exact head and audit all logs/artifacts. Do not close Milestone #3 or begin Milestone #4 until all required evidence passes. PR #21 remains untouched; Run #262 and main baseline are preserved; Ceres remains untouched; NEM remains isolated.
+> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** EGS-0008 / Issue #30 has audited exact-head ORCUS CI Run #265 (ID `46111351324`, SHA `de04727b73afab319bc9b3f96a9c8b314d891133`). The 258 KiB pipelined-Dadda artifact (264,634 bytes; SHA-256 `5d86bbc22e49078fa70336b127a1977d1113cfadc9b4dbfa814946be28e55b5f`) was downloaded, all 53 entries inventoried, and the digest independently matched. 4 lanes passed all four Baugh–Wooley base proofs, six weighted-heap stages including final CPA, sequential valid/reset induction, 512-vector streaming/flush/reset-leakage, and execution-verified L=6; ECP5 P&R achieved 335.9086 MHz at a 100 MHz target, with 1.7 ns logic / 1.3 ns routing and 186 LUT4 / 259 FF / 0 MULT18X18D. 8-lane base proofs passed 8/8, but stage-0 weighted-heap SAT timed out at 180 s (29,530 variables / 81,907 clauses), causing the pipeline job to exit code 1. No 8-lane streaming/latency/P&R, nor 16/32 pipeline evidence, exists in the artifact. Milestone #3 remains OPEN/BLOCKED; do not start Milestone #4. Run #262 remains immutable. PR #22 remains Draft/unmerged; PR #21 untouched; Ceres untouched; NEM isolated. Exact next action: investigate a sound partitioned 8-lane stage-0 proof strategy with regression equivalence, then rerun exact-head CI and complete 8/16/32 formal, streaming, latency and ECP5 P&R gates. No silicon or board-level claims.
 
 ---
 
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-28T05:13:30Z
+**Last updated:** 2026-11-28T05:24:14.457Z
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -3017,3 +3017,86 @@ Obtain the actual GitHub Actions URL or numeric run ID for the user's claimed co
 - Main and Run #262 remain preserved.
 - Ceres remains untouched; NEM remains isolated.
 - No silicon, board-level, or timing-closure claims.
+
+
+## EGS-0008 — ORCUS Run #265 exact-head pipeline audit — 2026-11-28
+
+- Execution ledger: **EGS-0008 / Issue #30** — https://github.com/bio-ctrl/EGS/issues/30 .
+- Objective: audit Run #265 logs and the `orcus-fpga-ecp5-pipelined-dadda` artifact for 4/8/16/32-lane formal, streaming/reset, execution-latency and ECP5 P&R evidence; diagnose job exit code 1 and determine Milestone #3 gate status.
+- Repository: `bio-ctrl/EGS`; branch: `research/orcus-ecp5-dadda-pipeline`; exact head: `de04727b73afab319bc9b3f96a9c8b314d891133`.
+- Run: [ORCUS CI #265](https://github.com/bio-ctrl/EGS/actions/runs/46111351324), run ID `46111351324`, event `workflow_dispatch`, completed with overall failure. Exact run metadata and both job summaries were checked. PR #22 was independently rechecked as open, Draft, unmerged, with the same exact head.
+- Existing EGS-0008 issue search returned no record; Issue #30 was created.
+
+### Artifact integrity and contents
+
+- Artifact: `orcus-fpga-ecp5-pipelined-dadda`, artifact ID `15248699954`, size 264,634 bytes (approximately 258 KiB).
+- GitHub uploaded SHA-256: `5d86bbc22e49078fa70336b127a1977d1113cfadc9b4dbfa814946be28e55b5f`; downloaded ZIP independently hashed to the same SHA-256.
+- ZIP inventory: 53 files. 4-lane directory includes generated RTL, manifest, Yosys synthesis JSON/log, nextpnr report/log, routed configuration, four initial arithmetic proof logs, six stage proof logs, sequential control induction source/log, and streaming testbench plus compile/simulation logs. 8-lane directory includes generated RTL/manifest, eight initial arithmetic proof logs, stage-0 miter source and timeout log. No 16- or 32-lane pipeline directories, formal results, streaming results, or P&R reports are present.
+- Tool versions from the FPGA job: Ubuntu 24.04.5; Python 3.11.18; Yosys 0.33 (git `2584903a060`); nextpnr-ecp5 0.6-3build5. Icarus version inventory probe printed `iverilog: invalid option -- '-'`; actual 4-lane compile and simulation passed.
+
+### Job and test outcomes
+
+- `test` job: PASS. The FPGA wrapper/report parser suite passed 5/5 tests; Dadda generator/sequential harness suite passed 8/8 tests.
+- `ORCUS FPGA ECP5 place-and-route` job: FAILURE. Toolchain installation passed. Formal/streaming/P&R benchmark failed at 8-lane stage-0 formal. Evidence artifact upload succeeded. The downstream separate FPGA implementation step was skipped; its artifact upload reported no files.
+- The 4-lane run itself completed Yosys synthesis, nextpnr P&R and simulation before the matrix advanced to 8 lanes.
+
+### Formal, streaming and latency evidence
+
+| Required check | 4 lanes | 8 lanes | 16 lanes | 32 lanes |
+|---|---|---|---|---|
+| Initial Baugh–Wooley arithmetic base proofs | 4/4 PASS; 0.0419–0.0438 s each | 8/8 PASS; approximately 0.04 s Yosys CPU each | Not run / no artifact | Not run / no artifact |
+| Weighted-heap stage proofs and final CPA | Stages 0–5 PASS; stage 5 includes final CPA | Stage 0 timed out after 180 s; later stages not run | Not run | Not run |
+| Sequential valid/reset temporal induction | PASS; depth 14; 0.2872 s | Not run | Not run | Not run |
+| 512-vector streaming, flush and reset-leakage | PASS; 512 vectors; explicit flush checks and reset stale-valid leakage checks passed | Not run | Not run | Not run |
+| Execution-verified latency L | 6 cycles | Not available; manifest schedule metadata L=8 only | Not available; no pipeline artifact (PR metadata previously listed L=10) | Not available; no pipeline artifact (PR metadata previously listed L=11) |
+
+4-lane stage proof runtimes: stage 0 / target height 13: 4.5521 s; stage 1 / height 9: 15.6226 s; stage 2 / height 6: 2.4074 s; stage 3 / height 4: 0.3520 s; stage 4 / height 3: 0.1233 s; stage 5 / height 2 with final CPA: 0.0819 s. Initial lane proof runtimes: lane 0 0.0438 s; lane 1 0.0419 s; lane 2 0.0432 s; lane 3 0.0436 s. Sequential control induction passed at depth 14 in 0.2872 s.
+
+The 4-lane streaming output is `PASS lanes=4 vectors=512 latency=6`. The generated testbench contains explicit flush-result checks and checks that reset clears `out_valid` and prevents stale transactions leaking after reset. This establishes execution-verified L=6 for 4 lanes only.
+
+### Exact exit-code-1 root cause
+
+The Python runner invoked the 8-lane stage-0 weighted-heap equivalence miter with Yosys `sat -verify -prove bad 0`. The miter imported 318 cells and generated a SAT instance with 29,530 variables and 81,907 clauses. The subprocess exceeded the configured 180-second timeout. Python raised `subprocess.TimeoutExpired`, wrapped as `TimeoutError: stage-0-heap-equivalence formal timeout for 8 lanes after 180s`, and the benchmark process exited with code 1.
+
+This is a solver runtime timeout, not a counterexample and not evidence of arithmetic inequivalence. The runner aborts at this formal gate, so 8-lane streaming, observed latency and pipeline ECP5 synthesis/P&R did not run. The separate downstream FPGA implementation step was skipped. Artifact upload after the failure succeeded.
+
+### 4-lane ECP5 pipeline result
+
+Target: LFE5U-85F-6BG381C / CABGA381 / speed grade 6; 100 MHz target; external IO unconstrained.
+
+- Yosys 0.33 synthesis: 1.1295 s.
+- nextpnr-ecp5 0.6-3build5 place-and-route: 0.7454 s.
+- Achieved synchronous clock Fmax: **335.9086 MHz**; nextpnr reports timing met at 100 MHz.
+- Critical register-to-register path: **1.7 ns logic + 1.3 ns routing**.
+- Mapped resources: **186 LUT4, 259 FF, 0 MULT18X18D**, 5 CCU2C, 8 PFUMX, 4 L6MUX21.
+- nextpnr utilization: 202 TRELLIS_COMB, 259 TRELLIS_FF, 46 TRELLIS_IO, 1 DCCA.
+
+These are device-specific FPGA P&R results, not silicon measurements. External IOs were unconstrained, so no board-level timing claim is supported.
+
+### Comparison with immutable Run #262
+
+Run #262 remains the combinational Fused Dadda baseline. Pipeline columns are populated only for the 4-lane exact-head run that completed the gates.
+
+| Lanes | Run #262 Fmax MHz | Baseline logic ns | Baseline routing ns | Baseline LUT4 / FF / MULT18X18D | Pipeline L | Pipeline Fmax / 100 MHz | Pipeline logic / routing ns | Pipeline LUT4 / FF / MULT18X18D |
+|---:|---:|---:|---:|---:|---:|---|---|---|
+| 4 | 106.26 | 3.496 | 5.390 | 260 / 42 / 0 | 6 | 335.91 / PASS | 1.7 / 1.3 | 186 / 259 / 0 |
+| 8 | 84.02 | 4.489 | 6.888 | 579 / 75 / 0 | Not verified | Not measured | Not measured | Not measured |
+| 16 | 73.10 | 4.987 | 8.168 | 1,252 / 140 / 0 | Not verified | Not measured | Not measured | Not measured |
+| 32 | 55.82 | 5.931 | 11.458 | 2,400 / 269 / 0 | Not verified | Not measured | Not measured | Not measured |
+
+The 4-lane pipeline result exceeds the 100 MHz target in the reported clock domain. Do not extrapolate it to larger widths. Pipeline timing/resource metrics for 8/16/32 are not measured, not zero, and not timing failures.
+
+### Milestone decision and exact next action
+
+- **Milestone #3 remains OPEN and BLOCKED. Do not begin Milestone #4.** 4 lanes has complete evidence; 8 lanes is blocked by stage-0 proof timeout; 16/32 lanes have no pipeline evidence.
+- Next action: investigate the 8-lane stage-0 weighted-heap miter's 29,530-variable / 81,907-clause SAT growth. Evaluate a sound partitioned proof decomposition that preserves exact weighted-heap semantics and add regression checks relating partitions to the whole-stage obligation. Preserve timeout history; do not weaken proof requirements or relabel timeout as pass.
+- Run focused tests, commit the correction on the research branch, and rerun ORCUS CI at a new exact head. Complete 8-lane stage proofs, sequential control, 512-vector streaming/flush/reset-leakage, observed latency and P&R. Then obtain the same full evidence for 16 and 32 lanes. Compare against Run #262 using the same target and constraints.
+- Only after all widths pass and PR #22 is reviewed may Milestone #3 be considered for closure and Milestone #4 (MAC + local-memory inference tile) begin.
+
+### Preserved constraints
+
+- Main and Run #262 remain preserved; Run #262 is immutable.
+- PR #22 remains Draft and unmerged.
+- PR #21 remains untouched.
+- Ceres remains untouched; NEM remains isolated.
+- No silicon claims, no board-level timing claims, and no unsupported multi-width timing-closure claims.

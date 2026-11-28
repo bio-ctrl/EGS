@@ -2760,3 +2760,24 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Updated `tests/test_dadda_pipeline.py` on the experiment branch; commit: `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`.
 - Adjusted the base-case miter source test to assert explicit signed operand extension and the 8-bit signed product expression introduced in the prior static-review correction.
 - Test definitions remain unexecuted. Next final reconciliation: fetch current PR/branch head, verify the workflow order and no unexpected Actions run, then create EGS-0003 Issue and record the final state on main.
+
+
+## EGS-0003 — compositional pipelined Dadda proof redesign committed; ready for manual CI
+
+- GitHub execution ledger: **EGS-0003 / Issue #25** — https://github.com/bio-ctrl/EGS/issues/25 .
+- Prior execution: EGS-0002 / Issue #24; root cause Run #263 (46085084604) was monolithic 16-step sequential SAT timeout at 4 lanes.
+- Repository/project: bio-ctrl/EGS, ORCUS pipeline experiment.
+- Experiment branch: research/orcus-ecp5-dadda-pipeline.
+- Exact branch head: ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4.
+- Starting main commit for EGS-0003: 79de79032ded5f7a755446ae7686de8e6434d84d.
+- PR #22: open, Draft, unmerged; head reconciled to the exact branch SHA above.
+- Implemented proof composition:
+  1. Per-lane combinational SAT base case: Baugh–Wooley partial products and per-lane correction bits equal one signed 4×4 product, with explicit operand sign extension.
+  2. Per-stage combinational SAT: each Dadda compressor stage preserves modulo-2^W weighted heap value; final stage also checks the CPA against the final two-row heap.
+  3. Sequential valid/reset control proof: instantiate actual pipeline RTL, optimize away unobserved arithmetic datapath, and use Yosys temporal induction against an independent L-stage valid shift reference.
+  4. Existing ECP5 runner order remains formal → 512-vector Icarus streaming/flush/reset-leakage simulation → Yosys ECP5 synthesis and nextpnr P&R, across 4/8/16/32 lanes.
+- Changed experiment-branch files: benchmarks/dadda_pipeline.py and tests/test_dadda_pipeline.py. The existing benchmarks/fpga_ecp5_pipeline.py and .github/workflows/ci.yml were inspected and remain unchanged.
+- Static reconciliation confirms branch head/PR head match, the test file contains source-level coverage for per-lane base proofs, per-stage weighted-heap proofs, final CPA, control/reset, and 512-vector streaming, and the runner still gates streaming and P&R behind formal.
+- **Readiness:** implementation is committed and is a candidate for the next manual ORCUS CI run at the exact SHA above. No CI run is currently discoverable for this final head. No unit test, Yosys proof, Icarus simulation, synthesis, or P&R was executed in this session. Do not claim formal PASS, execution-verified latency, Fmax, timing-path, or resource results until the exact-head run and artifacts are audited.
+- Constraints preserved: main and Run #262 remain baseline; PR #22 remains Draft; PR #21 untouched; Ceres untouched; NEM isolated; zero silicon claims.
+- Next action: trigger manual ORCUS CI for ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4, then audit all base/stage/control proofs, 512-vector streaming/reset behavior, and all four ECP5 P&R outputs.

@@ -2796,3 +2796,9 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Corrected GitHub issue search (`repo:bio-ctrl/EGS EGS-0004 is:issue`) returned zero issues. EGS-0004 is therefore the next available execution ID after EGS-0003 / Issue #25.
 - The run itself remains unresolved: current Actions API branch listing shows Run #263 with workflow head SHA `b4f1a9ef60d19258e3941e00389649f52ad3e392`, not requested SHA `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`. The user-provided Actions URL is a placeholder, not a run URL.
 - No EGS-0004 issue created yet; no technical results or P&R metrics claimed. Next: reconcile the branch ref and Actions run inventory, then retrieve exact-run jobs/logs/artifacts if available.
+
+
+## EGS-0004 branch-ref diagnostic — encoded branch URL rejected — 2026-11-27
+
+- Attempted a read-only GitHub API fetch of the branch ref for `research/orcus-ecp5-dadda-pipeline`; the GitHub connector rejected the URL as an invalid repository path (HTTP 400). No branch state was changed and no branch-head conclusion is drawn from this failed request.
+- Actions inventory and exact-head run reconciliation remain outstanding. Continue with a supported branch/commit endpoint or the user-supplied exact Actions URL.

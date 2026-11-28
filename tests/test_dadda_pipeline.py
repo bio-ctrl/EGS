@@ -1,7 +1,8 @@
 import unittest
 
 from benchmarks.dadda_pipeline import (
-    LANES, VECTOR_COUNT, build_sequential_miter, build_streaming_testbench,
+    LANES, VECTOR_COUNT, build_control_miter, build_stage_miter,
+    build_sequential_miter, build_streaming_testbench,
     _vectors,
 )
 from orcus.dadda_pipeline import generate_dadda_pipelined
@@ -41,13 +42,32 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
             self.assertIn(f"out_valid <= valid_pipe[{design.latency - 1}];", design.source)
             self.assertIn("one input transaction per cycle", design.manifest["throughput"])
 
-    def test_sequential_miter_aligns_reference_at_latency(self):
+    def test_each_stage_has_independent_weighted_heap_sat_miter(self):
         for lanes in LANES:
-            source, latency = build_sequential_miter(lanes)
-            self.assertIn(f"ref_valid_pipe[{latency}]", source)
-            self.assertIn(f"ref_data_pipe[{latency}]", source)
+            design = generate_dadda_pipelined(lanes)
+            for stage in range(design.latency):
+                with self.subTest(lanes=lanes, stage=stage):
+                    source = build_stage_miter(lanes, stage)
+                    self.assertIn(f"module orcus_dadda_stage_miter_{lanes}_{stage}", source)
+                    self.assertIn("weighted_input", source)
+                    self.assertIn("weighted_output", source)
+                    self.assertIn("assign bad = (weighted_input != weighted_output)", source)
+                    self.assertIn("^", source)
+                    if stage == design.latency - 1:
+                        self.assertIn("final_cpa", source)
+                        self.assertIn("final_cpa != weighted_output", source)
+                    else:
+                        self.assertNotIn("final_cpa", source)
+
+    def test_sequential_control_miter_checks_only_valid_reset_alignment(self):
+        for lanes in LANES:
+            source, latency = build_control_miter(lanes)
+            self.assertIn(f"ref_valid_pipe[{latency - 1}]", source)
             self.assertIn("dut_valid != ref_valid_pipe", source)
-            self.assertIn("dut_data != ref_data_pipe", source)
+            self.assertIn(f"orcus_dadda_pipelined_{lanes} dut", source)
+            self.assertIn("if (reset) ref_valid_pipe <= 0", source)
+            self.assertNotIn("ref_data_pipe", source)
+            self.assertEqual(build_sequential_miter(lanes), (source, latency))
 
     def test_streaming_testbench_has_512_back_to_back_vectors(self):
         for lanes in LANES:

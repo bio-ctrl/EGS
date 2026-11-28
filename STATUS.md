@@ -2626,3 +2626,13 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Exact match confirmed: branch `research/orcus-ecp5-dadda-pipeline`, PR #22, head SHA `b4f1a9ef60d19258e3941e00389649f52ad3e392`. Run URL: https://github.com/bio-ctrl/EGS/actions/runs/46085084604 .
 - This corrects the earlier observability state: a matching run is now discoverable. Its jobs, steps, logs, and artifacts have not yet been audited. No technical pass/fail findings or P&R metrics are asserted in this entry.
 - No source, PR, baseline, Ceres, or NEM state changed. PR #22 remains Draft and Run #262 remains the immutable combinational baseline. Next fetch Run #263 jobs, logs, artifacts and inspect exact failure cause and any partial pipeline results.
+
+
+## 295. Run #263 job and artifact inventory audited — 2026-11-27T21:31:00-06:00
+
+- Fetched Run #263 jobs and artifacts for exact head `b4f1a9ef60d19258e3941e00389649f52ad3e392`.
+- General `test` job `140792666821`: completed SUCCESS. Unit tests, Python compilation, benchmark jobs and target checks passed.
+- `ORCUS FPGA ECP5 place-and-route` job `140792667093`: completed FAILURE. The pipeline generator/sequential-harness source test step passed; the combined 4/8/16/32-lane pipeline formal/streaming/synthesis/P&R step failed. The baseline ECP5 step was skipped because the pipeline step failed.
+- Dedicated pipeline artifact exists: `orcus-fpga-ecp5-pipelined-dadda`, artifact ID `15238624029`, 27,468 bytes, SHA-256 `114013c6a9d90ec11c9b2e3008542325d2a9f3618bb6984c9932d7c71688aa1d`. It is associated with the exact run/head. Other general benchmark artifacts are not pipeline P&R evidence.
+- No root cause or per-lane formal/simulation/P&R result is yet asserted; next fetch the failed job log and download/inspect the dedicated artifact.
+- No source or PR state changed. Run #262 remains the immutable baseline; PR #22 remains Draft; Ceres and NEM untouched.

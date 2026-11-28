@@ -2789,3 +2789,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - A GitHub issue-search request for EGS-0004 was rejected by the API because the query omitted the required `is:issue` or `is:pull-request` qualifier. This is a query-format failure, not evidence that an EGS-0004 record does or does not exist.
 - A separate Actions API lookup currently shows only Run #263 for the branch, whose recorded workflow `head_sha` is `b4f1a9ef60d19258e3941e00389649f52ad3e392`; this does not match the requested exact head. Do not attribute Run #263 results to `ee8c0a0...` without an exact-head run record.
 - No technical validation result or P&R metric is inferred from this diagnostic. Continue by correcting the issue-search query and reconciling branch/run metadata before creating EGS-0004.
+
+
+## EGS-0004 ledger reconciliation — no existing issue found — 2026-11-27
+
+- Corrected GitHub issue search (`repo:bio-ctrl/EGS EGS-0004 is:issue`) returned zero issues. EGS-0004 is therefore the next available execution ID after EGS-0003 / Issue #25.
+- The run itself remains unresolved: current Actions API branch listing shows Run #263 with workflow head SHA `b4f1a9ef60d19258e3941e00389649f52ad3e392`, not requested SHA `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`. The user-provided Actions URL is a placeholder, not a run URL.
+- No EGS-0004 issue created yet; no technical results or P&R metrics claimed. Next: reconcile the branch ref and Actions run inventory, then retrieve exact-run jobs/logs/artifacts if available.

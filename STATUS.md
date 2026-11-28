@@ -2694,3 +2694,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Added a separate sequential valid/reset temporal-induction proof. It instantiates the real DUT but only observes `out_valid`; `opt_clean -purge` is applied after flattening so unobservable multiplier datapath logic should be removed from the SAT cone. The induction depth is `2*L+2`.
 - Every stage and control proof writes its generated Verilog and raw Yosys log to the persistent per-configuration validation artifact directory. The ECP5 runner imports this `run_formal` function, so its existing order remains formal → 512-vector streaming/reset simulation → ECP5 synthesis/P&R for each lane count.
 - No Yosys formal execution or test has yet been run on this code. This commit is not evidence of proof success. Next update source-level tests to cover stage miter structure, weighted-sum comparisons, final CPA check and control-only miter; then trigger CI for actual execution evidence.
+
+
+## EGS-0003 action 3 — compositional harness source tests committed
+
+- Updated `tests/test_dadda_pipeline.py` on the experiment branch; commit: `80ebf37c2dfbfb66b24d9bf7958dc7a43a073d27`.
+- Replaced the old full datapath sequential-miter source assertions with coverage for every stage's independent weighted-heap SAT miter, compressor equations, final-stage CPA comparison, and valid/reset-only control miter. Kept the 512-vector streaming-testbench structural checks.
+- These are source-level unit tests only; they have not yet executed. The implementation must still be exercised by the next ORCUS CI run, including verifying that Yosys accepts the `-tempinduct` control proof syntax and that dead datapath logic is actually pruned.
+- Next: inspect exact branch diff and branch head, reconcile PR #22 remains Draft, then create EGS-0003 issue and update main STATUS with the exact new head. Do not call the branch ready for CI until static review is complete; actual proof readiness remains subject to CI.

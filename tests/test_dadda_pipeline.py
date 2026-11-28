@@ -2,9 +2,9 @@ import unittest
 
 from benchmarks.dadda_pipeline import (
     LANES, VECTOR_COUNT, build_control_miter, build_initial_heap_miter,
-    build_stage_miter,
-    build_sequential_miter, build_streaming_testbench,
-    _vectors,
+    build_stage_partition, build_stage_column_miter, build_final_cpa_miter,
+    validate_stage_bit_partition, build_sequential_miter,
+    build_streaming_testbench, _vectors,
 )
 from orcus.dadda_pipeline import generate_dadda_pipelined
 from orcus.lane_scaling import accumulator_width
@@ -61,22 +61,64 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
                     self.assertIn(f"bias_{lane_index}_", source)
 
 
-    def test_each_stage_has_independent_weighted_heap_sat_miter(self):
+    def test_each_stage_has_per_column_conservation_miters_and_exact_accounting(self):
         for lanes in LANES:
-            design = generate_dadda_pipelined(lanes)
+            design=generate_dadda_pipelined(lanes)
             for stage in range(design.latency):
-                with self.subTest(lanes=lanes, stage=stage):
-                    source = build_stage_miter(lanes, stage)
-                    self.assertIn(f"module orcus_dadda_stage_miter_{lanes}_{stage}", source)
-                    self.assertIn("weighted_input", source)
-                    self.assertIn("weighted_output", source)
-                    self.assertIn("assign bad = (weighted_input != weighted_output)", source)
-                    self.assertIn("^", source)
-                    if stage == design.latency - 1:
-                        self.assertIn("final_cpa", source)
-                        self.assertIn("final_cpa != weighted_output", source)
-                    else:
-                        self.assertNotIn("final_cpa", source)
+                with self.subTest(lanes=lanes,stage=stage):
+                    part=build_stage_partition(lanes,stage)
+                    boundary=design.manifest["stage_boundaries"][stage]
+                    self.assertEqual(part["input_bit_count"],sum(map(len,boundary["input_heap"])))
+                    self.assertEqual(part["output_bit_count"],sum(map(len,boundary["output_heap"])))
+                    self.assertEqual(part["consumed_input_bit_count"]+part["pass_through_bit_count"],part["input_bit_count"])
+                    self.assertEqual(part["output_bit_count"],part["pass_through_bit_count"]+
+                        sum(1+int(r["carry"] is not None) for r in design.manifest["compressors"] if r["stage"]==stage))
+                    for col in part["columns"]:
+                        if not col["compressors"]:
+                            continue
+                        source=build_stage_column_miter(lanes,stage,col["column"])
+                        self.assertIn(f"orcus_dadda_stage_column_miter_{lanes}_{stage}_{col['column']}",source)
+                        self.assertIn("assign bad =",source)
+                        if col["column"]==design.width-1:
+                            self.assertIn("!= ",source)
+                        else:
+                            self.assertIn("conservation_inputs",source)
+                            self.assertIn("conservation_outputs",source)
+
+    def test_partition_accounting_rejects_dropped_duplicated_and_misweighted_bits(self):
+        design=generate_dadda_pipelined(4)
+        boundary=design.manifest["stage_boundaries"][0]
+        compressors=[dict(r) for r in design.manifest["compressors"] if r["stage"]==0]
+        inputs=[list(c) for c in boundary["input_heap"]]
+        outputs=[list(c) for c in boundary["output_heap"]]
+        width=design.width
+        dropped=[list(c) for c in outputs]
+        idx=next(i for i,c in enumerate(dropped) if c)
+        dropped[idx].pop()
+        with self.assertRaisesRegex(ValueError,"output partition mismatch"):
+            validate_stage_bit_partition(inputs,dropped,compressors,width)
+        duplicated=[list(c) for c in outputs]
+        duplicated[idx].append(duplicated[idx][0])
+        with self.assertRaisesRegex(ValueError,"appears more than once|duplicate output"):
+            validate_stage_bit_partition(inputs,duplicated,compressors,width)
+        misweighted=[dict(r) for r in compressors]
+        carry=next(r for r in misweighted if r["carry"] is not None)
+        carry["carry_column"]=carry["column"]
+        with self.assertRaisesRegex(ValueError,"misweighted carry"):
+            validate_stage_bit_partition(inputs,outputs,misweighted,width)
+        duplicated_input=[dict(r) for r in compressors]
+        duplicated_input[1]["inputs"]=list(duplicated_input[1]["inputs"])
+        duplicated_input[1]["inputs"][0]=duplicated_input[0]["inputs"][0]
+        with self.assertRaisesRegex(ValueError,"consumed more than once"):
+            validate_stage_bit_partition(inputs,outputs,duplicated_input,width)
+
+    def test_final_cpa_is_proved_as_a_separate_miter_for_all_widths(self):
+        for lanes in LANES:
+            with self.subTest(lanes=lanes):
+                source=build_final_cpa_miter(lanes)
+                self.assertIn(f"orcus_dadda_final_cpa_miter_{lanes}",source)
+                self.assertIn("final_cpa = final_row0 + final_row1",source)
+                self.assertIn("final_cpa != weighted_output",source)
 
     def test_sequential_control_miter_checks_registered_output_boundary(self):
         for lanes in LANES:

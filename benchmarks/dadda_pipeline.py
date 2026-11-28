@@ -92,70 +92,150 @@ def build_initial_heap_miter(lanes: int, lane_index: int = 0) -> str:
 
 
 
-def build_stage_miter(lanes: int, stage_index: int) -> str:
-    """Build a standalone combinational weighted-heap equivalence miter.
 
-    Inputs are arbitrary heap bits. Compressor equations are reconstructed
-    from the generator manifest, so each stage is proved independently of
-    all earlier pipeline logic and register boundaries.
-    """
+def validate_stage_bit_partition(input_heap: list[list[str]], output_heap: list[list[str]],
+                                 compressors: list[dict], width: int) -> dict:
+    """Validate exact input/output bit ownership and compressor column weights."""
+    if width <= 0 or len(input_heap) != width or len(output_heap) != width:
+        raise ValueError("heap column count must equal positive accumulator width")
+    def locate(heap, label):
+        found = {}
+        for col, tokens in enumerate(heap):
+            for token in tokens:
+                if token in found:
+                    raise ValueError(f"{label} bit {token} appears more than once")
+                found[token] = col
+        return found
+    inputs, outputs = locate(input_heap, "input"), locate(output_heap, "output")
+    consumed, sums, carries = {}, {}, {}
+    by_col = [[] for _ in range(width)]
+    for rec in compressors:
+        col, kind, ins = rec.get("column"), rec.get("kind"), rec.get("inputs")
+        if not isinstance(col, int) or not 0 <= col < width:
+            raise ValueError(f"invalid compressor column: {col!r}")
+        arity = 3 if kind == "full_adder" else 2 if kind == "half_adder" else None
+        if arity is None or not isinstance(ins, list) or len(ins) != arity:
+            raise ValueError(f"invalid compressor kind/arity: {rec!r}")
+        for token in ins:
+            if token not in inputs:
+                raise ValueError(f"compressor consumes unknown input bit {token}")
+            if inputs[token] != col:
+                raise ValueError(f"misweighted input bit {token}: expected column {col}, found {inputs[token]}")
+            if token in consumed:
+                raise ValueError(f"input bit {token} consumed more than once")
+            consumed[token] = rec.get("id", "unnamed")
+        st = rec.get("sum")
+        if not isinstance(st, str) or not st or st in sums or st in carries or st in inputs:
+            raise ValueError(f"duplicate or aliased compressor sum output {st}")
+        sums[st] = col
+        ct, cc = rec.get("carry"), rec.get("carry_column")
+        if col == width - 1:
+            if ct is not None or cc is not None or not rec.get("carry_truncated_modulo_2_W"):
+                raise ValueError("top-column carry must be explicitly truncated modulo 2**width")
+        else:
+            if not isinstance(ct, str) or not ct:
+                raise ValueError(f"compressor in column {col} is missing its carry output")
+            if cc != col + 1:
+                raise ValueError(f"misweighted carry {ct}: expected column {col + 1}, found {cc}")
+            if ct in sums or ct in carries or ct in inputs:
+                raise ValueError(f"duplicate or aliased compressor carry output {ct}")
+            carries[ct] = cc
+        by_col[col].append(rec)
+    passthrough = [[] for _ in range(width)]
+    for token, col in inputs.items():
+        if token not in consumed:
+            passthrough[col].append(token)
+    for col in range(width):
+        expected = passthrough[col]
+        expected += [token for token, weight in sums.items() if weight == col]
+        expected += [token for token, weight in carries.items() if weight == col]
+        actual = output_heap[col]
+        if len(actual) != len(set(actual)):
+            raise ValueError(f"duplicate output bit in column {col}")
+        if set(actual) != set(expected) or len(actual) != len(expected):
+            missing, extra = sorted(set(expected)-set(actual)), sorted(set(actual)-set(expected))
+            raise ValueError(f"output partition mismatch in column {col}: missing={missing}, unexpected={extra}")
+    if len(consumed) + sum(map(len, passthrough)) != len(inputs):
+        raise ValueError("input bit accounting is incomplete")
+    if sum(map(len, output_heap)) != len(sums)+len(carries)+sum(map(len, passthrough)):
+        raise ValueError("output bit accounting is incomplete")
+    return {"columns":[{"column":c,"compressors":by_col[c],"pass_through":passthrough[c]} for c in range(width)],
+            "input_bit_count":len(inputs),"consumed_input_bit_count":len(consumed),
+            "pass_through_bit_count":sum(map(len,passthrough)),
+            "output_bit_count":sum(map(len,output_heap)),"compressor_count":len(compressors)}
+
+
+def build_stage_partition(lanes: int, stage_index: int) -> dict:
     design = generate_dadda_pipelined(lanes)
     boundaries = design.manifest["stage_boundaries"]
     if stage_index < 0 or stage_index >= len(boundaries):
         raise ValueError(f"invalid stage {stage_index} for {lanes} lanes")
     boundary = boundaries[stage_index]
-    input_heap = boundary["input_heap"]
-    output_heap = boundary["output_heap"]
-    input_tokens = list(dict.fromkeys(token for col in input_heap for token in col))
-    declarations = [f"input wire {token}" for token in input_tokens]
-    lines = [
-        f"module orcus_dadda_stage_miter_{lanes}_{stage_index}(",
-        ", ".join(declarations + ["output wire bad"]),
-        ");",
-    ]
-    compressor_records = [
-        record for record in design.manifest["compressors"]
-        if record["stage"] == stage_index
-    ]
-    for record in compressor_records:
-        x = record["inputs"][0]
-        y = record["inputs"][1]
-        if record["kind"] == "full_adder":
-            z = record["inputs"][2]
-            lines.append(f"  wire {record['sum']} = {x} ^ {y} ^ {z};")
-            if record["carry"] is not None:
-                lines.append(
-                    f"  wire {record['carry']} = ({x} & {y}) | ({x} & {z}) | ({y} & {z});"
-                )
-        else:
-            lines.append(f"  wire {record['sum']} = {x} ^ {y};")
-            if record["carry"] is not None:
-                lines.append(f"  wire {record['carry']} = {x} & {y};")
+    compressors = [r for r in design.manifest["compressors"] if r["stage"] == stage_index]
+    part = validate_stage_bit_partition(boundary["input_heap"], boundary["output_heap"], compressors, design.width)
+    part["stage"], part["target_height"] = stage_index, boundary["target_height"]
+    return part
 
-    in_decls, in_expr = _weighted_sum(input_heap, design.width, "in")
-    out_decls, out_expr = _weighted_sum(output_heap, design.width, "out")
-    lines.extend(in_decls)
-    lines.extend(out_decls)
-    lines.append(f"  wire [{design.width - 1}:0] weighted_input = {in_expr};")
-    lines.append(f"  wire [{design.width - 1}:0] weighted_output = {out_expr};")
-    if stage_index == design.latency - 1:
-        row0 = [column[0] if column else "1'b0" for column in output_heap]
-        row1 = [column[1] if len(column) > 1 else "1'b0" for column in output_heap]
-        row0_expr = "{"+", ".join(reversed(row0))+"}"
-        row1_expr = "{"+", ".join(reversed(row1))+"}"
-        lines.append(f"  wire [{design.width - 1}:0] final_row0 = {row0_expr};")
-        lines.append(f"  wire [{design.width - 1}:0] final_row1 = {row1_expr};")
-        lines.append(
-            f"  wire [{design.width - 1}:0] final_cpa = final_row0 + final_row1;"
-        )
-        lines.append(
-            "  assign bad = (weighted_input != weighted_output) || "
-            "(final_cpa != weighted_output);"
-        )
+
+def build_stage_column_miter(lanes: int, stage_index: int, column_index: int) -> str:
+    """Prove local compressor conservation; no carry ripples between stage columns."""
+    design = generate_dadda_pipelined(lanes)
+    part = build_stage_partition(lanes, stage_index)
+    if column_index < 0 or column_index >= design.width:
+        raise ValueError(f"invalid column {column_index} for {lanes} lanes")
+    records = part["columns"][column_index]["compressors"]
+    if not records:
+        raise ValueError(f"column {column_index} has no compressors to prove")
+    ins = [x for r in records for x in r["inputs"]]
+    sums = [r["sum"] for r in records]
+    carries = [r["carry"] for r in records if r["carry"] is not None]
+    if len(ins) != len(set(ins)):
+        raise ValueError(f"column {column_index} has overlapping compressor inputs")
+    lines = [f"module orcus_dadda_stage_column_miter_{lanes}_{stage_index}_{column_index}(",
+             ", ".join([f"input wire {x}" for x in ins]+["output wire bad"]), ");"]
+    for r in records:
+        x,y=r["inputs"][:2]
+        if r["kind"]=="full_adder":
+            z=r["inputs"][2]
+            lines.append(f"  wire {r['sum']} = {x} ^ {y} ^ {z};")
+            if r["carry"] is not None:
+                lines.append(f"  wire {r['carry']} = ({x} & {y}) | ({x} & {z}) | ({y} & {z});")
+        else:
+            lines.append(f"  wire {r['sum']} = {x} ^ {y};")
+            if r["carry"] is not None:
+                lines.append(f"  wire {r['carry']} = {x} & {y};")
+    if column_index == design.width-1:
+        lines.append(f"  assign bad = (({' ^ '.join(ins)}) != ({' ^ '.join(sums)}));")
     else:
-        lines.append("  assign bad = (weighted_input != weighted_output);")
+        w=max(2,(len(ins)+2*len(records)+1).bit_length())
+        def ext(x): return f"{{{{{w-1}{{1'b0}}}}, {x}}}"
+        lhs=" + ".join(ext(x) for x in ins)
+        rhs_terms=[ext(x) for x in sums]+[f"({ext(x)} << 1)" for x in carries]
+        lines.append(f"  wire [{w-1}:0] conservation_inputs = {lhs};")
+        lines.append(f"  wire [{w-1}:0] conservation_outputs = {' + '.join(rhs_terms)};")
+        lines.append("  assign bad = (conservation_inputs != conservation_outputs);")
     lines.append("endmodule")
-    return "\n".join(lines) + "\n"
+    return "\n".join(lines)+"\n"
+
+
+def build_final_cpa_miter(lanes: int) -> str:
+    """Retain the final two-row CPA equivalence proof as a separate SAT job."""
+    design=generate_dadda_pipelined(lanes)
+    heap=design.manifest["stage_boundaries"][-1]["output_heap"]
+    tokens=list(dict.fromkeys(x for col in heap for x in col))
+    lines=[f"module orcus_dadda_final_cpa_miter_{lanes}(",
+           ", ".join([f"input wire {x}" for x in tokens]+["output wire bad"]), ");"]
+    row0=[col[0] if col else "1'b0" for col in heap]
+    row1=[col[1] if len(col)>1 else "1'b0" for col in heap]
+    lines.append(f"  wire [{design.width-1}:0] final_row0 = {{{', '.join(reversed(row0))}}};")
+    lines.append(f"  wire [{design.width-1}:0] final_row1 = {{{', '.join(reversed(row1))}}};")
+    lines.append(f"  wire [{design.width-1}:0] final_cpa = final_row0 + final_row1;")
+    decls,expr=_weighted_sum(heap,design.width,"final_cpa")
+    lines.extend(decls)
+    lines.append(f"  wire [{design.width-1}:0] weighted_output = {expr};")
+    lines.append("  assign bad = (final_cpa != weighted_output);")
+    lines.append("endmodule")
+    return "\n".join(lines)+"\n"
 
 
 def build_control_miter(lanes: int) -> tuple[str, int]:
@@ -338,14 +418,34 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
             initial_proofs.append(proof)
 
         for stage_index in range(design.latency):
-            stage_source = build_stage_miter(lanes, stage_index)
-            stage_top = f"orcus_dadda_stage_miter_{lanes}_{stage_index}"
-            result = execute(f"stage-{stage_index}-heap-equivalence",
-                             stage_source, stage_top, sequential=False)
-            result["stage"] = stage_index
-            result["target_height"] = design.stage_targets[stage_index]
-            result["final_cpa_included"] = stage_index == design.latency - 1
-            results.append(result)
+            partition = build_stage_partition(lanes, stage_index)
+            column_results = []
+            for column_record in partition["columns"]:
+                column_index = column_record["column"]
+                if not column_record["compressors"]:
+                    continue
+                stage_source = build_stage_column_miter(lanes, stage_index, column_index)
+                stage_top = f"orcus_dadda_stage_column_miter_{lanes}_{stage_index}_{column_index}"
+                proof = execute(f"stage-{stage_index}-column-{column_index}-conservation",
+                                stage_source, stage_top, sequential=False)
+                proof["column"] = column_index
+                proof["compressor_count"] = len(column_record["compressors"])
+                proof["input_bit_count"] = sum(len(r["inputs"]) for r in column_record["compressors"])
+                proof["pass_through_bit_count"] = len(column_record["pass_through"])
+                column_results.append(proof)
+            results.append({
+                "status":"PASS", "stage":stage_index, "target_height":design.stage_targets[stage_index],
+                "method":"independent per-column compressor conservation SAT plus exact bit accounting",
+                "bit_accounting":{k:partition[k] for k in (
+                    "input_bit_count","consumed_input_bit_count","pass_through_bit_count",
+                    "output_bit_count","compressor_count")},
+                "columns_proven":len(column_results), "column_proofs":column_results,
+                "final_cpa_included":False,
+            })
+
+        final_cpa_source = build_final_cpa_miter(lanes)
+        final_cpa = execute("final-cpa-equivalence", final_cpa_source,
+                            f"orcus_dadda_final_cpa_miter_{lanes}", sequential=False)
 
         control_source, latency = build_control_miter(lanes)
         control_top = f"orcus_pipeline_control_miter_{lanes}"
@@ -354,10 +454,11 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
 
     return {
         "status": "PASS",
-        "method": "compositional stage SAT plus sequential control induction",
+        "method": "per-column compressor conservation SAT with exact bit accounting, separate final CPA SAT, and sequential control induction",
         "latency_cycles": latency,
         "initial_heap_proofs": initial_proofs,
         "stage_proofs": results,
+        "final_cpa_proof": final_cpa,
         "control_proof": control,
     }
 

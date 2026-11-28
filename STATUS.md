@@ -2618,3 +2618,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Independently queried GitHub Actions by exact `head_sha` and by branch, and re-fetched PR #22 metadata. Both Actions queries returned empty run lists (`total_count=0` for branch); PR #22 remains open, Draft, unmerged, at the specified exact head SHA.
 - Because no valid run ID was supplied and Actions API still exposes no matching run, there is no trustworthy run record to fetch. Sequential SAT, 512-vector streaming/reset leakage, execution-verified latency, synthesis/P&R, utilization, path breakdown, and pipeline Fmax remain unaudited. Do not substitute Run #262 or PR #21.
 - No source, PR, baseline, Ceres, or NEM state was modified. Next required input: actual numeric GitHub Actions run ID or the completed run's URL (and if it ran on another SHA, that exact head SHA). Keep PR #22 Draft and all project boundaries intact.
+
+
+## 294. Exact-head ORCUS CI run discovered after refreshed Actions API query — 2026-11-27T21:30:00-06:00
+
+- Re-read authoritative main STATUS.md and queried the Actions runs API directly for exact head SHA `b4f1a9ef60d19258e3941e00389649f52ad3e392`. The earlier query had returned no matching run, but this refreshed query now returns Run #263, ID `46085084604`, workflow_dispatch, completed with conclusion **failure**.
+- Exact match confirmed: branch `research/orcus-ecp5-dadda-pipeline`, PR #22, head SHA `b4f1a9ef60d19258e3941e00389649f52ad3e392`. Run URL: https://github.com/bio-ctrl/EGS/actions/runs/46085084604 .
+- This corrects the earlier observability state: a matching run is now discoverable. Its jobs, steps, logs, and artifacts have not yet been audited. No technical pass/fail findings or P&R metrics are asserted in this entry.
+- No source, PR, baseline, Ceres, or NEM state changed. PR #22 remains Draft and Run #262 remains the immutable combinational baseline. Next fetch Run #263 jobs, logs, artifacts and inspect exact failure cause and any partial pipeline results.

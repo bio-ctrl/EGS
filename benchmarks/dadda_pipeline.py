@@ -213,41 +213,85 @@ def build_streaming_testbench(lanes: int) -> tuple[str, int]:
 
 
 def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None = None) -> dict:
-    source, latency = build_sequential_miter(lanes)
-    depth = 2 * latency + 4
-    with tempfile.TemporaryDirectory(prefix=f"orcus-pipe-formal-{lanes}-") as tmp:
+    """Prove each compressor stage independently, then prove valid/reset control.
+
+    No sequential multiplier datapath is unrolled. The only sequential SAT
+    instance observes the DUT's valid output and is optimized to its control
+    cone before SAT.
+    """
+    if not shutil.which(yosys):
+        raise RuntimeError(f"required validation tool not found: {yosys}")
+    design = generate_dadda_pipelined(lanes)
+    results = []
+    with tempfile.TemporaryDirectory(prefix=f"orcus-pipe-compositional-{lanes}-") as tmp:
         root = Path(tmp)
-        verilog, log = root / "miter.v", root / "yosys-formal.log"
-        verilog.write_text(source)
-        top = f"orcus_pipeline_miter_{lanes}"
-        script = (f"read_verilog {verilog}; prep -top {top}; flatten; "
-                  f"sat -seq {depth} -verify -prove bad 0 -set-init-zero")
-        started = time.perf_counter()
-        try:
-            proc = subprocess.run([yosys, "-p", script], text=True, capture_output=True,
-                                  timeout=timeout)
-        except subprocess.TimeoutExpired as exc:
-            stdout = exc.stdout.decode("utf-8", "replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
-            stderr = exc.stderr.decode("utf-8", "replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+
+        def execute(label: str, source: str, top: str, sequential: bool) -> dict:
+            verilog = root / f"{label}.v"
+            log = root / f"{label}.log"
+            verilog.write_text(source)
+            prep = f"read_verilog {verilog}; prep -top {top}; flatten; opt_clean -purge;"
+            if sequential:
+                depth = 2 * design.latency + 2
+                sat = (f"sat -seq {depth} -tempinduct -verify -prove bad 0 "
+                       "-set-init-zero")
+            else:
+                depth = None
+                sat = "sat -verify -prove bad 0"
+            started = time.perf_counter()
+            try:
+                proc = subprocess.run([yosys, "-p", prep + " " + sat],
+                                      text=True, capture_output=True, timeout=timeout)
+            except subprocess.TimeoutExpired as exc:
+                stdout = exc.stdout.decode("utf-8", "replace") if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+                stderr = exc.stderr.decode("utf-8", "replace") if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+                log_text = stdout + "\n" + stderr
+                if log_dir is not None:
+                    log_dir.mkdir(parents=True, exist_ok=True)
+                    (log_dir / f"{label}.v").write_text(source)
+                    (log_dir / f"{label}-timeout.log").write_text(log_text)
+                raise TimeoutError(f"{label} formal timeout for {lanes} lanes after {timeout}s") from exc
+            elapsed = time.perf_counter() - started
+            log_text = proc.stdout + "\n" + proc.stderr
+            log.write_text(log_text)
             if log_dir is not None:
                 log_dir.mkdir(parents=True, exist_ok=True)
-                (log_dir / f"{lanes}-lane-miter.v").write_text(source)
-                (log_dir / "yosys-formal-timeout.log").write_text(stdout + "\\n" + stderr)
-            raise TimeoutError(f"sequential SAT timeout for {lanes} lanes after {timeout}s") from exc
-        elapsed = time.perf_counter() - started
-        log_text = proc.stdout + "\n" + proc.stderr
-        log.write_text(log_text)
-        persistent_log = "yosys-formal.log"
-        if log_dir is not None:
-            log_dir.mkdir(parents=True, exist_ok=True)
-            (log_dir / f"{lanes}-lane-miter.v").write_text(source)
-            (log_dir / persistent_log).write_text(log_text)
-        if proc.returncode:
-            raise RuntimeError(f"sequential SAT failed for {lanes} lanes: {log_text[-5000:]}")
-        return {"status": "PASS", "method": "Yosys SAT bounded sequential miter",
-                "depth_cycles": depth, "latency_cycles": latency,
-                "runtime_seconds": elapsed, "log": persistent_log}
+                (log_dir / f"{label}.v").write_text(source)
+                (log_dir / f"{label}.log").write_text(log_text)
+            if proc.returncode:
+                raise RuntimeError(
+                    f"{label} formal failed for {lanes} lanes: {log_text[-5000:]}"
+                )
+            result = {"status": "PASS", "runtime_seconds": elapsed, "log": f"{label}.log"}
+            if depth is not None:
+                result["depth_cycles"] = depth
+                result["method"] = "Yosys sequential temporal induction on valid/reset control cone"
+            else:
+                result["method"] = "Yosys combinational SAT weighted-heap equivalence"
+            return result
 
+        for stage_index in range(design.latency):
+            stage_source = build_stage_miter(lanes, stage_index)
+            stage_top = f"orcus_dadda_stage_miter_{lanes}_{stage_index}"
+            result = execute(f"stage-{stage_index}-heap-equivalence",
+                             stage_source, stage_top, sequential=False)
+            result["stage"] = stage_index
+            result["target_height"] = design.stage_targets[stage_index]
+            result["final_cpa_included"] = stage_index == design.latency - 1
+            results.append(result)
+
+        control_source, latency = build_control_miter(lanes)
+        control_top = f"orcus_pipeline_control_miter_{lanes}"
+        control = execute("control-valid-reset-induction",
+                          control_source, control_top, sequential=True)
+
+    return {
+        "status": "PASS",
+        "method": "compositional stage SAT plus sequential control induction",
+        "latency_cycles": latency,
+        "stage_proofs": results,
+        "control_proof": control,
+    }
 
 def run_streaming(lanes: int, iverilog: str, vvp: str, timeout: int = 60, log_dir: Path | None = None) -> dict:
     source, latency = build_streaming_testbench(lanes)

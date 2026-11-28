@@ -2725,3 +2725,10 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Added `build_initial_heap_miter`: actual generated complemented 4×4 partial-product bits and each lane's correction-constant bits are weighted and compared modulo accumulator width against the direct sum of signed 4-bit lane products.
 - `run_formal` now executes this initial arithmetic identity proof before the per-stage compressor proofs and final CPA proof. This closes the previously identified base-case gap in the compositional proof chain.
 - The initial miter and all stage/control proof commands remain unexecuted; no formal PASS is claimed. Next add source-level coverage for the initial arithmetic miter, then inspect generated-source consistency and the final branch diff.
+
+
+## EGS-0003 action 5 — initial arithmetic miter source test committed
+
+- Updated `tests/test_dadda_pipeline.py` on the experiment branch; commit: `b3686c33b47d95b019f1f54e0dcb612ece65bfcd`.
+- Added source-level coverage that the initial-heap miter includes signed 4×4 lane multiplication, weighted initial heap, direct signed sum, and Baugh–Wooley correction bits for each supported lane count.
+- These tests have not yet been executed. Next complete static consistency review and check that the final branch includes the new base-case proof, every stage proof, valid/reset induction, and the unchanged streaming/P&R runner path.

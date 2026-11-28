@@ -258,7 +258,7 @@ def build_atomic_compressor_miter(kind: str) -> tuple[str, str]:
         "  wire [2:0] rhs = {2'b0, sum_bit} + ({2'b0, carry_bit} << 1);",
         "  assign bad = (lhs != rhs);",
     ])
-    return top, "\\n".join([f"module {top}({ports});", *body, "endmodule", ""])
+    return top, "\n".join([f"module {top}({ports});", *body, "endmodule", ""])
 
 
 def validate_stage_netlist_wiring(source: str, compressors: list[dict],
@@ -290,8 +290,9 @@ def validate_stage_netlist_wiring(source: str, compressors: list[dict],
         if carry is None:
             if rec.get("carry_column") is not None or not rec.get("carry_truncated_modulo_2_W"):
                 raise ValueError(f"stage {stage_index} compressor {ident} has invalid MSB truncation metadata")
-            if any(line.startswith(f"  wire {rec['id'].split('_')[0]}_c_") and rec['id'] in line
-                   for line in source_lines):
+            prefix, suffix = ident.split("_", 1)
+            unexpected_carry = f"{prefix}_c_{suffix}"
+            if any(line.startswith(f"  wire {unexpected_carry} =") for line in source_lines):
                 raise ValueError(f"stage {stage_index} compressor {ident} unexpectedly emits an MSB carry")
         else:
             carry_line = f"  wire {carry} = {carry_expr};"

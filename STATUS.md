@@ -10,13 +10,13 @@
 > - "Big dreams push past what other people view as possible, often because 'unrealistic' just means a goal hasn't been done yet by the people around you. You have to dream unrealistic because life is not realistic"
 > - "Get what I want and when I want it"
 
-> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** Milestone #2 remains closed on main at `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`. Run #262 (ID `45955978365`, head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`) remains the immutable combinational ECP5 baseline; only 4-lane Fused Dadda met 100 MHz. Milestone #3 remains OPEN. PR #22 is Draft and unmerged; EGS-0005 / Issue #27 audited Run #264 and diagnosed the sequential control miter's missing registered-output reference boundary. EGS-0006 / Issue #28 committed the correction on `research/orcus-ecp5-dadda-pipeline` at `448e4b70475feca4bd71c14ca71c1a75c3f12505`: the post-edge control reference now has L+1 bits to model L valid_pipe stages plus registered out_valid, while manifest and streaming input-to-output latency remain L for 4/8/16/32 lanes. Cross-width regression coverage was added. Python tests have not been executed in this session and no new CI run has been triggered; the fix is source-committed but not yet validated by execution. Exact next action: run focused and full tests, trigger ORCUS CI on the exact EGS-0006 SHA, and audit all proofs, 512-vector streaming/flush/reset leakage, observed latency, and ECP5 P&R. Do not close Milestone #3 or begin Milestone #4 until the required evidence passes. PR #21 remains untouched; Run #262 remains untouched; Ceres remains untouched; NEM remains isolated.
+> **CURRENT AUTHORITATIVE HANDOFF (2026-11-28):** Milestone #2 remains closed on main at `7cb67e8655e2c7f5ddb40b9ebc80809fa2d94c3a`. Run #262 (ID `45955978365`, head `93f23518a7f8ba2699f58a8c7fd0322b09a442ba`) remains the immutable combinational ECP5 baseline; only 4-lane Fused Dadda met 100 MHz. Milestone #3 remains OPEN. PR #22 is Draft and unmerged; EGS-0005 / Issue #27 audited Run #264 and diagnosed the sequential control miter's missing registered-output reference boundary. EGS-0006 / Issue #28 committed the correction on `research/orcus-ecp5-dadda-pipeline` at `de04727b73afab319bc9b3f96a9c8b314d891133`: the post-edge control reference now has L+1 bits to model L valid_pipe stages plus registered out_valid, while manifest and streaming input-to-output latency remain L for 4/8/16/32 lanes. Cross-width regression coverage was added. Python tests have not been executed in this session and no new CI run has been triggered; the fix is source-committed but not yet validated by execution. Exact next action: run focused and full tests, trigger ORCUS CI on the exact EGS-0006 SHA, and audit all proofs, 512-vector streaming/flush/reset leakage, observed latency, and ECP5 P&R. Do not close Milestone #3 or begin Milestone #4 until the required evidence passes. PR #21 remains untouched; Run #262 remains untouched; Ceres remains untouched; NEM remains isolated.
 
 ---
 
 > **PERMANENT MANDATORY HANDOFF RULE — EVERY ACTION, EVERY SESSION:** "Read `STATUS.md` on `main` first, never fabricate numbers, keep Ceres untouched, and update and commit `STATUS.md` on `main` after EVERY single action, experiment, diagnostic, failure, timeout, or milestone—permanently across every session—so a future AI session with zero chat history can recover the exact state immediately."
 
-**Last updated:** 2026-11-28T05:09:23Z
+**Last updated:** 2026-11-28T05:15:00Z
 **Repository:** `bio-ctrl/EGS`  
 **Status scope:** Parent-company mission, project boundaries, verified engineering evidence, and active research queue.
 
@@ -2951,7 +2951,7 @@ The same repository then recorded a biotechnology and computational-biology expl
 - Objective: Correct the sequential control miter's post-edge reference alignment for the DUT's separately registered `out_valid` boundary and add regression coverage across 4/8/16/32 lanes.
 - Repository: `bio-ctrl/EGS`; branch: `research/orcus-ecp5-dadda-pipeline`.
 - Starting branch head: `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`.
-- Implementation commit: `448e4b70475feca4bd71c14ca71c1a75c3f12505`.
+- Latest implementation head: `de04727b73afab319bc9b3f96a9c8b314d891133` (includes the final streaming-test assertion correction).
 - Files changed: `benchmarks/dadda_pipeline.py` and `tests/test_dadda_pipeline.py`.
 
 ### Implementation details
@@ -2966,4 +2966,4 @@ The same repository then recorded a biotechnology and computational-biology expl
 - PR #22 remains open, Draft and unmerged. Run #262 and its artifacts remain untouched. PR #21 remains untouched. Ceres remains untouched. NEM remains isolated.
 
 ### Exact next action
-Run `python -m unittest tests.test_dadda_pipeline`, then the full repository test suite. Trigger ORCUS CI against exact head `448e4b70475feca4bd71c14ca71c1a75c3f12505`; audit the 4/8/16/32-lane base/stage/control proofs, 512-vector streaming/flush/reset-leakage, observed latency and ECP5 synthesis/P&R. Keep Milestone #3 open and do not begin Milestone #4 until all evidence and review gates pass.
+Run `python -m unittest tests.test_dadda_pipeline`, then the full repository test suite. Trigger ORCUS CI against exact head `de04727b73afab319bc9b3f96a9c8b314d891133`; audit the 4/8/16/32-lane base/stage/control proofs, 512-vector streaming/flush/reset-leakage, observed latency and ECP5 synthesis/P&R. Keep Milestone #3 open and do not begin Milestone #4 until all evidence and review gates pass.

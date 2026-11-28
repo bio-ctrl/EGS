@@ -2732,3 +2732,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - Updated `tests/test_dadda_pipeline.py` on the experiment branch; commit: `b3686c33b47d95b019f1f54e0dcb612ece65bfcd`.
 - Added source-level coverage that the initial-heap miter includes signed 4×4 lane multiplication, weighted initial heap, direct signed sum, and Baugh–Wooley correction bits for each supported lane count.
 - These tests have not yet been executed. Next complete static consistency review and check that the final branch includes the new base-case proof, every stage proof, valid/reset induction, and the unchanged streaming/P&R runner path.
+
+
+## EGS-0003 proof-scaling refinement — initial heap identity split per lane
+
+- Refined `build_initial_heap_miter` to prove one lane's Baugh–Wooley partial-product/correction heap against that lane's signed 4×4 product, rather than placing all 4/8/16/32 multipliers in one base-case SAT cone.
+- `run_formal` now runs an independent base-case SAT proof for every lane, then every Dadda stage proof, then the control-only sequential induction. This keeps the arithmetic base-case proofs small and preserves per-lane counterexamples.
+- Experiment branch commit: `1ac548ed04577f125f15379c6675c84212a78b66`.
+- No execution tests have run; this is an implementation refinement. Next update tests for per-lane base-case miters and perform the final static review.

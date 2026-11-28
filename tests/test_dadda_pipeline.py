@@ -73,7 +73,7 @@ class DaddaPipelineGeneratorTests(unittest.TestCase):
                     self.assertEqual(part["consumed_input_bit_count"]+
                                      part["primary_pass_through_bit_count"],part["input_bit_count"])
                     self.assertEqual(part["output_bit_count"],part["pass_through_bit_count"]+
-                        sum(1+int(r["carry"] is not None) for r in design.manifest["compressors"] if r["stage"]==stage))
+                        sum(1 for r in design.manifest["compressors"] if r["stage"]==stage))
                     for col in part["columns"]:
                         if not col["compressors"]:
                             continue

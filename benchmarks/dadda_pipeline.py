@@ -262,7 +262,8 @@ def build_atomic_compressor_miter(kind: str) -> tuple[str, str]:
 
 
 def validate_stage_netlist_wiring(source: str, compressors: list[dict],
-                                  stage_index: int) -> dict:
+                                  stage_index: int,
+                                  output_heap: list[list[str]] | None = None) -> dict:
     """Match every scheduled compressor to its exact emitted Verilog equations."""
     source_lines = source.splitlines()
     checked = 0
@@ -299,8 +300,20 @@ def validate_stage_netlist_wiring(source: str, compressors: list[dict],
             if source_lines.count(carry_line) != 1:
                 raise ValueError(f"stage {stage_index} compressor {ident} carry pin/netlist mismatch")
         checked += 1
+    registered_bits_checked = 0
+    if output_heap is not None:
+        for column in output_heap:
+            for token in column:
+                qname = f"st{stage_index}_q_{token}"
+                register_line = f"      {qname} <= {token};"
+                if source_lines.count(register_line) != 1:
+                    raise ValueError(
+                        f"stage {stage_index} register/pass-through wiring mismatch for {token}"
+                    )
+                registered_bits_checked += 1
     return {"status": "PASS", "stage": stage_index,
             "compressors_checked": checked,
+            "registered_bits_checked": registered_bits_checked,
             "full_adders": sum(r["kind"] == "full_adder" for r in compressors),
             "half_adders": sum(r["kind"] == "half_adder" for r in compressors),
             "method": "exact emitted-Verilog compressor pin/equation matching"}
@@ -516,7 +529,9 @@ def run_formal(lanes: int, yosys: str, timeout: int = 180, log_dir: Path | None 
             partition = build_stage_partition(lanes, stage_index)
             stage_compressors = [r for r in design.manifest["compressors"]
                                  if r["stage"] == stage_index]
-            wiring = validate_stage_netlist_wiring(design.source, stage_compressors, stage_index)
+            wiring = validate_stage_netlist_wiring(
+                design.source, stage_compressors, stage_index,
+                design.manifest["stage_boundaries"][stage_index]["output_heap"])
             # The ownership/weight partition composes the atomic FA/HA lemmas:
             # every source bit is consumed once or passed through once; every
             # sum remains at 2**column; every carry advances one column; and

@@ -2899,8 +2899,8 @@ The same repository then recorded a biotechnology and computational-biology expl
 
 - Active technical focus: ORCUS Milestone #3 pipeline proof, streaming/reset validation and ECP5 timing closure.
 - Last validated hardware-architecture evidence: immutable Run #262 combinational ECP5 matrix; only 4-lane Fused Dadda reaches the 100 MHz target.
-- Current pipeline experiment: PR #22 Draft; EGS-0004 / Issue #26 blocked on exact-head Actions identity and evidence audit.
-- Not established: exact-head compositional formal PASS; 512-vector streaming/flush/reset-leakage PASS for the redesigned pipeline; execution-verified pipeline latency; pipeline P&R metrics; 8/16/32-lane 100 MHz timing closure; a fabricated chip or silicon measurement; a commercial ORCUS product; customer traction; secured investment; NVIDIA/AMD parity.
+- Current pipeline experiment: PR #22 Draft; exact-head Run #264 has been audited under EGS-0005 / Issue #27. The arithmetic base and six stage/CPA proofs passed for 4 lanes, but the sequential control miter failed due to a diagnosed reference-alignment off-by-one. Streaming, execution-verified latency and pipeline P&R remain unrun.
+- Not established: sequential control/reset formal PASS; 512-vector streaming/flush/reset-leakage PASS; execution-verified pipeline latency; pipeline P&R metrics; 8/16/32-lane results; 100 MHz pipeline timing closure; a fabricated chip or silicon measurement; a commercial ORCUS product; customer traction; secured investment; NVIDIA/AMD parity.
 - Preserve Run #262 and main as the baseline. Keep PR #22 Draft pending exact-head validation/review. Keep PR #21 untouched. Keep Ceres untouched. Keep NEM isolated. Do not mix the historical Xylenic or ELSTELLA/PROJECT ORIGIN phases into active EGS/ORCUS work unless the founder explicitly changes scope.
 
 

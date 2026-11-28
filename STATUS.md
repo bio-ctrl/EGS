@@ -2781,3 +2781,11 @@ All area/delay/power values below are Nangate45 typical-library pre-layout estim
 - **Readiness:** implementation is committed and is a candidate for the next manual ORCUS CI run at the exact SHA above. No CI run is currently discoverable for this final head. No unit test, Yosys proof, Icarus simulation, synthesis, or P&R was executed in this session. Do not claim formal PASS, execution-verified latency, Fmax, timing-path, or resource results until the exact-head run and artifacts are audited.
 - Constraints preserved: main and Run #262 remain baseline; PR #22 remains Draft; PR #21 untouched; Ceres untouched; NEM isolated; zero silicon claims.
 - Next action: trigger manual ORCUS CI for ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4, then audit all base/stage/control proofs, 512-vector streaming/reset behavior, and all four ECP5 P&R outputs.
+
+
+## EGS-0004 preliminary audit diagnostic — issue search query rejected — 2026-11-27
+
+- Execution requested: audit ORCUS CI allegedly run on `research/orcus-ecp5-dadda-pipeline` at `ee8c0a07381ef8d00a4a7457696daa67f5e4a0a4`.
+- A GitHub issue-search request for EGS-0004 was rejected by the API because the query omitted the required `is:issue` or `is:pull-request` qualifier. This is a query-format failure, not evidence that an EGS-0004 record does or does not exist.
+- A separate Actions API lookup currently shows only Run #263 for the branch, whose recorded workflow `head_sha` is `b4f1a9ef60d19258e3941e00389649f52ad3e392`; this does not match the requested exact head. Do not attribute Run #263 results to `ee8c0a0...` without an exact-head run record.
+- No technical validation result or P&R metric is inferred from this diagnostic. Continue by correcting the issue-search query and reconciling branch/run metadata before creating EGS-0004.
